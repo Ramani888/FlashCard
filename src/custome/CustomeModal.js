@@ -19,7 +19,7 @@ const CustomModal = ({
   content,
   title,
   width = scale(300),
-  height = verticalScale(200),
+  height,
   justifyContent = 'center',
   borderRadius = scale(10),
   borderTopLeftRadius,
