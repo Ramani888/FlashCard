@@ -1,7 +1,7 @@
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import {View, Text, TextInput, StyleSheet} from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import Color from '../component/Color';
 
 const CustomeInputField = ({
@@ -49,7 +49,7 @@ const CustomeInputField = ({
   errorTextStyles = {},
   inputStyles = {},
   containerStyles = {},
-  errorComponent,
+  errorContainerStyle,
 }) => {
   return (
     <View
@@ -60,8 +60,7 @@ const CustomeInputField = ({
           marginBottom: marginBottom,
         },
         containerStyles,
-      ]}
-    >
+      ]}>
       <View
         style={[
           {
@@ -77,14 +76,13 @@ const CustomeInputField = ({
             alignItems: 'center',
           },
           customStyles,
-        ]}
-      >
+        ]}>
         {iconLeft && IconComponentName && (
           <IconComponentName
             name={iconName}
             size={iconSize}
             color={iconColor}
-            style={{ marginLeft: scale(10) }}
+            style={{marginLeft: scale(10)}}
           />
         )}
         <TextInput
@@ -116,7 +114,7 @@ const CustomeInputField = ({
             name={iconName}
             size={iconSize}
             color={iconColor}
-            style={{ marginRight: scale(10) }}
+            style={{marginRight: scale(10)}}
           />
         )}
         {differentIconRight && IconRightComponentName && (
@@ -124,24 +122,15 @@ const CustomeInputField = ({
             name={iconRightName}
             size={iconRightSize}
             color={iconRightColor}
-            style={{ marginRight: scale(10) }}
+            style={{marginRight: scale(10)}}
           />
         )}
       </View>
-      {errors && touched && (errorComponent ? (
-        errorComponent
-      ) : (
-        <View
-          style={[
-            styles.viewError,
-            {
-              right: errors === 'Email is required' ? scale(-14) : scale(-5),
-            },
-          ]}
-        >
+      {errors && touched && (
+        <View style={[styles.viewError,errorContainerStyle]}>
           <Text style={[styles.textError, errorTextStyles]}>{errors}</Text>
         </View>
-      ))}
+      )}
     </View>
   );
 };

@@ -7,7 +7,11 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import Color from './Color';
 import Font from './Font';
 
-const ProfileModalContent = ({closeModal}) => {
+const ProfileModalContent = ({
+  closeModal,
+  openUserNameBottomSheets,
+  openEmailBottomSheets,
+}) => {
   const renderBody = () => {
     return (
       <View>
@@ -23,6 +27,7 @@ const ProfileModalContent = ({closeModal}) => {
         <Pressable
           style={styles.container}
           onPress={() => {
+            openUserNameBottomSheets();
             closeModal();
           }}>
           <MaterialIcons name="edit" size={scale(15)} color={Color.Black} />
@@ -35,6 +40,7 @@ const ProfileModalContent = ({closeModal}) => {
             {borderBottomWidth: scale(0), marginBottom: verticalScale(-5)},
           ]}
           onPress={() => {
+            openEmailBottomSheets();
             closeModal();
           }}>
           <MaterialCommunityIcons
@@ -42,7 +48,7 @@ const ProfileModalContent = ({closeModal}) => {
             size={scale(19)}
             color={Color.Black}
           />
-          <Text style={[styles.text,{marginLeft:scale(-3)}]}>Email</Text>
+          <Text style={[styles.text, {marginLeft: scale(-3)}]}>Email</Text>
         </Pressable>
       </View>
     );

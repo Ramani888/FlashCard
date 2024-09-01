@@ -27,10 +27,6 @@ const CustomeHeader = ({
   const navigation = useNavigation();
   const editRef = useRef(null);
 
-  // React.useEffect(() => {
-  //   setEditRef(editRef); // Ensure ref is set in parent component
-  // }, [setEditRef]);
-
   return (
     <View style={[styles.headerContainer, containerStyle]}>
       {goBack && (
