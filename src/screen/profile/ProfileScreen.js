@@ -2,33 +2,37 @@ import React, {useState, useCallback, useRef} from 'react';
 import {
   FlatList,
   Image,
+  Pressable,
   StyleSheet,
   Text,
   View,
   findNodeHandle,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Color from '../component/Color';
-import CustomeHeader from '../custome/CustomeHeader';
+import Color from '../../component/Color';
+import CustomeHeader from '../../custome/CustomeHeader';
 import {scale, verticalScale} from 'react-native-size-matters';
-import Font from '../component/Font';
-import CustomeInputField from '../custome/CustomeInputField';
-import CustomeModal from '../custome/CustomeModal';
-import ProfileModalContent from '../component/ProfileModalContent';
+import Font from '../../component/Font';
+import CustomeInputField from '../../custome/CustomeInputField';
+import CustomeModal from '../../custome/CustomeModal';
+import ProfileModalContent from '../../component/ProfileModalContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import UserNameBottomSheetsContent from '../component/profile/UserNameBottomSheetsContent';
-import EmailBottomSheetsContent from '../component/profile/EmailBottomSheetsContent';
+import UserNameBottomSheetsContent from '../../component/profile/UserNameBottomSheetsContent';
+import EmailBottomSheetsContent from '../../component/profile/EmailBottomSheetsContent';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenName} from '../../component/Screen';
 
 const tabData = [
-  {tabname: 'Contacts', image: require('../Assets/Img/userIcon.png')},
-  {tabname: 'PDF', image: require('../Assets/Img/pdf.png')},
-  {tabname: 'Notes', image: require('../Assets/Img/notes.png')},
-  {tabname: 'Images', image: require('../Assets/Img/images.png')},
-  {tabname: 'Cloud', image: require('../Assets/Img/cloud.png')},
-  {tabname: 'Support', image: require('../Assets/Img/support.png')},
+  {tabname: 'Contacts', image: require('../../Assets/Img/userIcon.png')},
+  {tabname: 'PDF', image: require('../../Assets/Img/pdf.png')},
+  {tabname: 'Notes', image: require('../../Assets/Img/notes.png')},
+  {tabname: 'Images', image: require('../../Assets/Img/images.png')},
+  {tabname: 'Cloud', image: require('../../Assets/Img/cloud.png')},
+  {tabname: 'Support', image: require('../../Assets/Img/support.png')},
 ];
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -63,16 +67,22 @@ const ProfileScreen = () => {
     refEmailRBSheet.current.close();
   };
 
+  const handleTabPress = tabname => {
+    tabname == 'Support' && navigation.navigate(ScreenName.support);
+  };
+
   const renderTab = useCallback(
     ({item}) => (
-      <View style={styles.tabContainer}>
+      <Pressable
+        style={styles.tabContainer}
+        onPress={() => handleTabPress(item?.tabname)}>
         <Image
           source={item?.image}
           style={styles.tabIcon}
           tintColor={Color.White}
         />
         <Text style={styles.tabText}>{item?.tabname}</Text>
-      </View>
+      </Pressable>
     ),
     [],
   );
@@ -166,7 +176,7 @@ const ProfileScreen = () => {
           <Text style={styles.subscriptionText}>Subscription</Text>
           <View style={styles.subscriptionBox}>
             <Image
-              source={require('../Assets/Img/subscription.png')}
+              source={require('../../Assets/Img/subscription.png')}
               style={styles.subscriptionImage}
             />
             <Text style={styles.subscriptionTier}>TIER 4</Text>

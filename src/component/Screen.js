@@ -1,6 +1,7 @@
 import CreateCardScreen from '../screen/CreateCardScreen';
 import HomeScreen from '../screen/HomeScreen';
-import ProfileScreen from '../screen/ProfileScreen';
+import ProfileScreen from '../screen/profile/ProfileScreen';
+import SupportScreen from '../screen/profile/SupportScreen';
 import QAScreen from '../screen/QAScreen';
 import VersesScreen from '../screen/VersesScreen';
 
@@ -10,6 +11,7 @@ export const ScreenName = {
   createCard: 'CreateCard',
   qaScreen: 'QAScreen',
   profile: 'Profile',
+  support: 'Support'
 };
 
 export const ScreenPath = {
@@ -18,4 +20,5 @@ export const ScreenPath = {
   CreateCardScreen,
   QAScreen,
   ProfileScreen,
+  SupportScreen
 };

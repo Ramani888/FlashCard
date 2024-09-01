@@ -37,6 +37,12 @@ const AppStack = () => {
         component={ScreenPath.ProfileScreen}
         options={{headerShown: false}}
       />
+
+      <Stack.Screen
+        name={ScreenName.support}
+        component={ScreenPath.SupportScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
