@@ -39,6 +39,12 @@ const AppStack = () => {
       />
 
       <Stack.Screen
+        name={ScreenName.contact}
+        component={ScreenPath.ContactScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
         name={ScreenName.support}
         component={ScreenPath.SupportScreen}
         options={{headerShown: false}}

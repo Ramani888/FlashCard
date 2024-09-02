@@ -7,6 +7,7 @@ import Color from '../component/Color';
 import Font from '../component/Font';
 import {Avatar} from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const CustomeHeader = ({
   goBack,
@@ -24,7 +25,7 @@ const CustomeHeader = ({
   setSearch,
   search,
   openEditModal,
-  setEditRef,
+  plusButton,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -76,6 +77,11 @@ const CustomeHeader = ({
           <AntDesign name="edit" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
+      {plusButton && (
+        <Pressable style={styles.plusButton} onPress={() => ''}>
+          <Entypo name="plus" size={scale(20)} color={Color.White} />
+        </Pressable>
+      )}
     </LinearGradient>
   );
 };
@@ -113,9 +119,9 @@ const styles = StyleSheet.create({
     borderRadius: scale(5),
     position: 'absolute',
     right: scale(15),
-    bottom:verticalScale(7),
+    bottom: verticalScale(7),
     padding: scale(10),
-    elevation:scale(5)
+    elevation: scale(5),
   },
   avtarContainer: {
     position: 'absolute',
@@ -132,5 +138,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: scale(15),
     paddingBottom: verticalScale(15),
+  },
+  plusButton: {
+    backgroundColor: Color.theme1,
+    height: scale(35),
+    width: scale(35),
+    borderRadius: scale(5),
+    position: 'absolute',
+    right:scale(15),
+    bottom:verticalScale(15),
+    alignItems:'center',
+    justifyContent:'center'
   },
 });

@@ -1,28 +1,32 @@
-import React, {useCallback, useRef, useState} from 'react';
-import {
-  FlatList,
-  Pressable,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import {StyleSheet, Text, View, FlatList, Pressable} from 'react-native';
+import React, {useCallback, useRef, useState, useMemo} from 'react';
+import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
-import CustomeHeader from '../../custome/CustomeHeader';
 import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
-import CustomeButton from '../../custome/CustomeButton';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import BottomSheetContent from '../../component/BottomSheetContent';
 import CustomeModal from '../../custome/CustomeModal';
-import ModalContent from '../../component/verses/ModalContent';
-import NoteModalContent from '../../component/profile/NoteModalContent';
+import ContactModalContent from '../../component/profile/ContactModalContent';
 
-const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
+const contactData = [
+  {
+    name: 'Mike',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbySPOVJMWqKXXDjw9zQLk4k7k7T2xDXjzsw&s',
+  },
+  {
+    name: 'Kevin',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbySPOVJMWqKXXDjw9zQLk4k7k7T2xDXjzsw&s',
+  },
+  {
+    name: 'Kyle',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbySPOVJMWqKXXDjw9zQLk4k7k7T2xDXjzsw&s',
+  },
+];
 
-const NotesScreen = () => {
+const ContactScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -32,34 +36,26 @@ const NotesScreen = () => {
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
       const offsetY =
-        notesData?.length > 7
+        contactData.length > 7
           ? isLastItem
             ? -height - 15
             : height + 15
           : height + 15;
-      setModalPosition({x: x - width * 3.25, y: y + offsetY});
+      setModalPosition({x: x - width * 3.47, y: y + offsetY});
       setModalVisible(true);
     });
   }, []);
 
-  const closeModal = useCallback(() => {
-    setModalVisible(false);
-  }, []);
+  const closeModal = useCallback(() => setModalVisible(false), []);
 
-  const openBottomSheet = useCallback(() => {
-    refRBSheet.current.open();
-  }, []);
-
-  const closeBottomSheet = useCallback(() => {
-    refRBSheet.current.close();
-  }, []);
-
-  const renderHeader = useCallback(
+  const renderHeader = useMemo(
     () => (
       <CustomeHeader
         goBack={true}
-        title={'Notes'}
+        title={'CONTACTS'}
+        plusButton={true}
         iconColor={Color.White}
+        iconStyle={styles.iconStyle}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
       />
@@ -67,34 +63,13 @@ const NotesScreen = () => {
     [],
   );
 
-  const BottomSheets = useCallback(
-    () => (
-      <RBSheet
-        ref={refRBSheet}
-        height={verticalScale(510)}
-        openDuration={250}
-        draggable={true}
-        customStyles={{
-          container: styles.bottomSheetContainer,
-        }}>
-        <View style={styles.sheetContainer}>
-          <BottomSheetContent
-            closeBottomSheet={closeBottomSheet}
-            title={editBottomSheet ? 'UPDATE NOTES' : 'CREATE NOTES'}
-          />
-        </View>
-      </RBSheet>
-    ),
-    [closeBottomSheet, editBottomSheet],
-  );
-
-  const renderNotes = useCallback(
+  const renderContacts = useCallback(
     ({item, index}) => {
-      const isLastItem = index === notesData.length - 1;
+      const isLastItem = index === contactData.length - 1;
 
       return (
-        <View style={styles.noteContainer}>
-          <Text style={styles.noteText}>{item?.name}</Text>
+        <View style={styles.contactContainer}>
+          <Text style={styles.contactText}>{item?.name}</Text>
           <Pressable
             ref={threeDotIconRef}
             onPress={() => openModal(item, isLastItem)}>
@@ -111,58 +86,24 @@ const NotesScreen = () => {
     [openModal],
   );
 
-  const renderBody = useCallback(
-    () => (
-      <View style={styles.bodyContainer}>
-        <FlatList
-          data={notesData}
-          renderItem={renderNotes}
-          keyExtractor={(item, index) => index.toString()}
-          style={{flex: 1, marginBottom: verticalScale(60)}}
-        />
-        {BottomSheets()}
-      </View>
-    ),
-    [renderNotes, BottomSheets],
-  );
-
   return (
     <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" />
-      {renderHeader()}
-      {renderBody()}
-      <CustomeButton
-        buttonColor={Color.theme1}
-        buttonWidth="90%"
-        buttonHeight={scale(45)}
-        title="CREATE NOTE"
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
-        fontColor={Color.White}
-        fontFamily={Font.semiBold}
-        marginTop={verticalScale(15)}
-        position="absolute"
-        alignSelf="center"
-        bottom={verticalScale(10)}
-        onPress={() => {
-          setEditBottomSheet(false);
-          refRBSheet.current.open();
-        }}
-      />
-
+      {renderHeader}
+      <View style={styles.bodyContainer}>
+        <FlatList
+          data={contactData}
+          renderItem={renderContacts}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.flatListStyle}
+        />
+      </View>
       <CustomeModal
         visible={modalVisible}
         onClose={closeModal}
         closeModal={false}
         mainPadding={scale(5)}
-        content={
-          <NoteModalContent
-            closeModal={closeModal}
-            openBottomSheet={openBottomSheet}
-            setEditBottomSheet={setEditBottomSheet}
-          />
-        }
-        width={scale(145)}
+        content={<ContactModalContent closeModal={closeModal} />}
+        width={scale(155)}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[
@@ -174,7 +115,7 @@ const NotesScreen = () => {
   );
 };
 
-export default React.memo(NotesScreen);
+export default React.memo(ContactScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -187,6 +128,9 @@ const styles = StyleSheet.create({
   headerTitleStyle: {
     color: Color.White,
     fontSize: scale(20),
+  },
+  iconStyle: {
+    bottom: verticalScale(1),
   },
   dotsIcon: {
     backgroundColor: Color.WhiteDefault,
@@ -203,7 +147,11 @@ const styles = StyleSheet.create({
     gap: scale(50),
     marginVertical: verticalScale(15),
   },
-  noteContainer: {
+  flatListStyle: {
+    flex: 1,
+    marginBottom: verticalScale(60),
+  },
+  contactContainer: {
     flexDirection: 'row',
     backgroundColor: Color.White,
     padding: scale(5),
@@ -215,7 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  noteText: {
+  contactText: {
     fontSize: scale(15),
     color: Color.Black,
     fontFamily: Font.regular,

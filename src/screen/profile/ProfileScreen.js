@@ -16,7 +16,7 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../../component/Font';
 import CustomeInputField from '../../custome/CustomeInputField';
 import CustomeModal from '../../custome/CustomeModal';
-import ProfileModalContent from '../../component/ProfileModalContent';
+import ProfileModalContent from '../../component/profile/ProfileModalContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import UserNameBottomSheetsContent from '../../component/profile/UserNameBottomSheetsContent';
 import EmailBottomSheetsContent from '../../component/profile/EmailBottomSheetsContent';
@@ -69,6 +69,7 @@ const ProfileScreen = () => {
   };
 
   const handleTabPress = tabname => {
+    tabname == 'Contacts' && navigation.navigate(ScreenName.contact)
     tabname == 'Support' && navigation.navigate(ScreenName.support);
     tabname == 'Notes' && navigation.navigate(ScreenName.notes);
   };
