@@ -1,21 +1,21 @@
 import React, {useMemo, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import Color from '../Color';
+import Color from './Color';
 import {scale, verticalScale} from 'react-native-size-matters';
-import CustomeButton from '../../custome/CustomeButton';
-import Font from '../Font';
-import CustomeInputField from '../../custome/CustomeInputField';
+import CustomeButton from '../custome/CustomeButton';
+import Font from './Font';
+import CustomeInputField from '../custome/CustomeInputField';
 import {Switch} from '@rneui/themed';
-import ColorCodePicker from './ColorCodePicker';
+import ColorCodePicker from './verses/ColorCodePicker';
 
-const BottomSheetContent = ({closeBottomSheet,title}) => {
+const BottomSheetContent = ({closeBottomSheet, title}) => {
   const [name, setName] = useState('');
   const [value, setValue] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
 
   const iconSize = useMemo(() => scale(20), []);
-  const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
-  const lockIcon = useMemo(() => require('../../Assets/Img/lock.png'), []);
+  const userIcon = useMemo(() => require('../Assets/Img/userIcon.png'), []);
+  const lockIcon = useMemo(() => require('../Assets/Img/lock.png'), []);
 
   const renderBody = useMemo(
     () => (

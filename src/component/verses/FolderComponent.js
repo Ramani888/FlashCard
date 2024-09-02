@@ -8,7 +8,7 @@ import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
 import CustomeButton from '../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import BottomSheetContent from './BottomSheetContent';
+import BottomSheetContent from '../BottomSheetContent';
 import { useNavigation } from '@react-navigation/native';
 
 const FolderComponent = ({onFolderClick}) => {

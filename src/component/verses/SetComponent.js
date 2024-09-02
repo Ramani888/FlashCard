@@ -8,7 +8,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import BottomSheetContent from './BottomSheetContent';
+import BottomSheetContent from '../BottomSheetContent';
 
 const SetComponent = ({folderData}) => {
   const [modalVisible, setModalVisible] = useState(false);
