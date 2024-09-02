@@ -7,6 +7,9 @@ import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeModal from '../../custome/CustomeModal';
 import ContactModalContent from '../../component/profile/ContactModalContent';
+import UserNameBottomSheetsContent from '../../component/profile/UserNameBottomSheetsContent';
+import ContactBottomSheetContent from '../../component/profile/ContactBottomSheetContent';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 const contactData = [
   {
@@ -29,9 +32,8 @@ const contactData = [
 const ContactScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
-  const [editBottomSheet, setEditBottomSheet] = useState(false);
   const threeDotIconRef = useRef(null);
-  const refRBSheet = useRef();
+  const refContactRBSheet = useRef();
 
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
@@ -48,6 +50,14 @@ const ContactScreen = () => {
 
   const closeModal = useCallback(() => setModalVisible(false), []);
 
+  const openContactBottomSheets = () => {
+    refContactRBSheet.current.open();
+  };
+
+  const closeContactBottomSheet = () => {
+    refContactRBSheet.current.close();
+  };
+
   const renderHeader = useMemo(
     () => (
       <CustomeHeader
@@ -58,10 +68,31 @@ const ContactScreen = () => {
         iconStyle={styles.iconStyle}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
+        openContactBottomSheets={openContactBottomSheets}
       />
     ),
     [],
   );
+
+  const contactBottomSheets = useCallback(() => {
+    return (
+      <RBSheet
+        ref={refContactRBSheet}
+        height={verticalScale(245)}
+        openDuration={250}
+        draggable={true}
+        customStyles={{
+          container: styles.bottomSheetContainer,
+          draggableIcon: styles.dragableIcon,
+        }}>
+        <View style={styles.sheetContainer}>
+          <ContactBottomSheetContent
+            closeContactBottomSheet={closeContactBottomSheet}
+          />
+        </View>
+      </RBSheet>
+    );
+  }, []);
 
   const renderContacts = useCallback(
     ({item, index}) => {
@@ -97,6 +128,7 @@ const ContactScreen = () => {
           style={styles.flatListStyle}
         />
       </View>
+      {contactBottomSheets()}
       <CustomeModal
         visible={modalVisible}
         onClose={closeModal}

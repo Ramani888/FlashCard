@@ -26,6 +26,7 @@ const CustomeHeader = ({
   search,
   openEditModal,
   plusButton,
+  openContactBottomSheets,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -78,7 +79,9 @@ const CustomeHeader = ({
         </Pressable>
       )}
       {plusButton && (
-        <Pressable style={styles.plusButton} onPress={() => ''}>
+        <Pressable
+          style={styles.plusButton}
+          onPress={() => openContactBottomSheets()}>
           <Entypo name="plus" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
@@ -145,9 +148,9 @@ const styles = StyleSheet.create({
     width: scale(35),
     borderRadius: scale(5),
     position: 'absolute',
-    right:scale(15),
-    bottom:verticalScale(15),
-    alignItems:'center',
-    justifyContent:'center'
+    right: scale(15),
+    bottom: verticalScale(15),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
