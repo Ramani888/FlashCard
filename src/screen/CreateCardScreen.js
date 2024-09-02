@@ -7,15 +7,15 @@ import CustomeInputField from '../custome/CustomeInputField';
 import Color from '../component/Color';
 import Font from '../component/Font';
 import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo'
+import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../custome/CustomeButton';
 
 const CreateCardScreen = () => {
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
 
-  const handleTopChange = useCallback((text) => setTop(text), []);
-  const handleBottomChange = useCallback((text) => setBottom(text), []);
+  const handleTopChange = useCallback(text => setTop(text), []);
+  const handleBottomChange = useCallback(text => setBottom(text), []);
 
   const header = useMemo(
     () => (
@@ -136,14 +136,17 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingBottom: verticalScale(20),
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
   },
   headerStyle: {
     backgroundColor: Color.transparent,
+    height: verticalScale(85),
+    alignItems: 'flex-end',
   },
-  headerTitle: {top: verticalScale(15)},
+  headerTitle: {top: verticalScale(40)},
   titleContainer: {
     alignItems: 'center',
+    // marginTop:verticalScale(15)
   },
   titleLine: {
     fontSize: scale(20),
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
     fontSize: scale(16),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingTop:verticalScale(5)
+    paddingTop: verticalScale(5),
   },
   icon: {
     backgroundColor: Color.WhiteDefault,

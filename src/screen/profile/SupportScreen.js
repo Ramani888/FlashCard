@@ -1,4 +1,4 @@
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -20,6 +20,7 @@ const SupportScreen = () => {
   const renderHeader = () => {
     return (
       <CustomeHeader
+        headerBackgroundColor={Color.transparent}
         goBack={true}
         title={'SUPPORT'}
         iconColor={Color.Black}
@@ -81,6 +82,7 @@ const SupportScreen = () => {
   };
   return (
     <View style={{flex: 1}}>
+      <StatusBar backgroundColor={Color.WhiteDefault}/>
       {renderHeader()}
       {renderBody()}
       <CustomeButton
@@ -94,7 +96,7 @@ const SupportScreen = () => {
         fontFamily={Font.semiBold}
         marginHorizontal={scale(15)}
         marginBottom={verticalScale(10)}
-        onPress={() => closeBottomSheet()}
+        onPress={() => ''}
       />
     </View>
   );
@@ -105,7 +107,8 @@ export default React.memo(SupportScreen);
 const styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: Color.transparent,
-    height: verticalScale(70),
+    height: verticalScale(90),
+    alignItems:'flex-end',
   },
   headerTitleStyle: {color: Color.Black, fontSize: scale(20)},
   dot: {

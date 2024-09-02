@@ -43,6 +43,12 @@ const AppStack = () => {
         component={ScreenPath.SupportScreen}
         options={{headerShown: false}}
       />
+
+      <Stack.Screen
+        name={ScreenName.notes}
+        component={ScreenPath.NotesScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

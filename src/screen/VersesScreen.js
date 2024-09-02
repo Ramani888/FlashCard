@@ -25,6 +25,7 @@ const VersesScreen = () => {
   const renderHeader = () => {
     return (
       <CustomeHeader
+        headerBackgroundColor={Color.transparent}
         goBack={true}
         title={'VERSES'}
         containerStyle={styles.headerStyle}
@@ -96,7 +97,7 @@ const VersesScreen = () => {
           )}
           {buttons()}
         </LinearGradient>
-        {tab == 'SET' && <SetComponent folderData={folderData}/>}
+        {tab == 'SET' && <SetComponent folderData={folderData} />}
         {tab == 'FOLDERS' && (
           <FolderComponent onFolderClick={handleFolderClick} />
         )}
@@ -116,6 +117,8 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Color.transparent,
+    height: verticalScale(90),
+    alignItems: 'flex-end',
   },
   searchContainer: {
     marginHorizontal: scale(15),

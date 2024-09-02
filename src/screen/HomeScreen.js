@@ -1,5 +1,12 @@
 import React, {useCallback, useRef, useState, memo} from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Color from '../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../component/Font';
@@ -140,7 +147,12 @@ const HomeScreen = () => {
     [renderHeaderIcons, renderButtons, BottomSheets],
   );
 
-  return <View>{renderBody()}</View>;
+  return (
+    <View>
+      <StatusBar translucent backgroundColor={Color.transparent} />
+      {renderBody()}
+    </View>
+  );
 };
 
 export default React.memo(HomeScreen);
@@ -148,13 +160,13 @@ export default React.memo(HomeScreen);
 const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: Color.theme1,
-    height: verticalScale(280),
+    height: verticalScale(290),
   },
   headerIconsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: scale(170),
-    marginTop: verticalScale(45),
+    marginTop: verticalScale(55),
     alignSelf: 'center',
   },
   earthIcon: {

@@ -3,6 +3,7 @@ import {
   FlatList,
   Image,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -69,6 +70,7 @@ const ProfileScreen = () => {
 
   const handleTabPress = tabname => {
     tabname == 'Support' && navigation.navigate(ScreenName.support);
+    tabname == 'Notes' && navigation.navigate(ScreenName.notes);
   };
 
   const renderTab = useCallback(
@@ -131,7 +133,9 @@ const ProfileScreen = () => {
     <LinearGradient
       colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
       style={styles.container}>
+      <StatusBar translucent backgroundColor={Color.transparent} />
       <CustomeHeader
+        headerBackgroundColor={Color.transparent}
         goBack={true}
         profileImage={true}
         edit={true}
@@ -233,6 +237,8 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Color.transparent,
+    height: verticalScale(90),
+    alignItems: 'flex-end',
   },
   bodyContainer: {
     marginHorizontal: scale(15),

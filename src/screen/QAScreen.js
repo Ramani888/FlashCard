@@ -20,6 +20,7 @@ const QAScreen = () => {
   const header = useMemo(
     () => (
       <CustomeHeader
+        headerBackgroundColor={Color.transparent}
         goBack={true}
         title={
           <View style={styles.titleContainer}>
@@ -119,7 +120,7 @@ const QAScreen = () => {
           marginTop={verticalScale(15)}
           position={'absolute'}
           bottom={verticalScale(10)}
-          onPress={() =>''}
+          onPress={() => ''}
         />
       </View>
     </View>
@@ -139,8 +140,10 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Color.transparent,
+    height: verticalScale(85),
+    alignItems: 'flex-end',
   },
-  headerTitle: {top: verticalScale(15)},
+  headerTitle: {top: verticalScale(41)},
   titleContainer: {
     alignItems: 'center',
   },
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
     fontSize: scale(16),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingTop:verticalScale(5)
+    paddingTop: verticalScale(5),
   },
   icon: {
     backgroundColor: Color.WhiteDefault,

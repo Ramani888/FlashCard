@@ -1,11 +1,12 @@
-import React, { useRef } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import React, {useRef} from 'react';
+import {StyleSheet, Text, View, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
-import { scale, verticalScale } from 'react-native-size-matters';
+import {useNavigation} from '@react-navigation/native';
+import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../component/Color';
 import Font from '../component/Font';
-import { Avatar } from '@rneui/themed';
+import {Avatar} from '@rneui/themed';
+import LinearGradient from 'react-native-linear-gradient';
 
 const CustomeHeader = ({
   goBack,
@@ -13,6 +14,7 @@ const CustomeHeader = ({
   profileImage,
   edit,
   titleStyle,
+  headerBackgroundColor,
   containerStyle,
   avtarContainerStyle,
   iconSize = scale(25),
@@ -28,12 +30,22 @@ const CustomeHeader = ({
   const editRef = useRef(null);
 
   return (
-    <View style={[styles.headerContainer, containerStyle]}>
+    <LinearGradient
+      colors={
+        headerBackgroundColor
+          ? [
+              headerBackgroundColor,
+              headerBackgroundColor,
+              headerBackgroundColor,
+            ]
+          : [Color.gradient1, Color.gradient2, Color.gradient3]
+      }
+      style={[styles.headerContainer, containerStyle]}>
       {goBack && (
         <Pressable
           onPress={navigation.goBack}
           style={[styles.iconContainer, iconStyle]}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+          hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
           <AntDesign name="arrowleft" size={iconSize} color={iconColor} />
         </Pressable>
       )}
@@ -43,7 +55,7 @@ const CustomeHeader = ({
           <Avatar
             size="large"
             rounded
-            source={{ uri: 'https://example.com/avatar.jpg' }}
+            source={{uri: 'https://example.com/avatar.jpg'}}
             title="JD"
             containerStyle={styles.avatar}
           />
@@ -64,7 +76,7 @@ const CustomeHeader = ({
           <AntDesign name="edit" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -83,6 +95,7 @@ const styles = StyleSheet.create({
     padding: scale(5),
     position: 'absolute',
     left: scale(10),
+    paddingBottom: verticalScale(15),
     zIndex: 1, // Ensure it appears above other elements
   },
   title: {
@@ -93,13 +106,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
+    paddingBottom: verticalScale(15),
   },
   searchIcon: {
     backgroundColor: Color.iconBackground,
     borderRadius: scale(5),
     position: 'absolute',
     right: scale(15),
+    bottom:verticalScale(7),
     padding: scale(10),
+    elevation:scale(5)
   },
   avtarContainer: {
     position: 'absolute',
@@ -107,6 +123,7 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
     top: verticalScale(15),
+    paddingTop: verticalScale(25),
   },
   avatar: {
     backgroundColor: '#BDBDBD',
@@ -114,5 +131,6 @@ const styles = StyleSheet.create({
   editIcon: {
     position: 'absolute',
     right: scale(15),
+    paddingBottom: verticalScale(15),
   },
 });
