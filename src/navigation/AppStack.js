@@ -15,6 +15,12 @@ const AppStack = () => {
       />
 
       <Stack.Screen
+        name={ScreenName.globalLiveFeed}
+        component={ScreenPath.GlobalLiveFeedScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
         name={ScreenName.verses}
         component={ScreenPath.VersesScreen}
         options={{headerShown: false}}

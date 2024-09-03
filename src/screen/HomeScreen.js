@@ -57,7 +57,8 @@ const HomeScreen = () => {
   const renderHeaderIcons = useCallback(
     () => (
       <View style={styles.headerIconsContainer}>
-        <Pressable>
+        <Pressable
+          onPress={() => navigation.navigate(ScreenName.globalLiveFeed)}>
           <Image source={icons.earthIcon} style={styles.earthIcon} />
         </Pressable>
         <Pressable onPress={() => refRBSheet.current.open()}>
