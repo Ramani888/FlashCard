@@ -2,13 +2,13 @@ import React, {useState, useMemo, useCallback} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from 'react-native-size-matters';
-import CustomeHeader from '../custome/CustomeHeader';
-import CustomeInputField from '../custome/CustomeInputField';
-import Color from '../component/Color';
-import Font from '../component/Font';
+import CustomeHeader from '../../custome/CustomeHeader';
+import CustomeInputField from '../../custome/CustomeInputField';
+import Color from '../../component/Color';
+import Font from '../../component/Font';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
-import CustomeButton from '../custome/CustomeButton';
+import CustomeButton from '../../custome/CustomeButton';
 
 const CreateCardScreen = () => {
   const [top, setTop] = useState('');
@@ -38,7 +38,7 @@ const CreateCardScreen = () => {
     () => (
       <View style={styles.imageContainer}>
         <Image
-          source={require('../Assets/Img/singleCard.png')}
+          source={require('../../Assets/Img/singleCard.png')}
           style={styles.cardImage}
           resizeMode="contain"
         />

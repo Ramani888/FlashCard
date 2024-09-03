@@ -43,7 +43,12 @@ const ModalContent = ({closeModal, type}) => {
           </Pressable>
         )}
         {type == 'Set' && (
-          <Pressable style={styles.container} onPress={closeModal}>
+          <Pressable
+            style={styles.container}
+            onPress={() => {
+              navigation.navigate(ScreenName.asignFolder);
+              closeModal();
+            }}>
             <Feather name="folder-plus" size={iconSize} color={Color.Black} />
             <Text style={styles.text}>Asign Folder</Text>
           </Pressable>

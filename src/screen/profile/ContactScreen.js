@@ -68,7 +68,7 @@ const ContactScreen = () => {
         iconStyle={styles.iconStyle}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
-        openContactBottomSheets={openContactBottomSheets}
+        plusIconAction={openContactBottomSheets}
       />
     ),
     [],

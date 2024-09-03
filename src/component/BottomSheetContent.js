@@ -11,6 +11,7 @@ import ColorCodePicker from './verses/ColorCodePicker';
 const BottomSheetContent = ({closeBottomSheet, title}) => {
   const [name, setName] = useState('');
   const [value, setValue] = useState(false);
+  console.log('value',value)
   const [selectedColor, setSelectedColor] = useState(null);
 
   const iconSize = useMemo(() => scale(20), []);

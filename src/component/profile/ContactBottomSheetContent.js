@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Color.WhiteDefault,
     position: 'absolute',
-    top: verticalScale(-35),
+    top: verticalScale(-25),
     right: 0,
   },
   title: {

@@ -27,6 +27,12 @@ const AppStack = () => {
       />
 
       <Stack.Screen
+        name={ScreenName.asignFolder}
+        component={ScreenPath.AssignFolderScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
         name={ScreenName.qaScreen}
         component={ScreenPath.QAScreen}
         options={{headerShown: false}}

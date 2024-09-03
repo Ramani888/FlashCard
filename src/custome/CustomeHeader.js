@@ -26,7 +26,7 @@ const CustomeHeader = ({
   search,
   openEditModal,
   plusButton,
-  openContactBottomSheets,
+  plusIconAction,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -79,9 +79,7 @@ const CustomeHeader = ({
         </Pressable>
       )}
       {plusButton && (
-        <Pressable
-          style={styles.plusButton}
-          onPress={() => openContactBottomSheets()}>
+        <Pressable style={styles.plusButton} onPress={plusIconAction}>
           <Entypo name="plus" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
