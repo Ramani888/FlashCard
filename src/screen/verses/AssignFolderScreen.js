@@ -39,7 +39,7 @@ const AssignFolderScreen = () => {
   const renderFolder = useCallback(({item, index}) => {
     const isLastItem = index === setData.length - 1;
     return (
-      <Pressable style={styles.folderItem} onPress={() => onFolderClick(item)}>
+      <Pressable style={styles.folderItem} onPress={() => ''}>
         <View style={styles.folderInfo}>
           <View style={[styles.iconColor, {backgroundColor: item.iconColor}]} />
           <Text style={styles.folderName}>{item.FolderName}</Text>
