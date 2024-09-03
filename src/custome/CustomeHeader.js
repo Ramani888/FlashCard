@@ -27,9 +27,11 @@ const CustomeHeader = ({
   openEditModal,
   plusButton,
   plusIconAction,
+  threeDotIcon,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
+  const threeDotIconRef = useRef(null);
 
   return (
     <LinearGradient
@@ -81,6 +83,19 @@ const CustomeHeader = ({
       {plusButton && (
         <Pressable style={styles.plusButton} onPress={plusIconAction}>
           <Entypo name="plus" size={scale(20)} color={Color.White} />
+        </Pressable>
+      )}
+      {threeDotIcon && (
+        <Pressable
+          ref={threeDotIconRef}
+          onPress={() => ''}
+          style={[styles.dotIconView,iconStyle]}>
+          <Entypo
+            name="dots-three-vertical"
+            size={scale(13)}
+            color={Color.White}
+            style={styles.dotsIcon}
+          />
         </Pressable>
       )}
     </LinearGradient>
@@ -150,5 +165,15 @@ const styles = StyleSheet.create({
     bottom: verticalScale(15),
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  dotIconView: {
+    position: 'absolute',
+    right: scale(15),
+  },
+  dotsIcon: {
+    backgroundColor: Color.iconBackground,
+    borderRadius: scale(5),
+    padding: scale(10),
+    marginBottom: verticalScale(5),
   },
 });

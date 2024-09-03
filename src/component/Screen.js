@@ -8,6 +8,7 @@ import QAScreen from '../screen/QAScreen';
 import VersesScreen from '../screen/verses/VersesScreen';
 import AssignFolderScreen from '../screen/verses/AssignFolderScreen';
 import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
+import SetDetailScreen from '../screen/verses/SetDetailScreen';
 
 export const ScreenName = {
   home: 'Home',
@@ -19,7 +20,8 @@ export const ScreenName = {
   support: 'Support',
   notes: 'Notes',
   asignFolder: 'AsignFolder',
-  globalLiveFeed: 'GlobalLiveFeed'
+  globalLiveFeed: 'GlobalLiveFeed',
+  setDetail: 'SetDetail'
 };
 
 export const ScreenPath = {
@@ -32,5 +34,6 @@ export const ScreenPath = {
   SupportScreen,
   NotesScreen,
   AssignFolderScreen,
-  GlobalLiveFeedScreen
+  GlobalLiveFeedScreen,
+  SetDetailScreen
 };

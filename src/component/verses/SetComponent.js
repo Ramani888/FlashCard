@@ -9,8 +9,11 @@ import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../BottomSheetContent';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenName} from '../Screen';
 
 const SetComponent = ({folderData}) => {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const threeDotIconRef = useRef(null);
@@ -50,7 +53,9 @@ const SetComponent = ({folderData}) => {
 
       return (
         <View style={styles.itemContainer}>
-          <View style={styles.setContainer}>
+          <Pressable
+            style={styles.setContainer}
+            onPress={() => navigation.navigate(ScreenName.setDetail,{setName: item?.setTitle})}>
             <View style={styles.rowContainer}>
               <Image
                 source={require('../../Assets/Img/bibleSign.png')}
@@ -78,7 +83,7 @@ const SetComponent = ({folderData}) => {
                 />
               </Pressable>
             </View>
-          </View>
+          </Pressable>
           <View style={[styles.folderContainer, {alignSelf: 'flex-start'}]}>
             <Image
               source={require('../../Assets/Img/folder.png')}
@@ -240,7 +245,7 @@ const styles = StyleSheet.create({
     fontSize: scale(12),
     color: Color.Black,
     fontFamily: Font.regular,
-    textTransform:'capitalize'
+    textTransform: 'capitalize',
   },
   modal: {
     position: 'absolute',

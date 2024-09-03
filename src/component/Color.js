@@ -157,7 +157,7 @@ const Color = {
   transparent: 'transparent',
   success: '#159587',
   error: '#d03135',
-  iconBackground: '#1b4a5b',
+  iconBackground: '#1e4e5e',
   gradient1: '#00394d',
   gradient2: '#174b5d',
   gradient3: '#104457'
