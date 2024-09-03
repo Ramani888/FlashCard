@@ -28,6 +28,7 @@ const CustomeHeader = ({
   plusButton,
   plusIconAction,
   threeDotIcon,
+  openSetDetailModal
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -88,7 +89,7 @@ const CustomeHeader = ({
       {threeDotIcon && (
         <Pressable
           ref={threeDotIconRef}
-          onPress={() => ''}
+          onPress={() => openSetDetailModal(threeDotIconRef)}
           style={[styles.dotIconView,iconStyle]}>
           <Entypo
             name="dots-three-vertical"
