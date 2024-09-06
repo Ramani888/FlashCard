@@ -198,7 +198,9 @@ const SetDetailScreen = () => {
       style={styles.container}>
       {header}
       {renderBody}
-      {modalVisible && <View style={styles.overlay} />}
+      {modalVisible && (
+        <Pressable style={styles.overlay} onPress={closeModal} />
+      )}
       {cardModalVisible && <View style={styles.overlay} />}
       <CustomeModal
         visible={modalVisible}

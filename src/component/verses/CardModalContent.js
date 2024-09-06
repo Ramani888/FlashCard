@@ -7,53 +7,51 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../Color';
 import Font from '../Font';
 
-const CardModalContent = ({closeModal}) => {
-  const renderBody = () => {
-    return (
-      <View>
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            closeModal();
-          }}>
-          <MaterialIcons name="edit" size={scale(15)} color={Color.Black} />
-          <Text style={styles.text}>Edit</Text>
-        </Pressable>
+// Reusable Pressable Item Component
+const PressableItem = ({icon, iconStyle, text, onPress, isLast}) => (
+  <Pressable
+    style={[styles.container, isLast && styles.lastItem]}
+    onPress={onPress}>
+    {icon}
+    <Text style={styles.text}>{text}</Text>
+  </Pressable>
+);
 
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            closeModal();
-          }}>
+const CardModalContent = ({closeModal}) => {
+  return (
+    <View>
+      <PressableItem
+        icon={<MaterialIcons name="edit" size={scale(15)} color={Color.Black} />}
+        text="Edit"
+        onPress={closeModal}
+      />
+      <PressableItem
+        icon={
           <MaterialCommunityIcons
             name="delete"
             size={scale(15)}
             color={Color.Red}
           />
-          <Text style={styles.text}>Delete</Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.container,
-            {borderBottomWidth: scale(0), marginBottom: verticalScale(-5)},
-          ]}
-          onPress={() => {
-            closeModal();
-          }}>
+        }
+        text="Delete"
+        onPress={closeModal}
+      />
+      <PressableItem
+        icon={
           <Image
             source={require('../../Assets/Img/moveFolder.png')}
-            style={{width: scale(16), height: scale(16)}}
+            style={styles.iconImage}
           />
-          <Text style={styles.text}>Move</Text>
-        </Pressable>
-      </View>
-    );
-  };
-  return <View>{renderBody()}</View>;
+        }
+        text="Move"
+        onPress={closeModal}
+        isLast={true} // Indicate that this is the last item
+      />
+    </View>
+  );
 };
 
-export default CardModalContent;
+export default React.memo(CardModalContent);
 
 const styles = StyleSheet.create({
   container: {
@@ -64,10 +62,18 @@ const styles = StyleSheet.create({
     borderBottomColor: Color.mediumGray,
     height: verticalScale(33),
   },
+  lastItem: {
+    borderBottomWidth: 0,
+    marginBottom: verticalScale(-5),
+  },
   text: {
     fontSize: scale(15),
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
+  },
+  iconImage: {
+    width: scale(16),
+    height: scale(16),
   },
 });

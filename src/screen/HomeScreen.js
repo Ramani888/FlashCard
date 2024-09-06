@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState, memo} from 'react';
+import React, {useCallback, useRef, useState, memo, useEffect} from 'react';
 import {
   Image,
   Pressable,
@@ -19,6 +19,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../component/Screen';
+import {apiGet} from '../Api/ApiService';
+import Api from '../Api/EndPoint';
+import Loader from '../component/Loader';
 
 const IconButton = memo(({name, iconComponent, selected, onPress}) => {
   const Icon = iconComponent;
@@ -46,7 +49,29 @@ const IconButton = memo(({name, iconComponent, selected, onPress}) => {
 const HomeScreen = () => {
   const refRBSheet = useRef();
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
+  const [cardTypeData, setCardTypeData] = useState([]);
   const [selectedIcon, setSelectedIcon] = useState('timer');
+
+  useEffect(() => {
+    getCardType();
+  }, []);
+
+  // ===================================== Api ===================================== //
+
+  const getCardType = async () => {
+    try {
+      setVisible(true);
+      const response = await apiGet(Api.getCardType, '');
+      setCardTypeData(response);
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  // ===================================== End ===================================== //
 
   const icons = {
     earthIcon: require('../Assets/Img/earthIcon.png'),
@@ -57,15 +82,11 @@ const HomeScreen = () => {
   const renderHeaderIcons = useCallback(
     () => (
       <View style={styles.headerIconsContainer}>
-        <Pressable
-          onPress={() => navigation.navigate(ScreenName.globalLiveFeed)}>
-          <Image source={icons.earthIcon} style={styles.earthIcon} />
-        </Pressable>
         <Pressable onPress={() => refRBSheet.current.open()}>
-          <Image source={icons.clockIcon} style={styles.earthIcon} />
+          <Image source={icons.clockIcon} style={styles.iconTop} />
         </Pressable>
         <Pressable onPress={() => navigation.navigate(ScreenName.profile)}>
-          <Image source={icons.userIcon} style={styles.earthIcon} />
+          <Image source={icons.userIcon} style={styles.iconTop} />
         </Pressable>
       </View>
     ),
@@ -76,21 +97,25 @@ const HomeScreen = () => {
     () => (
       <View style={styles.buttonsContainer}>
         <Text style={styles.myCardsText}>MY CARDS</Text>
-        {['VERSES', 'Q + As', 'GENERAL'].map((title, index) => (
+        {cardTypeData.map((item, index) => (
           <CustomeButton
             key={index}
             buttonColor={Color.theme1}
             buttonWidth={scale(310)}
             buttonHeight={scale(45)}
-            title={title}
+            title={item?.name}
             borderRadius={scale(10)}
             fontSize={scale(15)}
             fontColor={Color.White}
             fontFamily={Font.semiBold}
             marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
             onPress={() => {
-              title == 'VERSES' && navigation.navigate(ScreenName.verses);
-              title == 'Q + As' && navigation.navigate(ScreenName.qaScreen);
+              item?.name == 'VERSES' &&
+                navigation.navigate(ScreenName.verses, {cardTypeId: item?._id});
+              item?.name == 'Q + As' &&
+                navigation.navigate(ScreenName.qaScreen, {
+                  cardTypeId: item?._id,
+                });
             }}
           />
         ))}
@@ -151,6 +176,7 @@ const HomeScreen = () => {
   return (
     <View>
       <StatusBar translucent backgroundColor={Color.transparent} />
+      <Loader visible={visible} />
       {renderBody()}
     </View>
   );
@@ -166,11 +192,11 @@ const styles = StyleSheet.create({
   headerIconsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: scale(170),
+    width: scale(105),
     marginTop: verticalScale(55),
     alignSelf: 'center',
   },
-  earthIcon: {
+  iconTop: {
     width: scale(50),
     height: scale(50),
   },

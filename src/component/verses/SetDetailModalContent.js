@@ -1,73 +1,67 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../Color';
 import Font from '../Font';
 
+// Reusable Pressable Item Component
+const PressableItem = ({icon, text, onPress, customTextStyle, isLast}) => (
+  <Pressable
+    style={[styles.container, isLast && styles.lastItem]}
+    onPress={onPress}>
+    {icon}
+    <Text style={[styles.text, customTextStyle]}>{text}</Text>
+  </Pressable>
+);
+
 const SetDetailModalContent = ({closeModal, blurAllCards, allBlurred}) => {
-  const renderBody = () => {
-    return (
-      <View>
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            closeModal();
-          }}>
+  return (
+    <View>
+      <PressableItem
+        icon={
           <MaterialCommunityIcons
             name="swap-vertical"
             size={scale(15)}
             color={Color.Black}
           />
-          <Text style={styles.text}>Change Order</Text>
-        </Pressable>
-
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            blurAllCards();
-            closeModal();
-          }}>
+        }
+        text="Change Order"
+        onPress={closeModal}
+      />
+      <PressableItem
+        icon={
           <MaterialCommunityIcons
             name="blur"
             size={scale(15)}
             color={Color.Black}
           />
-          <Text style={styles.text}>
-            {allBlurred ? 'Remove Blur' : 'Blur All'}
-          </Text>
-        </Pressable>
-
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            closeModal();
-          }}>
-          <Entypo name="plus" size={scale(19)} color={Color.Black} />
-          <Text style={[styles.text, {marginLeft: scale(-3)}]}>
-            Create Card
-          </Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.container,
-            {borderBottomWidth: scale(0), marginBottom: verticalScale(-5)},
-          ]}
-          onPress={() => {
-            closeModal();
-          }}>
-          <Entypo name="grid" size={scale(19)} color={Color.Black} />
-          <Text style={[styles.text, {marginLeft: scale(-3)}]}>Layout</Text>
-        </Pressable>
-      </View>
-    );
-  };
-  return <View>{renderBody()}</View>;
+        }
+        text={allBlurred ? 'Remove Blur' : 'Blur All'}
+        onPress={() => {
+          blurAllCards();
+          closeModal();
+        }}
+      />
+      <PressableItem
+        icon={<Entypo name="plus" size={scale(19)} color={Color.Black} />}
+        text="Create Card"
+        onPress={closeModal}
+        customTextStyle={{marginLeft: scale(-3)}}
+      />
+      <PressableItem
+        icon={<Entypo name="grid" size={scale(19)} color={Color.Black} />}
+        text="Layout"
+        onPress={closeModal}
+        customTextStyle={{marginLeft: scale(-3)}}
+        isLast
+      />
+    </View>
+  );
 };
 
-export default SetDetailModalContent;
+export default React.memo(SetDetailModalContent);
 
 const styles = StyleSheet.create({
   container: {
@@ -77,6 +71,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: scale(0.7),
     borderBottomColor: Color.mediumGray,
     height: verticalScale(33),
+  },
+  lastItem: {
+    borderBottomWidth: 0,
+    marginBottom: verticalScale(-5),
   },
   text: {
     fontSize: scale(15),

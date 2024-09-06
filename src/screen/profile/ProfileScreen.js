@@ -44,7 +44,7 @@ const ProfileScreen = () => {
   const openModal = useCallback(ref => {
     if (ref.current) {
       ref.current.measureInWindow((x, y, width, height) => {
-        setModalPosition({x: x - width * 5, y: y + height + 25});
+        setModalPosition({x: x - width * 5, y: y + height + 10n});
         setModalVisible(true);
       });
     }
