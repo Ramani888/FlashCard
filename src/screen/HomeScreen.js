@@ -112,7 +112,7 @@ const HomeScreen = () => {
             onPress={() => {
               item?.name == 'VERSES' &&
                 navigation.navigate(ScreenName.verses, {cardTypeId: item?._id});
-              item?.name == 'Q + As' &&
+              item?.name == 'Q + A’s' &&
                 navigation.navigate(ScreenName.qaScreen, {
                   cardTypeId: item?._id,
                 });
@@ -121,7 +121,7 @@ const HomeScreen = () => {
         ))}
       </View>
     ),
-    [],
+    [cardTypeData],
   );
 
   const BottomSheets = useCallback(() => {
@@ -170,7 +170,7 @@ const HomeScreen = () => {
         {BottomSheets()}
       </View>
     ),
-    [renderHeaderIcons, renderButtons, BottomSheets],
+    [renderHeaderIcons, renderButtons, BottomSheets,cardTypeData],
   );
 
   return (

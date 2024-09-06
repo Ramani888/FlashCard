@@ -9,8 +9,12 @@ import VersesScreen from '../screen/verses/VersesScreen';
 import AssignFolderScreen from '../screen/verses/AssignFolderScreen';
 import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
 import SetDetailScreen from '../screen/verses/SetDetailScreen';
+import SignUpScreen from '../screen/auth/SignUpScreen';
+import SignInScreen from '../screen/auth/SignInScreen';
 
 export const ScreenName = {
+  signUp: 'SignUp',
+  signIn: 'SignIn',
   home: 'Home',
   verses: 'Verses',
   createCard: 'CreateCard',
@@ -21,10 +25,12 @@ export const ScreenName = {
   notes: 'Notes',
   asignFolder: 'AsignFolder',
   globalLiveFeed: 'GlobalLiveFeed',
-  setDetail: 'SetDetail'
+  setDetail: 'SetDetail',
 };
 
 export const ScreenPath = {
+  SignUpScreen,
+  SignInScreen,
   HomeScreen,
   VersesScreen,
   CreateCardScreen,
@@ -35,5 +41,5 @@ export const ScreenPath = {
   NotesScreen,
   AssignFolderScreen,
   GlobalLiveFeedScreen,
-  SetDetailScreen
+  SetDetailScreen,
 };

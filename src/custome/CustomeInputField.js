@@ -3,131 +3,73 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import Color from '../component/Color';
+import Font from '../component/Font';
 
 const CustomeInputField = ({
   placeholder,
   value,
   maxLength,
   onChangeText,
-  secureTextEntry = false,
-  editable = true,
-  keyboardType = 'default',
-  touched = false,
+  secureTextEntry,
+  editable,
+  keyboardType,
+  touched,
   errors,
-  borderWidth = scale(1),
-  borderRadius = scale(8),
-  borderColor = Color.Gray,
-  MainWidth = '100%',
-  backgroundColor = Color.White,
-  width = '100%',
-  height = verticalScale(50),
-  placeholderTextColor = Color.Gray,
-  marginTop = verticalScale(10),
-  marginBottom = verticalScale(10),
-  marginLeft = 0,
-  marginHorizontal = 0,
-  color = Color.Black,
-  inputWidth = '100%',
+  borderRadius,
+  backgroundColor,
+  width,
+  height,
+  placeholderTextColor,
+  marginLeft,
+  marginHorizontal,
   iconLeft,
-  IconComponentName,
-  iconName,
-  iconSize = scale(20),
-  iconColor = Color.Gray,
+  IconLeftComponent,
   iconRight,
-  differentIconRight,
-  IconRightComponentName,
-  iconRightName,
-  iconRightSize = scale(20),
-  iconRightColor = Color.Gray,
-  textArea = false,
-  textAlignVertical = 'top',
-  textAlign = 'left',
-  multiline = false,
-  numberOfLines = 5,
-  onBlur,
-  customStyles = {},
-  errorTextStyles = {},
-  inputStyles = {},
-  containerStyles = {},
+  IconRightComponent,
+  textArea,
+  textAlignVertical,
+  multiline,
+  numberOfLines,
+  customStyles,
+  errorTextStyles,
+  inputStyles,
+  inputContainerStyles,
   errorContainerStyle,
 }) => {
   return (
-    <View
-      style={[
-        {
-          width: MainWidth,
-          marginTop: marginTop,
-          marginBottom: marginBottom,
-        },
-        containerStyles,
-      ]}>
+    <View style={[styles.containerStyles, inputContainerStyles]}>
       <View
         style={[
           {
-            borderColor: errors && touched ? Color.Red : borderColor,
-            borderWidth: errors && touched ? scale(1) : borderWidth,
             marginHorizontal: marginHorizontal,
             height: height,
             width: width,
             borderRadius: borderRadius,
-            marginLeft: marginLeft,
-            backgroundColor: backgroundColor,
             flexDirection: 'row',
             alignItems: 'center',
           },
           customStyles,
         ]}>
-        {iconLeft && IconComponentName && (
-          <IconComponentName
-            name={iconName}
-            size={iconSize}
-            color={iconColor}
-            style={{marginLeft: scale(10)}}
-          />
-        )}
+        {iconLeft && IconLeftComponent}
         <TextInput
           placeholder={placeholder}
           placeholderTextColor={placeholderTextColor}
           value={value}
           maxLength={maxLength}
           onChangeText={onChangeText}
-          style={[
-            textArea ? styles.textArea : styles.textInput,
-            {
-              color: color,
-              width: inputWidth,
-            },
-            inputStyles,
-          ]}
+          style={[textArea ? styles.textArea : styles.textInput, inputStyles]}
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           editable={editable}
           textAlignVertical={textAlignVertical}
-          textAlign={textAlign}
           multiline={multiline}
           numberOfLines={numberOfLines}
           scrollEnabled={false}
-          onBlur={onBlur}
         />
-        {iconRight && IconComponentName && (
-          <IconComponentName
-            name={iconName}
-            size={iconSize}
-            color={iconColor}
-            style={{marginRight: scale(10)}}
-          />
-        )}
-        {differentIconRight && IconRightComponentName && (
-          <IconRightComponentName
-            name={iconRightName}
-            size={iconRightSize}
-            color={iconRightColor}
-            style={{marginRight: scale(10)}}
-          />
-        )}
+        {iconRight && IconRightComponent}
       </View>
       {errors && touched && (
-        <View style={[styles.viewError,errorContainerStyle]}>
+        <View style={[styles.viewError, errorContainerStyle]}>
           <Text style={[styles.textError, errorTextStyles]}>{errors}</Text>
         </View>
       )}
@@ -135,103 +77,23 @@ const CustomeInputField = ({
   );
 };
 
-CustomeInputField.propTypes = {
-  placeholder: PropTypes.string,
-  value: PropTypes.string,
-  maxLength: PropTypes.number,
-  onChangeText: PropTypes.func.isRequired,
-  secureTextEntry: PropTypes.bool,
-  editable: PropTypes.bool,
-  keyboardType: PropTypes.string,
-  touched: PropTypes.bool,
-  errors: PropTypes.string,
-  borderWidth: PropTypes.number,
-  borderRadius: PropTypes.number,
-  borderColor: PropTypes.string,
-  MainWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  backgroundColor: PropTypes.string,
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  height: PropTypes.number,
-  placeholderTextColor: PropTypes.string,
-  marginTop: PropTypes.number,
-  marginBottom: PropTypes.number,
-  marginLeft: PropTypes.number,
-  marginHorizontal: PropTypes.number,
-  color: PropTypes.string,
-  inputWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  iconLeft: PropTypes.bool,
-  IconComponentName: PropTypes.elementType,
-  iconName: PropTypes.string,
-  iconSize: PropTypes.number,
-  iconColor: PropTypes.string,
-  iconRight: PropTypes.bool,
-  differentIconRight: PropTypes.bool,
-  IconRightComponentName: PropTypes.elementType,
-  iconRightName: PropTypes.string,
-  iconRightSize: PropTypes.number,
-  iconRightColor: PropTypes.string,
-  textArea: PropTypes.bool,
-  textAlignVertical: PropTypes.string,
-  textAlign: PropTypes.string,
-  multiline: PropTypes.bool,
-  numberOfLines: PropTypes.number,
-  onBlur: PropTypes.func,
-  customStyles: PropTypes.object,
-  errorTextStyles: PropTypes.object,
-  inputStyles: PropTypes.object,
-  containerStyles: PropTypes.object,
-  errorComponent: PropTypes.element,
-};
-
-CustomeInputField.defaultProps = {
-  secureTextEntry: false,
-  editable: true,
-  keyboardType: 'default',
-  touched: false,
-  borderWidth: scale(1),
-  borderRadius: scale(8),
-  borderColor: Color.Gray,
-  MainWidth: '100%',
-  backgroundColor: Color.White,
-  width: '100%',
-  height: verticalScale(50),
-  placeholderTextColor: Color.Gray,
-  marginTop: verticalScale(10),
-  marginBottom: verticalScale(10),
-  marginLeft: 0,
-  marginHorizontal: 0,
-  color: Color.Black,
-  inputWidth: '100%',
-  iconSize: scale(20),
-  iconColor: Color.Gray,
-  iconRightSize: scale(20),
-  iconRightColor: Color.Gray,
-  textArea: false,
-  textAlignVertical: 'top',
-  textAlign: 'left',
-  multiline: false,
-  numberOfLines: 1,
-};
-
 export default CustomeInputField;
 
 const styles = StyleSheet.create({
+  containerStyles: {width: '100%'},
   textInput: {
     flex: 1,
     fontSize: scale(14),
     paddingLeft: scale(10),
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: Font.regular,
   },
   viewError: {
-    position: 'absolute',
-    bottom: verticalScale(-16),
-    marginVertical: verticalScale(2),
+    marginTop: verticalScale(3),
   },
   textError: {
     fontSize: moderateScale(10),
     color: Color.Red,
-    paddingLeft: scale(5),
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: Font.regular,
   },
   textArea: {
     flex: 1,

@@ -44,7 +44,7 @@ const ProfileScreen = () => {
   const openModal = useCallback(ref => {
     if (ref.current) {
       ref.current.measureInWindow((x, y, width, height) => {
-        setModalPosition({x: x - width * 5, y: y + height + 10n});
+        setModalPosition({x: x - width * 5, y: y + height + 10});
         setModalVisible(true);
       });
     }
@@ -69,7 +69,7 @@ const ProfileScreen = () => {
   };
 
   const handleTabPress = tabname => {
-    tabname == 'Contacts' && navigation.navigate(ScreenName.contact)
+    tabname == 'Contacts' && navigation.navigate(ScreenName.contact);
     tabname == 'Support' && navigation.navigate(ScreenName.support);
     tabname == 'Notes' && navigation.navigate(ScreenName.notes);
   };
@@ -157,6 +157,8 @@ const ProfileScreen = () => {
             height={verticalScale(40)}
             marginTop={verticalScale(5)}
             width="100%"
+            inputContainerStyles={styles.inputContainer}
+            inputStyles={styles.inputStyles}
           />
         </View>
 
@@ -172,6 +174,8 @@ const ProfileScreen = () => {
             height={verticalScale(40)}
             marginTop={verticalScale(5)}
             width="100%"
+            inputContainerStyles={styles.inputContainer}
+            inputStyles={styles.inputStyles}
           />
         </View>
 
@@ -240,6 +244,22 @@ const styles = StyleSheet.create({
     backgroundColor: Color.transparent,
     height: verticalScale(90),
     alignItems: 'flex-end',
+  },
+  inputContainer: {
+    width: '100%',
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+    paddingHorizontal: scale(8),
+    backgroundColor: Color.White,
+    borderRadius: scale(10),
+    marginTop: verticalScale(5),
+    marginBottom:verticalScale(10),
+    height: verticalScale(45),
+  },
+  inputStyles: {
+    fontSize: scale(13),
+    color: Color.Black,
+    fontFamily: Font.regular,
   },
   bodyContainer: {
     marginHorizontal: scale(15),

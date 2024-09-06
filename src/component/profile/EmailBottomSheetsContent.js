@@ -81,13 +81,12 @@ const EmailBottomSheetsContent = ({closeEmailBottomSheet}) => {
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
               value={values.email}
-              borderWidth={0.7}
-              borderColor={Color.LightGray}
-              height={verticalScale(45)}
               marginTop={verticalScale(10)}
               width="100%"
               errors={errors.email}
               touched={touched.email}
+              inputStyles={styles.inputStyles}
+              inputContainerStyles={styles.inputContainerStyle}
             />
             <CustomeButton
               buttonColor={Color.theme1}
@@ -143,6 +142,18 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginTop: verticalScale(15),
+  },
+  inputContainerStyle: {
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+    borderRadius: scale(10),
+    backgroundColor: Color.White,
+    height:verticalScale(45)
+  },
+  inputStyles: {
+    fontSize: scale(13),
+    color: Color.Black,
+    fontFamily: Font.regular,
   },
   closeButton: {
     height: scale(26),

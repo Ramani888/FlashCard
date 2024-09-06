@@ -56,13 +56,12 @@ const UserNameBottomSheetsContent = ({closeUserNameBottomSheet}) => {
               onChangeText={handleChange('username')}
               onBlur={handleBlur('username')}
               value={values.username}
-              borderWidth={0.7}
-              borderColor={Color.LightGray}
-              height={verticalScale(45)}
               marginTop={verticalScale(10)}
               width="100%"
               errors={errors.username}
               touched={touched.username}
+              inputStyles={styles.inputStyles}
+              inputContainerStyles={styles.inputContainerStyle}
             />
             <CustomeButton
               buttonColor={Color.theme1}
@@ -73,7 +72,7 @@ const UserNameBottomSheetsContent = ({closeUserNameBottomSheet}) => {
               fontSize={scale(15)}
               fontColor={Color.White}
               fontFamily={Font.semiBold}
-              marginTop={verticalScale(15)}
+              marginTop={verticalScale(20)}
               onPress={handleSubmit}
             />
           </View>
@@ -94,6 +93,18 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginTop: verticalScale(15),
+  },
+  inputContainerStyle: {
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+    borderRadius: scale(10),
+    backgroundColor: Color.White,
+    height:verticalScale(45)
+  },
+  inputStyles: {
+    fontSize: scale(13),
+    color: Color.Black,
+    fontFamily: Font.regular,
   },
   closeButton: {
     height: scale(26),

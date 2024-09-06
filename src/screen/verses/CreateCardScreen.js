@@ -6,8 +6,6 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeInputField from '../../custome/CustomeInputField';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 
 const CreateCardScreen = () => {
@@ -62,11 +60,13 @@ const CreateCardScreen = () => {
           placeholderTextColor={Color.mediumGray}
           onChangeText={handleTopChange}
           value={top}
-          borderWidth={1}
-          borderColor={Color.LightGray}
           height={verticalScale(45)}
           marginTop={verticalScale(-30)}
           width="100%"
+          inputContainerStyles={[
+            styles.inputContainerStyle,
+            styles.topInputStyle,
+          ]}
         />
         <CustomeInputField
           placeholder="Bottom"
@@ -75,37 +75,14 @@ const CreateCardScreen = () => {
           value={bottom}
           textArea={true}
           placeholderTextColor={Color.Gray}
-          borderWidth={1}
-          borderColor={Color.LightGray}
           borderRadius={scale(10)}
           multiline={true}
           numberOfLines={8}
           textAlignVertical="top"
+          inputContainerStyles={styles.inputContainerStyle}
         />
         <View style={styles.optionalContainer}>
-          <Text style={styles.optionalText}>Optional</Text>
-        </View>
-
-        <View style={styles.actionsContainer}>
-          <View style={styles.actionItem}>
-            <Feather
-              name="hash"
-              size={scale(10)}
-              color={Color.Black}
-              style={styles.icon}
-            />
-            <Text style={styles.actionText}>Add Hashtags</Text>
-          </View>
-
-          <View style={styles.actionItem}>
-            <Entypo
-              name="info"
-              size={scale(10)}
-              color={Color.Black}
-              style={styles.icon}
-            />
-            <Text style={styles.actionText}>Add Note</Text>
-          </View>
+          <Text style={styles.optionalText}>Optional - Add Note</Text>
         </View>
 
         <CustomeButton
@@ -153,6 +130,14 @@ const styles = StyleSheet.create({
     color: Color.White,
     fontFamily: Font.medium,
   },
+  inputContainerStyle: {
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+    borderRadius: scale(10),
+    marginBottom: verticalScale(15),
+    backgroundColor: Color.White,
+  },
+  topInputStyle: {marginTop: verticalScale(-25)},
   imageContainer: {
     alignItems: 'center',
     marginVertical: verticalScale(50),
@@ -176,23 +161,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   optionalText: {
-    fontSize: scale(12),
+    fontSize: scale(12.5),
     color: Color.Black,
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: verticalScale(30),
-  },
-  actionItem: {
-    alignItems: 'center',
-  },
-  actionText: {
-    fontSize: scale(16),
-    color: Color.Black,
-    fontFamily: Font.regular,
-    paddingTop: verticalScale(5),
   },
   icon: {
     backgroundColor: Color.WhiteDefault,

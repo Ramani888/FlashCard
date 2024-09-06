@@ -7,7 +7,19 @@ const Stack = createStackNavigator();
 
 const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={ScreenName.home}>
+    <Stack.Navigator initialRouteName={ScreenName.signIn}>
+      <Stack.Screen
+        name={ScreenName.signUp}
+        component={ScreenPath.SignUpScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={ScreenName.signIn}
+        component={ScreenPath.SignInScreen}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name={ScreenName.home}
         component={ScreenPath.HomeScreen}
