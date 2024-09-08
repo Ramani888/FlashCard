@@ -92,6 +92,7 @@ const VersesScreen = () => {
                 borderWidth={0}
                 height={verticalScale(40)}
                 width={scale(280)}
+                inputStyles={{paddingLeft:scale(5),backgroundColor:'red'}}
               />
             </View>
           )}

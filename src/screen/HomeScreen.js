@@ -6,9 +6,11 @@ import {
   StyleSheet,
   Text,
   View,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
 import Color from '../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import Font from '../component/Font';
 import CustomeButton from '../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -23,6 +25,8 @@ import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
 
+const { width, height } = Dimensions.get('window');
+
 const IconButton = memo(({name, iconComponent, selected, onPress}) => {
   const Icon = iconComponent;
 
@@ -35,7 +39,7 @@ const IconButton = memo(({name, iconComponent, selected, onPress}) => {
       onPress={onPress}>
       <Icon
         name={name}
-        size={scale(15)}
+        size={moderateScale(15)}
         color={selected ? Color.White : Color.theme1}
         style={[
           styles.icon,
@@ -101,18 +105,18 @@ const HomeScreen = () => {
           <CustomeButton
             key={index}
             buttonColor={Color.theme1}
-            buttonWidth={scale(310)}
+            buttonWidth={width * 0.85} // Responsive width
             buttonHeight={scale(45)}
             title={item?.name}
-            borderRadius={scale(10)}
-            fontSize={scale(15)}
+            borderRadius={moderateScale(10)}
+            fontSize={moderateScale(15)}
             fontColor={Color.White}
             fontFamily={Font.semiBold}
             marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
             onPress={() => {
-              item?.name == 'VERSES' &&
+              item?.name === 'VERSES' &&
                 navigation.navigate(ScreenName.verses, {cardTypeId: item?._id});
-              item?.name == 'Q + A’s' &&
+              item?.name === 'Q + A’s' &&
                 navigation.navigate(ScreenName.qaScreen, {
                   cardTypeId: item?._id,
                 });
@@ -128,7 +132,7 @@ const HomeScreen = () => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={verticalScale(375)}
+        height={height * 0.5} // Responsive height
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -156,7 +160,7 @@ const HomeScreen = () => {
 
   const renderBody = useCallback(
     () => (
-      <View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <LinearGradient
           colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
           style={styles.headerContainer}>
@@ -168,13 +172,13 @@ const HomeScreen = () => {
         </LinearGradient>
         {renderButtons()}
         {BottomSheets()}
-      </View>
+      </ScrollView>
     ),
-    [renderHeaderIcons, renderButtons, BottomSheets,cardTypeData],
+    [renderHeaderIcons, renderButtons, BottomSheets, cardTypeData],
   );
 
   return (
-    <View>
+    <View style={styles.container}>
       <StatusBar translucent backgroundColor={Color.transparent} />
       <Loader visible={visible} />
       {renderBody()}
@@ -185,9 +189,15 @@ const HomeScreen = () => {
 export default React.memo(HomeScreen);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Color.White,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
   headerContainer: {
-    backgroundColor: Color.theme1,
-    height: verticalScale(290),
+    height: height * 0.415, 
   },
   headerIconsContainer: {
     flexDirection: 'row',
@@ -197,12 +207,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   iconTop: {
-    width: scale(50),
-    height: scale(50),
+    width: scale(40),
+    height: scale(40),
   },
   cardImage: {
-    width: scale(310),
-    height: scale(215),
+    width: width * 0.85,
+    height: verticalScale(215),
     alignSelf: 'center',
     marginTop: verticalScale(25),
   },
@@ -218,22 +228,22 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     alignItems: 'center',
-    marginTop: verticalScale(80),
+    marginTop: verticalScale(70),
   },
   myCardsText: {
-    fontSize: scale(20),
+    fontSize: moderateScale(20),
     color: Color.Black,
     fontFamily: Font.medium,
   },
   iconBtn: {
-    padding: scale(5),
+    padding: moderateScale(5),
     borderWidth: scale(1),
     borderColor: Color.LightGray,
     borderRadius: scale(5),
   },
   icon: {
     backgroundColor: Color.WhiteDefault,
-    padding: scale(5),
+    padding: moderateScale(5),
     borderRadius: scale(5),
   },
 });

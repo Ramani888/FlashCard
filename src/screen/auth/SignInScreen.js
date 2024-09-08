@@ -78,7 +78,7 @@ const SignInScreen = () => {
       <Text style={styles.title}>Sign In</Text>
       <Text style={styles.subtitle}>Welcome 👋 Please enter your Account.</Text>
       <Formik
-        initialValues={{email: '', password: ''}}
+        initialValues={{email: 'abc@gmail.com', password: '123466789'}}
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log('Form Values:', values);

@@ -80,7 +80,7 @@ const CustomeInputField = ({
 export default CustomeInputField;
 
 const styles = StyleSheet.create({
-  containerStyles: {width: '100%'},
+  containerStyles: {width: '100%',alignItems:'center'},
   textInput: {
     flex: 1,
     fontSize: scale(14),
