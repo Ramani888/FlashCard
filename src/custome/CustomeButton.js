@@ -56,7 +56,7 @@ const CustomeButton = ({
         {
           backgroundColor: buttonColor,
           width: buttonWidth,
-          height: buttonHeight ? buttonHeight : width * 0.11,
+          height: buttonHeight ? buttonHeight : height * 0.06,
           borderRadius: borderRadius,
           borderTopLeftRadius: borderTopLeftRadius,
           borderTopRightRadius: borderTopRightRadius,

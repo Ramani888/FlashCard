@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {scale, verticalScale} from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -10,6 +10,8 @@ import CustomeButton from '../../custome/CustomeButton';
 import Font from '../../component/Font';
 import SetComponent from '../../component/verses/SetComponent';
 import FolderComponent from '../../component/verses/FolderComponent';
+
+const {width, height} = Dimensions.get('window');
 
 const VersesScreen = () => {
   const [search, setSearch] = useState(false);
@@ -50,6 +52,7 @@ const VersesScreen = () => {
         marginTop={verticalScale(15)}
         onPress={() => setTab('SET')}
       />
+
       <CustomeButton
         buttonColor={tab == 'FOLDERS' ? Color.White : Color.theme1}
         buttonWidth={scale(150)}
@@ -73,26 +76,29 @@ const VersesScreen = () => {
           style={styles.headerContainer}>
           {renderHeader()}
           {search && (
-            <View style={styles.searchContainer}>
-              <View
-                style={styles.searchIcon}
-                onPress={() => setSearch(!search)}>
-                <AntDesign
-                  name="search1"
-                  size={scale(10)}
-                  color={Color.White}
-                />
-              </View>
+            <View>
               <CustomeInputField
                 placeholder={'Search Hashtags'}
                 placeholderTextColor={Color.Gainsboro}
                 onChangeText={setSearchHashtags}
                 value={searchHashtags}
                 backgroundColor={'#3a6675'}
-                borderWidth={0}
-                height={verticalScale(40)}
-                width={scale(280)}
-                inputStyles={{paddingLeft:scale(5),backgroundColor:'red'}}
+                width={width * 0.88}
+                height={height * 0.065}
+                iconLeft={true}
+                IconLeftComponent={
+                  <View
+                    style={styles.searchIcon}
+                    onPress={() => setSearch(!search)}>
+                    <AntDesign
+                      name="search1"
+                      size={scale(14)}
+                      color={Color.White}
+                    />
+                  </View>
+                }
+                inputContainerStyles={styles.inputContainerStyle}
+                inputStyles={styles.inputStyles}
               />
             </View>
           )}
@@ -121,22 +127,26 @@ const styles = StyleSheet.create({
     height: verticalScale(90),
     alignItems: 'flex-end',
   },
-  searchContainer: {
-    marginHorizontal: scale(15),
-    backgroundColor: '#3a6675',
-    borderWidth: scale(0.5),
-    borderColor: '#3a6675',
-    height: verticalScale(45),
-    borderRadius: scale(10),
+  inputContainerStyle: {
     marginTop: verticalScale(15),
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderRadius: scale(10),
+    backgroundColor: Color.White,
+    height: verticalScale(45),
+  },
+  inputStyles: {
+    fontSize: scale(13),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    height: verticalScale(45),
   },
   searchIcon: {
+    width: width * 0.09,
+    height: height * 0.05,
     backgroundColor: '#496e7c',
     borderRadius: scale(5),
-    padding: scale(10),
-    marginLeft: scale(8),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: scale(6),
   },
   buttonContainer: {
     alignSelf: 'center',
