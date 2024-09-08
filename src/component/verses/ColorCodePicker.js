@@ -29,8 +29,8 @@ const {width, height} = Dimensions.get('window');
 
 const ColorCodePicker = ({setSelectedColor, selectedColor}) => {
   useEffect(() => {
-    setSelectedColor(colors[1]);
-  }, []);
+    setSelectedColor(selectedColor ? selectedColor : colors[1]);
+  }, [selectedColor]);
 
   const renderItem = useCallback(
     ({item}) => (

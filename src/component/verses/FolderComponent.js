@@ -10,7 +10,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../BottomSheetContent';
 import {useNavigation} from '@react-navigation/native';
-import {apiGet, apiPost} from '../../Api/ApiService';
+import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
@@ -19,8 +19,10 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [visible, setVisible] = useState(false);
   const [folderData, setFolderData] = useState([]);
+  const [singleFolderData, setSingleFolderData] = useState({});
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
@@ -30,6 +32,14 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
   useEffect(() => {
     getFolderData();
   }, []);
+
+  useEffect(() => {
+    if (singleFolderData) {
+      setFolderName(singleFolderData?.name);
+      setFolderStatus(singleFolderData?.isPrivate == true ? 1 : 0);
+      setFolderColor(singleFolderData?.color);
+    }
+  }, [singleFolderData]);
 
   // ================================== Api =================================== //
 
@@ -68,6 +78,40 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
     }
   };
 
+  const editFolder = async () => {
+    const rawData = {
+      _id: singleFolderData?._id,
+      name: folderName,
+      isPrivate: folderStatus,
+      color: folderColor,
+      cardTypeId: cardTypeId,
+      userId: '66da263e4d3998cb710a0487',
+    };
+    closeModal();
+    setVisible(true);
+    try {
+      const response = await apiPut(Api.Folder, '', JSON.stringify(rawData));
+      setFolderName('');
+      setFolderStatus(0);
+      setFolderColor('');
+      getFolderData(response?.message);
+    } catch (error) {
+      console.log('error in edit folder api', error);
+    }
+  };
+
+  const deleteFolder = async () => {
+    try {
+      setVisible(true);
+      const response = await apiDelete(
+        `${Api.Folder}?_id=${singleFolderData?._id}`,
+      );
+      getFolderData(response?.message);
+    } catch (error) {
+      console.log('error in delete folder api', error);
+    }
+  };
+
   // ================================== End =================================== //
 
   const openModal = useCallback((item, isLastItem) => {
@@ -97,7 +141,10 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
           </View>
           <Pressable
             ref={threeDotIconRef}
-            onPress={() => openModal(item, isLastItem)}>
+            onPress={() => {
+              setSingleFolderData(item);
+              openModal(item, isLastItem);
+            }}>
             <Entypo
               name="dots-three-vertical"
               size={scale(13)}
@@ -110,6 +157,10 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
     },
     [openModal],
   );
+
+  const openBottomSheet = () => {
+    refRBSheet.current.open();
+  };
 
   const closeBottomSheet = () => {
     refRBSheet.current.close();
@@ -128,19 +179,20 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
         <View style={styles.sheetContainer}>
           <BottomSheetContent
             closeBottomSheet={closeBottomSheet}
-            title={'CREATE FOLDER'}
+            title={editBottomSheet ? 'EDIT FOLDER' : 'CREATE FOLDER'}
             name={folderName}
             setName={setFolderName}
             status={folderStatus}
             setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
-            create={createFolder}
+            create={editBottomSheet ? editFolder : createFolder}
+            initialData={singleFolderData ? singleFolderData : ''}
           />
         </View>
       </RBSheet>
     );
-  }, [folderName, folderStatus, folderColor]);
+  }, [folderName, folderStatus, folderColor, editBottomSheet]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
@@ -177,7 +229,11 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
           marginTop={verticalScale(15)}
           position={'absolute'}
           bottom={verticalScale(10)}
-          onPress={() => refRBSheet.current.open()}
+          onPress={() => {
+            setEditBottomSheet(false);
+            setSingleFolderData({});
+            openBottomSheet();
+          }}
         />
       </View>
     );
@@ -192,7 +248,15 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
         onClose={closeModal}
         closeModal={false}
         mainPadding={scale(5)}
-        content={<ModalContent closeModal={closeModal} type={'Folder'} />}
+        content={
+          <ModalContent
+            closeModal={closeModal}
+            type={'Folder'}
+            openBottomSheet={openBottomSheet}
+            setEditBottomSheet={setEditBottomSheet}
+            deleteData={deleteFolder}
+          />
+        }
         width={scale(145)}
         height={scale(165)}
         justifyContent="flex-end"

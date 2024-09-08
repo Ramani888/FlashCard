@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useCallback} from 'react';
+import React, {useMemo, useState, useCallback, useEffect} from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import Color from './Color';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
@@ -21,7 +21,8 @@ const BottomSheetContent = ({
   color,
   setColor,
   create,
-}) => {
+}) => { 
+
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../Assets/Img/userIcon.png'), []);
   const lockIcon = useMemo(() => require('../Assets/Img/lock.png'), []);

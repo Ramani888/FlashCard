@@ -11,7 +11,13 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 
-const ModalContent = ({closeModal, type}) => {
+const ModalContent = ({
+  closeModal,
+  type,
+  openBottomSheet,
+  setEditBottomSheet,
+  deleteData,
+}) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(false);
 
@@ -53,7 +59,13 @@ const ModalContent = ({closeModal, type}) => {
             <Text style={styles.text}>Asign Folder</Text>
           </Pressable>
         )}
-        <Pressable style={styles.container} onPress={closeModal}>
+        <Pressable
+          style={styles.container}
+          onPress={() => {
+            // closeModal();
+            setEditBottomSheet(true);
+            openBottomSheet();
+          }}>
           <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
           <Text style={styles.text}>Edit</Text>
         </Pressable>
@@ -67,7 +79,12 @@ const ModalContent = ({closeModal, type}) => {
             <Text style={styles.text}>Delete Set</Text>
           </Pressable>
         ) : (
-          <Pressable style={styles.container} onPress={closeModal}>
+          <Pressable
+            style={styles.container}
+            onPress={() => {
+              deleteData();
+              closeModal();
+            }}>
             <MaterialCommunityIcons
               name="delete"
               size={iconSize}
