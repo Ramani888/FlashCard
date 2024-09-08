@@ -1,10 +1,10 @@
 import React, {useState, memo} from 'react';
-import {Pressable, StyleSheet, Text, View, Linking} from 'react-native';
+import {Pressable, StyleSheet, Text, View, Linking, ScrollView} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomeInputField from '../../custome/CustomeInputField';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeButton from '../../custome/CustomeButton';
@@ -48,7 +48,6 @@ const SignUpScreen = () => {
       .required('Password is required'),
   });
 
-  // Reusable function to render each input field dynamically
   const renderInputFields = (
     handleChange,
     handleBlur,
@@ -85,7 +84,7 @@ const SignUpScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>Sign Up</Text>
       <Text style={styles.subtitle}>Welcome 👋 Please enter your Account.</Text>
       <Formik
@@ -102,7 +101,7 @@ const SignUpScreen = () => {
           errors,
           touched,
         }) => (
-          <View style={{width: '90%', marginTop: verticalScale(15)}}>
+          <View style={styles.formContainer}>
             {renderInputFields(
               handleChange,
               handleBlur,
@@ -201,17 +200,18 @@ const SignUpScreen = () => {
           </View>
         )}
       </Formik>
-    </View>
+    </ScrollView>
   );
 };
 
-export default memo(SignUpScreen); // Optimized with memo for performance
+export default memo(SignUpScreen);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: moderateScale(20),
   },
   title: {
     fontSize: scale(20),
@@ -224,26 +224,31 @@ const styles = StyleSheet.create({
     color: Color.mediumGray,
     fontFamily: Font.regular,
     textAlign: 'center',
+    marginTop: verticalScale(10),
+  },
+  formContainer: {
+    width: '100%',
     marginTop: verticalScale(15),
   },
   inputContainer: {
     width: '100%',
     borderWidth: scale(1),
     borderColor: Color.LightGray,
-    paddingHorizontal: scale(8),
+    paddingHorizontal: moderateScale(8),
     backgroundColor: Color.White,
     borderRadius: scale(10),
-    marginTop: verticalScale(17),
+    marginTop: verticalScale(10),
     height: verticalScale(45),
   },
   inputStyles: {
     fontSize: scale(13),
     color: Color.Black,
     fontFamily: Font.regular,
+    height: verticalScale(45),
   },
   iconWrapper: {
     backgroundColor: Color.WhiteDefault,
-    padding: scale(5),
+    padding: moderateScale(5),
     borderRadius: scale(5),
   },
   checkboxContainer: {
@@ -255,7 +260,7 @@ const styles = StyleSheet.create({
     fontSize: scale(12),
     color: Color.mediumGray,
     fontFamily: Font.regular,
-    width: scale(255),
+    flexShrink: 1,
     lineHeight: verticalScale(20),
   },
   linkText: {
@@ -266,7 +271,7 @@ const styles = StyleSheet.create({
   },
   checkBox: {
     backgroundColor: Color.transparent,
-    padding: scale(2),
+    padding: 0,
   },
   signUpContainer: {
     flexDirection: 'row',
@@ -278,14 +283,17 @@ const styles = StyleSheet.create({
     fontSize: scale(13),
     color: Color.mediumGray,
     fontFamily: Font.regular,
-    width: scale(255),
-    lineHeight: verticalScale(20),
     textAlign: 'center',
   },
   signUpText: {
+    fontSize: scale(13),
+    color: Color.theme1,
+    fontFamily: Font.semiBold,
+  },
+  errorText: {
     fontSize: scale(12),
-    color: Color.Black,
-    fontFamily: Font.medium,
-    textDecorationLine: 'underline',
+    color: Color.Red,
+    fontFamily: Font.regular,
+    marginTop: verticalScale(5),
   },
 });

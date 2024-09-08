@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     fontSize: scale(13),
     color: Color.Black,
     fontFamily: Font.regular,
+    height:verticalScale(45)
   },
   closeButton: {
     height: scale(26),

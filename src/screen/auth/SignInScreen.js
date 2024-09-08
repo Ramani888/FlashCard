@@ -4,7 +4,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from 'react-native-size-matters'; // moderateScale for balanced scaling
 import CustomeInputField from '../../custome/CustomeInputField';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeButton from '../../custome/CustomeButton';
@@ -58,12 +58,11 @@ const SignInScreen = () => {
         iconLeft={true}
         keyboardType={field.keyboardType || 'default'}
         inputStyles={styles.inputStyles}
-        errorTextStyles={styles.errorText}
         IconLeftComponent={
           <View style={styles.iconWrapper}>
             <MaterialCommunityIcons
               name={field.iconName}
-              size={scale(17)}
+              size={moderateScale(17)}
               color={Color.Gray}
             />
           </View>
@@ -78,11 +77,11 @@ const SignInScreen = () => {
       <Text style={styles.title}>Sign In</Text>
       <Text style={styles.subtitle}>Welcome 👋 Please enter your Account.</Text>
       <Formik
-        initialValues={{email: 'abc@gmail.com', password: '123466789'}}
+        initialValues={{email: 'abc@gmail.com', password: '123456789'}}
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log('Form Values:', values);
-          navigation.navigate(ScreenName.home)
+          navigation.navigate(ScreenName.home);
         }}>
         {({
           handleChange,
@@ -92,7 +91,7 @@ const SignInScreen = () => {
           errors,
           touched,
         }) => (
-          <View style={{width: '90%', marginTop: verticalScale(15)}}>
+          <View style={styles.formContainer}>
             {renderInputFields(
               handleChange,
               handleBlur,
@@ -113,12 +112,11 @@ const SignInScreen = () => {
               iconLeft={true}
               secureTextEntry={!isPasswordVisible}
               inputStyles={styles.inputStyles}
-              errorTextStyles={styles.errorText}
               IconLeftComponent={
                 <View style={styles.iconWrapper}>
                   <MaterialCommunityIcons
                     name={'key-outline'}
-                    size={scale(17)}
+                    size={moderateScale(17)}
                     color={Color.Gray}
                   />
                 </View>
@@ -130,7 +128,7 @@ const SignInScreen = () => {
                   onPress={togglePasswordVisibility}>
                   <MaterialCommunityIcons
                     name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
-                    size={scale(17)}
+                    size={moderateScale(17)}
                     color={Color.Gray}
                   />
                 </Pressable>
@@ -147,11 +145,11 @@ const SignInScreen = () => {
               buttonWidth={'100%'}
               buttonHeight={verticalScale(45)}
               buttonColor={Color.theme1}
-              fontSize={scale(15)}
+              fontSize={moderateScale(15)}
               fontFamily={Font.semiBold}
               fontColor={Color.White}
-              borderRadius={scale(10)}
-              marginTop={verticalScale(5)}
+              borderRadius={moderateScale(10)}
+              marginTop={verticalScale(10)}
               onPress={handleSubmit}
             />
           </View>
@@ -160,7 +158,7 @@ const SignInScreen = () => {
 
       <View style={styles.signUpContainer}>
         <Text style={styles.infoText}>
-          You have don't account{' '}
+          Don't have an account?{' '}
           <Text
             style={styles.signUpText}
             onPress={() => navigation.navigate(ScreenName.signUp)}>
@@ -180,32 +178,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: scale(20),
   },
   title: {
-    fontSize: scale(20),
+    fontSize: moderateScale(22),
     color: Color.Black,
     fontFamily: Font.semiBold,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: scale(13),
+    fontSize: moderateScale(14),
     color: Color.mediumGray,
     fontFamily: Font.regular,
     textAlign: 'center',
+    marginTop: verticalScale(10),
+  },
+  formContainer: {
+    width: '100%',
     marginTop: verticalScale(15),
   },
   inputContainer: {
     width: '100%',
     borderWidth: scale(1),
     borderColor: Color.LightGray,
-    paddingHorizontal: scale(8),
+    paddingHorizontal: scale(10),
     backgroundColor: Color.White,
-    borderRadius: scale(10),
-    marginTop: verticalScale(17),
+    borderRadius: moderateScale(10),
+    marginTop: verticalScale(15),
     height: verticalScale(45),
   },
   inputStyles: {
-    fontSize: scale(13),
+    fontSize: moderateScale(14),
+    height: verticalScale(45),
     color: Color.Black,
     fontFamily: Font.regular,
   },
@@ -214,9 +218,12 @@ const styles = StyleSheet.create({
     padding: scale(5),
     borderRadius: scale(5),
   },
-  forgotPassBtn: {marginVertical: verticalScale(10), alignSelf: 'flex-end'},
+  forgotPassBtn: {
+    marginVertical: verticalScale(10),
+    alignSelf: 'flex-end',
+  },
   forgotPassText: {
-    fontSize: scale(13),
+    fontSize: moderateScale(13),
     fontFamily: Font.medium,
     color: Color.Black,
   },
@@ -227,15 +234,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   infoText: {
-    fontSize: scale(13),
+    fontSize: moderateScale(13),
     color: Color.mediumGray,
     fontFamily: Font.regular,
-    width: scale(255),
+    width: '90%',
     lineHeight: verticalScale(20),
     textAlign: 'center',
   },
   signUpText: {
-    fontSize: scale(12),
+    fontSize: moderateScale(12),
     color: Color.Black,
     fontFamily: Font.medium,
     textDecorationLine: 'underline',

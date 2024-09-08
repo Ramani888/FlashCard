@@ -39,11 +39,7 @@ const CustomModal = ({
       onRequestClose={onClose}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View
-          style={[
-            styles.modalContainer,
-            {justifyContent, backgroundColor},
-            modalContainerStyle,
-          ]}>
+          style={[styles.modalContainer, {justifyContent, backgroundColor}]}>
           <View
             style={[
               styles.modalContent,
@@ -57,6 +53,7 @@ const CustomModal = ({
                 borderBottomRightRadius,
                 padding: mainPadding,
               },
+              modalContainerStyle,
             ]}>
             <View style={styles.headerContainer}>
               {title && <Text style={styles.modalTitle}>{title}</Text>}

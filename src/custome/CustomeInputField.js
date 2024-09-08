@@ -37,14 +37,16 @@ const CustomeInputField = ({
   errorContainerStyle,
 }) => {
   return (
-    <View style={[styles.containerStyles, inputContainerStyles]}>
+    <View style={[styles.containerStyles]}>
       <View
         style={[
+          inputContainerStyles,
           {
-            marginHorizontal: marginHorizontal,
-            height: height,
-            width: width,
-            borderRadius: borderRadius,
+            marginHorizontal: marginHorizontal ? marginHorizontal : 0,
+            height: height ? height : verticalScale(45),
+            width: width ? width : '100%',
+            borderRadius: borderRadius ? borderRadius : moderateScale(8),
+            backgroundColor: backgroundColor || Color.White,
             flexDirection: 'row',
             alignItems: 'center',
           },
@@ -53,7 +55,7 @@ const CustomeInputField = ({
         {iconLeft && IconLeftComponent}
         <TextInput
           placeholder={placeholder}
-          placeholderTextColor={placeholderTextColor}
+          placeholderTextColor={placeholderTextColor || Color.Gray}
           value={value}
           maxLength={maxLength}
           onChangeText={onChangeText}
@@ -61,7 +63,7 @@ const CustomeInputField = ({
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           editable={editable}
-          textAlignVertical={textAlignVertical}
+          textAlignVertical={textAlignVertical || 'center'}
           multiline={multiline}
           numberOfLines={numberOfLines}
           scrollEnabled={false}
@@ -80,7 +82,10 @@ const CustomeInputField = ({
 export default CustomeInputField;
 
 const styles = StyleSheet.create({
-  containerStyles: {width: '100%',alignItems:'center'},
+  containerStyles: {
+    width: '100%',
+    alignItems: 'center',
+  },
   textInput: {
     flex: 1,
     fontSize: scale(14),
@@ -89,6 +94,7 @@ const styles = StyleSheet.create({
   },
   viewError: {
     marginTop: verticalScale(3),
+    alignSelf: 'flex-start',
   },
   textError: {
     fontSize: moderateScale(10),
@@ -99,11 +105,11 @@ const styles = StyleSheet.create({
     flex: 1,
     color: Color.Black,
     borderColor: 'gray',
-    borderRadius: scale(8),
+    borderRadius: moderateScale(8),
     fontSize: scale(14),
     paddingHorizontal: scale(12),
     paddingTop: verticalScale(10),
-    paddingBottom: scale(10),
+    paddingBottom: verticalScale(10),
     textAlignVertical: 'top',
   },
 });

@@ -7,12 +7,12 @@ import {
   StyleSheet,
   Text,
   View,
-  findNodeHandle,
+  Dimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../../component/Color';
 import CustomeHeader from '../../custome/CustomeHeader';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import Font from '../../component/Font';
 import CustomeInputField from '../../custome/CustomeInputField';
 import CustomeModal from '../../custome/CustomeModal';
@@ -22,6 +22,9 @@ import UserNameBottomSheetsContent from '../../component/profile/UserNameBottomS
 import EmailBottomSheetsContent from '../../component/profile/EmailBottomSheetsContent';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
+
+// Get screen dimensions
+const {width, height} = Dimensions.get('window');
 
 const tabData = [
   {tabname: 'Contacts', image: require('../../Assets/Img/userIcon.png')},
@@ -94,7 +97,7 @@ const ProfileScreen = () => {
     return (
       <RBSheet
         ref={refUserNameRBSheet}
-        height={verticalScale(245)}
+        height={height * 0.34}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -114,7 +117,7 @@ const ProfileScreen = () => {
     return (
       <RBSheet
         ref={refEmailRBSheet}
-        height={verticalScale(430)}
+        height={height * 0.60}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -142,7 +145,6 @@ const ProfileScreen = () => {
         edit={true}
         containerStyle={styles.headerStyle}
         openEditModal={openModal}
-        setEditRef={ref => (editRef.current = ref)}
       />
       <View style={styles.bodyContainer}>
         <View>
@@ -194,15 +196,13 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <View>
-        <FlatList
-          data={tabData}
-          renderItem={renderTab}
-          numColumns={3}
-          key={'_'}
-          contentContainerStyle={{paddingHorizontal: scale(15)}}
-        />
-      </View>
+      <FlatList
+        data={tabData}
+        renderItem={renderTab}
+        numColumns={3}
+        key={'_'}
+        contentContainerStyle={{paddingHorizontal: scale(15)}}
+      />
 
       {userNameBottomSheets()}
       {emailBottomSheets()}
@@ -253,13 +253,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.White,
     borderRadius: scale(10),
     marginTop: verticalScale(5),
-    marginBottom:verticalScale(10),
+    marginBottom: verticalScale(10),
     height: verticalScale(45),
   },
   inputStyles: {
+    height: verticalScale(45),
     fontSize: scale(13),
     color: Color.Black,
     fontFamily: Font.regular,
+    paddingLeft: scale(5),
   },
   bodyContainer: {
     marginHorizontal: scale(15),
@@ -307,13 +309,13 @@ const styles = StyleSheet.create({
     paddingLeft: scale(10),
   },
   tabContainer: {
+    flex: 1,
     alignItems: 'center',
-    marginHorizontal: scale(30),
     marginVertical: verticalScale(15),
   },
   tabIcon: {
-    width: scale(24),
-    height: scale(24),
+    width: moderateScale(24),
+    height: moderateScale(24),
   },
   tabText: {
     fontSize: scale(14),
@@ -338,7 +340,7 @@ const styles = StyleSheet.create({
   },
   sheetContainer: {
     flexDirection: 'row',
-    gap: scale(50),
+    justifyContent: 'center',
     marginVertical: verticalScale(15),
   },
   dragableIcon: {marginTop: verticalScale(20)},

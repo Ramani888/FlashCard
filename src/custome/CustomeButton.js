@@ -1,6 +1,8 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Dimensions} from 'react-native';
 import React from 'react';
 import {scale} from 'react-native-size-matters';
+
+const {width, height} = Dimensions.get('window');
 
 const CustomeButton = ({
   title,
@@ -54,7 +56,7 @@ const CustomeButton = ({
         {
           backgroundColor: buttonColor,
           width: buttonWidth,
-          height: buttonHeight,
+          height: buttonHeight ? buttonHeight : width * 0.11,
           borderRadius: borderRadius,
           borderTopLeftRadius: borderTopLeftRadius,
           borderTopRightRadius: borderTopRightRadius,

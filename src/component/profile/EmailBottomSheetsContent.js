@@ -1,15 +1,17 @@
 import React, {useCallback, useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import CustomeInputField from '../../custome/CustomeInputField';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import Color from '../../component/Color';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../Font';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import OTPTextInput from 'react-native-otp-textinput';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
+
+const {width, height} = Dimensions.get('window');
 
 const EmailBottomSheetsContent = ({closeEmailBottomSheet}) => {
   const [isValid, setIsValid] = useState(true);
@@ -91,14 +93,13 @@ const EmailBottomSheetsContent = ({closeEmailBottomSheet}) => {
             <CustomeButton
               buttonColor={Color.theme1}
               buttonWidth="100%"
-              buttonHeight={scale(45)}
               title="Send Verification Code"
               borderRadius={scale(10)}
               fontSize={scale(15)}
               fontColor={Color.White}
               fontFamily={Font.semiBold}
               marginTop={verticalScale(15)}
-              marginBottom={verticalScale(50)}
+              marginBottom={height * 0.05}
               onPress={handleSubmit}
             />
 
@@ -114,7 +115,7 @@ const EmailBottomSheetsContent = ({closeEmailBottomSheet}) => {
               <CustomeButton
                 buttonColor={Color.theme1}
                 buttonWidth="100%"
-                buttonHeight={scale(45)}
+                // buttonHeight={width*0.05}
                 title="VERIFY"
                 borderRadius={scale(10)}
                 fontSize={scale(15)}
@@ -148,12 +149,13 @@ const styles = StyleSheet.create({
     borderColor: Color.LightGray,
     borderRadius: scale(10),
     backgroundColor: Color.White,
-    height:verticalScale(45)
+    height: verticalScale(45),
   },
   inputStyles: {
     fontSize: scale(13),
     color: Color.Black,
     fontFamily: Font.regular,
+    height: verticalScale(45),
   },
   closeButton: {
     height: scale(26),
@@ -179,11 +181,10 @@ const styles = StyleSheet.create({
   },
   otpContainer: {
     marginBottom: verticalScale(5),
-    // marginLeft: scale(-5.5),
   },
   otpInput: {
-    width: scale(71),
-    height: scale(67),
+    width: width * 0.2,
+    height: height * 0.1,
     borderWidth: scale(1),
     borderBottomWidth: scale(1),
     borderRadius: scale(10),

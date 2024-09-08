@@ -69,7 +69,7 @@ const HomeScreen = () => {
       const response = await apiGet(Api.getCardType, '');
       setCardTypeData(response);
     } catch (error) {
-      console.log('error', error);
+      console.log('error in cardType Data', error);
     } finally {
       setVisible(false);
     }
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   headerIconsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: scale(105),
+    width: scale(85),
     marginTop: verticalScale(55),
     alignSelf: 'center',
   },
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     alignItems: 'center',
-    marginTop: verticalScale(70),
+    marginTop: moderateScale(70),
   },
   myCardsText: {
     fontSize: moderateScale(20),

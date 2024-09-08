@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import CustomeInputField from '../../custome/CustomeInputField';
@@ -8,6 +8,8 @@ import Color from '../../component/Color';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../Font';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+
+const {width, height} = Dimensions.get('window');
 
 const UserNameBottomSheetsContent = ({closeUserNameBottomSheet}) => {
   const validationSchema = Yup.object().shape({
@@ -66,13 +68,12 @@ const UserNameBottomSheetsContent = ({closeUserNameBottomSheet}) => {
             <CustomeButton
               buttonColor={Color.theme1}
               buttonWidth="100%"
-              buttonHeight={scale(45)}
               title="CONFIRM"
               borderRadius={scale(10)}
               fontSize={scale(15)}
               fontColor={Color.White}
               fontFamily={Font.semiBold}
-              marginTop={verticalScale(20)}
+              marginTop={verticalScale(height*0.03)}
               onPress={handleSubmit}
             />
           </View>
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
     fontSize: scale(13),
     color: Color.Black,
     fontFamily: Font.regular,
+    height:verticalScale(45)
   },
   closeButton: {
     height: scale(26),
