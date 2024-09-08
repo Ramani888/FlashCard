@@ -1,17 +1,19 @@
 import React, {useMemo, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import Color from './Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import CustomeButton from '../custome/CustomeButton';
 import Font from './Font';
 import CustomeInputField from '../custome/CustomeInputField';
 import {Switch} from '@rneui/themed';
 import ColorCodePicker from './verses/ColorCodePicker';
 
+const {width, height} = Dimensions.get('window');
+
 const BottomSheetContent = ({closeBottomSheet, title}) => {
   const [name, setName] = useState('');
   const [value, setValue] = useState(false);
-  console.log('value',value)
+  console.log('value', value);
   const [selectedColor, setSelectedColor] = useState(null);
 
   const iconSize = useMemo(() => scale(20), []);
@@ -32,9 +34,8 @@ const BottomSheetContent = ({closeBottomSheet, title}) => {
           value={name}
           borderWidth={1}
           borderColor={Color.LightGray}
-          height={verticalScale(45)}
-          marginTop={verticalScale(10)}
-          width="100%"
+          inputContainerStyles={styles.inputContainer}
+          inputStyles={styles.inputStyles}
         />
 
         <View style={styles.switchContainer}>
@@ -99,7 +100,6 @@ const BottomSheetContent = ({closeBottomSheet, title}) => {
       <CustomeButton
         buttonColor={Color.theme1}
         buttonWidth="100%"
-        buttonHeight={scale(45)}
         title="DONE"
         borderRadius={scale(10)}
         fontSize={scale(15)}
@@ -131,14 +131,32 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.medium,
     textAlign: 'center',
-    paddingBottom: verticalScale(8),
+    paddingBottom: height * 0.01,
   },
   separator: {
     borderBottomWidth: scale(1),
     borderBottomColor: Color.LightGray,
   },
+  inputContainer: {
+    width: '100%',
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+    paddingHorizontal: scale(8),
+    backgroundColor: Color.White,
+    borderRadius: scale(10),
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(10),
+    height: verticalScale(45),
+  },
+  inputStyles: {
+    height: verticalScale(45),
+    fontSize: scale(13),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    paddingLeft: scale(5),
+  },
   switchContainer: {
-    width: scale(200),
+    width: width * 0.6,
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -154,8 +172,8 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
   },
   icon: {
-    width: scale(30),
-    height: scale(30),
+    width: width * 0.07,
+    height: height * 0.04,
   },
   colorSection: {
     marginTop: verticalScale(10),
@@ -183,13 +201,12 @@ const styles = StyleSheet.create({
   },
   colorIndicator: {
     width: scale(13),
-    height: verticalScale(30),
+    height: height * 0.05,
     borderRadius: scale(8),
     marginLeft: scale(5),
   },
   colorOptionLarge: {
-    height: verticalScale(40),
-    // backgroundColor: Color.Green,
+    height: height * 0.06,
     borderRadius: scale(10),
     width: scale(130),
   },

@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {
+  Dimensions,
   FlatList,
   Pressable,
   StatusBar,
@@ -19,6 +20,8 @@ import BottomSheetContent from '../../component/BottomSheetContent';
 import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from '../../component/verses/ModalContent';
 import NoteModalContent from '../../component/profile/NoteModalContent';
+
+const {height, width} = Dimensions.get('window');
 
 const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
 
@@ -71,7 +74,7 @@ const NotesScreen = () => {
     () => (
       <RBSheet
         ref={refRBSheet}
-        height={verticalScale(510)}
+        height={height * 0.76}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -80,7 +83,7 @@ const NotesScreen = () => {
         <View style={styles.sheetContainer}>
           <BottomSheetContent
             closeBottomSheet={closeBottomSheet}
-            title={editBottomSheet ? 'UPDATE NOTES' : 'CREATE NOTES'}
+            title={editBottomSheet ? 'EDIT NOTES' : 'CREATE NOTES'}
           />
         </View>
       </RBSheet>
