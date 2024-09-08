@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import Color from '../Color';
 import Font from '../Font';
@@ -11,13 +11,66 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../BottomSheetContent';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
+import {apiGet, apiPost} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import Loader from '../Loader';
+import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 
-const SetComponent = ({folderData}) => {
+const SetComponent = ({folderId, cardTypeId}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [visible, setVisible] = useState(false);
+  const [setData, setSetData] = useState([]);
+  const [setName, setSetName] = useState();
+  const [setStatus, setSetStatus] = useState(0);
+  const [setColor, setSetColor] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
+
+  useEffect(() => {
+    getSetData();
+  }, []);
+
+  // ===================================== Api ===================================== //
+
+  const getSetData = async (message = '') => {
+    !message && setVisible(true);
+    try {
+      const response = await apiGet(
+        `${Api.Set}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487`,
+      );
+      setSetData(response);
+      message && showMessageonTheScreen(message);
+    } catch (error) {
+      console.log('error in get folder api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const createSet = async () => {
+    const rawData = {
+      name: setName,
+      isPrivate: setStatus,
+      color: setColor,
+      cardTypeId: cardTypeId,
+      userId: '66da263e4d3998cb710a0487',
+    };
+    setVisible(true);
+    try {
+      const response = await apiPost(Api.Set, '', JSON.stringify(rawData));
+      console.log('response101010', response);
+      setSetName('');
+      setSetStatus('');
+      setSetColor('');
+      getSetData(response?.message);
+    } catch (error) {
+      console.log('error in create set api', error);
+    }
+  };
+
+  // ===================================== Api ===================================== //
 
   const openModal = (item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
@@ -31,18 +84,6 @@ const SetComponent = ({folderData}) => {
     setModalVisible(false);
   };
 
-  const setData = useMemo(
-    () => [
-      {setTitle: 'GENESIS', subSet: 5},
-      {setTitle: 'EXODUS', subSet: 3},
-      {setTitle: 'LEVITICUS', subSet: 1},
-      {setTitle: 'NUMBERS', subSet: 4},
-      {setTitle: 'DUETIRENOMY', subSet: 2},
-      {setTitle: 'JOSHUA', subSet: 5},
-    ],
-    [],
-  );
-
   const closeBottomSheet = () => {
     refRBSheet.current.close();
   };
@@ -55,18 +96,22 @@ const SetComponent = ({folderData}) => {
         <View style={styles.itemContainer}>
           <Pressable
             style={styles.setContainer}
-            onPress={() => navigation.navigate(ScreenName.setDetail,{setName: item?.setTitle})}>
+            onPress={() =>
+              navigation.navigate(ScreenName.setDetail, {
+                setName: item?.name,
+              })
+            }>
             <View style={styles.rowContainer}>
               <Image
                 source={require('../../Assets/Img/bibleSign.png')}
                 style={styles.bibleIcon}
-                tintColor={folderData?.iconColor}
+                tintColor={item?.color}
               />
-              <Text style={styles.setTitle}>{item?.setTitle}</Text>
+              <Text style={styles.setTitle}>{item?.name}</Text>
             </View>
             <View style={styles.rowWithGap}>
               <View style={styles.subSetContainer}>
-                <Text style={styles.subSetText}>{item?.subSet}</Text>
+                <Text style={styles.subSetText}>3</Text>
                 <Image
                   source={require('../../Assets/Img/cardIcon.png')}
                   style={styles.cardIcon}
@@ -89,7 +134,7 @@ const SetComponent = ({folderData}) => {
               source={require('../../Assets/Img/folder.png')}
               style={styles.folderIcon}
             />
-            <Text style={styles.folderText}>{folderData?.FolderName}</Text>
+            <Text style={styles.folderText}>folder</Text>
           </View>
         </View>
       );
@@ -111,44 +156,49 @@ const SetComponent = ({folderData}) => {
           <BottomSheetContent
             closeBottomSheet={closeBottomSheet}
             title={'CREATE SET'}
+            name={setName}
+            setName={setSetName}
+            status={setStatus}
+            setStatus={setSetStatus}
+            color={setColor}
+            setColor={setSetColor}
+            create={createSet}
           />
         </View>
       </RBSheet>
     );
-  }, []);
+  }, [setName, setStatus, setColor]);
 
-  const renderBody = useCallback(
-    () => (
-      <View style={styles.bodyContainer}>
-        <FlatList
-          data={setData}
-          renderItem={renderSet}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          style={{flex: 1}}
-        />
-        <CustomeButton
-          buttonColor={Color.theme1}
-          buttonWidth="100%"
-          buttonHeight={scale(45)}
-          title="CREATE SET"
-          borderRadius={scale(10)}
-          fontSize={scale(15)}
-          fontColor={Color.White}
-          fontFamily={Font.semiBold}
-          marginTop={verticalScale(15)}
-          position={'absolute'}
-          bottom={verticalScale(10)}
-          onPress={() => refRBSheet.current.open()}
-        />
-        {BottomSheets()}
-      </View>
-    ),
-    [setData, renderSet],
+  const renderBody = () => (
+    <View style={styles.bodyContainer}>
+      <FlatList
+        data={setData}
+        renderItem={renderSet}
+        keyExtractor={(item, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1}}
+      />
+      <CustomeButton
+        buttonColor={Color.theme1}
+        buttonWidth="100%"
+        buttonHeight={scale(45)}
+        title="CREATE SET"
+        borderRadius={scale(10)}
+        fontSize={scale(15)}
+        fontColor={Color.White}
+        fontFamily={Font.semiBold}
+        marginTop={verticalScale(15)}
+        position={'absolute'}
+        bottom={verticalScale(10)}
+        onPress={() => refRBSheet.current.open()}
+      />
+      {BottomSheets()}
+    </View>
   );
 
   return (
     <View style={{flex: 1}}>
+      <Loader visible={visible} />
       {renderBody()}
       <CustomeModal
         visible={modalVisible}

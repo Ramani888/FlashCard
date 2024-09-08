@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useState, useCallback} from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import Color from './Color';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
@@ -7,24 +7,40 @@ import Font from './Font';
 import CustomeInputField from '../custome/CustomeInputField';
 import {Switch} from '@rneui/themed';
 import ColorCodePicker from './verses/ColorCodePicker';
+import showMessageonTheScreen from './ShowMessageOnTheScreen';
 
 const {width, height} = Dimensions.get('window');
 
-const BottomSheetContent = ({closeBottomSheet, title}) => {
-  const [name, setName] = useState('');
-  const [value, setValue] = useState(false);
-  console.log('value', value);
-  const [selectedColor, setSelectedColor] = useState(null);
-
+const BottomSheetContent = ({
+  closeBottomSheet,
+  title,
+  name,
+  setName,
+  status,
+  setStatus,
+  color,
+  setColor,
+  create,
+}) => {
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../Assets/Img/userIcon.png'), []);
   const lockIcon = useMemo(() => require('../Assets/Img/lock.png'), []);
+
+  const toggleSwitch = () => setStatus(status => (status === 0 ? 1 : 0));
+
+  const handleSubmit = () => {
+    if (name && status !== null && color) {
+      create();
+      closeBottomSheet();
+    } else {
+      showMessageonTheScreen('All fields are required');
+    }
+  };
 
   const renderBody = useMemo(
     () => (
       <View style={styles.bodyContainer}>
         <Text style={styles.title}>{title}</Text>
-
         <View style={styles.separator} />
 
         <CustomeInputField
@@ -45,10 +61,11 @@ const BottomSheetContent = ({closeBottomSheet, title}) => {
           </View>
 
           <Switch
-            value={value}
-            onValueChange={setValue}
-            thumbColor={value ? Color.theme1 : '#8E9494'}
-            trackColor={{false: '#E7EAEB', true: Color.theme2}}
+            value={status === 1}
+            onValueChange={toggleSwitch}
+            color={status === 1 ? '#FF0000' : '#4CAF50'}
+            trackColor={{false: '#d3d3d3', true: '#d3d3d3'}}
+            thumbColor={status === 1 ? '#FF0000' : '#4CAF50'}
           />
 
           <View style={styles.switchContent}>
@@ -59,39 +76,21 @@ const BottomSheetContent = ({closeBottomSheet, title}) => {
 
         <View style={styles.colorSection}>
           <Text style={styles.colorTitle}>Color</Text>
-
           <View style={styles.separator} />
 
           <View style={styles.colorOptionsContainer}>
             <View style={styles.colorOption}>
-              <Text
-                style={[
-                  styles.colorIndicator,
-                  {backgroundColor: selectedColor},
-                ]}></Text>
+              <Text style={[styles.colorIndicator, {backgroundColor: color}]} />
             </View>
-            <Text
-              style={{
-                fontSize: scale(16),
-                color: Color.Black,
-                fontFamily: Font.medium,
-              }}>
-              Or
-            </Text>
-            <View
-              style={[
-                styles.colorOptionLarge,
-                {backgroundColor: selectedColor},
-              ]}></View>
+            <Text style={styles.orText}>Or</Text>
+            <View style={[styles.colorOptionLarge, {backgroundColor: color}]} />
           </View>
-          <ColorCodePicker
-            setSelectedColor={setSelectedColor}
-            selectedColor={selectedColor}
-          />
+
+          <ColorCodePicker setSelectedColor={setColor} selectedColor={color} />
         </View>
       </View>
     ),
-    [value, name, userIcon, lockIcon, selectedColor], // Dependencies for useMemo
+    [name, color, setStatus, title, userIcon, lockIcon, toggleSwitch],
   );
 
   return (
@@ -106,7 +105,7 @@ const BottomSheetContent = ({closeBottomSheet, title}) => {
         fontColor={Color.White}
         fontFamily={Font.semiBold}
         marginTop={verticalScale(15)}
-        onPress={() => closeBottomSheet()}
+        onPress={handleSubmit}
       />
     </View>
   );
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
     borderWidth: scale(1),
     borderColor: Color.LightGray,
     borderRadius: scale(10),
-    width: scale(130),
+    width: width * 0.36,
     height: verticalScale(40),
     justifyContent: 'center',
   },
@@ -207,23 +206,14 @@ const styles = StyleSheet.create({
   },
   colorOptionLarge: {
     height: height * 0.06,
+    width: width * 0.36,
+    borderWidth: scale(1),
     borderRadius: scale(10),
-    width: scale(130),
+    borderColor: Color.LightGray,
+  },
+  orText: {
+    fontSize: scale(16),
+    color: Color.Black,
+    fontFamily: Font.medium,
   },
 });
-
-// #a378ff
-// #ea80fc
-// #ff8a80
-// #1de9b6
-// #25c6da
-
-// #81dbfe
-// #438afe
-// #81b0fd
-
-// #bdbdbd
-
-// #ff9f7f
-
-// #ffd27f

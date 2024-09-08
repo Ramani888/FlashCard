@@ -5,7 +5,7 @@ import NotesScreen from '../screen/profile/NotesScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
 import QAScreen from '../screen/QAScreen';
-import VersesScreen from '../screen/verses/VersesScreen';
+import VersesScreen from '../screen/verses/CardTypeWiseFolderAndSetScreen';
 import AssignFolderScreen from '../screen/verses/AssignFolderScreen';
 import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
 import SetDetailScreen from '../screen/verses/SetDetailScreen';

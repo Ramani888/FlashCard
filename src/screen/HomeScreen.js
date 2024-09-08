@@ -101,33 +101,28 @@ const HomeScreen = () => {
     () => (
       <View style={styles.buttonsContainer}>
         <Text style={styles.myCardsText}>MY CARDS</Text>
-        {[{name: 'VERSES'}, {name: 'Q + A’s'}, {name: 'GENERAL'}].map(
-          (item, index) => (
-            <CustomeButton
-              key={index}
-              buttonColor={Color.theme1}
-              buttonWidth={width * 0.85}
-              buttonHeight={height * 0.06}
-              title={item?.name}
-              borderRadius={moderateScale(10)}
-              fontSize={moderateScale(15)}
-              fontColor={Color.White}
-              fontFamily={Font.semiBold}
-              marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
-              onPress={() => {
-                item?.name === 'VERSES' &&
-                  navigation.navigate(
-                    ScreenName.verses,
-                    //  {cardTypeId: item?._id}
-                  );
-                item?.name === 'Q + A’s' &&
-                  navigation.navigate(ScreenName.qaScreen, {
-                    // cardTypeId: item?._id,
-                  });
-              }}
-            />
-          ),
-        )}
+        {cardTypeData.map((item, index) => (
+          <CustomeButton
+            key={index}
+            buttonColor={Color.theme1}
+            buttonWidth={width * 0.85}
+            buttonHeight={height * 0.06}
+            title={item?.name}
+            borderRadius={moderateScale(10)}
+            fontSize={moderateScale(15)}
+            fontColor={Color.White}
+            fontFamily={Font.semiBold}
+            marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
+            onPress={() => {
+              item?.name === 'VERSES' &&
+                navigation.navigate(ScreenName.verses, {cardTypeId: item?._id});
+              item?.name === 'Q + A’s' &&
+                navigation.navigate(ScreenName.qaScreen, {
+                  cardTypeId: item?._id,
+                });
+            }}
+          />
+        ))}
       </View>
     ),
     [cardTypeData],
@@ -137,7 +132,7 @@ const HomeScreen = () => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.5} // Responsive height
+        height={height * 0.57} // Responsive height
         openDuration={250}
         draggable={true}
         customStyles={{

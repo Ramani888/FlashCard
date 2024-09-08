@@ -10,17 +10,20 @@ import CustomeButton from '../../custome/CustomeButton';
 import Font from '../../component/Font';
 import SetComponent from '../../component/verses/SetComponent';
 import FolderComponent from '../../component/verses/FolderComponent';
+import {useRoute} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
 const VersesScreen = () => {
+  const route = useRoute();
   const [search, setSearch] = useState(false);
   const [searchHashtags, setSearchHashtags] = useState('');
   const [tab, setTab] = useState('FOLDERS');
-  const [folderData, setFolderData] = useState({});
+  const [folderId, setFolderId] = useState('');
+  const {cardTypeId} = route.params;
 
-  const handleFolderClick = data => {
-    setFolderData(data); // Store the data to be passed to SetScreen
+  const handleFolderClick = folderId => {
+    setFolderId(folderId); // Store the data to be passed to SetScreen
     setTab('SET'); // Switch to SetScreen
   };
 
@@ -104,9 +107,14 @@ const VersesScreen = () => {
           )}
           {buttons()}
         </LinearGradient>
-        {tab == 'SET' && <SetComponent folderData={folderData} />}
+        {tab == 'SET' && (
+          <SetComponent folderId={folderId} cardTypeId={cardTypeId} />
+        )}
         {tab == 'FOLDERS' && (
-          <FolderComponent onFolderClick={handleFolderClick} />
+          <FolderComponent
+            onFolderClick={handleFolderClick}
+            cardTypeId={cardTypeId}
+          />
         )}
       </View>
     );

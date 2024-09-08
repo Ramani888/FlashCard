@@ -1,5 +1,5 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useMemo, useRef, useState, useCallback} from 'react';
+import React, {useMemo, useRef, useState, useCallback, useEffect} from 'react';
 import Color from '../Color';
 import Font from '../Font';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -9,23 +9,66 @@ import ModalContent from './ModalContent';
 import CustomeButton from '../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../BottomSheetContent';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {apiGet, apiPost} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import Loader from '../Loader';
+import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 
-const FolderComponent = ({onFolderClick}) => {
-  const navigation = useNavigation()
+const FolderComponent = ({onFolderClick, cardTypeId}) => {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [visible, setVisible] = useState(false);
+  const [folderData, setFolderData] = useState([]);
+  const [folderName, setFolderName] = useState('');
+  const [folderStatus, setFolderStatus] = useState(0);
+  const [folderColor, setFolderColor] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
-  const setData = useMemo(
-    () => [
-      {FolderName: 'SIN', iconColor: '#8da0ff'},
-      {FolderName: 'BAPTISM', iconColor: '#ea80fc'},
-      {FolderName: 'BIBLE', iconColor: '#ffd27f'},
-    ],
-    [],
-  );
+  useEffect(() => {
+    getFolderData();
+  }, []);
+
+  // ================================== Api =================================== //
+
+  const getFolderData = async (message = '') => {
+    !message && setVisible(true);
+    try {
+      const response = await apiGet(
+        `${Api.Folder}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487`,
+      );
+      setFolderData(response);
+      message && showMessageonTheScreen(message);
+    } catch (error) {
+      console.log('error in get folder api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const createFolder = async () => {
+    const rawData = {
+      name: folderName,
+      isPrivate: folderStatus,
+      color: folderColor,
+      cardTypeId: cardTypeId,
+      userId: '66da263e4d3998cb710a0487',
+    };
+    setVisible(true);
+    try {
+      const response = await apiPost(Api.Folder, '', JSON.stringify(rawData));
+      setFolderName('');
+      setFolderStatus(0);
+      setFolderColor('');
+      getFolderData(response?.message);
+    } catch (error) {
+      console.log('error in create folder api', error);
+    }
+  };
+
+  // ================================== End =================================== //
 
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
@@ -41,14 +84,16 @@ const FolderComponent = ({onFolderClick}) => {
 
   const renderFolder = useCallback(
     ({item, index}) => {
-      const isLastItem = index === setData.length - 1;
+      const isLastItem = index === folderData.length - 1;
       return (
-        <Pressable style={styles.folderItem} onPress={() => onFolderClick(item)}>
+        <Pressable
+          style={styles.folderItem}
+          onPress={() => {
+            onFolderClick(item._id);
+          }}>
           <View style={styles.folderInfo}>
-            <View
-              style={[styles.iconColor, {backgroundColor: item.iconColor}]}
-            />
-            <Text style={styles.folderName}>{item.FolderName}</Text>
+            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            <Text style={styles.folderName}>{item.name}</Text>
           </View>
           <Pressable
             ref={threeDotIconRef}
@@ -81,11 +126,21 @@ const FolderComponent = ({onFolderClick}) => {
           container: styles.bottomSheetContainer,
         }}>
         <View style={styles.sheetContainer}>
-          <BottomSheetContent closeBottomSheet={closeBottomSheet} title={'CREATE FOLDER'}/>
+          <BottomSheetContent
+            closeBottomSheet={closeBottomSheet}
+            title={'CREATE FOLDER'}
+            name={folderName}
+            setName={setFolderName}
+            status={folderStatus}
+            setStatus={setFolderStatus}
+            color={folderColor}
+            setColor={setFolderColor}
+            create={createFolder}
+          />
         </View>
       </RBSheet>
     );
-  }, []);
+  }, [folderName, folderStatus, folderColor]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
@@ -103,7 +158,7 @@ const FolderComponent = ({onFolderClick}) => {
         </View>
 
         <FlatList
-          data={setData}
+          data={folderData}
           renderItem={renderFolder}
           keyExtractor={keyExtractor}
           style={{marginTop: verticalScale(10)}}
@@ -130,6 +185,7 @@ const FolderComponent = ({onFolderClick}) => {
 
   return (
     <View style={styles.container}>
+      <Loader visible={visible} />
       {renderBody()}
       <CustomeModal
         visible={modalVisible}

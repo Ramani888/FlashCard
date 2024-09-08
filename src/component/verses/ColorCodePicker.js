@@ -41,7 +41,6 @@ const ColorCodePicker = ({setSelectedColor, selectedColor}) => {
           selectedColor === item && styles.selectedColor,
         ]}
         onPress={() => setSelectedColor(item)}>
-        {/* {selectedColor === item && <View style={styles.checkmark} />} */}
       </TouchableOpacity>
     ),
     [selectedColor],
@@ -66,12 +65,12 @@ const styles = StyleSheet.create({
     margin: scale(10),
     backgroundColor: Color.WhiteDefault,
     padding: scale(3),
-    marginTop: height*0.02,
+    marginTop: height * 0.02,
     borderRadius: scale(10),
   },
   colorBox: {
     width: width * 0.09,
-    height: height* 0.05,
+    height: height * 0.05,
     margin: scale(5),
     borderRadius: scale(5),
     justifyContent: 'center',
