@@ -213,7 +213,7 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
           data={folderData}
           renderItem={renderFolder}
           keyExtractor={keyExtractor}
-          style={{marginTop: verticalScale(10)}}
+          style={styles.flatlist}
         />
         {BottomSheets()}
 
@@ -278,6 +278,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(15),
     flex: 1,
   },
+  flatlist: {marginTop: verticalScale(10), marginBottom: verticalScale(55)},
   folderContainer: {
     backgroundColor: Color.SandyBrown,
     borderRadius: scale(10),

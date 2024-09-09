@@ -11,6 +11,8 @@ import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
 import SetDetailScreen from '../screen/verses/SetDetailScreen';
 import SignUpScreen from '../screen/auth/SignUpScreen';
 import SignInScreen from '../screen/auth/SignInScreen';
+import PdfScreen from '../screen/profile/PdfScreen';
+import ImagesScreen from '../screen/profile/ImagesScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -26,6 +28,8 @@ export const ScreenName = {
   asignFolder: 'AsignFolder',
   globalLiveFeed: 'GlobalLiveFeed',
   setDetail: 'SetDetail',
+  pdf: 'Pdf',
+  image: 'Image',
 };
 
 export const ScreenPath = {
@@ -42,4 +46,6 @@ export const ScreenPath = {
   AssignFolderScreen,
   GlobalLiveFeedScreen,
   SetDetailScreen,
+  PdfScreen,
+  ImagesScreen,
 };

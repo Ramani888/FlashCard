@@ -85,6 +85,18 @@ const AppStack = () => {
         component={ScreenPath.NotesScreen}
         options={{headerShown: false}}
       />
+
+      <Stack.Screen
+        name={ScreenName.pdf}
+        component={ScreenPath.PdfScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={ScreenName.image}
+        component={ScreenPath.ImagesScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

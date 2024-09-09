@@ -75,6 +75,8 @@ const ProfileScreen = () => {
     tabname == 'Contacts' && navigation.navigate(ScreenName.contact);
     tabname == 'Support' && navigation.navigate(ScreenName.support);
     tabname == 'Notes' && navigation.navigate(ScreenName.notes);
+    tabname == 'PDF' && navigation.navigate(ScreenName.pdf);
+    tabname == 'Images' && navigation.navigate(ScreenName.image);
   };
 
   const renderTab = useCallback(
@@ -117,7 +119,7 @@ const ProfileScreen = () => {
     return (
       <RBSheet
         ref={refEmailRBSheet}
-        height={height * 0.60}
+        height={height * 0.6}
         openDuration={250}
         draggable={true}
         customStyles={{
