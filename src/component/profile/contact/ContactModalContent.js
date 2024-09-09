@@ -3,8 +3,8 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {scale, verticalScale} from 'react-native-size-matters';
-import Color from '../Color';
-import Font from '../Font';
+import Color from '../../Color';
+import Font from '../../Font';
 
 const ContactModalContent = ({closeModal}) => {
   // Memoizing the renderBody to avoid unnecessary re-renders

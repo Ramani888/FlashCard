@@ -6,6 +6,7 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../../component/Font';
+import ImageComponent from '../../component/profile/image/ImageComponent';
 
 const ImagesScreen = () => {
   const [tab, setTab] = useState('IMAGES');
@@ -62,6 +63,8 @@ const ImagesScreen = () => {
 
           {buttons()}
         </LinearGradient>
+
+        {tab == 'IMAGES' && <ImageComponent />}
       </View>
     );
   };

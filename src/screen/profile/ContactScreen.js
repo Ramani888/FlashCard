@@ -6,9 +6,9 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeModal from '../../custome/CustomeModal';
-import ContactModalContent from '../../component/profile/ContactModalContent';
-import UserNameBottomSheetsContent from '../../component/profile/UserNameBottomSheetsContent';
-import ContactBottomSheetContent from '../../component/profile/ContactBottomSheetContent';
+import ContactModalContent from '../../component/profile/contact/ContactModalContent';
+import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
+import ContactBottomSheetContent from '../../component/profile/contact/ContactBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 const contactData = [

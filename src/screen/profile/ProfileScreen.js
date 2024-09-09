@@ -16,10 +16,10 @@ import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import Font from '../../component/Font';
 import CustomeInputField from '../../custome/CustomeInputField';
 import CustomeModal from '../../custome/CustomeModal';
-import ProfileModalContent from '../../component/profile/ProfileModalContent';
+import ProfileModalContent from '../../component/profile/profile/ProfileModalContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import UserNameBottomSheetsContent from '../../component/profile/UserNameBottomSheetsContent';
-import EmailBottomSheetsContent from '../../component/profile/EmailBottomSheetsContent';
+import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
+import EmailBottomSheetsContent from '../../component/profile/profile/EmailBottomSheetsContent';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 

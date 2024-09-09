@@ -2,11 +2,11 @@ import React, {useCallback} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import CustomeInputField from '../../custome/CustomeInputField';
+import CustomeInputField from '../../../custome/CustomeInputField';
 import {scale, verticalScale} from 'react-native-size-matters';
-import Color from '../../component/Color';
-import CustomeButton from '../../custome/CustomeButton';
-import Font from '../Font';
+import Color from '../../Color';
+import CustomeButton from '../../../custome/CustomeButton';
+import Font from '../../Font';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const ContactBottomSheetContent = ({closeContactBottomSheet}) => {
