@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -29,8 +29,29 @@ const NotesScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
+  const [singleNoteData, setSingleNoteData] = useState({});
+  const [noteData, setNoteData] = useState([]);
+  const [noteName, setNoteName] = useState();
+  const [noteStatus, setNoteStatus] = useState(0);
+  const [noteColor, setNoteColor] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
+
+  useEffect(() => {
+    getNoteData();
+  }, []);
+
+  // ====================================== Api ===================================== //
+
+  const getNoteData = () => {};
+
+  const createNote = () => {};
+
+  const editNote = () => {};
+
+  const deleteNote = () => {};
+
+  // ====================================== End ===================================== //
 
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
@@ -84,11 +105,19 @@ const NotesScreen = () => {
           <BottomSheetContent
             closeBottomSheet={closeBottomSheet}
             title={editBottomSheet ? 'EDIT NOTES' : 'CREATE NOTES'}
+            name={noteName}
+            setName={setNoteName}
+            status={noteStatus}
+            setStatus={setNoteStatus}
+            color={noteColor}
+            setColor={setNoteColor}
+            create={editBottomSheet ? editNote : createNote}
+            initialData={singleNoteData ? singleNoteData : ''}
           />
         </View>
       </RBSheet>
     ),
-    [closeBottomSheet, editBottomSheet],
+    [noteName, noteStatus, noteColor, editBottomSheet],
   );
 
   const renderNotes = useCallback(
@@ -100,7 +129,10 @@ const NotesScreen = () => {
           <Text style={styles.noteText}>{item?.name}</Text>
           <Pressable
             ref={threeDotIconRef}
-            onPress={() => openModal(item, isLastItem)}>
+            onPress={() => {
+              setSingleNoteData(item);
+              openModal(item, isLastItem);
+            }}>
             <Entypo
               name="dots-three-vertical"
               size={scale(13)}
@@ -149,7 +181,8 @@ const NotesScreen = () => {
         bottom={verticalScale(10)}
         onPress={() => {
           setEditBottomSheet(false);
-          refRBSheet.current.open();
+          setSingleNoteData({});
+          openBottomSheet();
         }}
       />
 
@@ -163,6 +196,7 @@ const NotesScreen = () => {
             closeModal={closeModal}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
+            deleteData={deleteNote}
           />
         }
         width={scale(145)}

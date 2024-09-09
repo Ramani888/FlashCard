@@ -20,7 +20,7 @@ const CardTypeWiseFolderAndSetScreen = () => {
   const [searchHashtags, setSearchHashtags] = useState('');
   const [tab, setTab] = useState('FOLDERS');
   const [folderId, setFolderId] = useState('');
-  const {cardTypeId} = route.params;
+  const {cardTypeId, cartTypeName} = route.params;
 
   const handleFolderClick = folderId => {
     setFolderId(folderId); // Store the data to be passed to SetScreen
@@ -32,7 +32,7 @@ const CardTypeWiseFolderAndSetScreen = () => {
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={'VERSES'}
+        title={cartTypeName}
         containerStyle={styles.headerStyle}
         searchIcon={true}
         setSearch={setSearch}

@@ -116,10 +116,17 @@ const HomeScreen = () => {
             onPress={() => {
               item?.name === 'VERSES' &&
                 navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
+                  cartTypeName: item?.name,
                   cardTypeId: item?._id,
                 });
               item?.name === 'Q + A’s' &&
                 navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
+                  cartTypeName: item?.name,
+                  cardTypeId: item?._id,
+                });
+              item?.name === 'GENERAL' &&
+                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
+                  cartTypeName: item?.name,
                   cardTypeId: item?._id,
                 });
             }}

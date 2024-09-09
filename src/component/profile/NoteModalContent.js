@@ -10,6 +10,7 @@ const NoteModalContent = ({
   closeModal,
   openBottomSheet,
   setEditBottomSheet,
+  deleteData,
 }) => {
   const renderBody = () => {
     return (
@@ -31,6 +32,7 @@ const NoteModalContent = ({
             {borderBottomWidth: scale(0), marginBottom: verticalScale(-2)},
           ]}
           onPress={() => {
+            deleteData();
             closeModal();
           }}>
           <MaterialCommunityIcons
