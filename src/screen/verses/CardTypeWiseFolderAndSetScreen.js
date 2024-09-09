@@ -14,7 +14,7 @@ import {useRoute} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
-const VersesScreen = () => {
+const CardTypeWiseFolderAndSetScreen = () => {
   const route = useRoute();
   const [search, setSearch] = useState(false);
   const [searchHashtags, setSearchHashtags] = useState('');
@@ -123,7 +123,7 @@ const VersesScreen = () => {
   return <View style={{flex: 1}}>{renderBody()}</View>;
 };
 
-export default React.memo(VersesScreen);
+export default React.memo(CardTypeWiseFolderAndSetScreen);
 
 const styles = StyleSheet.create({
   headerContainer: {

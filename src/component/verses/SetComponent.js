@@ -11,7 +11,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../BottomSheetContent';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {apiGet, apiPost} from '../../Api/ApiService';
+import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
@@ -20,6 +20,8 @@ const SetComponent = ({folderId, cardTypeId}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [editBottomSheet, setEditBottomSheet] = useState(false);
+  const [singleSetData, setSingleSetData] = useState({});
   const [visible, setVisible] = useState(false);
   const [setData, setSetData] = useState([]);
   const [setName, setSetName] = useState();
@@ -31,6 +33,14 @@ const SetComponent = ({folderId, cardTypeId}) => {
   useEffect(() => {
     getSetData();
   }, []);
+
+  useEffect(() => {
+    if (singleSetData) {
+      setSetName(singleSetData?.name);
+      setSetStatus(singleSetData?.isPrivate == true ? 1 : 0);
+      setSetColor(singleSetData?.color);
+    }
+  }, [singleSetData]);
 
   // ===================================== Api ===================================== //
 
@@ -70,6 +80,38 @@ const SetComponent = ({folderId, cardTypeId}) => {
     }
   };
 
+  const editSet = async () => {
+    const rawData = {
+      _id: singleSetData?._id,
+      name: setName,
+      isPrivate: setStatus,
+      color: setColor,
+      cardTypeId: cardTypeId,
+      userId: '66da263e4d3998cb710a0487',
+    };
+    closeModal();
+    setVisible(true);
+    try {
+      const response = await apiPut(Api.Set, '', JSON.stringify(rawData));
+      setSetName('');
+      setSetStatus(0);
+      setSetColor('');
+      getSetData(response?.message);
+    } catch (error) {
+      console.log('error in edit Set api', error);
+    }
+  };
+
+  const deleteSet = async () => {
+    try {
+      setVisible(true);
+      const response = await apiDelete(`${Api.Set}?_id=${singleSetData?._id}`);
+      getSetData(response?.message);
+    } catch (error) {
+      console.log('error in delete set api', error);
+    }
+  };
+
   // ===================================== Api ===================================== //
 
   const openModal = (item, isLastItem) => {
@@ -82,6 +124,10 @@ const SetComponent = ({folderId, cardTypeId}) => {
 
   const closeModal = () => {
     setModalVisible(false);
+  };
+
+  const openBottomSheet = () => {
+    refRBSheet.current.open();
   };
 
   const closeBottomSheet = () => {
@@ -119,7 +165,10 @@ const SetComponent = ({folderId, cardTypeId}) => {
               </View>
               <Pressable
                 ref={threeDotIconRef}
-                onPress={() => openModal(item, isLastItem)}>
+                onPress={() => {
+                  setSingleSetData(item);
+                  openModal(item, isLastItem);
+                }}>
                 <Entypo
                   name="dots-three-vertical"
                   size={scale(13)}
@@ -155,19 +204,20 @@ const SetComponent = ({folderId, cardTypeId}) => {
         <View style={styles.sheetContainer}>
           <BottomSheetContent
             closeBottomSheet={closeBottomSheet}
-            title={'CREATE SET'}
+            title={editBottomSheet ? 'EDIT SET' : 'CREATE SET'}
             name={setName}
             setName={setSetName}
             status={setStatus}
             setStatus={setSetStatus}
             color={setColor}
             setColor={setSetColor}
-            create={createSet}
+            create={editBottomSheet ? editSet : createSet}
+            initialData={singleSetData ? singleSetData : ''}
           />
         </View>
       </RBSheet>
     );
-  }, [setName, setStatus, setColor]);
+  }, [setName, setStatus, setColor, editBottomSheet]);
 
   const renderBody = () => (
     <View style={styles.bodyContainer}>
@@ -190,7 +240,11 @@ const SetComponent = ({folderId, cardTypeId}) => {
         marginTop={verticalScale(15)}
         position={'absolute'}
         bottom={verticalScale(10)}
-        onPress={() => refRBSheet.current.open()}
+        onPress={() => {
+          setEditBottomSheet(false);
+          setSingleSetData({});
+          openBottomSheet();
+        }}
       />
       {BottomSheets()}
     </View>
@@ -205,7 +259,15 @@ const SetComponent = ({folderId, cardTypeId}) => {
         onClose={closeModal}
         closeModal={false}
         mainPadding={scale(5)}
-        content={<ModalContent closeModal={closeModal} type={'Set'} />}
+        content={
+          <ModalContent
+            closeModal={closeModal}
+            type={'Set'}
+            openBottomSheet={openBottomSheet}
+            setEditBottomSheet={setEditBottomSheet}
+            deleteData={deleteSet}
+          />
+        }
         width={scale(145)}
         height={scale(195)}
         justifyContent="flex-end"

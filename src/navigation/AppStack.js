@@ -33,8 +33,8 @@ const AppStack = () => {
       />
 
       <Stack.Screen
-        name={ScreenName.verses}
-        component={ScreenPath.VersesScreen}
+        name={ScreenName.cardTypeWiseFolderAndSet}
+        component={ScreenPath.CardTypeWiseFolderAndSetScreen}
         options={{headerShown: false}}
       />
 

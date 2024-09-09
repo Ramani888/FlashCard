@@ -59,18 +59,35 @@ const ModalContent = ({
             <Text style={styles.text}>Asign Folder</Text>
           </Pressable>
         )}
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            // closeModal();
-            setEditBottomSheet(true);
-            openBottomSheet();
-          }}>
-          <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
-          <Text style={styles.text}>Edit</Text>
-        </Pressable>
+        {type == 'Set' && (
+          <Pressable
+            style={styles.container}
+            onPress={() => {
+              setEditBottomSheet(true);
+              openBottomSheet();
+            }}>
+            <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
+            <Text style={styles.text}>Edit Set</Text>
+          </Pressable>
+        )}
+        {type == 'Folder' && (
+          <Pressable
+            style={styles.container}
+            onPress={() => {
+              setEditBottomSheet(true);
+              openBottomSheet();
+            }}>
+            <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
+            <Text style={styles.text}>Edit Folder</Text>
+          </Pressable>
+        )}
         {type == 'Set' ? (
-          <Pressable style={styles.container} onPress={closeModal}>
+          <Pressable
+            style={styles.container}
+            onPress={() => {
+              deleteData();
+              closeModal();
+            }}>
             <MaterialCommunityIcons
               name="delete"
               size={iconSize}

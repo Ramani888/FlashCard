@@ -5,7 +5,7 @@ import NotesScreen from '../screen/profile/NotesScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
 import QAScreen from '../screen/QAScreen';
-import VersesScreen from '../screen/verses/CardTypeWiseFolderAndSetScreen';
+import CardTypeWiseFolderAndSetScreen from '../screen/verses/CardTypeWiseFolderAndSetScreen';
 import AssignFolderScreen from '../screen/verses/AssignFolderScreen';
 import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
 import SetDetailScreen from '../screen/verses/SetDetailScreen';
@@ -16,7 +16,7 @@ export const ScreenName = {
   signUp: 'SignUp',
   signIn: 'SignIn',
   home: 'Home',
-  verses: 'Verses',
+  cardTypeWiseFolderAndSet: 'CardTypeWiseFolderAndSet',
   createCard: 'CreateCard',
   qaScreen: 'QAScreen',
   profile: 'Profile',
@@ -32,7 +32,7 @@ export const ScreenPath = {
   SignUpScreen,
   SignInScreen,
   HomeScreen,
-  VersesScreen,
+  CardTypeWiseFolderAndSetScreen,
   CreateCardScreen,
   QAScreen,
   ProfileScreen,

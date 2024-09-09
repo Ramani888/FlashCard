@@ -115,9 +115,11 @@ const HomeScreen = () => {
             marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
             onPress={() => {
               item?.name === 'VERSES' &&
-                navigation.navigate(ScreenName.verses, {cardTypeId: item?._id});
+                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
+                  cardTypeId: item?._id,
+                });
               item?.name === 'Q + A’s' &&
-                navigation.navigate(ScreenName.qaScreen, {
+                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
                   cardTypeId: item?._id,
                 });
             }}
