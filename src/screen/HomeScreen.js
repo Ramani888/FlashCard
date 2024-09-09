@@ -141,7 +141,7 @@ const HomeScreen = () => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.57} // Responsive height
+        height={height * 0.57}
         openDuration={250}
         draggable={true}
         customStyles={{

@@ -17,6 +17,7 @@ const ModalContent = ({
   openBottomSheet,
   setEditBottomSheet,
   deleteData,
+  cardTypeId,
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(false);
@@ -52,7 +53,9 @@ const ModalContent = ({
           <Pressable
             style={styles.container}
             onPress={() => {
-              navigation.navigate(ScreenName.asignFolder);
+              navigation.navigate(ScreenName.asignFolder, {
+                cardTypeId: cardTypeId,
+              });
               closeModal();
             }}>
             <Feather name="folder-plus" size={iconSize} color={Color.Black} />

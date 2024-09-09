@@ -1,5 +1,5 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -8,18 +8,64 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import Font from '../../component/Font';
+import {useRoute} from '@react-navigation/native';
+import {apiGet, apiPost} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import Loader from '../../component/Loader';
+import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 
 const AssignFolderScreen = () => {
+  const route = useRoute();
   const refRBSheet = useRef();
+  const [visible, setVisible] = useState(false);
+  const [folderData, setFolderData] = useState([]);
+  const [folderName, setFolderName] = useState('');
+  const [folderStatus, setFolderStatus] = useState(0);
+  const [folderColor, setFolderColor] = useState('');
+  const {cardTypeId} = route.params;
 
-  const setData = useMemo(
-    () => [
-      {FolderName: 'SIN', iconColor: '#8da0ff'},
-      {FolderName: 'BAPTISM', iconColor: '#ea80fc'},
-      {FolderName: 'BIBLE', iconColor: '#ffd27f'},
-    ],
-    [],
-  );
+  useEffect(() => {
+    getFolderData();
+  }, []);
+
+  // ================================== Api =================================== //
+
+  const getFolderData = async (message = '') => {
+    !message && setVisible(true);
+    try {
+      const response = await apiGet(
+        `${Api.Folder}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487`,
+      );
+      setFolderData(response);
+      message && showMessageonTheScreen(message);
+    } catch (error) {
+      console.log('error in get folder api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const createFolder = async () => {
+    const rawData = {
+      name: folderName,
+      isPrivate: folderStatus,
+      color: folderColor,
+      cardTypeId: cardTypeId,
+      userId: '66da263e4d3998cb710a0487',
+    };
+    setVisible(true);
+    try {
+      const response = await apiPost(Api.Folder, '', JSON.stringify(rawData));
+      setFolderName('');
+      setFolderStatus(0);
+      setFolderColor('');
+      getFolderData(response?.message);
+    } catch (error) {
+      console.log('error in create folder api', error);
+    }
+  };
+
+  // ================================== Api =================================== //
 
   const renderHeader = () => {
     return (
@@ -37,12 +83,12 @@ const AssignFolderScreen = () => {
   };
 
   const renderFolder = useCallback(({item, index}) => {
-    const isLastItem = index === setData.length - 1;
+    const isLastItem = index === folderData.length - 1;
     return (
       <Pressable style={styles.folderItem} onPress={() => ''}>
         <View style={styles.folderInfo}>
-          <View style={[styles.iconColor, {backgroundColor: item.iconColor}]} />
-          <Text style={styles.folderName}>{item.FolderName}</Text>
+          <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+          <Text style={styles.folderName}>{item?.name}</Text>
         </View>
       </Pressable>
     );
@@ -70,11 +116,18 @@ const AssignFolderScreen = () => {
           <BottomSheetContent
             closeBottomSheet={closeBottomSheet}
             title={'CREATE FOLDER'}
+            name={folderName}
+            setName={setFolderName}
+            status={folderStatus}
+            setStatus={setFolderStatus}
+            color={folderColor}
+            setColor={setFolderColor}
+            create={createFolder}
           />
         </View>
       </RBSheet>
     );
-  }, []);
+  }, [folderName, folderStatus, folderColor]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
@@ -91,7 +144,7 @@ const AssignFolderScreen = () => {
         </View>
 
         <FlatList
-          data={setData}
+          data={folderData}
           renderItem={renderFolder}
           keyExtractor={keyExtractor}
           style={{marginTop: verticalScale(10)}}
@@ -118,6 +171,7 @@ const AssignFolderScreen = () => {
 
   return (
     <View style={{flex: 1}}>
+      <Loader visible={visible} />
       {renderHeader()}
       {renderBody()}
     </View>

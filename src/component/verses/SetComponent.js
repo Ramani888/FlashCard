@@ -266,6 +266,7 @@ const SetComponent = ({folderId, cardTypeId}) => {
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
             deleteData={deleteSet}
+            cardTypeId={cardTypeId}
           />
         }
         width={scale(145)}
