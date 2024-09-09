@@ -150,7 +150,7 @@ const ImageComponent = () => {
         </View>
       );
     },
-    [openModal], // Memoize renderImage with openModal as a dependency
+    [openModal], 
   );
 
   const renderBody = () => {
@@ -160,7 +160,7 @@ const ImageComponent = () => {
           data={imageData}
           renderItem={renderImage}
           numColumns={3}
-          keyExtractor={(_, index) => index.toString()} // Provide unique keys
+          keyExtractor={(_, index) => index.toString()} 
         />
         {BottomSheets()}
       </View>
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     margin: scale(5.5),
-    position: 'relative', // To handle absolute positioning of the icon
+    position: 'relative', 
   },
   image: {
     width: scale(105),

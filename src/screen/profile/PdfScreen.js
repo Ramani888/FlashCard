@@ -55,7 +55,7 @@ const PdfScreen = () => {
 
   const renderBody = () => {
     return (
-      <View >
+      <View>
         <LinearGradient
           colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
           style={styles.headerContainer}>

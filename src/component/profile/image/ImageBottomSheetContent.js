@@ -16,7 +16,7 @@ import {
   const {height, width} = Dimensions.get('window');
   
   const ImageBottomSheetContent = ({closeBottomSheet, title}) => {
-    // Memoize the handleSubmit function to avoid re-creation on each render
+
     const handleSubmit = useCallback(() => {
       closeBottomSheet();
     }, [closeBottomSheet]);
