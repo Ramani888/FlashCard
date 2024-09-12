@@ -13,9 +13,11 @@ import SignUpScreen from '../screen/auth/SignUpScreen';
 import SignInScreen from '../screen/auth/SignInScreen';
 import PdfScreen from '../screen/profile/PdfScreen';
 import ImagesScreen from '../screen/profile/ImagesScreen';
+import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
+  otpVerify: 'OtpVerify',
   signIn: 'SignIn',
   home: 'Home',
   cardTypeWiseFolderAndSet: 'CardTypeWiseFolderAndSet',
@@ -34,6 +36,7 @@ export const ScreenName = {
 
 export const ScreenPath = {
   SignUpScreen,
+  OtpVerifyScreen,
   SignInScreen,
   HomeScreen,
   CardTypeWiseFolderAndSetScreen,

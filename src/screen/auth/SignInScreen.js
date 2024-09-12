@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useEffect} from 'react';
 import {Pressable, StyleSheet, Text, View, Linking} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -10,6 +10,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomeButton from '../../custome/CustomeButton';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
+import {apiPost} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
+import Loader from '../../component/Loader';
 
 const inputFields = [
   {
@@ -23,6 +28,42 @@ const inputFields = [
 const SignInScreen = () => {
   const navigation = useNavigation();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  // ===================================== Api =================================== //
+
+  const loginUser = async (email, password) => {
+    const rawData = {
+      email: email,
+      password: password,
+    };
+    try {
+      setVisible(true);
+      const response = await apiPost(Api.signIn, '', JSON.stringify(rawData));
+      console.log('response', response);
+      if (response?.success == true) {
+        await AsyncStorage.setItem('user', JSON.stringify(response?.user));
+        LoggedInUser();
+        showMessageonTheScreen(response?.message);
+      }
+    } catch (error) {
+      console.log('error in login api', error);
+    }
+  };
+
+  const LoggedInUser = async () => {
+    try {
+      const userData = await AsyncStorage.getItem('user');
+      global.user = JSON.parse(userData);
+      navigation.navigate(ScreenName.home);
+    } catch (error) {
+      console.log('error in logged in', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  // ===================================== Api =================================== //
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
@@ -74,14 +115,15 @@ const SignInScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Loader visible={visible} />
       <Text style={styles.title}>Sign In</Text>
       <Text style={styles.subtitle}>Welcome 👋 Please enter your Account.</Text>
       <Formik
-        initialValues={{email: 'abc@gmail.com', password: '123456789'}}
+        initialValues={{email: '', password: ''}}
         validationSchema={validationSchema}
         onSubmit={values => {
-          console.log('Form Values:', values);
-          navigation.navigate(ScreenName.home);
+          loginUser(values.email, values.password);
+          // navigation.navigate(ScreenName.home);
         }}>
         {({
           handleChange,

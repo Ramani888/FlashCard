@@ -1,106 +1,149 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import React, {useMemo} from 'react';
 import {ScreenName, ScreenPath} from '../component/Screen';
 
 const Stack = createStackNavigator();
 
-const AppStack = () => {
+const AppStack = ({user}) => {
+  const {
+    signIn,
+    signUp,
+    otpVerify,
+    home,
+    globalLiveFeed,
+    cardTypeWiseFolderAndSet,
+    createCard,
+    asignFolder,
+    setDetail,
+    qaScreen,
+    profile,
+    contact,
+    support,
+    notes,
+    pdf,
+    image,
+  } = ScreenName;
+
+  const {
+    SignUpScreen,
+    OtpVerifyScreen,
+    SignInScreen,
+    HomeScreen,
+    GlobalLiveFeedScreen,
+    CardTypeWiseFolderAndSetScreen,
+    CreateCardScreen,
+    AssignFolderScreen,
+    SetDetailScreen,
+    QAScreen,
+    ProfileScreen,
+    ContactScreen,
+    SupportScreen,
+    NotesScreen,
+    PdfScreen,
+    ImagesScreen,
+  } = ScreenPath;
+
+  const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
+
   return (
-    <Stack.Navigator initialRouteName={ScreenName.signIn}>
+    <Stack.Navigator initialRouteName={initialRouteName}>
       <Stack.Screen
-        name={ScreenName.signUp}
-        component={ScreenPath.SignUpScreen}
+        name={signUp}
+        component={SignUpScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.signIn}
-        component={ScreenPath.SignInScreen}
+        name={otpVerify}
+        component={OtpVerifyScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.home}
-        component={ScreenPath.HomeScreen}
+        name={signIn}
+        component={SignInScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.globalLiveFeed}
-        component={ScreenPath.GlobalLiveFeedScreen}
+        name={home}
+        component={HomeScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.cardTypeWiseFolderAndSet}
-        component={ScreenPath.CardTypeWiseFolderAndSetScreen}
+        name={globalLiveFeed}
+        component={GlobalLiveFeedScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.createCard}
-        component={ScreenPath.CreateCardScreen}
+        name={cardTypeWiseFolderAndSet}
+        component={CardTypeWiseFolderAndSetScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.asignFolder}
-        component={ScreenPath.AssignFolderScreen}
+        name={createCard}
+        component={CreateCardScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.setDetail}
-        component={ScreenPath.SetDetailScreen}
+        name={asignFolder}
+        component={AssignFolderScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.qaScreen}
-        component={ScreenPath.QAScreen}
+        name={setDetail}
+        component={SetDetailScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.profile}
-        component={ScreenPath.ProfileScreen}
+        name={qaScreen}
+        component={QAScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.contact}
-        component={ScreenPath.ContactScreen}
+        name={profile}
+        component={ProfileScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.support}
-        component={ScreenPath.SupportScreen}
+        name={contact}
+        component={ContactScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.notes}
-        component={ScreenPath.NotesScreen}
+        name={support}
+        component={SupportScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.pdf}
-        component={ScreenPath.PdfScreen}
+        name={notes}
+        component={NotesScreen}
         options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name={ScreenName.image}
-        component={ScreenPath.ImagesScreen}
+        name={pdf}
+        component={PdfScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={image}
+        component={ImagesScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
 };
 
-export default AppStack;
-
-const styles = StyleSheet.create({});
+export default React.memo(AppStack);

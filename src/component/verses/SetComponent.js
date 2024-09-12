@@ -48,7 +48,9 @@ const SetComponent = ({folderId, cardTypeId}) => {
     !message && setVisible(true);
     try {
       const response = await apiGet(
-        `${Api.Set}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487`,
+        folderId
+          ? `${Api.Set}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487&folderId=${folderId}`
+          : `${Api.Set}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487`,
       );
       setSetData(response);
       message && showMessageonTheScreen(message);

@@ -1,5 +1,12 @@
 import React, {useState, useCallback} from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {scale, verticalScale} from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -73,50 +80,55 @@ const CardTypeWiseFolderAndSetScreen = () => {
 
   const renderBody = useCallback(() => {
     return (
-      <View style={{flex: 1}}>
-        <LinearGradient
-          colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
-          style={styles.headerContainer}>
-          {renderHeader()}
-          {search && (
-            <View>
-              <CustomeInputField
-                placeholder={'Search Hashtags'}
-                placeholderTextColor={Color.Gainsboro}
-                onChangeText={setSearchHashtags}
-                value={searchHashtags}
-                backgroundColor={'#3a6675'}
-                width={width * 0.88}
-                height={height * 0.065}
-                iconLeft={true}
-                IconLeftComponent={
-                  <View
-                    style={styles.searchIcon}
-                    onPress={() => setSearch(!search)}>
-                    <AntDesign
-                      name="search1"
-                      size={scale(14)}
-                      color={Color.White}
-                    />
-                  </View>
-                }
-                inputContainerStyles={styles.inputContainerStyle}
-                inputStyles={styles.inputStyles}
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+          <View style={{flex: 1}}>
+            <LinearGradient
+              colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
+              style={styles.headerContainer}>
+              {renderHeader()}
+              {search && (
+                <View>
+                  <CustomeInputField
+                    placeholder={'Search'}
+                    placeholderTextColor={Color.Gainsboro}
+                    onChangeText={setSearchHashtags}
+                    value={searchHashtags}
+                    backgroundColor={'#3a6675'}
+                    width={width * 0.88}
+                    height={height * 0.065}
+                    iconLeft={true}
+                    IconLeftComponent={
+                      <View
+                        style={styles.searchIcon}
+                        onPress={() => setSearch(!search)}>
+                        <AntDesign
+                          name="search1"
+                          size={scale(14)}
+                          color={Color.White}
+                        />
+                      </View>
+                    }
+                    inputContainerStyles={styles.inputContainerStyle}
+                    inputStyles={styles.inputStyles}
+                  />
+                </View>
+              )}
+              {buttons()}
+            </LinearGradient>
+            {tab == 'SET' && (
+              <SetComponent folderId={folderId} cardTypeId={cardTypeId} />
+            )}
+            {tab == 'FOLDERS' && (
+              <FolderComponent
+                onFolderClick={handleFolderClick}
+                cardTypeId={cardTypeId}
               />
-            </View>
-          )}
-          {buttons()}
-        </LinearGradient>
-        {tab == 'SET' && (
-          <SetComponent folderId={folderId} cardTypeId={cardTypeId} />
-        )}
-        {tab == 'FOLDERS' && (
-          <FolderComponent
-            onFolderClick={handleFolderClick}
-            cardTypeId={cardTypeId}
-          />
-        )}
-      </View>
+            )}
+          </View>
+      </KeyboardAvoidingView>
     );
   }, [renderHeader, search, tab]);
 

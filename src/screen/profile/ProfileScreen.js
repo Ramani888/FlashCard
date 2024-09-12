@@ -22,8 +22,11 @@ import UserNameBottomSheetsContent from '../../component/profile/profile/UserNam
 import EmailBottomSheetsContent from '../../component/profile/profile/EmailBottomSheetsContent';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
+import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
+import Loader from '../../component/Loader';
+import CustomeButton from '../../custome/CustomeButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Get screen dimensions
 const {width, height} = Dimensions.get('window');
 
 const tabData = [
@@ -37,6 +40,7 @@ const tabData = [
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -77,6 +81,20 @@ const ProfileScreen = () => {
     tabname == 'Notes' && navigation.navigate(ScreenName.notes);
     tabname == 'PDF' && navigation.navigate(ScreenName.pdf);
     tabname == 'Images' && navigation.navigate(ScreenName.image);
+  };
+
+  const handleLogout = async () => {
+    try {
+      setVisible(true);
+      const user = await AsyncStorage.removeItem('user');
+      showMessageonTheScreen('User Logout Successfully');
+      global.user = user;
+      navigation.navigate(ScreenName.signIn);
+    } catch (error) {
+      console.log('error in logout', error);
+    } finally {
+      setVisible(false);
+    }
   };
 
   const renderTab = useCallback(
@@ -140,6 +158,7 @@ const ProfileScreen = () => {
       colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
       style={styles.container}>
       <StatusBar translucent backgroundColor={Color.transparent} />
+      <Loader visible={visible} />
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
@@ -204,6 +223,20 @@ const ProfileScreen = () => {
         numColumns={3}
         key={'_'}
         contentContainerStyle={{paddingHorizontal: scale(15)}}
+      />
+
+      <CustomeButton
+        title={'Logout'}
+        buttonWidth={'90%'}
+        buttonHeight={verticalScale(40)}
+        buttonColor={Color.White}
+        fontSize={scale(15)}
+        fontFamily={Font.semiBold}
+        fontColor={Color.theme1}
+        borderRadius={scale(10)}
+        marginBottom={verticalScale(25)}
+        alignSelf={'center'}
+        onPress={handleLogout}
       />
 
       {userNameBottomSheets()}

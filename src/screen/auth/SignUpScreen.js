@@ -1,5 +1,12 @@
 import React, {useState, memo} from 'react';
-import {Pressable, StyleSheet, Text, View, Linking, ScrollView} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  ScrollView,
+} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
@@ -10,7 +17,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomeButton from '../../custome/CustomeButton';
 import {CheckBox} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
-import { ScreenName } from '../../component/Screen';
+import {ScreenName} from '../../component/Screen';
+import {apiPost} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import Loader from '../../component/Loader';
 
 const inputFields = [
   {
@@ -28,8 +38,28 @@ const inputFields = [
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  // ======================================== Api ===================================== //
+
+  const signUp = async value => {
+    try {
+      setVisible(true);
+      const response = await apiPost(Api.signUp, '', JSON.stringify(value));
+      console.log('responsesignup', response);
+      if (response?.success == true) {
+        navigation?.navigate(ScreenName.otpVerify, {email: value.email});
+      }
+    } catch (error) {
+      console.log('error in signUp api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  // ======================================== End ===================================== //
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
@@ -84,14 +114,21 @@ const SignUpScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}>
+      <Loader visible={visible} />
       <Text style={styles.title}>Sign Up</Text>
       <Text style={styles.subtitle}>Welcome 👋 Please enter your Account.</Text>
       <Formik
-        initialValues={{email: '', userName: '', password: ''}}
+        initialValues={{
+          email: 'nikunjramani567@gmail.com',
+          userName: 'Nikunj',
+          password: 'Nikunj123@',
+        }}
         validationSchema={validationSchema}
         onSubmit={values => {
-          console.log('Form Values:', values);
+          signUp(values);
         }}>
         {({
           handleChange,
