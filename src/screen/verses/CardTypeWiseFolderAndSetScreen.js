@@ -82,8 +82,13 @@ const CardTypeWiseFolderAndSetScreen = () => {
     return (
       <KeyboardAvoidingView
         style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+        // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 20}
+        enabled={Platform.OS === "ios" ? true : false}
+      >
           <View style={{flex: 1}}>
             <LinearGradient
               colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
@@ -132,7 +137,9 @@ const CardTypeWiseFolderAndSetScreen = () => {
     );
   }, [renderHeader, search, tab]);
 
-  return <View style={{flex: 1}}>{renderBody()}</View>;
+  return (
+    renderBody()
+  );
 };
 
 export default React.memo(CardTypeWiseFolderAndSetScreen);
