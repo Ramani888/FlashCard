@@ -29,6 +29,7 @@ const SignInScreen = () => {
   const navigation = useNavigation();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [error, setError] = useState('');
 
   // ===================================== Api =================================== //
 
@@ -45,6 +46,9 @@ const SignInScreen = () => {
         await AsyncStorage.setItem('user', JSON.stringify(response?.user));
         LoggedInUser();
         showMessageonTheScreen(response?.message);
+      } else {
+        setError(response?.message)
+        setVisible(false);
       }
     } catch (error) {
       console.log('error in login api', error);
@@ -182,6 +186,8 @@ const SignInScreen = () => {
               <Text style={styles.forgotPassText}>Forgot Password?</Text>
             </Pressable>
 
+            {error?.length > 0 && (<Text style={styles.errorMessage}>{error}</Text>)}
+
             <CustomeButton
               title={'SIGN IN'}
               buttonWidth={'100%'}
@@ -289,4 +295,10 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     textDecorationLine: 'underline',
   },
+  errorMessage: {
+    fontSize: moderateScale(13),
+    fontFamily: Font.medium,
+    color: Color.Red,
+    textAlign: 'center',
+  }
 });

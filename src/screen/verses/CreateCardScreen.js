@@ -1,7 +1,7 @@
-import React, {useState, useMemo, useCallback} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, { useState, useMemo, useCallback, useRef } from 'react';
+import { Image, StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale, verticalScale } from 'react-native-size-matters';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeInputField from '../../custome/CustomeInputField';
 import Color from '../../component/Color';
@@ -46,61 +46,71 @@ const CreateCardScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
-        style={styles.headerContainer}>
-        {header}
-        {cardImage}
-      </LinearGradient>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps='handled'
+      >
+        <LinearGradient
+          colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
+          style={styles.headerContainer}
+        >
+          {header}
+          {cardImage}
+        </LinearGradient>
 
-      <View style={styles.inputContainer}>
-        <CustomeInputField
-          placeholder="Top"
-          placeholderTextColor={Color.mediumGray}
-          onChangeText={handleTopChange}
-          value={top}
-          height={verticalScale(45)}
-          marginTop={verticalScale(-30)}
-          width="100%"
-          inputContainerStyles={[
-            styles.inputContainerStyle,
-            styles.topInputStyle,
-          ]}
-        />
-        <CustomeInputField
-          placeholder="Bottom"
-          height={verticalScale(180)}
-          onChangeText={handleBottomChange}
-          value={bottom}
-          textArea={true}
-          placeholderTextColor={Color.Gray}
-          borderRadius={scale(10)}
-          multiline={true}
-          numberOfLines={8}
-          textAlignVertical="top"
-          inputContainerStyles={styles.inputContainerStyle}
-        />
-        <View style={styles.optionalContainer}>
-          <Text style={styles.optionalText}>Optional - Add Note</Text>
+        <View style={styles.inputContainer}>
+          <CustomeInputField
+            placeholder="Top"
+            placeholderTextColor={Color.mediumGray}
+            onChangeText={handleTopChange}
+            value={top}
+            height={verticalScale(45)}
+            marginTop={verticalScale(-30)}
+            width="100%"
+            inputContainerStyles={[
+              styles.inputContainerStyle,
+              styles.topInputStyle,
+            ]}
+          />
+          <CustomeInputField
+            placeholder="Bottom"
+            height={verticalScale(180)}
+            onChangeText={handleBottomChange}
+            value={bottom}
+            textArea={true}
+            placeholderTextColor={Color.Gray}
+            borderRadius={scale(10)}
+            multiline={true}
+            numberOfLines={8}
+            textAlignVertical="top"
+            inputContainerStyles={styles.inputContainerStyle}
+          />
+          <View style={styles.optionalContainer}>
+            <Text style={styles.optionalText}>Optional - Add Note</Text>
+          </View>
+
+          <CustomeButton
+            buttonColor={Color.theme1}
+            buttonWidth="100%"
+            buttonHeight={scale(45)}
+            title="DONE"
+            borderRadius={scale(10)}
+            fontSize={scale(15)}
+            fontColor={Color.White}
+            fontFamily={Font.semiBold}
+            marginTop={verticalScale(15)}
+            marginBottom={verticalScale(15)}
+            // position={'absolute'}
+            // bottom={verticalScale(10)}
+            onPress={() => refRBSheet.current.open()}
+          />
         </View>
-
-        <CustomeButton
-          buttonColor={Color.theme1}
-          buttonWidth="100%"
-          buttonHeight={scale(45)}
-          title="DONE"
-          borderRadius={scale(10)}
-          fontSize={scale(15)}
-          fontColor={Color.White}
-          fontFamily={Font.semiBold}
-          marginTop={verticalScale(15)}
-          position={'absolute'}
-          bottom={verticalScale(10)}
-          onPress={() => refRBSheet.current.open()}
-        />
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -110,6 +120,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.White,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
   headerContainer: {
     paddingBottom: verticalScale(20),
@@ -123,7 +136,6 @@ const styles = StyleSheet.create({
   headerTitle: {top: verticalScale(40)},
   titleContainer: {
     alignItems: 'center',
-    // marginTop:verticalScale(15)
   },
   titleLine: {
     fontSize: scale(20),
