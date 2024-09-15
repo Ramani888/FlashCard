@@ -8,7 +8,7 @@ import Color from '../../component/Color';
 import Font from '../../component/Font';
 import CustomeButton from '../../custome/CustomeButton';
 
-const CreateCardScreen = () => {
+const CreateCardScreen = ({cardTypeId, folderId, setId}) => {
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
 
@@ -44,6 +44,22 @@ const CreateCardScreen = () => {
     ),
     [],
   );
+
+  const createCard = async () => {
+    const rawData = {
+      top: top,
+      bottom: bottom,
+      userId: global?.user?._id,
+      cardTypeId: '',
+      folderId: '',
+      setId: ''
+    }
+    try {
+
+    } catch (err) {
+      console.log('Error creating card:', err);
+    }
+  }
 
   return (
     <KeyboardAvoidingView
@@ -106,7 +122,7 @@ const CreateCardScreen = () => {
             marginBottom={verticalScale(15)}
             // position={'absolute'}
             // bottom={verticalScale(10)}
-            onPress={() => refRBSheet.current.open()}
+            onPress={() => {}}
           />
         </View>
       </ScrollView>

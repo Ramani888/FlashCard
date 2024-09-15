@@ -15,7 +15,7 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 
-const FolderComponent = ({onFolderClick, cardTypeId}) => {
+const FolderComponent = ({onFolderClick, cardTypeId, handleCreateSetClick}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -47,7 +47,7 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
     !message && setVisible(true);
     try {
       const response = await apiGet(
-        `${Api.Folder}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487`,
+        `${Api.Folder}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}`,
       );
       setFolderData(response);
       message && showMessageonTheScreen(message);
@@ -64,7 +64,7 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
       isPrivate: folderStatus,
       color: folderColor,
       cardTypeId: cardTypeId,
-      userId: '66da263e4d3998cb710a0487',
+      userId: global?.user?._id,
     };
     setVisible(true);
     try {
@@ -85,7 +85,7 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
       isPrivate: folderStatus,
       color: folderColor,
       cardTypeId: cardTypeId,
-      userId: '66da263e4d3998cb710a0487',
+      userId: global?.user?._id,
     };
     closeModal();
     setVisible(true);
@@ -255,6 +255,8 @@ const FolderComponent = ({onFolderClick, cardTypeId}) => {
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
             deleteData={deleteFolder}
+            handleCreateSetClick={handleCreateSetClick}
+            singleFolderData={singleFolderData}
           />
         }
         width={scale(145)}

@@ -18,6 +18,8 @@ const ModalContent = ({
   setEditBottomSheet,
   deleteData,
   cardTypeId,
+  handleCreateSetClick,
+  singleFolderData
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(false);
@@ -44,6 +46,7 @@ const ModalContent = ({
             style={styles.container}
             onPress={() => {
               closeModal();
+              handleCreateSetClick(singleFolderData?._id)
             }}>
             <Entypo name="plus" size={iconSize} color={Color.Black} />
             <Text style={styles.text}>Create Set</Text>

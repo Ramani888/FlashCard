@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import {
   Dimensions,
   KeyboardAvoidingView,
@@ -27,19 +27,26 @@ const CardTypeWiseFolderAndSetScreen = () => {
   const [searchHashtags, setSearchHashtags] = useState('');
   const [tab, setTab] = useState('FOLDERS');
   const [folderId, setFolderId] = useState('');
-  const {cardTypeId, cartTypeName} = route.params;
+  const [openSetSheet, setOpenSetSheet] = useState(false);
+  const {cardTypeId, cardTypeName} = route.params;
 
   const handleFolderClick = folderId => {
     setFolderId(folderId); // Store the data to be passed to SetScreen
     setTab('SET'); // Switch to SetScreen
   };
 
+  const handleCreateSetClick = folderId => {
+    setFolderId(folderId); // Store the data to be passed to SetScreen
+    setTab('SET'); // Switch to SetScreen
+    setOpenSetSheet(true); // Open SetBottomSheet
+  }
+
   const renderHeader = () => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={cartTypeName}
+        title={cardTypeName}
         containerStyle={styles.headerStyle}
         searchIcon={true}
         setSearch={setSearch}
@@ -60,7 +67,10 @@ const CardTypeWiseFolderAndSetScreen = () => {
         fontColor={tab == 'SET' ? Color.Black : Color.White}
         fontFamily={Font.medium}
         marginTop={verticalScale(15)}
-        onPress={() => setTab('SET')}
+        onPress={() => {
+          setTab('SET');
+          setFolderId('');
+        }}
       />
 
       <CustomeButton
@@ -73,7 +83,10 @@ const CardTypeWiseFolderAndSetScreen = () => {
         fontColor={tab == 'FOLDERS' ? Color.Black : Color.White}
         fontFamily={Font.medium}
         marginTop={verticalScale(15)}
-        onPress={() => setTab('FOLDERS')}
+        onPress={() => {
+          setTab('FOLDERS');
+          setOpenSetSheet(false);
+        }}
       />
     </View>
   );
@@ -124,12 +137,18 @@ const CardTypeWiseFolderAndSetScreen = () => {
               {buttons()}
             </LinearGradient>
             {tab == 'SET' && (
-              <SetComponent folderId={folderId} cardTypeId={cardTypeId} />
+              <SetComponent 
+                folderId={folderId} 
+                cardTypeId={cardTypeId}
+                openSetSheet={openSetSheet}
+                setOpenSetSheet={setOpenSetSheet}
+              />
             )}
             {tab == 'FOLDERS' && (
               <FolderComponent
                 onFolderClick={handleFolderClick}
                 cardTypeId={cardTypeId}
+                handleCreateSetClick={handleCreateSetClick}
               />
             )}
           </View>

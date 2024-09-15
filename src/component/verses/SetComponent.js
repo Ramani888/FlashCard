@@ -16,7 +16,7 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 
-const SetComponent = ({folderId, cardTypeId}) => {
+const SetComponent = ({folderId, cardTypeId, openSetSheet, setOpenSetSheet}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -42,16 +42,24 @@ const SetComponent = ({folderId, cardTypeId}) => {
     }
   }, [singleSetData]);
 
+  useEffect(() => {
+    if (openSetSheet) {
+      setEditBottomSheet(false);
+      setSingleSetData({});
+      openBottomSheet();
+    }
+  }, [openSetSheet])
+
   // ===================================== Api ===================================== //
 
   const getSetData = async (message = '') => {
     !message && setVisible(true);
+    console.log('folderId', folderId)
+    console.log('global user', global.user)
     try {
-      const response = await apiGet(
-        folderId
-          ? `${Api.Set}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487&folderId=${folderId}`
-          : `${Api.Set}?cardTypeId=${cardTypeId}&userId=66da263e4d3998cb710a0487`,
-      );
+      const url = folderId ? `${Api.FolderSet}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}&folderId=${folderId}` : `${Api.Set}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}`;
+      console.log('url', url)
+      const response = await apiGet(url);
       setSetData(response);
       message && showMessageonTheScreen(message);
     } catch (error) {
@@ -67,7 +75,8 @@ const SetComponent = ({folderId, cardTypeId}) => {
       isPrivate: setStatus,
       color: setColor,
       cardTypeId: cardTypeId,
-      userId: '66da263e4d3998cb710a0487',
+      userId: global?.user?._id,
+      ...(folderId ? { folderId: folderId } : {})
     };
     setVisible(true);
     try {
@@ -89,7 +98,7 @@ const SetComponent = ({folderId, cardTypeId}) => {
       isPrivate: setStatus,
       color: setColor,
       cardTypeId: cardTypeId,
-      userId: '66da263e4d3998cb710a0487',
+      userId: global?.user?._id,
     };
     closeModal();
     setVisible(true);
@@ -134,6 +143,7 @@ const SetComponent = ({folderId, cardTypeId}) => {
 
   const closeBottomSheet = () => {
     refRBSheet.current.close();
+    setOpenSetSheet(false);
   };
 
   const renderSet = useCallback(

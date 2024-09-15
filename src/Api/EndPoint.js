@@ -7,6 +7,7 @@ const Api = {
   getCardType: `${Base_url}/card/type`,
   Folder: `${Base_url}/folder`,
   Set: `${Base_url}/set`,
+  FolderSet: `${Base_url}/folder/set`
 };
 
 export default Api;
