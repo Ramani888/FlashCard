@@ -10,6 +10,7 @@ const Api = {
   FolderSet: `${Base_url}/folder/set`,
   card: `${Base_url}/card`,
   blurAllCard: `${Base_url}/blur/all/card`,
+  moveCard: `${Base_url}/move/card`,
 };
 
 export default Api;

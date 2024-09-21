@@ -67,7 +67,15 @@ const CardModalContent = ({
           />
         }
         text="Move"
-        onPress={closeModal}
+        onPress={() => {
+          navigation.navigate(ScreenName.assignSet, {
+            cardTypeId: cardTypeId,
+            folderId: folderId,
+            setId: setId,
+            cardId: item?._id,
+          });
+          closeModal();
+        }}
         isLast={true}
       />
     </View>

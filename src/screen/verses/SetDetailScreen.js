@@ -28,6 +28,7 @@ const SetDetailScreen = () => {
   const [cardModalPosition, setCardModalPosition] = useState({x: 0, y: 0});
   const [blurredCardIndices, setBlurredCardIndices] = useState([]);
   const [cardData, setCardData] = useState([]);
+  // console.log('cardData',cardData)
   const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
   const {setName} = route.params;
@@ -82,6 +83,21 @@ const SetDetailScreen = () => {
       }
     } catch (error) {
       console.log('error in update card', error);
+    }
+  };
+
+  const blurAllCard = async isBlur => {
+    try {
+      setVisible(true);
+      const response = await apiPut(
+        `${Api.blurAllCard}?setId=${setId}&isBlur=${isBlur}`,
+      );
+      console.log('response', response);
+      if (response?.success == true) {
+        getCardData(false);
+      }
+    } catch (error) {
+      console.log('error', error);
     }
   };
 
@@ -215,6 +231,7 @@ const SetDetailScreen = () => {
             setId={setId}
             setLayout={setLayout}
             layout={layout}
+            blurAllCard={blurAllCard}
           />
         }
         width={scale(150)}

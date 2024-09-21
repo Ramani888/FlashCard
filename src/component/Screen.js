@@ -15,6 +15,7 @@ import PdfScreen from '../screen/profile/PdfScreen';
 import ImagesScreen from '../screen/profile/ImagesScreen';
 import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
 import OpenAi from '../screen/OpenAi';
+import AssignSetScreen from '../screen/verses/AssignSetScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -29,6 +30,7 @@ export const ScreenName = {
   support: 'Support',
   notes: 'Notes',
   asignFolder: 'AsignFolder',
+  assignSet: 'AssignSet',
   globalLiveFeed: 'GlobalLiveFeed',
   setDetail: 'SetDetail',
   pdf: 'Pdf',
@@ -49,6 +51,7 @@ export const ScreenPath = {
   SupportScreen,
   NotesScreen,
   AssignFolderScreen,
+  AssignSetScreen,
   GlobalLiveFeedScreen,
   SetDetailScreen,
   PdfScreen,

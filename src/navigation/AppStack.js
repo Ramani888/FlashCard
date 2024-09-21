@@ -14,6 +14,7 @@ const AppStack = ({user}) => {
     cardTypeWiseFolderAndSet,
     createCard,
     asignFolder,
+    assignSet,
     setDetail,
     qaScreen,
     profile,
@@ -34,6 +35,7 @@ const AppStack = ({user}) => {
     CardTypeWiseFolderAndSetScreen,
     CreateCardScreen,
     AssignFolderScreen,
+    AssignSetScreen,
     SetDetailScreen,
     QAScreen,
     ProfileScreen,
@@ -94,6 +96,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={asignFolder}
         component={AssignFolderScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={assignSet}
+        component={AssignSetScreen}
         options={{headerShown: false}}
       />
 

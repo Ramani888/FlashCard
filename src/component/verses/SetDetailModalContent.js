@@ -24,6 +24,7 @@ const SetDetailModalContent = ({
   setId,
   setLayout,
   layout,
+  blurAllCard
 }) => {
   const navigation = useNavigation();
 
@@ -50,7 +51,7 @@ const SetDetailModalContent = ({
         }
         text={'Blur All'}
         onPress={() => {
-          blurAllCards();
+          blurAllCard(true);
           closeModal();
         }}
       />
