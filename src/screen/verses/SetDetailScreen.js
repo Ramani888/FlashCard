@@ -28,13 +28,12 @@ const SetDetailScreen = () => {
   const [cardModalPosition, setCardModalPosition] = useState({x: 0, y: 0});
   const [blurredCardIndices, setBlurredCardIndices] = useState([]);
   const [cardData, setCardData] = useState([]);
-  // console.log('cardData',cardData)
   const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
   const {setName} = route.params;
   const threeDotIconRef = useRef();
 
-  const {setId, folderId, cardTypeId} = route.params;
+  const {setId, folderId, cardTypeId,cardTypeName} = route.params;
 
   useEffect(() => {
     getCardData(false, false);
@@ -146,7 +145,7 @@ const SetDetailScreen = () => {
         headerBackgroundColor={Color.transparent}
         title={
           <View style={styles.titleContainer}>
-            <Text style={styles.titleLine}>VERSES</Text>
+            <Text style={styles.titleLine}>{cardTypeName}</Text>
             <Text style={styles.titleLine}>{setName}</Text>
           </View>
         }
@@ -227,6 +226,7 @@ const SetDetailScreen = () => {
           <SetDetailModalContent
             closeModal={closeModal}
             cardTypeId={cardTypeId}
+            cardTypeName={cardTypeName}
             folderId={folderId}
             setId={setId}
             setLayout={setLayout}
@@ -257,6 +257,7 @@ const SetDetailScreen = () => {
             deleteCard={deleteCard}
             item={item}
             cardTypeId={cardTypeId}
+            cardTypeName={cardTypeName}
             folderId={folderId}
             setId={setId}
           />

@@ -19,6 +19,7 @@ import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 const SetComponent = ({
   folderId,
   cardTypeId,
+  cardTypeName,
   openSetSheet,
   setOpenSetSheet,
 }) => {
@@ -164,6 +165,7 @@ const SetComponent = ({
                 setId: item?._id,
                 folderId: folderId,
                 cardTypeId: cardTypeId,
+                cardTypeName: cardTypeName
               })
             }>
             <View style={styles.rowContainer}>
@@ -287,6 +289,7 @@ const SetComponent = ({
             setEditBottomSheet={setEditBottomSheet}
             deleteData={deleteSet}
             cardTypeId={cardTypeId}
+            cardTypeName={cardTypeName}
             folderId={folderId}
             setId={setId}
           />

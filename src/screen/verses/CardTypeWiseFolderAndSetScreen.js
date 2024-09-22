@@ -140,6 +140,7 @@ const CardTypeWiseFolderAndSetScreen = () => {
               <SetComponent 
                 folderId={folderId} 
                 cardTypeId={cardTypeId}
+                cardTypeName={cardTypeName}
                 openSetSheet={openSetSheet}
                 setOpenSetSheet={setOpenSetSheet}
               />

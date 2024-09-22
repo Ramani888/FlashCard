@@ -4,7 +4,6 @@ import ContactScreen from '../screen/profile/ContactScreen';
 import NotesScreen from '../screen/profile/NotesScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
-import QAScreen from '../screen/QAScreen';
 import CardTypeWiseFolderAndSetScreen from '../screen/verses/CardTypeWiseFolderAndSetScreen';
 import AssignFolderScreen from '../screen/verses/AssignFolderScreen';
 import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
@@ -14,7 +13,6 @@ import SignInScreen from '../screen/auth/SignInScreen';
 import PdfScreen from '../screen/profile/PdfScreen';
 import ImagesScreen from '../screen/profile/ImagesScreen';
 import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
-import OpenAi from '../screen/OpenAi';
 import AssignSetScreen from '../screen/verses/AssignSetScreen';
 
 export const ScreenName = {
@@ -24,7 +22,6 @@ export const ScreenName = {
   home: 'Home',
   cardTypeWiseFolderAndSet: 'CardTypeWiseFolderAndSet',
   createCard: 'CreateCard',
-  qaScreen: 'QAScreen',
   profile: 'Profile',
   contact: 'Contacts',
   support: 'Support',
@@ -35,7 +32,6 @@ export const ScreenName = {
   setDetail: 'SetDetail',
   pdf: 'Pdf',
   image: 'Image',
-  openAi: 'OpenAi'
 };
 
 export const ScreenPath = {
@@ -45,7 +41,6 @@ export const ScreenPath = {
   HomeScreen,
   CardTypeWiseFolderAndSetScreen,
   CreateCardScreen,
-  QAScreen,
   ProfileScreen,
   ContactScreen,
   SupportScreen,
@@ -56,5 +51,4 @@ export const ScreenPath = {
   SetDetailScreen,
   PdfScreen,
   ImagesScreen,
-  OpenAi
 };

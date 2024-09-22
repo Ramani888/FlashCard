@@ -18,6 +18,7 @@ const ModalContent = ({
   setEditBottomSheet,
   deleteData,
   cardTypeId,
+  cardTypeName,
   handleCreateSetClick,
   singleFolderData,
   folderId,
@@ -40,6 +41,7 @@ const ModalContent = ({
               closeModal();
               navigation.navigate(ScreenName.createCard, {
                 cardTypeId: cardTypeId,
+                cardTypeName: cardTypeName,
                 folderId: folderId,
                 setId: setId,
               });

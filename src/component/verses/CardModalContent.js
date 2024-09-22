@@ -23,9 +23,11 @@ const CardModalContent = ({
   deleteCard,
   item,
   cardTypeId,
+  cardTypeName,
   folderId,
   setId,
 }) => {
+  console.log('cardTypeName',cardTypeName)
   const navigation = useNavigation();
 
   return (
@@ -39,6 +41,7 @@ const CardModalContent = ({
           navigation.navigate(ScreenName.createCard, {
             initialData: item,
             cardTypeId: cardTypeId,
+            cardTypeName: cardTypeName,
             folderId: folderId,
             setId: setId,
           });

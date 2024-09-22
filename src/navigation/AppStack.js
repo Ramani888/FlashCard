@@ -112,12 +112,6 @@ const AppStack = ({user}) => {
       />
 
       <Stack.Screen
-        name={qaScreen}
-        component={QAScreen}
-        options={{headerShown: false}}
-      />
-
-      <Stack.Screen
         name={profile}
         component={ProfileScreen}
         options={{headerShown: false}}
@@ -150,12 +144,6 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={image}
         component={ImagesScreen}
-        options={{headerShown: false}}
-      />
-
-      <Stack.Screen
-        name={openAi}
-        component={OpenAi}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

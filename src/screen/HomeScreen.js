@@ -24,6 +24,7 @@ import {ScreenName} from '../component/Screen';
 import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
+import AIScreen from '../component/AIScreen';
 
 const {width, height} = Dimensions.get('window');
 
@@ -56,6 +57,7 @@ const HomeScreen = () => {
   const [visible, setVisible] = useState(false);
   const [cardTypeData, setCardTypeData] = useState([]);
   const [selectedIcon, setSelectedIcon] = useState('timer');
+  const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
 
   useEffect(() => {
     getCardType();
@@ -100,7 +102,7 @@ const HomeScreen = () => {
   const renderButtons = useCallback(
     () => (
       <View style={styles.buttonsContainer}>
-        <Pressable onPress={() => navigation.navigate(ScreenName.openAi)}>
+        <Pressable onPress={() => openAiBottomSheets.current.open()}>
           <Image
             source={require('../Assets/Img/ai.png')}
             style={{width: scale(60), height: scale(60), alignSelf: 'center'}}
@@ -172,6 +174,12 @@ const HomeScreen = () => {
     );
   }, [selectedIcon]);
 
+  // const AiBottomSheets = useCallback(() => {
+  //   return (
+
+  //   );
+  // }, []);
+
   const renderBody = useCallback(
     () => (
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -186,6 +194,7 @@ const HomeScreen = () => {
         </LinearGradient>
         {renderButtons()}
         {BottomSheets()}
+        <AIScreen setOpenAIBottomsheet={setOpenAIBottomsheet} />
       </ScrollView>
     ),
     [renderHeaderIcons, renderButtons, BottomSheets, cardTypeData],

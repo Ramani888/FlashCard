@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  Pressable
+  Pressable,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -21,6 +21,7 @@ import {apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
+import AIScreen from '../../component/AIScreen';
 
 const CreateCardScreen = () => {
   const navigation = useNavigation();
@@ -28,7 +29,8 @@ const CreateCardScreen = () => {
   const [visible, setVisible] = useState(false);
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
-  const {cardTypeId, folderId, setId, initialData} = route.params;
+  const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
+  const {cardTypeId, cardTypeName, folderId, setId, initialData} = route.params;
 
   useEffect(() => {
     if (initialData) {
@@ -100,7 +102,9 @@ const CreateCardScreen = () => {
         title={
           <View style={styles.titleContainer}>
             <Text style={styles.titleLine}>CREATE</Text>
-            <Text style={styles.titleLine}>GENERAL CARD</Text>
+            <Text style={styles.titleLine}>
+              {cardTypeName == 'Q + A’s' ? 'Q + A’s' : 'GENERAL CARD'}
+            </Text>
           </View>
         }
         titleStyle={styles.headerTitle}
@@ -113,11 +117,19 @@ const CreateCardScreen = () => {
   const cardImage = useMemo(
     () => (
       <View style={styles.imageContainer}>
-        <Image
-          source={require('../../Assets/Img/singleCard.png')}
-          style={styles.cardImage}
-          resizeMode="contain"
-        />
+        {cardTypeName == 'Q + A’s' ? (
+          <Image
+            source={require('../../Assets/Img/questionMark.png')}
+            style={styles.cardImage}
+            resizeMode="contain"
+          />
+        ) : (
+          <Image
+            source={require('../../Assets/Img/singleCard.png')}
+            style={styles.cardImage}
+            resizeMode="contain"
+          />
+        )}
       </View>
     ),
     [],
@@ -140,7 +152,7 @@ const CreateCardScreen = () => {
 
         <View style={styles.inputContainer}>
           <CustomeInputField
-            placeholder="Top"
+            placeholder={cardTypeName == 'Q + A’s' ? 'Enter Question' : 'Top'}
             placeholderTextColor={Color.mediumGray}
             onChangeText={handleTopChange}
             value={top}
@@ -153,7 +165,7 @@ const CreateCardScreen = () => {
             ]}
           />
           <CustomeInputField
-            placeholder="Bottom"
+            placeholder={cardTypeName == 'Q + A’s' ? 'Enter Answer' : 'Bottom'}
             height={verticalScale(180)}
             onChangeText={handleBottomChange}
             value={bottom}
@@ -169,7 +181,9 @@ const CreateCardScreen = () => {
             <Text style={styles.optionalText}>Optional - Add Note</Text>
           </View>
 
-          <Pressable onPress={() => navigation.navigate(ScreenName.openAi)} style={styles.aiButton}>
+          <Pressable
+            onPress={() => openAiBottomSheets.current.open()}
+            style={styles.aiButton}>
             <Image
               source={require('../../Assets/Img/ai.png')}
               style={styles.aiImage}
@@ -198,6 +212,7 @@ const CreateCardScreen = () => {
             }}
           />
         </View>
+        <AIScreen setOpenAIBottomsheet={setOpenAIBottomsheet} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -271,6 +286,6 @@ const styles = StyleSheet.create({
     padding: scale(10),
     width: scale(30),
   },
-  aiButton:{marginVertical:verticalScale(20)},
-  aiImage:{width: scale(60), height: scale(60), alignSelf: 'center'}
+  aiButton: {marginVertical: verticalScale(20)},
+  aiImage: {width: scale(60), height: scale(60), alignSelf: 'center'},
 });
