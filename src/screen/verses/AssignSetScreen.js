@@ -13,10 +13,11 @@ import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import { ScreenName } from '../../component/Screen';
+import {ScreenName} from '../../component/Screen';
+import {useSelector} from 'react-redux';
 
 const AssignSetScreen = () => {
-    const navigation = useNavigation()
+  const navigation = useNavigation();
   const route = useRoute();
   const refRBSheet = useRef();
   const [visible, setVisible] = useState(false);
@@ -25,7 +26,8 @@ const AssignSetScreen = () => {
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
   const [selectedSet, setSelectedSet] = useState('');
-  const {cardTypeId, folderId, setId, cardId} = route.params;
+  const {cardTypeId} = useSelector(state => state.myState);
+  const {folderId, setId, cardId} = route.params;
 
   useEffect(() => {
     getSetData();

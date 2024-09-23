@@ -15,13 +15,9 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
+import {useSelector} from 'react-redux';
 
-const SetComponent = ({
-  folderId,
-  cardTypeId,
-  openSetSheet,
-  setOpenSetSheet,
-}) => {
+const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -35,6 +31,7 @@ const SetComponent = ({
   const [setId, setSetId] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
+  const {cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     getSetData();
@@ -163,7 +160,6 @@ const SetComponent = ({
                 setName: item?.name,
                 setId: item?._id,
                 folderId: folderId,
-                cardTypeId: cardTypeId,
               })
             }>
             <View style={styles.rowContainer}>
@@ -286,7 +282,6 @@ const SetComponent = ({
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
             deleteData={deleteSet}
-            cardTypeId={cardTypeId}
             folderId={folderId}
             setId={setId}
           />

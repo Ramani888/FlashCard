@@ -7,6 +7,7 @@ import Color from '../Color';
 import Font from '../Font';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
+import { useSelector } from 'react-redux';
 
 const PressableItem = ({icon, text, onPress, customTextStyle, isLast}) => (
   <Pressable
@@ -19,7 +20,6 @@ const PressableItem = ({icon, text, onPress, customTextStyle, isLast}) => (
 
 const SetDetailModalContent = ({
   closeModal,
-  cardTypeId,
   folderId,
   setId,
   setLayout,
@@ -60,7 +60,6 @@ const SetDetailModalContent = ({
         text="Create Card"
         onPress={() => {
           navigation.navigate(ScreenName.createCard, {
-            cardTypeId: cardTypeId,
             folderId: folderId,
             setId: setId,
           });

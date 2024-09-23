@@ -13,6 +13,7 @@ import {apiGet, apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
+import { useSelector } from 'react-redux';
 
 const AssignFolderScreen = () => {
   const route = useRoute();
@@ -22,7 +23,7 @@ const AssignFolderScreen = () => {
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
-  const {cardTypeId} = route.params;
+  const {cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     getFolderData();

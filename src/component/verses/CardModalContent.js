@@ -22,7 +22,6 @@ const CardModalContent = ({
   closeModal,
   deleteCard,
   item,
-  cardTypeId,
   folderId,
   setId,
 }) => {
@@ -38,7 +37,6 @@ const CardModalContent = ({
         onPress={() => {
           navigation.navigate(ScreenName.createCard, {
             initialData: item,
-            cardTypeId: cardTypeId,
             folderId: folderId,
             setId: setId,
           });
@@ -69,7 +67,6 @@ const CardModalContent = ({
         text="Move"
         onPress={() => {
           navigation.navigate(ScreenName.assignSet, {
-            cardTypeId: cardTypeId,
             folderId: folderId,
             setId: setId,
             cardId: item?._id,

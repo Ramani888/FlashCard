@@ -2,6 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   cardTypeName: '',
+  cardTypeId: '',
 };
 
 const StateSlice = createSlice({
@@ -9,7 +10,8 @@ const StateSlice = createSlice({
   initialState,
   reducers: {
     setState: (state, action) => {
-      state.cardTypeName = action.payload;
+      state.cardTypeName = action.payload?.cardTypeName;
+      state.cardTypeId = action.payload?.cardTypeId;
     },
   },
 });

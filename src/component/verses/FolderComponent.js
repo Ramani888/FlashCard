@@ -14,8 +14,9 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
+import { useSelector } from 'react-redux';
 
-const FolderComponent = ({onFolderClick, cardTypeId, handleCreateSetClick}) => {
+const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -28,6 +29,7 @@ const FolderComponent = ({onFolderClick, cardTypeId, handleCreateSetClick}) => {
   const [folderColor, setFolderColor] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
+  const {cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     getFolderData();

@@ -31,8 +31,8 @@ const CreateCardScreen = () => {
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
   const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
-  const {cardTypeId, folderId, setId, initialData} = route.params;
-  const {cardTypeName} = useSelector(state => state.myState);
+  const {folderId, setId, initialData} = route.params;
+  const {cardTypeName, cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     if (initialData) {

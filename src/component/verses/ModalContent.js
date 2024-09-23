@@ -10,6 +10,7 @@ import Font from '../Font';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
+import {useSelector} from 'react-redux';
 
 const ModalContent = ({
   closeModal,
@@ -17,7 +18,6 @@ const ModalContent = ({
   openBottomSheet,
   setEditBottomSheet,
   deleteData,
-  cardTypeId,
   handleCreateSetClick,
   singleFolderData,
   folderId,
@@ -25,6 +25,7 @@ const ModalContent = ({
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(false);
+  const {cardTypeId} = useSelector(state => state.myState);
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
@@ -39,7 +40,6 @@ const ModalContent = ({
             onPress={() => {
               closeModal();
               navigation.navigate(ScreenName.createCard, {
-                cardTypeId: cardTypeId,
                 folderId: folderId,
                 setId: setId,
               });
@@ -62,9 +62,7 @@ const ModalContent = ({
           <Pressable
             style={styles.container}
             onPress={() => {
-              navigation.navigate(ScreenName.asignFolder, {
-                cardTypeId: cardTypeId,
-              });
+              navigation.navigate(ScreenName.asignFolder);
               closeModal();
             }}>
             <Feather name="folder-plus" size={iconSize} color={Color.Black} />

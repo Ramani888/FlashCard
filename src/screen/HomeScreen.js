@@ -124,24 +124,24 @@ const HomeScreen = () => {
             fontFamily={Font.semiBold}
             marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
             onPress={() => {
-              item?.name === 'VERSES' && dispatch(setState('VERSES'));
-              item?.name === 'Q + A’s' && dispatch(setState('Q + A’s'));
-              item?.name === 'GENERAL' && dispatch(setState('GENERAL'));
               item?.name === 'VERSES' &&
-                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
-                  cardTypeName: item?.name,
-                  cardTypeId: item?._id,
-                });
+                dispatch(
+                  setState({cardTypeName: 'VERSES', cardTypeId: item?._id}),
+                );
               item?.name === 'Q + A’s' &&
-                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
-                  cardTypeName: item?.name,
-                  cardTypeId: item?._id,
-                });
+                dispatch(
+                  setState({cardTypeName: 'Q + A’s', cardTypeId: item?._id}),
+                );
               item?.name === 'GENERAL' &&
-                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
-                  cardTypeName: item?.name,
-                  cardTypeId: item?._id,
-                });
+                dispatch(
+                  setState({cardTypeName: 'GENERAL', cardTypeId: item?._id}),
+                );
+              item?.name === 'VERSES' &&
+                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
+              item?.name === 'Q + A’s' &&
+                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
+              item?.name === 'GENERAL' &&
+                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
             }}
           />
         ))}

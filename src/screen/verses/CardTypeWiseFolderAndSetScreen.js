@@ -18,7 +18,7 @@ import Font from '../../component/Font';
 import SetComponent from '../../component/verses/SetComponent';
 import FolderComponent from '../../component/verses/FolderComponent';
 import {useRoute} from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,7 +30,6 @@ const CardTypeWiseFolderAndSetScreen = () => {
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
   const {cardTypeName} = useSelector(state => state.myState);
-  const {cardTypeId} = route.params;
 
   const handleFolderClick = folderId => {
     setFolderId(folderId);
@@ -38,10 +37,10 @@ const CardTypeWiseFolderAndSetScreen = () => {
   };
 
   const handleCreateSetClick = folderId => {
-    setFolderId(folderId); 
+    setFolderId(folderId);
     setTab('SET');
-    setOpenSetSheet(true); 
-  }
+    setOpenSetSheet(true);
+  };
 
   const renderHeader = () => {
     return (
@@ -100,67 +99,62 @@ const CardTypeWiseFolderAndSetScreen = () => {
         // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
 
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 20}
-        enabled={Platform.OS === "ios" ? true : false}
-      >
-          <View style={{flex: 1}}>
-            <LinearGradient
-              colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
-              style={styles.headerContainer}>
-              {renderHeader()}
-              {search && (
-                <View>
-                  <CustomeInputField
-                    placeholder={'Search'}
-                    placeholderTextColor={Color.Gainsboro}
-                    onChangeText={setSearchHashtags}
-                    value={searchHashtags}
-                    backgroundColor={'#3a6675'}
-                    width={width * 0.88}
-                    height={height * 0.065}
-                    iconLeft={true}
-                    IconLeftComponent={
-                      <View
-                        style={styles.searchIcon}
-                        onPress={() => setSearch(!search)}>
-                        <AntDesign
-                          name="search1"
-                          size={scale(14)}
-                          color={Color.White}
-                        />
-                      </View>
-                    }
-                    inputContainerStyles={styles.inputContainerStyle}
-                    inputStyles={styles.inputStyles}
-                  />
-                </View>
-              )}
-              {buttons()}
-            </LinearGradient>
-            {tab == 'SET' && (
-              <SetComponent 
-                folderId={folderId} 
-                cardTypeId={cardTypeId}
-                openSetSheet={openSetSheet}
-                setOpenSetSheet={setOpenSetSheet}
-              />
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS == 'ios' ? 0 : 20}
+        enabled={Platform.OS === 'ios' ? true : false}>
+        <View style={{flex: 1}}>
+          <LinearGradient
+            colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
+            style={styles.headerContainer}>
+            {renderHeader()}
+            {search && (
+              <View>
+                <CustomeInputField
+                  placeholder={'Search'}
+                  placeholderTextColor={Color.Gainsboro}
+                  onChangeText={setSearchHashtags}
+                  value={searchHashtags}
+                  backgroundColor={'#3a6675'}
+                  width={width * 0.88}
+                  height={height * 0.065}
+                  iconLeft={true}
+                  IconLeftComponent={
+                    <View
+                      style={styles.searchIcon}
+                      onPress={() => setSearch(!search)}>
+                      <AntDesign
+                        name="search1"
+                        size={scale(14)}
+                        color={Color.White}
+                      />
+                    </View>
+                  }
+                  inputContainerStyles={styles.inputContainerStyle}
+                  inputStyles={styles.inputStyles}
+                />
+              </View>
             )}
-            {tab == 'FOLDERS' && (
-              <FolderComponent
-                onFolderClick={handleFolderClick}
-                cardTypeId={cardTypeId}
-                handleCreateSetClick={handleCreateSetClick}
-              />
-            )}
-          </View>
+            {buttons()}
+          </LinearGradient>
+          {tab == 'SET' && (
+            <SetComponent
+              folderId={folderId}
+              openSetSheet={openSetSheet}
+              setOpenSetSheet={setOpenSetSheet}
+            />
+          )}
+          {tab == 'FOLDERS' && (
+            <FolderComponent
+              onFolderClick={handleFolderClick}
+              handleCreateSetClick={handleCreateSetClick}
+            />
+          )}
+        </View>
       </KeyboardAvoidingView>
     );
   }, [renderHeader, search, tab]);
 
-  return (
-    renderBody()
-  );
+  return renderBody();
 };
 
 export default React.memo(CardTypeWiseFolderAndSetScreen);
