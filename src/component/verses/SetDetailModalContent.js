@@ -20,7 +20,6 @@ const PressableItem = ({icon, text, onPress, customTextStyle, isLast}) => (
 const SetDetailModalContent = ({
   closeModal,
   cardTypeId,
-  cardTypeName,
   folderId,
   setId,
   setLayout,
@@ -62,7 +61,6 @@ const SetDetailModalContent = ({
         onPress={() => {
           navigation.navigate(ScreenName.createCard, {
             cardTypeId: cardTypeId,
-            cardTypeName: cardTypeName,
             folderId: folderId,
             setId: setId,
           });

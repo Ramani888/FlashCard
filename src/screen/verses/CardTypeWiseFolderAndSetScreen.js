@@ -18,6 +18,7 @@ import Font from '../../component/Font';
 import SetComponent from '../../component/verses/SetComponent';
 import FolderComponent from '../../component/verses/FolderComponent';
 import {useRoute} from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
@@ -28,17 +29,18 @@ const CardTypeWiseFolderAndSetScreen = () => {
   const [tab, setTab] = useState('FOLDERS');
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
-  const {cardTypeId, cardTypeName} = route.params;
+  const {cardTypeName} = useSelector(state => state.myState);
+  const {cardTypeId} = route.params;
 
   const handleFolderClick = folderId => {
-    setFolderId(folderId); // Store the data to be passed to SetScreen
-    setTab('SET'); // Switch to SetScreen
+    setFolderId(folderId);
+    setTab('SET');
   };
 
   const handleCreateSetClick = folderId => {
-    setFolderId(folderId); // Store the data to be passed to SetScreen
-    setTab('SET'); // Switch to SetScreen
-    setOpenSetSheet(true); // Open SetBottomSheet
+    setFolderId(folderId); 
+    setTab('SET');
+    setOpenSetSheet(true); 
   }
 
   const renderHeader = () => {
@@ -140,7 +142,6 @@ const CardTypeWiseFolderAndSetScreen = () => {
               <SetComponent 
                 folderId={folderId} 
                 cardTypeId={cardTypeId}
-                cardTypeName={cardTypeName}
                 openSetSheet={openSetSheet}
                 setOpenSetSheet={setOpenSetSheet}
               />

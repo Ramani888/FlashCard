@@ -17,6 +17,7 @@ import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CardGridLayout from '../../component/verses/CardGridLayout';
 import SimpleLayout from '../../component/verses/SimpleLayout';
+import { useSelector } from 'react-redux';
 
 const SetDetailScreen = () => {
   const route = useRoute();
@@ -33,7 +34,8 @@ const SetDetailScreen = () => {
   const {setName} = route.params;
   const threeDotIconRef = useRef();
 
-  const {setId, folderId, cardTypeId,cardTypeName} = route.params;
+  const {setId, folderId, cardTypeId} = route.params;
+  const {cardTypeName} = useSelector(state => state.myState);
 
   useEffect(() => {
     getCardData(false, false);
@@ -226,7 +228,6 @@ const SetDetailScreen = () => {
           <SetDetailModalContent
             closeModal={closeModal}
             cardTypeId={cardTypeId}
-            cardTypeName={cardTypeName}
             folderId={folderId}
             setId={setId}
             setLayout={setLayout}
@@ -257,7 +258,6 @@ const SetDetailScreen = () => {
             deleteCard={deleteCard}
             item={item}
             cardTypeId={cardTypeId}
-            cardTypeName={cardTypeName}
             folderId={folderId}
             setId={setId}
           />
