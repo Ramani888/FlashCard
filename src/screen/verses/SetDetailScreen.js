@@ -33,7 +33,6 @@ const SetDetailScreen = () => {
   const [layout, setLayout] = useState('single');
   const {setName} = route.params;
   const threeDotIconRef = useRef();
-
   const {setId, folderId} = route.params;
   const {cardTypeName, cardTypeId} = useSelector(state => state.myState);
 
@@ -116,6 +115,11 @@ const SetDetailScreen = () => {
   };
 
   // ====================================== End ===================================== //
+
+  const changeOrder = () => {
+    const newData = [...cardData].reverse();
+    setCardData(newData);
+  };
 
   const openModal = useCallback(ref => {
     if (ref.current) {
@@ -232,6 +236,7 @@ const SetDetailScreen = () => {
             setLayout={setLayout}
             layout={layout}
             blurAllCard={blurAllCard}
+            changeOrder={changeOrder}
           />
         }
         width={scale(150)}

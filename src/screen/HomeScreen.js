@@ -136,12 +136,7 @@ const HomeScreen = () => {
                 dispatch(
                   setState({cardTypeName: 'GENERAL', cardTypeId: item?._id}),
                 );
-              item?.name === 'VERSES' &&
-                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
-              item?.name === 'Q + A’s' &&
-                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
-              item?.name === 'GENERAL' &&
-                navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
+              navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
             }}
           />
         ))}

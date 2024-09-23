@@ -7,7 +7,7 @@ import Color from '../Color';
 import Font from '../Font';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const PressableItem = ({icon, text, onPress, customTextStyle, isLast}) => (
   <Pressable
@@ -25,6 +25,7 @@ const SetDetailModalContent = ({
   setLayout,
   layout,
   blurAllCard,
+  changeOrder,
 }) => {
   const navigation = useNavigation();
 
@@ -39,7 +40,10 @@ const SetDetailModalContent = ({
           />
         }
         text="Change Order"
-        onPress={closeModal}
+        onPress={() => {
+          changeOrder();
+          closeModal();
+        }}
       />
       <PressableItem
         icon={
