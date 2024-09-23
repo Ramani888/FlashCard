@@ -22,6 +22,7 @@ import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import AIScreen from '../../component/AIScreen';
+import {useSelector} from 'react-redux';
 
 const CreateCardScreen = () => {
   const navigation = useNavigation();
@@ -30,7 +31,8 @@ const CreateCardScreen = () => {
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
   const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
-  const {cardTypeId, cardTypeName, folderId, setId, initialData} = route.params;
+  const {cardTypeId, folderId, setId, initialData} = route.params;
+  const {cardTypeName} = useSelector(state => state.myState);
 
   useEffect(() => {
     if (initialData) {

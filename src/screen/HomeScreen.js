@@ -25,6 +25,8 @@ import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
 import AIScreen from '../component/AIScreen';
+import {setState} from '../redux/StateSlice';
+import {useDispatch} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
@@ -52,6 +54,7 @@ const IconButton = memo(({name, iconComponent, selected, onPress}) => {
 });
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const refRBSheet = useRef();
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -121,6 +124,9 @@ const HomeScreen = () => {
             fontFamily={Font.semiBold}
             marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
             onPress={() => {
+              item?.name === 'VERSES' && dispatch(setState('VERSES'));
+              item?.name === 'Q + A’s' && dispatch(setState('Q + A’s'));
+              item?.name === 'GENERAL' && dispatch(setState('GENERAL'));
               item?.name === 'VERSES' &&
                 navigation.navigate(ScreenName.cardTypeWiseFolderAndSet, {
                   cardTypeName: item?.name,
