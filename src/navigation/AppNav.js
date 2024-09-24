@@ -17,6 +17,7 @@ const AppNav = () => {
       const userData = await AsyncStorage.getItem('user');
       if (userData) {
         const parsedUser = JSON.parse(userData);
+        console.log('User',parsedUser)
         setUser(parsedUser);
         global.user = parsedUser;
       } else {

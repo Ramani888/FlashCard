@@ -1,7 +1,7 @@
 import CreateCardScreen from '../screen/verses/CreateCardScreen';
 import HomeScreen from '../screen/HomeScreen';
 import ContactScreen from '../screen/profile/ContactScreen';
-import NotesScreen from '../screen/profile/NotesScreen';
+import NotesScreen from '../screen/profile/notes/NotesScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
 import CardTypeWiseFolderAndSetScreen from '../screen/verses/CardTypeWiseFolderAndSetScreen';
@@ -14,6 +14,7 @@ import PdfScreen from '../screen/profile/PdfScreen';
 import ImagesScreen from '../screen/profile/ImagesScreen';
 import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
 import AssignSetScreen from '../screen/verses/AssignSetScreen';
+import NoteDetailScreen from '../screen/profile/notes/NoteDetailScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -26,6 +27,7 @@ export const ScreenName = {
   contact: 'Contacts',
   support: 'Support',
   notes: 'Notes',
+  notesDetail: 'NotesDetail',
   asignFolder: 'AsignFolder',
   assignSet: 'AssignSet',
   globalLiveFeed: 'GlobalLiveFeed',
@@ -45,6 +47,7 @@ export const ScreenPath = {
   ContactScreen,
   SupportScreen,
   NotesScreen,
+  NoteDetailScreen,
   AssignFolderScreen,
   AssignSetScreen,
   GlobalLiveFeedScreen,

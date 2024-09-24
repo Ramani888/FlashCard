@@ -7,6 +7,7 @@ import Color from '../Color';
 import Font from '../Font';
 
 const NoteModalContent = ({
+  item,
   closeModal,
   openBottomSheet,
   setEditBottomSheet,
@@ -32,7 +33,7 @@ const NoteModalContent = ({
             {borderBottomWidth: scale(0), marginBottom: verticalScale(-2)},
           ]}
           onPress={() => {
-            deleteData();
+            deleteData(item?._id);
             closeModal();
           }}>
           <MaterialCommunityIcons

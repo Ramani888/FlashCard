@@ -16,14 +16,13 @@ const AppStack = ({user}) => {
     asignFolder,
     assignSet,
     setDetail,
-    qaScreen,
     profile,
     contact,
     support,
     notes,
+    notesDetail,
     pdf,
     image,
-    openAi,
   } = ScreenName;
 
   const {
@@ -37,14 +36,13 @@ const AppStack = ({user}) => {
     AssignFolderScreen,
     AssignSetScreen,
     SetDetailScreen,
-    QAScreen,
     ProfileScreen,
     ContactScreen,
     SupportScreen,
     NotesScreen,
+    NoteDetailScreen,
     PdfScreen,
     ImagesScreen,
-    OpenAi,
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -132,6 +130,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={notes}
         component={NotesScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={notesDetail}
+        component={NoteDetailScreen}
         options={{headerShown: false}}
       />
 

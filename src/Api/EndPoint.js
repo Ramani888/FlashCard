@@ -11,6 +11,7 @@ const Api = {
   card: `${Base_url}/card`,
   blurAllCard: `${Base_url}/blur/all/card`,
   moveCard: `${Base_url}/move/card`,
+  notes: `${Base_url}/notes`,
 };
 
 export default Api;

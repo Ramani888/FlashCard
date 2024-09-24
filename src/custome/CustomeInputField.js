@@ -35,6 +35,7 @@ const CustomeInputField = ({
   inputStyles,
   inputContainerStyles,
   errorContainerStyle,
+  onBlur
 }) => {
   return (
     <View style={[styles.containerStyles]}>
@@ -67,6 +68,7 @@ const CustomeInputField = ({
           multiline={multiline}
           numberOfLines={numberOfLines}
           scrollEnabled={false}
+          onBlur={onBlur}
         />
         {iconRight && IconRightComponent}
       </View>

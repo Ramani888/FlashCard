@@ -9,23 +9,31 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Color from '../../component/Color';
+import Color from '../../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
-import CustomeHeader from '../../custome/CustomeHeader';
-import Font from '../../component/Font';
+import CustomeHeader from '../../../custome/CustomeHeader';
+import Font from '../../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
-import CustomeButton from '../../custome/CustomeButton';
+import CustomeButton from '../../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import BottomSheetContent from '../../component/BottomSheetContent';
-import CustomeModal from '../../custome/CustomeModal';
-import ModalContent from '../../component/verses/ModalContent';
-import NoteModalContent from '../../component/profile/NoteModalContent';
+import BottomSheetContent from '../../../component/BottomSheetContent';
+import CustomeModal from '../../../custome/CustomeModal';
+import ModalContent from '../../../component/verses/ModalContent';
+import NoteModalContent from '../../../component/profile/NoteModalContent';
+import {apiDelete, apiGet, apiPost, apiPut} from '../../../Api/ApiService';
+import Api from '../../../Api/EndPoint';
+import Loader from '../../../component/Loader';
+import showMessageonTheScreen from '../../../component/ShowMessageOnTheScreen';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenName} from '../../../component/Screen';
 
 const {height, width} = Dimensions.get('window');
 
 const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
 
 const NotesScreen = () => {
+  const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -34,22 +42,81 @@ const NotesScreen = () => {
   const [noteName, setNoteName] = useState();
   const [noteStatus, setNoteStatus] = useState(0);
   const [noteColor, setNoteColor] = useState('');
+  const [noteDesc, setNoteDesc] = useState('');
+  console.log('noteDesc', noteDesc);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
   useEffect(() => {
-    getNoteData();
+    getNoteData(true);
   }, []);
 
   // ====================================== Api ===================================== //
 
-  const getNoteData = () => {};
+  const getNoteData = async (initialLoader, message) => {
+    try {
+      initialLoader && setVisible(true);
+      const response = await apiGet(`${Api.notes}?userId=${global?.user?._id}`);
+      setNoteData(response);
+      if (!initialLoader) {
+        showMessageonTheScreen(message);
+      }
+    } catch (error) {
+      console.log('error in get note data', error);
+    } finally {
+      setVisible(false);
+    }
+  };
 
-  const createNote = () => {};
+  const createNote = async () => {
+    const rawData = {
+      userId: global?.user?._id,
+      name: noteName,
+      color: noteColor,
+      note: '',
+    };
+    try {
+      setVisible(true);
+      const response = await apiPost(Api.notes, '', JSON.stringify(rawData));
+      if (response?.success == true) {
+        getNoteData(false, response?.message);
+      }
+    } catch (error) {
+      console.log('error in create note api', error);
+    }
+  };
 
-  const editNote = () => {};
+  const editNote = async () => {
+    const rawData = {
+      _id: singleNoteData?._id,
+      userId: global?.user?._id,
+      name: noteName,
+      color: noteColor,
+      note: noteDesc,
+    };
+    console.log('rawData', rawData);
+    try {
+      setVisible(true);
+      const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
+      if (response?.success == true) {
+        getNoteData(false, response?.message);
+      }
+    } catch (error) {
+      console.log('error in update note api', error);
+    }
+  };
 
-  const deleteNote = () => {};
+  const deleteNote = async noteId => {
+    try {
+      setVisible(true);
+      const response = await apiDelete(`${Api.notes}?_id=${noteId}`);
+      if (response?.success == true) {
+        getNoteData(false, response?.message);
+      }
+    } catch (error) {
+      console.log('error in delete note api', error);
+    }
+  };
 
   // ====================================== End ===================================== //
 
@@ -125,7 +192,16 @@ const NotesScreen = () => {
       const isLastItem = index === notesData.length - 1;
 
       return (
-        <View style={styles.noteContainer}>
+        <Pressable
+          style={styles.noteContainer}
+          onPress={() =>
+            navigation.navigate(ScreenName.notesDetail, {
+              noteName: item?.name,
+              note: item?.note,
+              setNoteDesc,
+              editNote,
+            })
+          }>
           <Text style={styles.noteText}>{item?.name}</Text>
           <Pressable
             ref={threeDotIconRef}
@@ -140,17 +216,17 @@ const NotesScreen = () => {
               style={styles.dotsIcon}
             />
           </Pressable>
-        </View>
+        </Pressable>
       );
     },
-    [openModal],
+    [openModal, noteData],
   );
 
   const renderBody = useCallback(
     () => (
       <View style={styles.bodyContainer}>
         <FlatList
-          data={notesData}
+          data={noteData}
           renderItem={renderNotes}
           keyExtractor={(item, index) => index.toString()}
           style={{flex: 1, marginBottom: verticalScale(60)}}
@@ -164,6 +240,7 @@ const NotesScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
+      <Loader visible={visible} />
       {renderHeader()}
       {renderBody()}
       <CustomeButton
@@ -193,6 +270,7 @@ const NotesScreen = () => {
         mainPadding={scale(5)}
         content={
           <NoteModalContent
+            item={singleNoteData}
             closeModal={closeModal}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}

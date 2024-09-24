@@ -34,7 +34,6 @@ const CreateCardScreen = () => {
   const [note, setNote] = useState('');
   const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
   const {folderId, setId, initialData, editNote} = route.params;
-  console.log('route.params', route.params);
   const {cardTypeName, cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
