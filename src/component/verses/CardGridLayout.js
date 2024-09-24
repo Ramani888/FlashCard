@@ -11,6 +11,8 @@ const CardGridLayout = ({
   updateCard,
   threeDotIconRef,
   setItem,
+  folderId,
+  setId,
   openCardModal,
   openNoteModal,
 }) => {
@@ -32,6 +34,15 @@ const CardGridLayout = ({
       setItem(item);
     }
   }, [item]);
+
+  const editNote = () => {
+    navigation.navigate(ScreenName.createCard, {
+      editNote: true,
+      initialData: item,
+      folderId: folderId,
+      setId: setId,
+    });
+  };
 
   return (
     <View
@@ -109,7 +120,7 @@ const CardGridLayout = ({
             <View>
               <Text style={styles.noteTitle}>NOTE</Text>
               <Pressable
-                ref={threeDotIconRef}
+                onPress={editNote}
                 style={styles.noteEditIcon}>
                 <Entypo
                   name="edit"
@@ -120,7 +131,6 @@ const CardGridLayout = ({
               </Pressable>
             </View>
             <View style={styles.divider} />
-            {console.log('note',item?.note)}
             <Text style={styles.cardDescWithMargin}>{item?.note}</Text>
           </View>
         )}

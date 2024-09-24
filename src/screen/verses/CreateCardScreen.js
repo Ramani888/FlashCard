@@ -33,14 +33,18 @@ const CreateCardScreen = () => {
   const [noteVisible, setNoteVisible] = useState(false);
   const [note, setNote] = useState('');
   const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
-  const {folderId, setId, initialData} = route.params;
-  console.log('route.params',route.params)
+  const {folderId, setId, initialData, editNote} = route.params;
+  console.log('route.params', route.params);
   const {cardTypeName, cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     if (initialData) {
       setTop(initialData?.top);
       setBottom(initialData?.bottom);
+    }
+    if (editNote) {
+      setNoteVisible(true);
+      setNote(initialData?.note);
     }
   }, [initialData]);
 

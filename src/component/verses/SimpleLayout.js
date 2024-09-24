@@ -5,15 +5,20 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../Font';
 import {BlurView} from '@react-native-community/blur';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {ScreenName} from '../Screen';
+import {useNavigation} from '@react-navigation/native';
 
 const SimpleLayout = ({
   item,
   updateCard,
   threeDotIconRef,
   setItem,
+  folderId,
+  setId,
   openCardModal,
   openNoteModal,
 }) => {
+  const navigation = useNavigation();
   const infoIconRef = useRef();
   const cardContainerRef = useRef();
   const [showNote, setShowNote] = useState(false);
@@ -31,7 +36,7 @@ const SimpleLayout = ({
       openNoteModal(infoIconRef, cardHeight);
       setItem(item);
     }
-  }, [item]);
+  }, [item, cardHeight]);
 
   const toggleBlur = useCallback(() => {
     const isBlurred = item?.isBlur == 0 ? 1 : 0;
@@ -42,6 +47,15 @@ const SimpleLayout = ({
     setItem(item);
     openCardModal();
   }, [item, setItem, openCardModal]);
+
+  const editNote = () => {
+    navigation.navigate(ScreenName.createCard, {
+      editNote: true,
+      initialData: item,
+      folderId: folderId,
+      setId: setId,
+    });
+  };
 
   return (
     <View
@@ -92,9 +106,7 @@ const SimpleLayout = ({
           <View>
             <View>
               <Text style={styles.noteTitle}>NOTE</Text>
-              <Pressable
-                onPress={openModal}
-                style={styles.noteEditIcon}>
+              <Pressable onPress={() => editNote()} style={styles.noteEditIcon}>
                 <Entypo
                   name="edit"
                   size={scale(11)}

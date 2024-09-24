@@ -145,16 +145,23 @@ const SetDetailScreen = () => {
 
   const closeCardModal = useCallback(() => setCardModalVisible(false), []);
 
-  const openNoteModal = useCallback((ref, cardHeight) => {
-    if (ref.current) {
-      ref.current.measureInWindow((x, y, width, height) => {
-        layout == 'single'
-          ? setNoteModalPosition({x: x - width * 6, y: y + cardHeight * 0.5})
-          : setNoteModalPosition({x: x - width * 4.6, y: y + cardHeight * 0.2});
-        setNoteModalVisible(true);
-      });
-    }
-  }, []);
+  const openNoteModal = useCallback(
+    (ref, cardHeight) => {
+      console.log('cardHeight',cardHeight)
+      if (ref.current) {
+        ref.current.measureInWindow((x, y, width, height) => {
+          layout == 'single'
+            ? setNoteModalPosition({x: x - width * 6, y: y + cardHeight * 0.35})
+            : setNoteModalPosition({
+                x: x - width * 4.6,
+                y: y + cardHeight * 0.2,
+              });
+          setNoteModalVisible(true);
+        });
+      }
+    },
+    [layout],
+  );
 
   const closeNoteModal = useCallback(() => setNoteModalVisible(false), []);
 
@@ -192,6 +199,8 @@ const SetDetailScreen = () => {
                   updateCard={updateCard}
                   threeDotIconRef={threeDotIconRef}
                   setItem={setItem}
+                  folderId={folderId}
+                  setId={setId}
                   openCardModal={openCardModal}
                   openNoteModal={openNoteModal}
                 />
@@ -211,6 +220,8 @@ const SetDetailScreen = () => {
                   updateCard={updateCard}
                   threeDotIconRef={threeDotIconRef}
                   setItem={setItem}
+                  folderId={folderId}
+                  setId={setId}
                   openCardModal={openCardModal}
                   openNoteModal={openNoteModal}
                 />
