@@ -93,7 +93,6 @@ const SimpleLayout = ({
             <View>
               <Text style={styles.noteTitle}>NOTE</Text>
               <Pressable
-                ref={threeDotIconRef}
                 onPress={openModal}
                 style={styles.noteEditIcon}>
                 <Entypo

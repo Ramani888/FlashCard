@@ -1,5 +1,5 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import Color from '../Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../Font';
@@ -12,9 +12,32 @@ const CardGridLayout = ({
   threeDotIconRef,
   setItem,
   openCardModal,
+  openNoteModal,
 }) => {
+  const infoIconRef = useRef();
+  const cardContainerRef = useRef();
+  const [showNote, setShowNote] = useState(false);
+  const [cardHeight, setCardHeight] = useState(0);
+
+  const onCardLayout = useCallback(event => {
+    const {height} = event.nativeEvent.layout;
+    setCardHeight(height);
+  }, []);
+
+  const toggleNote = useCallback(() => {
+    if (item?.note) {
+      setShowNote(prev => !prev);
+    } else {
+      openNoteModal(infoIconRef, cardHeight);
+      setItem(item);
+    }
+  }, [item]);
+
   return (
-    <View style={{margin: scale(5)}}>
+    <View
+      ref={cardContainerRef}
+      onLayout={onCardLayout}
+      style={{margin: scale(5)}}>
       <View style={styles.gridCardHeader}>
         <View>
           <Text style={styles.cardTitle}>{item.top}</Text>
@@ -23,7 +46,7 @@ const CardGridLayout = ({
           </Text>
         </View>
         <View style={[styles.cardActions, styles.gridCardAction]}>
-          <Pressable>
+          <Pressable ref={infoIconRef} onPress={toggleNote}>
             <Image
               source={require('../../Assets/Img/infoIcon.png')}
               style={styles.infoIcon}
@@ -80,6 +103,26 @@ const CardGridLayout = ({
             blurAmount={10}
             overlayColor={'rgba(255, 255, 255, 0)'}
           />
+        )}
+        {showNote && (
+          <View>
+            <View>
+              <Text style={styles.noteTitle}>NOTE</Text>
+              <Pressable
+                ref={threeDotIconRef}
+                style={styles.noteEditIcon}>
+                <Entypo
+                  name="edit"
+                  size={scale(11)}
+                  color={Color.Grey}
+                  style={styles.dotsIcon}
+                />
+              </Pressable>
+            </View>
+            <View style={styles.divider} />
+            {console.log('note',item?.note)}
+            <Text style={styles.cardDescWithMargin}>{item?.note}</Text>
+          </View>
         )}
         <Text style={[styles.cardDesc, {width: scale(130)}]}>
           {item.bottom}
@@ -206,4 +249,27 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   gridCardAction: {flexDirection: 'column', paddingVertical: verticalScale(5)},
+  noteTitle: {
+    fontSize: scale(20),
+    color: Color.Black,
+    fontFamily: Font.medium,
+    textAlign: 'center',
+  },
+  noteEditIcon: {
+    position: 'absolute',
+    right: scale(0),
+    top: verticalScale(7),
+  },
+  divider: {
+    borderBottomWidth: scale(0.5),
+    borderBottomColor: Color.LightGray,
+    paddingTop: verticalScale(5),
+  },
+  cardDescWithMargin: {
+    fontSize: scale(12),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    marginBottom: verticalScale(15),
+    paddingTop: verticalScale(5),
+  },
 });
