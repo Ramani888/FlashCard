@@ -1,5 +1,5 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Alert, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useState, useCallback, memo, useRef} from 'react';
 import Color from '../Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../Font';
@@ -12,52 +12,63 @@ const SimpleLayout = ({
   threeDotIconRef,
   setItem,
   openCardModal,
+  openNoteModal,
 }) => {
+  const infoIconRef = useRef();
+  const cardContainerRef = useRef();
+  const [showNote, setShowNote] = useState(false);
+  const [cardHeight, setCardHeight] = useState(0);
+
+  const onCardLayout = useCallback(event => {
+    const {height} = event.nativeEvent.layout;
+    setCardHeight(height);
+  }, []);
+
+  const toggleNote = useCallback(() => {
+    if (item?.note) {
+      setShowNote(prev => !prev);
+    } else {
+      openNoteModal(infoIconRef, cardHeight);
+      setItem(item);
+    }
+  }, [item]);
+
+  const toggleBlur = useCallback(() => {
+    const isBlurred = item?.isBlur == 0 ? 1 : 0;
+    updateCard(item?._id, item.top, item.bottom, item?.note, isBlurred);
+  }, [item, updateCard]);
+
+  const openModal = useCallback(() => {
+    setItem(item);
+    openCardModal();
+  }, [item, setItem, openCardModal]);
+
   return (
-    <View style={styles.cardContainer}>
+    <View
+      ref={cardContainerRef}
+      onLayout={onCardLayout}
+      style={styles.cardContainer}>
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{item.top}</Text>
         <Text style={styles.cardNumber}>1 : 3 - 7</Text>
         <View style={styles.cardActions}>
-          <Pressable>
+          <Pressable ref={infoIconRef} onPress={toggleNote}>
             <Image
               source={require('../../Assets/Img/infoIcon.png')}
               style={styles.infoIcon}
             />
           </Pressable>
-          <Pressable
-            onPress={() => {
-              const isBlurred = item?.isBlur == 0 ? 1 : 0;
-              updateCard(
-                item?._id,
-                item.top,
-                item.bottom,
-                item?.note,
-                isBlurred,
-              );
-            }}>
-            {item?.isBlur ? (
-              <Entypo
-                name="eye-with-line"
-                size={scale(11)}
-                color={Color.Grey}
-                style={styles.dotsIcon}
-              />
-            ) : (
-              <Entypo
-                name="eye"
-                size={scale(11)}
-                color={Color.Grey}
-                style={styles.dotsIcon}
-              />
-            )}
+          <Pressable onPress={toggleBlur}>
+            <Entypo
+              name={item?.isBlur ? 'eye-with-line' : 'eye'}
+              size={scale(11)}
+              color={Color.Grey}
+              style={styles.dotsIcon}
+            />
           </Pressable>
           <Pressable
             ref={threeDotIconRef}
-            onPress={() => {
-              setItem(item);
-              openCardModal();
-            }}
+            onPress={openModal}
             style={styles.dotIconView}>
             <Entypo
               name="dots-three-vertical"
@@ -77,13 +88,33 @@ const SimpleLayout = ({
             overlayColor={'rgba(255, 255, 255, 0)'}
           />
         )}
-        <Text style={[styles.cardDesc]}>{item.bottom}</Text>
+        {showNote && (
+          <View>
+            <View>
+              <Text style={styles.noteTitle}>NOTE</Text>
+              <Pressable
+                ref={threeDotIconRef}
+                onPress={openModal}
+                style={styles.noteEditIcon}>
+                <Entypo
+                  name="edit"
+                  size={scale(11)}
+                  color={Color.Grey}
+                  style={styles.dotsIcon}
+                />
+              </Pressable>
+            </View>
+            <View style={styles.divider} />
+            <Text style={styles.cardDescWithMargin}>{item?.note}</Text>
+          </View>
+        )}
+        <Text style={styles.cardDesc}>{item?.bottom}</Text>
       </View>
     </View>
   );
 };
 
-export default SimpleLayout;
+export default memo(SimpleLayout);
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -130,6 +161,13 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
   },
+  cardDescWithMargin: {
+    fontSize: scale(12),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    marginBottom: verticalScale(15),
+    paddingTop: verticalScale(5),
+  },
   infoIcon: {
     width: scale(24),
     height: scale(24),
@@ -141,6 +179,22 @@ const styles = StyleSheet.create({
   },
   absoluteBlur: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: 1000, // Ensure the blur view is behind the text
+    zIndex: 1000,
+  },
+  noteTitle: {
+    fontSize: scale(20),
+    color: Color.Black,
+    fontFamily: Font.medium,
+    textAlign: 'center',
+  },
+  noteEditIcon: {
+    position: 'absolute',
+    right: scale(10),
+    top: verticalScale(7),
+  },
+  divider: {
+    borderBottomWidth: scale(0.5),
+    borderBottomColor: Color.LightGray,
+    paddingTop: verticalScale(5),
   },
 });

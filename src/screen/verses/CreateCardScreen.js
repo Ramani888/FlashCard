@@ -30,8 +30,11 @@ const CreateCardScreen = () => {
   const [visible, setVisible] = useState(false);
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
+  const [noteVisible, setNoteVisible] = useState(false);
+  const [note, setNote] = useState('');
   const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
   const {folderId, setId, initialData} = route.params;
+  console.log('route.params',route.params)
   const {cardTypeName, cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
@@ -51,6 +54,7 @@ const CreateCardScreen = () => {
       cardTypeId: cardTypeId,
       folderId: folderId,
       setId: setId,
+      note: note,
     };
     try {
       setVisible(true);
@@ -75,7 +79,7 @@ const CreateCardScreen = () => {
       setId: setId,
       top: top,
       bottom: bottom,
-      note: '',
+      note: note,
       isBlur: initialData?.isBlur == false ? 0 : 1,
     };
     try {
@@ -179,13 +183,37 @@ const CreateCardScreen = () => {
             textAlignVertical="top"
             inputContainerStyles={styles.inputContainerStyle}
           />
-          <View style={styles.optionalContainer}>
-            <Text style={styles.optionalText}>Optional - Add Note</Text>
-          </View>
+
+          {noteVisible && (
+            <CustomeInputField
+              placeholder={'Note'}
+              height={verticalScale(180)}
+              onChangeText={setNote}
+              value={note}
+              textArea={true}
+              placeholderTextColor={Color.Gray}
+              borderRadius={scale(10)}
+              multiline={true}
+              numberOfLines={8}
+              textAlignVertical="top"
+              inputContainerStyles={styles.inputContainerStyle}
+            />
+          )}
+
+          {!noteVisible && (
+            <Pressable
+              style={styles.optionalContainer}
+              onPress={() => setNoteVisible(true)}>
+              <Text style={styles.optionalText}>Optional - Add Note</Text>
+            </Pressable>
+          )}
 
           <Pressable
             onPress={() => openAiBottomSheets.current.open()}
-            style={styles.aiButton}>
+            style={[
+              styles.aiButton,
+              {marginBottom: noteVisible ? verticalScale(90) : 0},
+            ]}>
             <Image
               source={require('../../Assets/Img/ai.png')}
               style={styles.aiImage}

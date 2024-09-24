@@ -18,6 +18,7 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CardGridLayout from '../../component/verses/CardGridLayout';
 import SimpleLayout from '../../component/verses/SimpleLayout';
 import {useSelector} from 'react-redux';
+import AddNoteModalContent from '../../component/verses/AddNoteModalContent';
 
 const SetDetailScreen = () => {
   const route = useRoute();
@@ -26,8 +27,9 @@ const SetDetailScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [cardModalVisible, setCardModalVisible] = useState(false);
+  const [noteModalVisible, setNoteModalVisible] = useState(false);
   const [cardModalPosition, setCardModalPosition] = useState({x: 0, y: 0});
-  const [blurredCardIndices, setBlurredCardIndices] = useState([]);
+  const [noteModalPosition, setNoteModalPosition] = useState({x: 0, y: 0});
   const [cardData, setCardData] = useState([]);
   const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
@@ -143,6 +145,18 @@ const SetDetailScreen = () => {
 
   const closeCardModal = useCallback(() => setCardModalVisible(false), []);
 
+  const openNoteModal = useCallback((ref, cardHeight) => {
+    // console.log('cardHeight',cardHeight)
+    if (ref.current) {
+      ref.current.measureInWindow((x, y, width, height) => {
+        setNoteModalPosition({x: x - width * 6, y: y + cardHeight * 0.5});
+        setNoteModalVisible(true);
+      });
+    }
+  }, []);
+
+  const closeNoteModal = useCallback(() => setNoteModalVisible(false), []);
+
   const header = useMemo(
     () => (
       <CustomeHeader
@@ -178,6 +192,7 @@ const SetDetailScreen = () => {
                   threeDotIconRef={threeDotIconRef}
                   setItem={setItem}
                   openCardModal={openCardModal}
+                  openNoteModal={openNoteModal}
                 />
               );
             }}
@@ -209,7 +224,7 @@ const SetDetailScreen = () => {
         )}
       </View>
     ),
-    [blurredCardIndices, cardData, layout],
+    [cardData, layout],
   );
 
   return (
@@ -273,6 +288,26 @@ const SetDetailScreen = () => {
           {
             top: cardModalPosition.y,
             left: cardModalPosition.x,
+          },
+        ]}
+      />
+
+      <CustomeModal
+        visible={noteModalVisible}
+        onClose={closeNoteModal}
+        closeModal={false}
+        mainPadding={scale(5)}
+        content={
+          <AddNoteModalContent item={item} folderId={folderId} setId={setId} />
+        }
+        width={scale(140)}
+        justifyContent="flex-end"
+        borderRadius={scale(10)}
+        modalContainerStyle={[
+          styles.modal,
+          {
+            top: noteModalPosition.y,
+            left: noteModalPosition.x,
           },
         ]}
       />

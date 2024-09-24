@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useState, useCallback, useRef, useEffect} from 'react';
 import {
   Dimensions,
   KeyboardAvoidingView,
@@ -26,10 +26,14 @@ const CardTypeWiseFolderAndSetScreen = () => {
   const route = useRoute();
   const [search, setSearch] = useState(false);
   const [searchHashtags, setSearchHashtags] = useState('');
-  const [tab, setTab] = useState('FOLDERS');
+  const [tab, setTab] = useState('SET`');
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
   const {cardTypeName} = useSelector(state => state.myState);
+
+  useEffect(() => {
+    setTab('SET');
+  }, []);
 
   const handleFolderClick = folderId => {
     setFolderId(folderId);
@@ -96,9 +100,6 @@ const CardTypeWiseFolderAndSetScreen = () => {
     return (
       <KeyboardAvoidingView
         style={{flex: 1}}
-        // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        // keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
-
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS == 'ios' ? 0 : 20}
         enabled={Platform.OS === 'ios' ? true : false}>
