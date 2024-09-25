@@ -38,7 +38,6 @@ const NotesScreen = () => {
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
-  // console.log('singleNoteData', singleNoteData);
   const [noteData, setNoteData] = useState([]);
   const [noteName, setNoteName] = useState();
   const [noteStatus, setNoteStatus] = useState(0);
@@ -93,7 +92,6 @@ const NotesScreen = () => {
       color: editWithNote ? color : noteColor,
       note: noteDesc,
     };
-    console.log('rawData', rawData);
     try {
       setVisible(true);
       const response = await apiPut(Api.notes, '', JSON.stringify(rawData));

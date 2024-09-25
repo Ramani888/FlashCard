@@ -65,8 +65,6 @@ const BottomSheetContent = ({
           inputStyles={styles.inputStyles}
         />
 
-        {console.log('title', title)}
-
         {title !== 'CREATE NOTES' && title !== 'EDIT NOTES' && (
           <View style={styles.switchContainer}>
             <View style={styles.switchContent}>
