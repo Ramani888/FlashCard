@@ -8,6 +8,7 @@ import Font from '../../../component/Font';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomeInputField from '../../../custome/CustomeInputField';
 import CustomeButton from '../../../custome/CustomeButton';
+import showMessageonTheScreen from '../../../component/ShowMessageOnTheScreen';
 
 const {height} = Dimensions.get('window');
 
@@ -15,7 +16,7 @@ const NoteDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [notes, setNotes] = useState('');
-  const {noteName, note, setNoteDesc, editNote} = route.params;
+  const {noteName, note, noteId, noteColor, editNote} = route.params;
 
   useEffect(() => {
     if (note) {
@@ -25,7 +26,6 @@ const NoteDetailScreen = () => {
 
   const handleNoteDesc = text => {
     setNotes(text);
-    setNoteDesc(text);
   };
 
   const renderHeader = () => {
@@ -72,8 +72,12 @@ const NoteDetailScreen = () => {
           fontFamily={Font.semiBold}
           alignSelf="center"
           onPress={() => {
-            editNote();
-            navigation.goBack();
+            if (notes) {
+              editNote(true, noteId, noteName, noteColor, notes);
+              navigation.goBack();
+            } else {
+              showMessageonTheScreen('Please enter any note');
+            }
           }}
         />
       </View>

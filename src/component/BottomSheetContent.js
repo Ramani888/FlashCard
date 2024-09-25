@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     borderWidth: scale(1),
     borderColor: Color.LightGray,
     borderRadius: scale(10),
-    height: verticalScale(405),
+    // height: verticalScale(405),
     padding: scale(10),
   },
   title: {

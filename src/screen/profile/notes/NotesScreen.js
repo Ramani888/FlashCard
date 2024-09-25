@@ -38,12 +38,11 @@ const NotesScreen = () => {
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
+  // console.log('singleNoteData', singleNoteData);
   const [noteData, setNoteData] = useState([]);
   const [noteName, setNoteName] = useState();
   const [noteStatus, setNoteStatus] = useState(0);
   const [noteColor, setNoteColor] = useState('');
-  const [noteDesc, setNoteDesc] = useState('');
-  console.log('noteDesc', noteDesc);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
@@ -86,12 +85,12 @@ const NotesScreen = () => {
     }
   };
 
-  const editNote = async () => {
+  const editNote = async (editWithNote, noteId, name, color, noteDesc) => {
     const rawData = {
-      _id: singleNoteData?._id,
+      _id: editWithNote ? noteId : singleNoteData?._id,
       userId: global?.user?._id,
-      name: noteName,
-      color: noteColor,
+      name: editWithNote ? name : noteName,
+      color: editWithNote ? color : noteColor,
       note: noteDesc,
     };
     console.log('rawData', rawData);
@@ -162,7 +161,7 @@ const NotesScreen = () => {
     () => (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.76}
+        height={height * 0.65}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -194,14 +193,16 @@ const NotesScreen = () => {
       return (
         <Pressable
           style={styles.noteContainer}
-          onPress={() =>
+          onPress={() => {
+            setSingleNoteData(item);
             navigation.navigate(ScreenName.notesDetail, {
               noteName: item?.name,
               note: item?.note,
-              setNoteDesc,
+              noteId: item?._id,
+              noteColor: item?.color,
               editNote,
-            })
-          }>
+            });
+          }}>
           <Text style={styles.noteText}>{item?.name}</Text>
           <Pressable
             ref={threeDotIconRef}
@@ -219,7 +220,7 @@ const NotesScreen = () => {
         </Pressable>
       );
     },
-    [openModal, noteData],
+    [openModal, noteData, singleNoteData],
   );
 
   const renderBody = useCallback(
