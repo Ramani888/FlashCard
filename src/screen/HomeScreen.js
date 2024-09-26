@@ -12,7 +12,6 @@ import {
 import Color from '../component/Color';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import Font from '../component/Font';
-import CustomeButton from '../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import TimerComponent from '../component/homescreen/TimerComponent';
 import PushNotificationComponent from '../component/homescreen/PushNotificationComponent';
@@ -25,7 +24,6 @@ import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
 import AIScreen from '../component/AIScreen';
-import {setState} from '../redux/StateSlice';
 import {useDispatch} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
@@ -35,19 +33,13 @@ const IconButton = memo(({name, iconComponent, selected, onPress}) => {
 
   return (
     <Pressable
-      style={[
-        styles.iconBtn,
-        {backgroundColor: selected ? Color.theme1 : Color.White},
-      ]}
+      style={[styles.iconBtn, selected && styles.iconBtnSelected]}
       onPress={onPress}>
       <Icon
         name={name}
         size={moderateScale(15)}
         color={selected ? Color.White : Color.theme1}
-        style={[
-          styles.icon,
-          {backgroundColor: selected ? Color.theme1 : Color.WhiteDefault},
-        ]}
+        style={[styles.icon, selected && styles.iconSelected]}
       />
     </Pressable>
   );
@@ -59,127 +51,97 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [cardTypeData, setCardTypeData] = useState([]);
-  const [selectedIcon, setSelectedIcon] = useState('timer');
-  const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
 
-  useEffect(() => {
-    getCardType();
-  }, []);
-
-  // ===================================== Api ===================================== //
-
-  const getCardType = async () => {
-    try {
-      setVisible(true);
-      const response = await apiGet(Api.getCardType, '');
-      setCardTypeData(response);
-    } catch (error) {
-      console.log('error in cardType Data', error);
-    } finally {
-      setVisible(false);
-    }
-  };
-
-  // ===================================== End ===================================== //
-
-  const icons = {
-    earthIcon: require('../Assets/Img/earthIcon.png'),
-    clockIcon: require('../Assets/Img/clock.png'),
-    userIcon: require('../Assets/Img/user.png'),
-  };
-
-  const renderHeaderIcons = useCallback(
-    () => (
-      <View style={styles.headerIconsContainer}>
-        <Pressable onPress={() => refRBSheet.current.open()}>
-          <Image source={icons.clockIcon} style={styles.iconTop} />
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate(ScreenName.profile)}>
-          <Image source={icons.userIcon} style={styles.iconTop} />
-        </Pressable>
-      </View>
-    ),
-    [],
-  );
-
-  const renderButtons = useCallback(
-    () => (
-      <View style={styles.buttonsContainer}>
-        <Pressable onPress={() => openAiBottomSheets.current.open()}>
-          <Image
-            source={require('../Assets/Img/ai.png')}
-            style={{width: scale(60), height: scale(60), alignSelf: 'center'}}
-          />
-        </Pressable>
-        {cardTypeData.map((item, index) => (
-          <CustomeButton
-            key={index}
-            buttonColor={Color.theme1}
-            buttonWidth={width * 0.85}
-            buttonHeight={height * 0.06}
-            title={item?.name}
-            borderRadius={moderateScale(10)}
-            fontSize={moderateScale(15)}
-            fontColor={Color.White}
-            fontFamily={Font.semiBold}
-            marginTop={index === 0 ? verticalScale(25) : verticalScale(15)}
-            onPress={() => {
-              item?.name === 'VERSES' &&
-                dispatch(
-                  setState({cardTypeName: 'VERSES', cardTypeId: item?._id}),
-                );
-              item?.name === 'Q + A’s' &&
-                dispatch(
-                  setState({cardTypeName: 'Q + A’s', cardTypeId: item?._id}),
-                );
-              item?.name === 'GENERAL' &&
-                dispatch(
-                  setState({cardTypeName: 'GENERAL', cardTypeId: item?._id}),
-                );
-              navigation.navigate(ScreenName.cardTypeWiseFolderAndSet);
-            }}
-          />
-        ))}
-      </View>
-    ),
-    [cardTypeData],
-  );
-
-  const BottomSheets = useCallback(() => {
+  const tabView = () => {
     return (
-      <RBSheet
-        ref={refRBSheet}
-        height={height * 0.57}
-        openDuration={250}
-        draggable={true}
-        customStyles={{
-          container: styles.bottomSheetContainer,
-        }}>
-        <View style={styles.sheetContainer}>
-          <IconButton
-            name="clock"
-            iconComponent={MaterialCommunityIcons}
-            selected={selectedIcon === 'timer'}
-            onPress={() => setSelectedIcon('timer')}
-          />
-          <IconButton
-            name="notifications"
-            iconComponent={Ionicons}
-            selected={selectedIcon === 'notification'}
-            onPress={() => setSelectedIcon('notification')}
-          />
+      <View style={styles.tabViewContainer}>
+        <View style={styles.tabRow}>
+          <Pressable
+            style={styles.tabContainer}
+            onPress={() => navigation.navigate(ScreenName.profile)}>
+            <Image
+              source={require('../Assets/Img/account.png')}
+              style={styles.tabIcon}
+            />
+            <Text style={styles.tabText}>Account</Text>
+          </Pressable>
+
+          <Pressable style={styles.tabAiContainer} onPress={() => navigation.navigate(ScreenName.aiScreen)}>
+            <Image
+              source={require('../Assets/Img/aiIcon.png')}
+              style={styles.tabAi}
+            />
+            <Text style={styles.tabText}>AI</Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.tabContainer}
+            onPress={() => navigation.navigate(ScreenName.notes)}>
+            <Image
+              source={require('../Assets/Img/notes.png')}
+              style={styles.tabIcon}
+              tintColor={Color.theme1}
+            />
+            <Text style={styles.tabText}>Notes</Text>
+          </Pressable>
         </View>
-        {selectedIcon === 'timer' && <TimerComponent />}
-        {selectedIcon === 'notification' && <PushNotificationComponent />}
-      </RBSheet>
+
+        <View style={styles.tabRowSecondary}>
+          <Pressable
+            style={styles.tabContainer}
+            onPress={() => navigation.navigate(ScreenName.pdf)}>
+            <Image
+              source={require('../Assets/Img/pdf.png')}
+              style={styles.tabIcon}
+              tintColor={Color.theme1}
+            />
+            <Text style={styles.tabText}>PDF's</Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.tabContainer}
+            onPress={() => navigation.navigate(ScreenName.image)}>
+            <Image
+              source={require('../Assets/Img/images.png')}
+              style={styles.tabIcon}
+              tintColor={Color.theme1}
+            />
+            <Text style={styles.tabText}>Images</Text>
+          </Pressable>
+        </View>
+      </View>
     );
-  }, [selectedIcon]);
+  };
 
-  // const AiBottomSheets = useCallback(() => {
+  // const BottomSheets = useCallback(() => {
   //   return (
-
+  //     <RBSheet
+  //       ref={refRBSheet}
+  //       height={height * 0.57}
+  //       openDuration={250}
+  //       draggable={true}
+  //       customStyles={{
+  //         container: styles.bottomSheetContainer,
+  //       }}>
+  //       <View style={styles.sheetContainer}>
+  //         <IconButton
+  //           name="clock"
+  //           iconComponent={MaterialCommunityIcons}
+  //           selected={selectedIcon === 'timer'}
+  //           onPress={() => setSelectedIcon('timer')}
+  //         />
+  //         <IconButton
+  //           name="notifications"
+  //           iconComponent={Ionicons}
+  //           selected={selectedIcon === 'notification'}
+  //           onPress={() => setSelectedIcon('notification')}
+  //         />
+  //       </View>
+  //       {selectedIcon === 'timer' && <TimerComponent />}
+  //       {selectedIcon === 'notification' && <PushNotificationComponent />}
+  //     </RBSheet>
   //   );
-  // }, []);
+  // }, [selectedIcon]);
 
   const renderBody = useCallback(
     () => (
@@ -187,18 +149,27 @@ const HomeScreen = () => {
         <LinearGradient
           colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
           style={styles.headerContainer}>
-          {renderHeaderIcons()}
-          <Image
-            source={require('../Assets/Img/card.png')}
-            style={styles.cardImage}
-          />
+          <Text style={styles.headerText}>MY CARDS</Text>
+          <Pressable
+            onPress={() =>
+              navigation.navigate(ScreenName.setAndFolder)
+            }>
+            <Image
+              source={require('../Assets/Img/card.png')}
+              style={styles.cardImage}
+            />
+          </Pressable>
         </LinearGradient>
-        {renderButtons()}
-        {BottomSheets()}
-        <AIScreen setOpenAIBottomsheet={setOpenAIBottomsheet} />
+        {tabView()}
+
+        <Image
+          source={require('../Assets/Img/ads.png')}
+          style={styles.adsImage}
+          resizeMode="contain"
+        />
       </ScrollView>
     ),
-    [renderHeaderIcons, renderButtons, BottomSheets, cardTypeData],
+    [cardTypeData],
   );
 
   return (
@@ -223,22 +194,18 @@ const styles = StyleSheet.create({
   headerContainer: {
     height: height * 0.415,
   },
-  headerIconsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: scale(85),
-    marginTop: verticalScale(55),
-    alignSelf: 'center',
-  },
-  iconTop: {
-    width: scale(40),
-    height: scale(40),
+  headerText: {
+    fontSize: scale(20),
+    fontFamily: Font.medium,
+    color: Color.White,
+    textAlign: 'center',
+    marginTop: verticalScale(65),
   },
   cardImage: {
     width: width * 0.85,
     height: verticalScale(215),
     alignSelf: 'center',
-    marginTop: verticalScale(25),
+    marginTop: verticalScale(15),
   },
   bottomSheetContainer: {
     alignItems: 'center',
@@ -250,19 +217,66 @@ const styles = StyleSheet.create({
     gap: scale(50),
     marginVertical: verticalScale(15),
   },
-  buttonsContainer: {
-    alignItems: 'center',
-    marginTop: moderateScale(70),
-  },
   iconBtn: {
     padding: moderateScale(5),
     borderWidth: scale(1),
     borderColor: Color.LightGray,
     borderRadius: scale(5),
+    backgroundColor: Color.White,
+  },
+  iconBtnSelected: {
+    backgroundColor: Color.theme1,
   },
   icon: {
     backgroundColor: Color.WhiteDefault,
     padding: moderateScale(5),
     borderRadius: scale(5),
+  },
+  iconSelected: {
+    backgroundColor: Color.theme1,
+  },
+  tabViewContainer: {
+    marginTop: verticalScale(75),
+  },
+  tabRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: scale(400),
+    alignSelf: 'center',
+  },
+  tabAiContainer: {
+    marginTop: verticalScale(5),
+    alignItems: 'center',
+  },
+  tabRowSecondary: {
+    flexDirection: 'row',
+    width: scale(250),
+    alignSelf: 'center',
+    marginTop: verticalScale(15),
+  },
+  tabContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginVertical: verticalScale(15),
+  },
+  tabIcon: {
+    width: moderateScale(24),
+    height: moderateScale(24),
+  },
+  tabAi: {
+    width: moderateScale(35),
+    height: moderateScale(35),
+  },
+  tabText: {
+    fontSize: scale(14),
+    fontFamily: Font.medium,
+    color: Color.theme1,
+    paddingTop: verticalScale(5),
+  },
+  adsImage: {
+    width: '100%',
+    height: verticalScale(50),
+    position: 'absolute',
+    bottom: verticalScale(30),
   },
 });

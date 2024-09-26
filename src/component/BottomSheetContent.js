@@ -11,6 +11,21 @@ import showMessageonTheScreen from './ShowMessageOnTheScreen';
 
 const {width, height} = Dimensions.get('window');
 
+const colors = [
+  '#FFFFFF',
+  '#a378ff',
+  '#ea80fc',
+  '#ff8a80',
+  '#1de9b6',
+  '#25c6da',
+  '#81dbfe',
+  '#438afe',
+  '#81b0fd',
+  '#bdbdbd',
+  '#ff9f7f',
+  '#ffd27f',
+];
+
 const BottomSheetContent = ({
   closeBottomSheet,
   title,

@@ -23,6 +23,7 @@ import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import AIScreen from '../../component/AIScreen';
 import {useSelector} from 'react-redux';
+import { ScreenName } from '../../component/Screen';
 
 const CreateCardScreen = () => {
   const navigation = useNavigation();
@@ -34,7 +35,6 @@ const CreateCardScreen = () => {
   const [note, setNote] = useState('');
   const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
   const {folderId, setId, initialData, editNote} = route.params;
-  const {cardTypeName, cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     if (initialData) {
@@ -54,7 +54,6 @@ const CreateCardScreen = () => {
       top: top,
       bottom: bottom,
       userId: global?.user?._id,
-      cardTypeId: cardTypeId,
       folderId: folderId,
       setId: setId,
       note: note,
@@ -77,7 +76,6 @@ const CreateCardScreen = () => {
     const rawData = {
       _id: initialData?._id,
       userId: global?.user?._id,
-      cardTypeId: cardTypeId,
       folderId: folderId,
       setId: setId,
       top: top,
@@ -110,10 +108,7 @@ const CreateCardScreen = () => {
         goBack={true}
         title={
           <View style={styles.titleContainer}>
-            <Text style={styles.titleLine}>CREATE</Text>
-            <Text style={styles.titleLine}>
-              {cardTypeName == 'Q + A’s' ? 'Q + A’s' : 'GENERAL CARD'}
-            </Text>
+            <Text style={styles.titleLine}>CREATED CARD</Text>
           </View>
         }
         titleStyle={styles.headerTitle}
@@ -126,19 +121,11 @@ const CreateCardScreen = () => {
   const cardImage = useMemo(
     () => (
       <View style={styles.imageContainer}>
-        {cardTypeName == 'Q + A’s' ? (
-          <Image
-            source={require('../../Assets/Img/questionMark.png')}
-            style={styles.cardImage}
-            resizeMode="contain"
-          />
-        ) : (
-          <Image
-            source={require('../../Assets/Img/singleCard.png')}
-            style={styles.cardImage}
-            resizeMode="contain"
-          />
-        )}
+        <Image
+          source={require('../../Assets/Img/singleCard.png')}
+          style={styles.cardImage}
+          resizeMode="contain"
+        />
       </View>
     ),
     [],
@@ -161,12 +148,11 @@ const CreateCardScreen = () => {
 
         <View style={styles.inputContainer}>
           <CustomeInputField
-            placeholder={cardTypeName == 'Q + A’s' ? 'Enter Question' : 'Top'}
+            placeholder={'Top'}
             placeholderTextColor={Color.mediumGray}
             onChangeText={handleTopChange}
             value={top}
             height={verticalScale(45)}
-            marginTop={verticalScale(-30)}
             width="100%"
             inputContainerStyles={[
               styles.inputContainerStyle,
@@ -174,7 +160,7 @@ const CreateCardScreen = () => {
             ]}
           />
           <CustomeInputField
-            placeholder={cardTypeName == 'Q + A’s' ? 'Enter Answer' : 'Bottom'}
+            placeholder={'Bottom'}
             height={verticalScale(180)}
             onChangeText={handleBottomChange}
             value={bottom}
@@ -212,7 +198,7 @@ const CreateCardScreen = () => {
           )}
 
           <Pressable
-            onPress={() => openAiBottomSheets.current.open()}
+            onPress={() => navigation.navigate(ScreenName.aiScreen)}
             style={[
               styles.aiButton,
               {marginBottom: noteVisible ? verticalScale(90) : 0},
@@ -233,7 +219,7 @@ const CreateCardScreen = () => {
             fontColor={Color.White}
             fontFamily={Font.semiBold}
             marginTop={verticalScale(15)}
-            marginBottom={verticalScale(15)}
+            marginBottom={verticalScale(0)}
             position={'absolute'}
             bottom={verticalScale(10)}
             onPress={() => {
@@ -262,7 +248,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   headerContainer: {
-    paddingBottom: verticalScale(20),
     justifyContent: 'flex-end',
   },
   headerStyle: {
@@ -286,14 +271,14 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(15),
     backgroundColor: Color.White,
   },
-  topInputStyle: {marginTop: verticalScale(-25)},
+  topInputStyle: {marginTop: verticalScale(15)},
   imageContainer: {
     alignItems: 'center',
-    marginVertical: verticalScale(50),
+    marginVertical: verticalScale(40),
   },
   cardImage: {
     width: scale(124),
-    height: scale(76),
+    height: scale(80),
   },
   inputContainer: {
     flex: 1,
@@ -308,6 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    marginTop:verticalScale(-8)
   },
   optionalText: {
     fontSize: scale(12.5),
@@ -319,6 +305,6 @@ const styles = StyleSheet.create({
     padding: scale(10),
     width: scale(30),
   },
-  aiButton: {marginVertical: verticalScale(20)},
+  aiButton: {marginVertical: verticalScale(27)},
   aiImage: {width: scale(60), height: scale(60), alignSelf: 'center'},
 });

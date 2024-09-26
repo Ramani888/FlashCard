@@ -9,7 +9,7 @@ import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../BottomSheetContent';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
@@ -18,6 +18,7 @@ import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import {useSelector} from 'react-redux';
 
 const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -31,11 +32,10 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
   const [setId, setSetId] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
-  const {cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     getSetData();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     if (singleSetData) {
@@ -59,8 +59,8 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
     !message && setVisible(true);
     try {
       const url = folderId
-        ? `${Api.FolderSet}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}&folderId=${folderId}`
-        : `${Api.Set}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}`;
+        ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}`
+        : `${Api.Set}?userId=${global?.user?._id}`;
       const response = await apiGet(url);
       setSetData(response);
       message && showMessageonTheScreen(message);
@@ -76,7 +76,6 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
       name: setName,
       isPrivate: setStatus,
       color: setColor,
-      cardTypeId: cardTypeId,
       userId: global?.user?._id,
       ...(folderId ? {folderId: folderId} : {}),
     };
@@ -98,7 +97,6 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
       name: setName,
       isPrivate: setStatus,
       color: setColor,
-      cardTypeId: cardTypeId,
       userId: global?.user?._id,
     };
     closeModal();
@@ -172,7 +170,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
             </View>
             <View style={styles.rowWithGap}>
               <View style={styles.subSetContainer}>
-                <Text style={styles.subSetText}>3</Text>
+                <Text style={styles.subSetText}>{item?.cardCount}</Text>
                 <Image
                   source={require('../../Assets/Img/cardIcon.png')}
                   style={styles.cardIcon}
@@ -199,7 +197,9 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
               source={require('../../Assets/Img/folder.png')}
               style={styles.folderIcon}
             />
-            <Text style={styles.folderText}>folder</Text>
+            <Text style={styles.folderText}>
+              {item?.folderName ? item?.folderName : ''}
+            </Text>
           </View>
         </View>
       );

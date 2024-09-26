@@ -11,7 +11,7 @@ const AppStack = ({user}) => {
     otpVerify,
     home,
     globalLiveFeed,
-    cardTypeWiseFolderAndSet,
+    setAndFolder,
     createCard,
     asignFolder,
     assignSet,
@@ -23,6 +23,7 @@ const AppStack = ({user}) => {
     notesDetail,
     pdf,
     image,
+    aiScreen,
   } = ScreenName;
 
   const {
@@ -31,7 +32,7 @@ const AppStack = ({user}) => {
     SignInScreen,
     HomeScreen,
     GlobalLiveFeedScreen,
-    CardTypeWiseFolderAndSetScreen,
+    SetAndFolderScreen,
     CreateCardScreen,
     AssignFolderScreen,
     AssignSetScreen,
@@ -43,6 +44,7 @@ const AppStack = ({user}) => {
     NoteDetailScreen,
     PdfScreen,
     ImagesScreen,
+    AiScreen,
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -80,8 +82,8 @@ const AppStack = ({user}) => {
       />
 
       <Stack.Screen
-        name={cardTypeWiseFolderAndSet}
-        component={CardTypeWiseFolderAndSetScreen}
+        name={setAndFolder}
+        component={SetAndFolderScreen}
         options={{headerShown: false}}
       />
 
@@ -148,6 +150,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={image}
         component={ImagesScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={aiScreen}
+        component={AiScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

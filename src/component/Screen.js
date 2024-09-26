@@ -4,7 +4,7 @@ import ContactScreen from '../screen/profile/ContactScreen';
 import NotesScreen from '../screen/profile/notes/NotesScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
-import CardTypeWiseFolderAndSetScreen from '../screen/verses/CardTypeWiseFolderAndSetScreen';
+import SetAndFolderScreen from '../screen/verses/SetAndFolderScreen';
 import AssignFolderScreen from '../screen/verses/AssignFolderScreen';
 import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
 import SetDetailScreen from '../screen/verses/SetDetailScreen';
@@ -15,13 +15,14 @@ import ImagesScreen from '../screen/profile/ImagesScreen';
 import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
 import AssignSetScreen from '../screen/verses/AssignSetScreen';
 import NoteDetailScreen from '../screen/profile/notes/NoteDetailScreen';
+import AiScreen from '../screen/AiScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
   otpVerify: 'OtpVerify',
   signIn: 'SignIn',
   home: 'Home',
-  cardTypeWiseFolderAndSet: 'CardTypeWiseFolderAndSet',
+  setAndFolder: 'SetAndFolder',
   createCard: 'CreateCard',
   profile: 'Profile',
   contact: 'Contacts',
@@ -34,6 +35,7 @@ export const ScreenName = {
   setDetail: 'SetDetail',
   pdf: 'Pdf',
   image: 'Image',
+  aiScreen: 'AiScreen'
 };
 
 export const ScreenPath = {
@@ -41,7 +43,7 @@ export const ScreenPath = {
   OtpVerifyScreen,
   SignInScreen,
   HomeScreen,
-  CardTypeWiseFolderAndSetScreen,
+  SetAndFolderScreen,
   CreateCardScreen,
   ProfileScreen,
   ContactScreen,
@@ -54,4 +56,5 @@ export const ScreenPath = {
   SetDetailScreen,
   PdfScreen,
   ImagesScreen,
+  AiScreen
 };

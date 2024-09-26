@@ -31,6 +31,7 @@ const SetDetailScreen = () => {
   const [cardModalPosition, setCardModalPosition] = useState({x: 0, y: 0});
   const [noteModalPosition, setNoteModalPosition] = useState({x: 0, y: 0});
   const [cardData, setCardData] = useState([]);
+  console.log('cardData',cardData)
   const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
   const {setName} = route.params;
@@ -147,7 +148,7 @@ const SetDetailScreen = () => {
 
   const openNoteModal = useCallback(
     (ref, cardHeight) => {
-      console.log('cardHeight',cardHeight)
+      console.log('cardHeight', cardHeight);
       if (ref.current) {
         ref.current.measureInWindow((x, y, width, height) => {
           layout == 'single'
@@ -173,7 +174,6 @@ const SetDetailScreen = () => {
         headerBackgroundColor={Color.transparent}
         title={
           <View style={styles.titleContainer}>
-            <Text style={styles.titleLine}>{cardTypeName}</Text>
             <Text style={styles.titleLine}>{setName}</Text>
           </View>
         }

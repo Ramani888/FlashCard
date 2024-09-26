@@ -49,7 +49,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
     !message && setVisible(true);
     try {
       const response = await apiGet(
-        `${Api.Folder}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}`,
+        `${Api.Folder}?userId=${global?.user?._id}`,
       );
       setFolderData(response);
       message && showMessageonTheScreen(message);
@@ -201,15 +201,9 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const renderBody = () => {
     return (
       <View style={{flex: 1}}>
-        <View style={styles.folderContainer}>
-          <Text style={styles.folderText}>TRINITY</Text>
-          <Entypo
-            name="dots-three-vertical"
-            size={scale(13)}
-            color={Color.Black}
-            style={styles.dotsIcon}
-          />
-        </View>
+        <Pressable style={styles.folderContainer} onPress={() => onFolderClick('')}>
+          <Text style={styles.folderText}>ALL SETS</Text>
+        </Pressable>
 
         <FlatList
           data={folderData}
@@ -284,7 +278,7 @@ const styles = StyleSheet.create({
   },
   flatlist: {marginTop: verticalScale(10), marginBottom: verticalScale(55)},
   folderContainer: {
-    backgroundColor: Color.SandyBrown,
+    backgroundColor: Color.White,
     borderRadius: scale(10),
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -296,6 +290,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(15),
+    paddingVertical:verticalScale(3.5)
   },
 
   folderItem: {

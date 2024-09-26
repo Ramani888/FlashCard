@@ -31,11 +31,13 @@ const {width, height} = Dimensions.get('window');
 
 const tabData = [
   {tabname: 'Contacts', image: require('../../Assets/Img/userIcon.png')},
-  {tabname: 'PDF', image: require('../../Assets/Img/pdf.png')},
-  {tabname: 'Notes', image: require('../../Assets/Img/notes.png')},
-  {tabname: 'Images', image: require('../../Assets/Img/images.png')},
   {tabname: 'Cloud', image: require('../../Assets/Img/cloud.png')},
   {tabname: 'Support', image: require('../../Assets/Img/support.png')},
+  {tabname: 'Privacy & Terms', image: require('../../Assets/Img/privacy.png')},
+  {tabname: 'About Us', image: require('../../Assets/Img/notes.png')},
+  // {tabname: 'PDF', image: require('../../Assets/Img/pdf.png')},
+  // {tabname: 'Notes', image: require('../../Assets/Img/notes.png')},
+  // {tabname: 'Images', image: require('../../Assets/Img/images.png')},
 ];
 
 const ProfileScreen = () => {

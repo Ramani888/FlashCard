@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
   dotIconView: {
     position: 'absolute',
     right: scale(15),
+    top:verticalScale(50)
   },
   dotsIcon: {
     backgroundColor: Color.iconBackground,

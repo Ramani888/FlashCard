@@ -22,7 +22,7 @@ import {useSelector} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 
-const CardTypeWiseFolderAndSetScreen = () => {
+const SetAndFolderScreen = () => {
   const route = useRoute();
   const [search, setSearch] = useState(false);
   const [searchHashtags, setSearchHashtags] = useState('');
@@ -51,7 +51,7 @@ const CardTypeWiseFolderAndSetScreen = () => {
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={cardTypeName}
+        title={'MY CARD'}
         containerStyle={styles.headerStyle}
         searchIcon={true}
         setSearch={setSearch}
@@ -158,7 +158,7 @@ const CardTypeWiseFolderAndSetScreen = () => {
   return renderBody();
 };
 
-export default React.memo(CardTypeWiseFolderAndSetScreen);
+export default React.memo(SetAndFolderScreen);
 
 const styles = StyleSheet.create({
   headerContainer: {
