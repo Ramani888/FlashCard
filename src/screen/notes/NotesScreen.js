@@ -9,23 +9,23 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Color from '../../../component/Color';
+import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
-import CustomeHeader from '../../../custome/CustomeHeader';
-import Font from '../../../component/Font';
+import CustomeHeader from '../../custome/CustomeHeader';
+import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
-import CustomeButton from '../../../custome/CustomeButton';
+import CustomeButton from '../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import BottomSheetContent from '../../../component/BottomSheetContent';
-import CustomeModal from '../../../custome/CustomeModal';
-import ModalContent from '../../../component/verses/ModalContent';
-import NoteModalContent from '../../../component/profile/NoteModalContent';
-import {apiDelete, apiGet, apiPost, apiPut} from '../../../Api/ApiService';
-import Api from '../../../Api/EndPoint';
-import Loader from '../../../component/Loader';
-import showMessageonTheScreen from '../../../component/ShowMessageOnTheScreen';
+import BottomSheetContent from '../../component/BottomSheetContent';
+import CustomeModal from '../../custome/CustomeModal';
+import ModalContent from '../../component/verses/ModalContent';
+import NoteModalContent from '../../component/profile/NoteModalContent';
+import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import Loader from '../../component/Loader';
+import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {useNavigation} from '@react-navigation/native';
-import {ScreenName} from '../../../component/Screen';
+import {ScreenName} from '../../component/Screen';
 
 const {height, width} = Dimensions.get('window');
 

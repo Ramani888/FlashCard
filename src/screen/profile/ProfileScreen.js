@@ -80,9 +80,9 @@ const ProfileScreen = () => {
   const handleTabPress = tabname => {
     tabname == 'Contacts' && navigation.navigate(ScreenName.contact);
     tabname == 'Support' && navigation.navigate(ScreenName.support);
-    tabname == 'Notes' && navigation.navigate(ScreenName.notes);
-    tabname == 'PDF' && navigation.navigate(ScreenName.pdf);
-    tabname == 'Images' && navigation.navigate(ScreenName.image);
+    tabname == 'Cloud' && navigation.navigate(ScreenName.cloud);
+    tabname == 'Privacy & Terms' && navigation.navigate(ScreenName.privacy);
+    tabname == 'About Us' && navigation.navigate(ScreenName.aboutUs);
   };
 
   const handleLogout = async () => {

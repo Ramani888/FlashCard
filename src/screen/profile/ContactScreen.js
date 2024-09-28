@@ -64,7 +64,6 @@ const ContactScreen = () => {
     try {
       setVisible(true);
       const response = await apiPost(Api.contacts, '', JSON.stringify(rawData));
-      console.log('response1221211',response)
       if (response.success == true) {
         getContacts(true, response?.message);
       }

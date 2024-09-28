@@ -1,6 +1,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useMemo} from 'react';
 import {ScreenName, ScreenPath} from '../component/Screen';
+import CloudScreen from '../screen/profile/CloudScreen';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,9 @@ const AppStack = ({user}) => {
     pdf,
     image,
     aiScreen,
+    cloud,
+    privacy,
+    aboutUs,
   } = ScreenName;
 
   const {
@@ -45,6 +49,9 @@ const AppStack = ({user}) => {
     PdfScreen,
     ImagesScreen,
     AiScreen,
+    PrivacyScreen,
+    AboutUsScreen,
+    CloudScreen,
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -156,6 +163,24 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={aiScreen}
         component={AiScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={cloud}
+        component={CloudScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={privacy}
+        component={PrivacyScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={aboutUs}
+        component={AboutUsScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

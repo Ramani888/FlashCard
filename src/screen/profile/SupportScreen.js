@@ -80,6 +80,7 @@ const SupportScreen = () => {
       </View>
     );
   };
+  
   return (
     <View style={{flex: 1}}>
       <StatusBar backgroundColor={Color.WhiteDefault}/>

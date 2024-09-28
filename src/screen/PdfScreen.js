@@ -1,22 +1,23 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import CustomeHeader from '../../custome/CustomeHeader';
-import Color from '../../component/Color';
+import CustomeHeader from '../custome/CustomeHeader';
+import Color from '../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomeButton from '../../custome/CustomeButton';
-import Font from '../../component/Font';
-import ImageComponent from '../../component/profile/image/ImageComponent';
+import CustomeButton from '../custome/CustomeButton';
+import Font from '../component/Font';
+import PdfComponent from '../component/profile/pdf/PdfComponent';
+import PdfFolderComponent from '../component/pdf/PdfFolderComponent';
 
-const ImagesScreen = () => {
-  const [tab, setTab] = useState('IMAGES');
+const PdfScreen = () => {
+  const [tab, setTab] = useState('PDF');
 
   const renderHeader = () => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={'IMAGES'}
+        title={'PDF'}
         titleStyle={styles.title}
         containerStyle={styles.headerStyle}
       />
@@ -26,16 +27,16 @@ const ImagesScreen = () => {
   const buttons = () => (
     <View style={styles.buttonContainer}>
       <CustomeButton
-        buttonColor={tab == 'IMAGES' ? Color.White : Color.theme1}
+        buttonColor={tab == 'PDF' ? Color.White : Color.theme1}
         buttonWidth={scale(150)}
         buttonHeight={scale(45)}
-        title={'IMAGES'}
+        title={`PDF's`}
         borderRadius={scale(10)}
         fontSize={scale(15)}
-        fontColor={tab == 'IMAGES' ? Color.Black : Color.White}
+        fontColor={tab == 'PDF' ? Color.Black : Color.White}
         fontFamily={Font.medium}
         marginTop={verticalScale(15)}
-        onPress={() => setTab('IMAGES')}
+        onPress={() => setTab('PDF')}
       />
 
       <CustomeButton
@@ -55,7 +56,7 @@ const ImagesScreen = () => {
 
   const renderBody = () => {
     return (
-      <View>
+      <View style={{flex:1}}>
         <LinearGradient
           colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
           style={styles.headerContainer}>
@@ -64,15 +65,16 @@ const ImagesScreen = () => {
           {buttons()}
         </LinearGradient>
 
-        {tab == 'IMAGES' && <ImageComponent />}
+        {tab == 'PDF' && <PdfComponent />}
+        {tab == 'FOLDERS' && <PdfFolderComponent />}
       </View>
     );
   };
 
-  return <View>{renderBody()}</View>;
+  return <View style={{flex:1}}>{renderBody()}</View>;
 };
 
-export default React.memo(ImagesScreen);
+export default React.memo(PdfScreen);
 
 const styles = StyleSheet.create({
   headerContainer: {

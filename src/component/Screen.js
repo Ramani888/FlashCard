@@ -1,21 +1,24 @@
-import CreateCardScreen from '../screen/verses/CreateCardScreen';
+import CreateCardScreen from '../screen/card/CreateCardScreen';
 import HomeScreen from '../screen/HomeScreen';
 import ContactScreen from '../screen/profile/ContactScreen';
-import NotesScreen from '../screen/profile/notes/NotesScreen';
+import NotesScreen from '../screen/notes/NotesScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
-import SetAndFolderScreen from '../screen/verses/SetAndFolderScreen';
-import AssignFolderScreen from '../screen/verses/AssignFolderScreen';
+import SetAndFolderScreen from '../screen/card/SetAndFolderScreen';
+import AssignFolderScreen from '../screen/card/AssignFolderScreen';
 import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
-import SetDetailScreen from '../screen/verses/SetDetailScreen';
+import SetDetailScreen from '../screen/card/SetDetailScreen';
 import SignUpScreen from '../screen/auth/SignUpScreen';
 import SignInScreen from '../screen/auth/SignInScreen';
-import PdfScreen from '../screen/profile/PdfScreen';
-import ImagesScreen from '../screen/profile/ImagesScreen';
+import PdfScreen from '../screen/PdfScreen';
+import ImagesScreen from '../screen/ImagesScreen';
 import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
-import AssignSetScreen from '../screen/verses/AssignSetScreen';
-import NoteDetailScreen from '../screen/profile/notes/NoteDetailScreen';
+import AssignSetScreen from '../screen/card/AssignSetScreen';
+import NoteDetailScreen from '../screen/notes/NoteDetailScreen';
 import AiScreen from '../screen/AiScreen';
+import PrivacyScreen from '../screen/profile/PrivacyScreen';
+import AboutUsScreen from '../screen/profile/AboutUsScreen';
+import CloudScreen from '../screen/profile/CloudScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -35,7 +38,10 @@ export const ScreenName = {
   setDetail: 'SetDetail',
   pdf: 'Pdf',
   image: 'Image',
-  aiScreen: 'AiScreen'
+  aiScreen: 'AiScreen',
+  privacy: 'Privacy',
+  aboutUs: 'AboutUs',
+  cloud: 'Cloud'
 };
 
 export const ScreenPath = {
@@ -56,5 +62,8 @@ export const ScreenPath = {
   SetDetailScreen,
   PdfScreen,
   ImagesScreen,
-  AiScreen
+  AiScreen,
+  PrivacyScreen,
+  AboutUsScreen,
+  CloudScreen
 };
