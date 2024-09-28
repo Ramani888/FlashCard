@@ -14,6 +14,7 @@ const Api = {
   assignedFolder: `${Base_url}/assign/folder`,
   notes: `${Base_url}/notes`,
   contacts: `${Base_url}/contacts`,
+  searchUser:  `${Base_url}/contacts/users`,
 };
 
 export default Api;

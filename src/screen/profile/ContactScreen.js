@@ -1,5 +1,12 @@
-import {StyleSheet, Text, View, FlatList, Pressable} from 'react-native';
-import React, {useCallback, useRef, useState, useMemo} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Pressable,
+  Dimensions,
+} from 'react-native';
+import React, {useCallback, useRef, useState, useMemo, useEffect} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -10,30 +17,63 @@ import ContactModalContent from '../../component/profile/contact/ContactModalCon
 import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
 import ContactBottomSheetContent from '../../component/profile/contact/ContactBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {apiGet, apiPost} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
+import Loader from '../../component/Loader';
 
-const contactData = [
-  {
-    name: 'Mike',
-    image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbySPOVJMWqKXXDjw9zQLk4k7k7T2xDXjzsw&s',
-  },
-  {
-    name: 'Kevin',
-    image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbySPOVJMWqKXXDjw9zQLk4k7k7T2xDXjzsw&s',
-  },
-  {
-    name: 'Kyle',
-    image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbySPOVJMWqKXXDjw9zQLk4k7k7T2xDXjzsw&s',
-  },
-];
+const {height, width} = Dimensions.get('window');
 
 const ContactScreen = () => {
+  const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [contactData, setContactData] = useState([]);
   const threeDotIconRef = useRef(null);
   const refContactRBSheet = useRef();
+
+  useEffect(() => {
+    getContacts(false);
+  }, []);
+
+  // ==================================== Api ================================== //
+
+  const getContacts = async (message, messageValue) => {
+    try {
+      message == false && setVisible(true);
+      const response = await apiGet(
+        `${Api.contacts}?userId=${global.user?._id}`,
+      );
+      console.log('response', response);
+      if (response) {
+        setContactData(response);
+        message && showMessageonTheScreen(messageValue);
+      }
+    } catch (error) {
+      console.log('error in get contact api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const createContacts = async selectedUserId => {
+    const rawData = {
+      userId: global.user?._id,
+      contactUserId: selectedUserId,
+    };
+    try {
+      setVisible(true);
+      const response = await apiPost(Api.contacts, '', JSON.stringify(rawData));
+      console.log('response1221211',response)
+      if (response.success == true) {
+        getContacts(true, response?.message);
+      }
+    } catch (error) {
+      console.log('error in get contact api', error);
+    }
+  };
+
+  // ==================================== End ================================== //
 
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
@@ -78,7 +118,7 @@ const ContactScreen = () => {
     return (
       <RBSheet
         ref={refContactRBSheet}
-        height={verticalScale(245)}
+        height={height * 0.4}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -88,6 +128,7 @@ const ContactScreen = () => {
         <View style={styles.sheetContainer}>
           <ContactBottomSheetContent
             closeContactBottomSheet={closeContactBottomSheet}
+            createContacts={createContacts}
           />
         </View>
       </RBSheet>
@@ -100,7 +141,7 @@ const ContactScreen = () => {
 
       return (
         <View style={styles.contactContainer}>
-          <Text style={styles.contactText}>{item?.name}</Text>
+          <Text style={styles.contactText}>{item?.userName}</Text>
           <Pressable
             ref={threeDotIconRef}
             onPress={() => openModal(item, isLastItem)}>
@@ -119,6 +160,7 @@ const ContactScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Loader visible={visible} />
       {renderHeader}
       <View style={styles.bodyContainer}>
         <FlatList
