@@ -25,9 +25,9 @@ const AssignSetScreen = () => {
   const [setName, setSetName] = useState('');
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
-  const [selectedSet, setSelectedSet] = useState('');
+  const [selectedSetId, setSelectedSetId] = useState('');
   const {cardTypeId} = useSelector(state => state.myState);
-  const {folderId, setId, cardId} = route.params;
+  const {folderId, cardId} = route.params;
 
   useEffect(() => {
     getSetData();
@@ -35,15 +35,16 @@ const AssignSetScreen = () => {
 
   // ===================================== Api ===================================== //
 
-  const getSetData = async (message = '') => {
-    !message && setVisible(true);
+  const getSetData = async (message, messageValue) => {
+    message == false && setVisible(true);
     try {
       const url = folderId
-        ? `${Api.FolderSet}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}&folderId=${folderId}`
-        : `${Api.Set}?cardTypeId=${cardTypeId}&userId=${global?.user?._id}`;
+        ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}`
+        : `${Api.Set}?userId=${global?.user?._id}`;
+      console.log('url', url);
       const response = await apiGet(url);
       setSetData(response);
-      message && showMessageonTheScreen(message);
+      message && showMessageonTheScreen(messageValue);
     } catch (error) {
       console.log('error in get folder api', error);
     } finally {
@@ -66,7 +67,7 @@ const AssignSetScreen = () => {
       setSetName('');
       setSetStatus('');
       setSetColor('');
-      getSetData(response?.message);
+      getSetData(true, response?.message);
     } catch (error) {
       console.log('error in create set api', error);
     }
@@ -76,16 +77,13 @@ const AssignSetScreen = () => {
     try {
       setVisible(true);
       const response = await apiPut(
-        `${Api.moveCard}?setId=${setId}&cardId=${cardId}`,
+        `${Api.moveCard}?setId=${selectedSetId}&cardId=${cardId}`,
       );
       if (response?.success == true) {
-        // navigation.navigate(ScreenName.)
-        showMessageonTheScreen(response?.message);
+        getSetData(true, response?.message);
       }
     } catch (error) {
       console.log('error in assignSet api', error);
-    } finally {
-      setVisible(false);
     }
   };
 
@@ -109,7 +107,7 @@ const AssignSetScreen = () => {
   const renderSet = useCallback(
     ({item, index}) => {
       const isLastItem = index === setData.length - 1;
-      const selected = selectedSet == item?._id;
+      const selected = selectedSetId == item?._id;
 
       return (
         <View style={styles.itemContainer}>
@@ -118,7 +116,7 @@ const AssignSetScreen = () => {
               styles.setContainer,
               {backgroundColor: selected ? Color.DarkGray : Color.White},
             ]}
-            onPress={() => setSelectedSet(item?._id)}>
+            onPress={() => setSelectedSetId(item?._id)}>
             <View style={styles.rowContainer}>
               <Image
                 source={require('../../Assets/Img/bibleSign.png')}
@@ -129,7 +127,7 @@ const AssignSetScreen = () => {
             </View>
             <View style={styles.rowWithGap}>
               <View style={styles.subSetContainer}>
-                <Text style={styles.subSetText}>3</Text>
+                <Text style={styles.subSetText}>{item?.cardCount}</Text>
                 <Image
                   source={require('../../Assets/Img/cardIcon.png')}
                   style={styles.cardIcon}
@@ -147,7 +145,7 @@ const AssignSetScreen = () => {
         </View>
       );
     },
-    [setData, selectedSet],
+    [setData, selectedSetId],
   );
 
   const openBottomSheet = () => {

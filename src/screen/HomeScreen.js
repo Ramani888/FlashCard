@@ -49,7 +49,6 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const refRBSheet = useRef();
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
   const [cardTypeData, setCardTypeData] = useState([]);
 
   const tabView = () => {
@@ -66,7 +65,9 @@ const HomeScreen = () => {
             <Text style={styles.tabText}>Account</Text>
           </Pressable>
 
-          <Pressable style={styles.tabAiContainer} onPress={() => navigation.navigate(ScreenName.aiScreen)}>
+          <Pressable
+            style={styles.tabAiContainer}
+            onPress={() => navigation.navigate(ScreenName.aiScreen)}>
             <Image
               source={require('../Assets/Img/aiIcon.png')}
               style={styles.tabAi}
@@ -151,9 +152,7 @@ const HomeScreen = () => {
           style={styles.headerContainer}>
           <Text style={styles.headerText}>MY CARDS</Text>
           <Pressable
-            onPress={() =>
-              navigation.navigate(ScreenName.setAndFolder)
-            }>
+            onPress={() => navigation.navigate(ScreenName.setAndFolder)}>
             <Image
               source={require('../Assets/Img/card.png')}
               style={styles.cardImage}
@@ -175,7 +174,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor={Color.transparent} />
-      <Loader visible={visible} />
+
       {renderBody()}
     </View>
   );

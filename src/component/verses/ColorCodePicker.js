@@ -29,7 +29,11 @@ const {width, height} = Dimensions.get('window');
 
 const ColorCodePicker = ({setSelectedColor, selectedColor}) => {
   useEffect(() => {
-    setSelectedColor(selectedColor ? selectedColor : colors[1]);
+    setSelectedColor(
+      selectedColor === undefined || selectedColor === ''
+        ? colors[1]
+        : selectedColor,
+    );
   }, [selectedColor]);
 
   const renderItem = useCallback(
@@ -40,8 +44,7 @@ const ColorCodePicker = ({setSelectedColor, selectedColor}) => {
           {backgroundColor: item},
           selectedColor === item && styles.selectedColor,
         ]}
-        onPress={() => setSelectedColor(item)}>
-      </TouchableOpacity>
+        onPress={() => setSelectedColor(item)}></TouchableOpacity>
     ),
     [selectedColor],
   );

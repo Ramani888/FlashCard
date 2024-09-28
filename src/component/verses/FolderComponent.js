@@ -1,4 +1,11 @@
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useMemo, useRef, useState, useCallback, useEffect} from 'react';
 import Color from '../Color';
 import Font from '../Font';
@@ -14,7 +21,9 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+
+const {height, width} = Dimensions.get('window');
 
 const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const navigation = useNavigation();
@@ -23,7 +32,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [visible, setVisible] = useState(false);
   const [folderData, setFolderData] = useState([]);
-  const [singleFolderData, setSingleFolderData] = useState({});
+  const [singleFolderItem, setSingleFolderItem] = useState({});
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
@@ -36,12 +45,12 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   }, []);
 
   useEffect(() => {
-    if (singleFolderData) {
-      setFolderName(singleFolderData?.name);
-      setFolderStatus(singleFolderData?.isPrivate == true ? 1 : 0);
-      setFolderColor(singleFolderData?.color);
+    if (singleFolderItem) {
+      setFolderName(singleFolderItem?.name);
+      setFolderStatus(singleFolderItem?.isPrivate == true ? 1 : 0);
+      setFolderColor(singleFolderItem?.color);
     }
-  }, [singleFolderData]);
+  }, [singleFolderItem]);
 
   // ================================== Api =================================== //
 
@@ -63,9 +72,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const createFolder = async () => {
     const rawData = {
       name: folderName,
-      isPrivate: folderStatus,
       color: folderColor,
-      cardTypeId: cardTypeId,
       userId: global?.user?._id,
     };
     setVisible(true);
@@ -82,11 +89,9 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
 
   const editFolder = async () => {
     const rawData = {
-      _id: singleFolderData?._id,
+      _id: singleFolderItem?._id,
       name: folderName,
-      isPrivate: folderStatus,
       color: folderColor,
-      cardTypeId: cardTypeId,
       userId: global?.user?._id,
     };
     closeModal();
@@ -106,7 +111,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
     try {
       setVisible(true);
       const response = await apiDelete(
-        `${Api.Folder}?_id=${singleFolderData?._id}`,
+        `${Api.Folder}?_id=${singleFolderItem?._id}`,
       );
       getFolderData(response?.message);
     } catch (error) {
@@ -144,7 +149,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
           <Pressable
             ref={threeDotIconRef}
             onPress={() => {
-              setSingleFolderData(item);
+              setSingleFolderItem(item);
               openModal(item, isLastItem);
             }}>
             <Entypo
@@ -172,7 +177,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={verticalScale(510)}
+        height={height * 0.65}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -189,7 +194,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
             color={folderColor}
             setColor={setFolderColor}
             create={editBottomSheet ? editFolder : createFolder}
-            initialData={singleFolderData ? singleFolderData : ''}
+            initialData={singleFolderItem ? singleFolderItem : ''}
           />
         </View>
       </RBSheet>
@@ -201,7 +206,9 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const renderBody = () => {
     return (
       <View style={{flex: 1}}>
-        <Pressable style={styles.folderContainer} onPress={() => onFolderClick('')}>
+        <Pressable
+          style={styles.folderContainer}
+          onPress={() => onFolderClick('')}>
           <Text style={styles.folderText}>ALL SETS</Text>
         </Pressable>
 
@@ -227,7 +234,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
           bottom={verticalScale(10)}
           onPress={() => {
             setEditBottomSheet(false);
-            setSingleFolderData({});
+            setSingleFolderItem({});
             openBottomSheet();
           }}
         />
@@ -252,7 +259,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
             setEditBottomSheet={setEditBottomSheet}
             deleteData={deleteFolder}
             handleCreateSetClick={handleCreateSetClick}
-            singleFolderData={singleFolderData}
+            singleItem={singleFolderItem}
           />
         }
         width={scale(145)}
@@ -290,7 +297,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(15),
-    paddingVertical:verticalScale(3.5)
+    paddingVertical: verticalScale(3.5),
   },
 
   folderItem: {

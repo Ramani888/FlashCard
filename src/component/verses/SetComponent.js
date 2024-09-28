@@ -284,6 +284,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
             deleteData={deleteSet}
             folderId={folderId}
             setId={setId}
+            singleItem={singleSetData}
           />
         }
         width={scale(145)}

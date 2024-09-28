@@ -31,7 +31,6 @@ const SetDetailScreen = () => {
   const [cardModalPosition, setCardModalPosition] = useState({x: 0, y: 0});
   const [noteModalPosition, setNoteModalPosition] = useState({x: 0, y: 0});
   const [cardData, setCardData] = useState([]);
-  console.log('cardData',cardData)
   const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
   const {setName} = route.params;

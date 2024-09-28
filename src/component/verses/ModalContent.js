@@ -19,7 +19,7 @@ const ModalContent = ({
   setEditBottomSheet,
   deleteData,
   handleCreateSetClick,
-  singleFolderData,
+  singleItem,
   folderId,
   setId,
 }) => {
@@ -62,7 +62,9 @@ const ModalContent = ({
           <Pressable
             style={styles.container}
             onPress={() => {
-              navigation.navigate(ScreenName.asignFolder);
+              navigation.navigate(ScreenName.asignFolder, {
+                setId: singleItem?._id,
+              });
               closeModal();
             }}>
             <Feather name="folder-plus" size={iconSize} color={Color.Black} />

@@ -38,6 +38,7 @@ const BottomSheetContent = ({
   create,
   initialData,
 }) => {
+  console.log('color',color)
   useEffect(() => {
     if (initialData) {
       setName(initialData?.name);
@@ -80,27 +81,30 @@ const BottomSheetContent = ({
           inputStyles={styles.inputStyles}
         />
 
-        {title !== 'CREATE NOTES' && title !== 'EDIT NOTES' && (
-          <View style={styles.switchContainer}>
-            <View style={styles.switchContent}>
-              <Image source={userIcon} style={styles.icon} />
-              <Text style={styles.switchLabel}>Public</Text>
-            </View>
+        {title !== 'CREATE NOTES' &&
+          title !== 'EDIT NOTES' &&
+          title !== 'CREATE FOLDER' &&
+          title !== 'EDIT FOLDER' && (
+            <View style={styles.switchContainer}>
+              <View style={styles.switchContent}>
+                <Image source={userIcon} style={styles.icon} />
+                <Text style={styles.switchLabel}>Public</Text>
+              </View>
 
-            <Switch
-              value={status === 1}
-              onValueChange={toggleSwitch}
-              color={status === 1 ? '#FF0000' : '#4CAF50'}
-              trackColor={{false: '#d3d3d3', true: '#d3d3d3'}}
-              thumbColor={status === 1 ? '#FF0000' : '#4CAF50'}
-            />
+              <Switch
+                value={status === 1}
+                onValueChange={toggleSwitch}
+                color={status === 1 ? '#FF0000' : '#4CAF50'}
+                trackColor={{false: '#d3d3d3', true: '#d3d3d3'}}
+                thumbColor={status === 1 ? '#FF0000' : '#4CAF50'}
+              />
 
-            <View style={styles.switchContent}>
-              <Image source={lockIcon} style={styles.icon} />
-              <Text style={styles.switchLabel}>Private</Text>
+              <View style={styles.switchContent}>
+                <Image source={lockIcon} style={styles.icon} />
+                <Text style={styles.switchLabel}>Private</Text>
+              </View>
             </View>
-          </View>
-        )}
+          )}
 
         <View style={styles.colorSection}>
           <Text style={styles.colorTitle}>Color</Text>
