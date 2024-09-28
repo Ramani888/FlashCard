@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomeButton from '../custome/CustomeButton';
 import Font from '../component/Font';
 import ImageComponent from '../component/profile/image/ImageComponent';
+import ImageFolderComponent from '../component/Images/ImageFolderComponent';
 
 const ImagesScreen = () => {
   const [tab, setTab] = useState('IMAGES');
@@ -55,7 +56,7 @@ const ImagesScreen = () => {
 
   const renderBody = () => {
     return (
-      <View>
+      <View style={{flex:1}}>
         <LinearGradient
           colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
           style={styles.headerContainer}>
@@ -65,11 +66,12 @@ const ImagesScreen = () => {
         </LinearGradient>
 
         {tab == 'IMAGES' && <ImageComponent />}
+        {tab == 'FOLDERS' && <ImageFolderComponent/>}
       </View>
     );
   };
 
-  return <View>{renderBody()}</View>;
+  return <View style={{flex:1}}>{renderBody()}</View>;
 };
 
 export default React.memo(ImagesScreen);

@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, useRef, useState, memo} from 'react';
+import React, {useCallback, useRef, useState, memo, useEffect} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../../Color';
@@ -16,18 +16,55 @@ import PdfModalContent from './PdfModalContent';
 import CustomeButton from '../../../custome/CustomeButton';
 import PdfBottomSheetContent from './PdfBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {apiGet, apiPost} from '../../../Api/ApiService';
+import Api from '../../../Api/EndPoint';
+import Loader from '../../Loader';
 
 const {width, height} = Dimensions.get('window');
 
 const pdfData = [{name: 'pdf1'}, {name: 'pdf2'}, {name: 'pdf3'}];
 
 const PdfComponent = memo(() => {
+  const [visible, setVisible] = useState(false);
+  const [pdfData, setPdfData] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [pdfName, setPdfName] = useState('');
   const [pdfColor, setPdfColor] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
+
+  useEffect(() => {
+    getPdf();
+  }, []);
+
+  // ================================= Api =============================== //
+
+  const getPdf = async () => {
+    try {
+      setVisible(true);
+      const response = await apiGet(`${Api.pdf}?userId=${global.user?._id}`);
+      console.log('response', response);
+      setPdfData(response);
+    } catch (error) {
+      console.log('error in getpdf api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  // const createPdf = async () => {
+  //   try {
+  //     setVisible(true);
+  //     const response = await apiPost(`${Api.pdf}?userId=${global.user?._id}`);
+  //     console.log('response', response);
+  //     setPdfData(response);
+  //   } catch (error) {
+      
+  //   }
+  // }
+
+  // ================================= End =============================== //
 
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
@@ -112,6 +149,7 @@ const PdfComponent = memo(() => {
 
   return (
     <View style={styles.container}>
+      <Loader visible={visible} />
       {renderBody()}
       <CustomeButton
         buttonColor={Color.theme1}

@@ -16,6 +16,8 @@ const Api = {
   contacts: `${Base_url}/contacts`,
   searchUser: `${Base_url}/contacts/users`,
   pdfFolder: `${Base_url}/pdf/folder`,
+  pdf: `${Base_url}/pdf`,
+  imageFolder: `${Base_url}/images/folder`,
 };
 
 export default Api;

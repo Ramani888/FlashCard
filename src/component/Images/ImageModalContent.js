@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import {useSelector} from 'react-redux';
 
-const PdfModalContent = ({
+const ImageModalContent = ({
   closeModal,
   type,
   openBottomSheet,
@@ -63,7 +63,7 @@ const PdfModalContent = ({
   return <View>{renderBody}</View>;
 };
 
-export default React.memo(PdfModalContent);
+export default React.memo(ImageModalContent);
 
 const styles = StyleSheet.create({
   container: {
