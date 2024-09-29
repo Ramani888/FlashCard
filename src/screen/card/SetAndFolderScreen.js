@@ -15,8 +15,8 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeInputField from '../../custome/CustomeInputField';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../../component/Font';
-import SetComponent from '../../component/verses/SetComponent';
-import FolderComponent from '../../component/verses/FolderComponent';
+import SetComponent from '../../component/cards/SetComponent';
+import FolderComponent from '../../component/cards/FolderComponent';
 import {useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 

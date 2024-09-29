@@ -18,7 +18,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import CustomeModal from '../../custome/CustomeModal';
-import ModalContent from '../../component/verses/ModalContent';
+import ModalContent from '../../component/cards/ModalContent';
 import NoteModalContent from '../../component/profile/NoteModalContent';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';

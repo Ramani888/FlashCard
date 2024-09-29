@@ -35,14 +35,14 @@ const PdfComponent = memo(() => {
   const refRBSheet = useRef(null);
 
   useEffect(() => {
-    getPdf();
+    getPdf(false);
   }, []);
 
   // ================================= Api =============================== //
 
-  const getPdf = async () => {
+  const getPdf = async message => {
     try {
-      setVisible(true);
+      message == false && setVisible(true);
       const response = await apiGet(`${Api.pdf}?userId=${global.user?._id}`);
       console.log('response', response);
       setPdfData(response);
@@ -53,16 +53,23 @@ const PdfComponent = memo(() => {
     }
   };
 
-  // const createPdf = async () => {
-  //   try {
-  //     setVisible(true);
-  //     const response = await apiPost(`${Api.pdf}?userId=${global.user?._id}`);
-  //     console.log('response', response);
-  //     setPdfData(response);
-  //   } catch (error) {
-      
-  //   }
-  // }
+  const createPdf = async pdf => {
+    var formdata = new FormData();
+    formdata.append('userId', global.user?._id);
+    formdata.append('color', pdfColor);
+    formdata.append('pdf', pdf);
+    console.log('formdata',formdata)
+    try {
+      setVisible(true);
+      const response = await apiPost(Api.pdf,'',formdata);
+      console.log('response',response)
+      if (response) {
+        getPdf(true);
+      }
+    } catch (error) {
+      console.log('error in upload pdf api', error);
+    }
+  };
 
   // ================================= End =============================== //
 
@@ -104,6 +111,7 @@ const PdfComponent = memo(() => {
             name={pdfName}
             setColor={setPdfColor}
             color={pdfColor}
+            create={createPdf}
           />
         </View>
       </RBSheet>

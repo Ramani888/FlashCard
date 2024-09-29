@@ -6,27 +6,34 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../../Color';
 import Font from '../../Font';
 
-const ContactModalContent = ({closeModal}) => {
-  // Memoizing the renderBody to avoid unnecessary re-renders
-  const renderBody = useCallback(() => (
-    <View>
-      <Pressable style={styles.container} onPress={closeModal}>
-        <MaterialCommunityIcons
-          name="delete"
-          size={scale(17)}
-          color={Color.Red}
-        />
-        <Text style={styles.text}>Delete Contact</Text>
-      </Pressable>
+const ContactModalContent = ({closeModal, item, deleteContacts}) => {
+  const renderBody = useCallback(
+    () => (
+      <View>
+        <Pressable
+          style={styles.container}
+          onPress={() => {
+            deleteContacts(item?._id);
+            closeModal();
+          }}>
+          <MaterialCommunityIcons
+            name="delete"
+            size={scale(17)}
+            color={Color.Red}
+          />
+          <Text style={styles.text}>Delete Contact</Text>
+        </Pressable>
 
-      <Pressable
-        style={[styles.container, styles.viewContactContainer]}
-        onPress={closeModal}>
-        <Entypo name="eye" size={scale(17)} color={Color.Black} />
-        <Text style={styles.text}>View Contact</Text>
-      </Pressable>
-    </View>
-  ), [closeModal]);
+        <Pressable
+          style={[styles.container, styles.viewContactContainer]}
+          onPress={closeModal}>
+          <Entypo name="eye" size={scale(17)} color={Color.Black} />
+          <Text style={styles.text}>View Contact</Text>
+        </Pressable>
+      </View>
+    ),
+    [closeModal],
+  );
 
   return <View>{renderBody()}</View>;
 };

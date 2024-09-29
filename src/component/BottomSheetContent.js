@@ -6,7 +6,7 @@ import CustomeButton from '../custome/CustomeButton';
 import Font from './Font';
 import CustomeInputField from '../custome/CustomeInputField';
 import {Switch} from '@rneui/themed';
-import ColorCodePicker from './verses/ColorCodePicker';
+import ColorCodePicker from './cards/ColorCodePicker';
 import showMessageonTheScreen from './ShowMessageOnTheScreen';
 
 const {width, height} = Dimensions.get('window');

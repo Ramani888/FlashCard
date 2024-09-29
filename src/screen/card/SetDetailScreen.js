@@ -9,16 +9,16 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
 import CustomeModal from '../../custome/CustomeModal';
-import SetDetailModalContent from '../../component/verses/SetDetailModalContent';
-import CardModalContent from '../../component/verses/CardModalContent';
+import SetDetailModalContent from '../../component/cards/SetDetailModalContent';
+import CardModalContent from '../../component/cards/CardModalContent';
 import {apiDelete, apiGet, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import CardGridLayout from '../../component/verses/CardGridLayout';
-import SimpleLayout from '../../component/verses/SimpleLayout';
+import CardGridLayout from '../../component/cards/CardGridLayout';
+import SimpleLayout from '../../component/cards/SimpleLayout';
 import {useSelector} from 'react-redux';
-import AddNoteModalContent from '../../component/verses/AddNoteModalContent';
+import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
 
 const SetDetailScreen = () => {
   const route = useRoute();

@@ -17,7 +17,7 @@ import ContactModalContent from '../../component/profile/contact/ContactModalCon
 import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
 import ContactBottomSheetContent from '../../component/profile/contact/ContactBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {apiGet, apiPost} from '../../Api/ApiService';
+import {apiDelete, apiGet, apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
@@ -29,6 +29,7 @@ const ContactScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [contactData, setContactData] = useState([]);
+  const [singleContactItem, setSingleContactItem] = useState({});
   const threeDotIconRef = useRef(null);
   const refContactRBSheet = useRef();
 
@@ -69,6 +70,18 @@ const ContactScreen = () => {
       }
     } catch (error) {
       console.log('error in get contact api', error);
+    }
+  };
+
+  const deleteContacts = async contactId => {
+    try {
+      setVisible(true);
+      const response = await apiDelete(`${Api.contacts}?_id=${contactId}`);
+      if (response.success == true) {
+        getContacts(true, response?.message);
+      }
+    } catch (error) {
+      console.log('error in delete contact api', error);
     }
   };
 
@@ -143,7 +156,10 @@ const ContactScreen = () => {
           <Text style={styles.contactText}>{item?.userName}</Text>
           <Pressable
             ref={threeDotIconRef}
-            onPress={() => openModal(item, isLastItem)}>
+            onPress={() => {
+              setSingleContactItem(item);
+              openModal(item, isLastItem);
+            }}>
             <Entypo
               name="dots-three-vertical"
               size={scale(13)}
@@ -175,7 +191,13 @@ const ContactScreen = () => {
         onClose={closeModal}
         closeModal={false}
         mainPadding={scale(5)}
-        content={<ContactModalContent closeModal={closeModal} />}
+        content={
+          <ContactModalContent
+            closeModal={closeModal}
+            item={singleContactItem}
+            deleteContacts={deleteContacts}
+          />
+        }
         width={scale(155)}
         justifyContent="flex-end"
         borderRadius={20}

@@ -12,9 +12,10 @@ import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import CustomeButton from '../../../custome/CustomeButton';
 import Font from '../../Font';
 import CustomeInputField from '../../../custome/CustomeInputField';
-import ColorCodePicker from '../../verses/ColorCodePicker';
+import ColorCodePicker from '../../cards/ColorCodePicker';
 import showMessageonTheScreen from '../../ShowMessageOnTheScreen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import DocumentPicker from 'react-native-document-picker';
 
 const {width, height} = Dimensions.get('window');
 
@@ -25,9 +26,36 @@ const PdfBottomSheetContent = ({
   name,
   setColor,
   color,
+  create,
 }) => {
+  const [fileResponse, setFileResponse] = useState([]);
+  const file = {
+    name: fileResponse[0]?.name,
+    type: fileResponse[0]?.type,
+    uri: fileResponse[0]?.uri,
+  };
+
   const handleSubmit = () => {
+    create(file);
     closeBottomSheet();
+    setName('');
+    setColor('');
+  };
+
+  const handleDocumentPick = async () => {
+    try {
+      const response = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      setFileResponse(response);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled the picker');
+      } else {
+        console.error('Unknown error:', err);
+        throw err;
+      }
+    }
   };
 
   const renderBody = useMemo(
@@ -39,15 +67,36 @@ const PdfBottomSheetContent = ({
         <Text style={styles.title}>{title}</Text>
         <View style={styles.separator} />
 
-        <Image
-          source={require('../../../Assets/Img/folderFram.png')}
+        <Pressable
+          onPress={() => handleDocumentPick()}
           style={{
-            width: width * 0.23,
             height: height * 0.12,
-            alignSelf: 'center',
-            marginTop: verticalScale(10),
-          }}
-        />
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          {fileResponse?.length > 0 ? (
+            <View>
+              <Text
+                style={{
+                  fontSize: scale(15),
+                  fontFamily: Font.medium,
+                  color: Color.Black,
+                }}>
+                {fileResponse[0]?.name}
+              </Text>
+            </View>
+          ) : (
+            <Image
+              source={require('../../../Assets/Img/folderFram.png')}
+              style={{
+                width: width * 0.23,
+                height: height * 0.12,
+                alignSelf: 'center',
+                marginTop: verticalScale(10),
+              }}
+            />
+          )}
+        </Pressable>
 
         <CustomeInputField
           placeholder="Create Name"
@@ -68,7 +117,7 @@ const PdfBottomSheetContent = ({
         </View>
       </View>
     ),
-    [name, color],
+    [name, color, fileResponse],
   );
 
   return (
