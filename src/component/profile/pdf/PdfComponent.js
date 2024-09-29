@@ -28,6 +28,7 @@ const PdfComponent = memo(() => {
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [pdfName, setPdfName] = useState('');
   const [pdfColor, setPdfColor] = useState('');
@@ -57,14 +58,30 @@ const PdfComponent = memo(() => {
     var formdata = new FormData();
     formdata.append('userId', global.user?._id);
     formdata.append('color', pdfColor);
+    formdata.append('name', pdfName);
     formdata.append('pdf', pdf);
-    console.log('formdata',formdata)
     try {
       setVisible(true);
-      const response = await apiPost(Api.pdf,'',formdata);
-      console.log('response',response)
-      if (response) {
-        getPdf(true);
+      const response = await apiPost(Api.pdf, '', formdata);
+      if (response?.success == true) {
+        getPdf(true, response?.message);
+      }
+    } catch (error) {
+      console.log('error in upload pdf api', error);
+    }
+  };
+
+  const editPdf = async pdf => {
+    var formdata = new FormData();
+    formdata.append('userId', global.user?._id);
+    formdata.append('color', pdfColor);
+    formdata.append('name', pdfName);
+    formdata.append('pdf', pdf);
+    try {
+      setVisible(true);
+      const response = await apiPost(Api.pdf, '', formdata);
+      if (response?.success == true) {
+        getPdf(true, response?.message);
       }
     } catch (error) {
       console.log('error in upload pdf api', error);
@@ -127,7 +144,9 @@ const PdfComponent = memo(() => {
             <Text style={styles.folderName}>{item.name}</Text>
             <Pressable
               ref={threeDotIconRef}
-              onPress={() => openModal(item, isLastItem)}>
+              onPress={() => {
+                openModal(item, isLastItem);
+              }}>
               <Entypo
                 name="dots-three-vertical"
                 size={scale(13)}

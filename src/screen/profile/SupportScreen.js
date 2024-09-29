@@ -1,4 +1,12 @@
-import {FlatList, Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -59,7 +67,7 @@ const SupportScreen = () => {
 
   const renderBody = () => {
     return (
-      <View style={{flex: 1, margin: scale(15)}}>
+      <View style={styles.bodyContainer}>
         <Text style={styles.issueHeading}>Please let us know</Text>
         <View>
           <FlatList
@@ -67,23 +75,24 @@ const SupportScreen = () => {
             renderItem={renderIssue}
             style={{marginTop: verticalScale(10)}}
           />
-          <Text
-            style={{
-              fontSize: scale(15),
-              color: Color.Black,
-              fontFamily: Font.regular,
-              marginTop: verticalScale(10),
-            }}>
+          <Text style={styles.note}>
             We will email you back as soon as posible.
           </Text>
+        </View>
+        <View style={{marginTop:verticalScale(70),alignItems:'center'}}>
+          <Image
+            source={require('../../Assets/Img/imageFram.png')}
+            style={styles.image}
+          />
+          <Text style={styles.screenshotText}>Attach screenshot of issue</Text>
         </View>
       </View>
     );
   };
-  
+
   return (
     <View style={{flex: 1}}>
-      <StatusBar backgroundColor={Color.WhiteDefault}/>
+      <StatusBar backgroundColor={Color.WhiteDefault} />
       {renderHeader()}
       {renderBody()}
       <CustomeButton
@@ -109,7 +118,7 @@ const styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: Color.transparent,
     height: verticalScale(90),
-    alignItems:'flex-end',
+    alignItems: 'flex-end',
   },
   headerTitleStyle: {color: Color.Black, fontSize: scale(20)},
   dot: {
@@ -117,6 +126,7 @@ const styles = StyleSheet.create({
     height: scale(7),
     borderRadius: scale(3.5),
   },
+  bodyContainer: {flex: 1, margin: scale(15)},
   issueView: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -135,4 +145,17 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     paddingLeft: scale(10),
   },
+  note: {
+    fontSize: scale(15),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    marginTop: verticalScale(10),
+  },
+  screenshotText: {
+    fontSize: scale(15),
+    color: Color.mediumGray,
+    fontFamily: Font.regular,
+    marginTop:verticalScale(10)
+  },
+  image: {width: scale(95), height: scale(95)},
 });

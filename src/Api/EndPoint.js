@@ -18,6 +18,7 @@ const Api = {
   pdfFolder: `${Base_url}/pdf/folder`,
   pdf: `${Base_url}/pdf`,
   imageFolder: `${Base_url}/images/folder`,
+  profilePic: `${Base_url}/profile/picture`,
 };
 
 export default Api;

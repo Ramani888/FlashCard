@@ -28,7 +28,7 @@ const CustomeHeader = ({
   plusButton,
   plusIconAction,
   threeDotIcon,
-  openSetDetailModal
+  openSetDetailModal,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -57,10 +57,15 @@ const CustomeHeader = ({
       {title && <Text style={[styles.title, titleStyle]}>{title}</Text>}
       {profileImage && (
         <Pressable style={styles.avtarContainer}>
+          {console.log('global.user?.picture',global.user?.picture)}
           <Avatar
             size="large"
             rounded
-            source={{uri: 'https://example.com/avatar.jpg'}}
+            source={{
+              uri: global.user?.picture
+                ? global.user?.picture
+                : 'https://example.com/avatar.jpg',
+            }}
             title="JD"
             containerStyle={styles.avatar}
           />
@@ -90,7 +95,7 @@ const CustomeHeader = ({
         <Pressable
           ref={threeDotIconRef}
           onPress={() => openSetDetailModal(threeDotIconRef)}
-          style={[styles.dotIconView,iconStyle]}>
+          style={[styles.dotIconView, iconStyle]}>
           <Entypo
             name="dots-three-vertical"
             size={scale(13)}
@@ -170,7 +175,7 @@ const styles = StyleSheet.create({
   dotIconView: {
     position: 'absolute',
     right: scale(15),
-    top:verticalScale(50)
+    top: verticalScale(50),
   },
   dotsIcon: {
     backgroundColor: Color.iconBackground,

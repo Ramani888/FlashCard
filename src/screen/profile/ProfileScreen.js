@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useState, useCallback, useRef, useEffect} from 'react';
 import {
   FlatList,
   Image,
@@ -26,6 +26,8 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
 import CustomeButton from '../../custome/CustomeButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {apiPost, apiPut} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
 
 const {width, height} = Dimensions.get('window');
 
@@ -35,9 +37,6 @@ const tabData = [
   {tabname: 'Support', image: require('../../Assets/Img/support.png')},
   {tabname: 'Privacy & Terms', image: require('../../Assets/Img/privacy.png')},
   {tabname: 'About Us', image: require('../../Assets/Img/notes.png')},
-  // {tabname: 'PDF', image: require('../../Assets/Img/pdf.png')},
-  // {tabname: 'Notes', image: require('../../Assets/Img/notes.png')},
-  // {tabname: 'Images', image: require('../../Assets/Img/images.png')},
 ];
 
 const ProfileScreen = () => {
@@ -49,6 +48,33 @@ const ProfileScreen = () => {
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const refUserNameRBSheet = useRef();
   const refEmailRBSheet = useRef();
+
+  useEffect(() => {
+    setEmail(global.user?.email);
+    setUserName(global.user?.userName);
+  }, []);
+
+  // =================================== Api =================================== //
+
+  const updateProfilePic = async file => {
+    var formdata = new FormData();
+    formdata.append('picture', file);
+    formdata.append('_id', global.user?._id);
+    try {
+      setVisible(true);
+      const response = await apiPut(Api.profilePic, '', formdata);
+      if (response?.success == true) {
+        showMessageonTheScreen(response?.message);
+        global.user = response.user;
+      }
+    } catch (error) {
+      console.log('error in updateProfilePicture api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  // =================================== End =================================== //
 
   const openModal = useCallback(ref => {
     if (ref.current) {
@@ -99,21 +125,27 @@ const ProfileScreen = () => {
     }
   };
 
-  const renderTab = useCallback(
-    ({item}) => (
+  const renderTab = useCallback(({item}) => {
+    const privacyTab = item.tabname === 'Privacy & Terms';
+    const aboutUsTab = item.tabname === 'About Us';
+    return (
       <Pressable
-        style={styles.tabContainer}
+        style={[
+          styles.tabContainer,
+          privacyTab && styles.privacyTab,
+          aboutUsTab && styles.aboutUsTab,
+        ]}
         onPress={() => handleTabPress(item?.tabname)}>
         <Image
           source={item?.image}
           style={styles.tabIcon}
           tintColor={Color.White}
+          resizeMode="contain"
         />
         <Text style={styles.tabText}>{item?.tabname}</Text>
       </Pressable>
-    ),
-    [],
-  );
+    );
+  }, []);
 
   const userNameBottomSheets = useCallback(() => {
     return (
@@ -177,6 +209,7 @@ const ProfileScreen = () => {
             placeholderTextColor={Color.mediumGray}
             onChangeText={setUserName}
             value={username}
+            editable={false}
             borderWidth={1}
             borderColor={Color.LightGray}
             height={verticalScale(40)}
@@ -194,6 +227,7 @@ const ProfileScreen = () => {
             placeholderTextColor={Color.mediumGray}
             onChangeText={setEmail}
             value={email}
+            editable={false}
             borderWidth={1}
             borderColor={Color.LightGray}
             height={verticalScale(40)}
@@ -256,6 +290,7 @@ const ProfileScreen = () => {
             closeModal={closeModal}
             openUserNameBottomSheets={openUserNameBottomSheets}
             openEmailBottomSheets={openEmailBottomSheets}
+            updateProfilePic={updateProfilePic}
           />
         }
         width={scale(120)}
@@ -383,4 +418,10 @@ const styles = StyleSheet.create({
     marginVertical: verticalScale(15),
   },
   dragableIcon: {marginTop: verticalScale(20)},
+  privacyTab: {
+    marginLeft: scale(30),
+  },
+  aboutUsTab: {
+    marginRight: scale(20),
+  },
 });

@@ -32,6 +32,14 @@ export const apiPost = async (url, userToken, body) => {
       headers: setAuthHeader(userToken, isFormData),
       body: body,
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `API Error: ${response.status} ${response.statusText} - ${errorText}`,
+      );
+    }
+
     const result = await response.json();
     return result;
   } catch (error) {
