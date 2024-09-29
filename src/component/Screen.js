@@ -19,6 +19,7 @@ import AiScreen from '../screen/AiScreen';
 import PrivacyScreen from '../screen/profile/PrivacyScreen';
 import AboutUsScreen from '../screen/profile/AboutUsScreen';
 import CloudScreen from '../screen/profile/CloudScreen';
+import SubscriptionScreen from '../screen/SubscriptionScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -41,7 +42,8 @@ export const ScreenName = {
   aiScreen: 'AiScreen',
   privacy: 'Privacy',
   aboutUs: 'AboutUs',
-  cloud: 'Cloud'
+  cloud: 'Cloud',
+  subscription: 'Subscription'
 };
 
 export const ScreenPath = {
@@ -65,5 +67,6 @@ export const ScreenPath = {
   AiScreen,
   PrivacyScreen,
   AboutUsScreen,
-  CloudScreen
+  CloudScreen,
+  SubscriptionScreen
 };

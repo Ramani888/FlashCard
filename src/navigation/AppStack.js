@@ -28,6 +28,7 @@ const AppStack = ({user}) => {
     cloud,
     privacy,
     aboutUs,
+    subscription
   } = ScreenName;
 
   const {
@@ -52,6 +53,7 @@ const AppStack = ({user}) => {
     PrivacyScreen,
     AboutUsScreen,
     CloudScreen,
+    SubscriptionScreen
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -181,6 +183,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={aboutUs}
         component={AboutUsScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={subscription}
+        component={SubscriptionScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

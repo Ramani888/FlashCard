@@ -208,13 +208,15 @@ const ProfileScreen = () => {
 
         <View style={styles.subscriptionContainer}>
           <Text style={styles.subscriptionText}>Subscription</Text>
-          <View style={styles.subscriptionBox}>
+          <Pressable
+            style={styles.subscriptionBox}
+            onPress={() => navigation.navigate(ScreenName.subscription)}>
             <Image
               source={require('../../Assets/Img/subscription.png')}
               style={styles.subscriptionImage}
             />
             <Text style={styles.subscriptionTier}>TIER 4</Text>
-          </View>
+          </Pressable>
           <View style={styles.separator} />
         </View>
       </View>
