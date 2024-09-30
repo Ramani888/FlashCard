@@ -37,7 +37,7 @@ const PdfModalContent = ({closeModal}) => {
             closeModal();
           }}>
           <Feather name="folder-plus" size={scale(15)} color={Color.Black} />
-          <Text style={styles.text}>Asign Folder</Text>
+          <Text style={styles.text}>Assign Folder</Text>
         </Pressable>
       </View>
     );

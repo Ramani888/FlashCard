@@ -64,7 +64,6 @@ const SimpleLayout = ({
       style={styles.cardContainer}>
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{item.top}</Text>
-        <Text style={styles.cardNumber}>1 : 3 - 7</Text>
         <View style={styles.cardActions}>
           <Pressable ref={infoIconRef} onPress={toggleNote}>
             <Image
@@ -119,7 +118,7 @@ const SimpleLayout = ({
             <Text style={styles.cardDescWithMargin}>{item?.note}</Text>
           </View>
         )}
-        <Text style={styles.cardDesc}>{item?.bottom}</Text>
+        {!showNote && <Text style={styles.cardDesc}>{item?.bottom}</Text>}
       </View>
     </View>
   );
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#ececec',
     paddingVertical: verticalScale(10),
     borderTopLeftRadius: scale(10),
@@ -144,6 +143,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     color: Color.Black,
     paddingLeft: scale(10),
+    width: scale(230),
   },
   cardNumber: {
     fontSize: scale(14),
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     gap: scale(5),
     position: 'absolute',
     right: scale(10),
+    marginTop: verticalScale(10),
   },
   dotIconView: {},
   cardBody: {

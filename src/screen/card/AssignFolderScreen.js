@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeButton from '../../custome/CustomeButton';
@@ -18,9 +18,9 @@ import { scale, verticalScale } from 'react-native-size-matters';
 const {height, width} = Dimensions.get('window');
 
 const AssignFolderScreen = () => {
+  const navigation = useNavigation()
   const route = useRoute();
   const refRBSheet = useRef(null); 
-  const { cardTypeId } = useSelector(state => state.myState);
   const { setId } = route.params;
 
   const [visible, setVisible] = useState(false);
@@ -54,7 +54,6 @@ const AssignFolderScreen = () => {
       name: folderName,
       isPrivate: folderStatus,
       color: folderColor,
-      cardTypeId: cardTypeId,
       userId: global?.user?._id,
     };
     setVisible(true);
@@ -74,6 +73,7 @@ const AssignFolderScreen = () => {
       setVisible(true);
       const response = await apiPut(`${Api.assignedFolder}?folderId=${selectedFolderId}&setId=${setId}`);
       if (response?.success) {
+        navigation.goBack()
         getFolderData(true, response?.message);
       }
     } catch (error) {

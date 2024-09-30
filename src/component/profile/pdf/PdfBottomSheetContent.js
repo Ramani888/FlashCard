@@ -45,9 +45,15 @@ const PdfBottomSheetContent = ({
   const handleDocumentPick = async () => {
     try {
       const response = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.pdf],
       });
-      setFileResponse(response);
+
+      if (response[0]?.type !== 'application/pdf') {
+        showMessageonTheScreen('Please select a PDF file only');
+        setFileResponse([]);
+      } else {
+        setFileResponse(response);
+      }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         console.log('User cancelled the picker');
@@ -111,7 +117,16 @@ const PdfBottomSheetContent = ({
 
         <View style={styles.colorSection}>
           <Text style={styles.colorTitle}>Color</Text>
+
           <View style={styles.separator} />
+
+          <View style={styles.colorOptionsContainer}>
+            <View style={styles.colorOption}>
+              <Text style={[styles.colorIndicator, {backgroundColor: color}]} />
+            </View>
+            <Text style={styles.orText}>Or</Text>
+            <View style={[styles.colorOptionLarge, {backgroundColor: color}]} />
+          </View>
 
           <ColorCodePicker setSelectedColor={setColor} selectedColor={color} />
         </View>
@@ -200,5 +215,37 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: verticalScale(-30),
     right: scale(-7),
+  },
+  colorOptionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: verticalScale(13),
+  },
+  colorOption: {
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+    borderRadius: scale(10),
+    width: width * 0.36,
+    height: verticalScale(40),
+    justifyContent: 'center',
+  },
+  colorIndicator: {
+    width: scale(13),
+    height: height * 0.05,
+    borderRadius: scale(8),
+    marginLeft: scale(5),
+  },
+  colorOptionLarge: {
+    height: height * 0.06,
+    width: width * 0.36,
+    borderWidth: scale(1),
+    borderRadius: scale(10),
+    borderColor: Color.LightGray,
+  },
+  orText: {
+    fontSize: scale(16),
+    color: Color.Black,
+    fontFamily: Font.medium,
   },
 });

@@ -36,7 +36,7 @@ const SetDetailScreen = () => {
   const {setName} = route.params;
   const threeDotIconRef = useRef();
   const {setId, folderId} = route.params;
-  const {cardTypeName, cardTypeId} = useSelector(state => state.myState);
+  const {cardTypeName} = useSelector(state => state.myState);
 
   useEffect(() => {
     getCardData(false, false);
@@ -50,7 +50,7 @@ const SetDetailScreen = () => {
         setVisible(true);
       }
       const response = await apiGet(
-        `${Api.card}?setId=${setId}&folderId=${folderId}&cardTypeId=${cardTypeId}&userId=${global.user?._id}`,
+        `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${global.user?._id}`,
       );
       setCardData(response);
       if (update) {
@@ -70,7 +70,6 @@ const SetDetailScreen = () => {
     const rawData = {
       _id: cardId,
       userId: global?.user?._id,
-      cardTypeId: cardTypeId,
       folderId: folderId,
       setId: setId,
       top: top,

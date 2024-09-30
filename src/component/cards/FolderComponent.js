@@ -38,7 +38,6 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const [folderColor, setFolderColor] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
-  const {cardTypeId} = useSelector(state => state.myState);
 
   useEffect(() => {
     getFolderData();
@@ -263,7 +262,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
           />
         }
         width={scale(145)}
-        height={scale(165)}
+        // height={scale(165)}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

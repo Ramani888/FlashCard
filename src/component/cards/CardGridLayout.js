@@ -50,12 +50,8 @@ const CardGridLayout = ({
       onLayout={onCardLayout}
       style={{margin: scale(5)}}>
       <View style={styles.gridCardHeader}>
-        <View>
-          <Text style={styles.cardTitle}>{item.top}</Text>
-          <Text style={[styles.cardNumber, {paddingLeft: scale(12)}]}>
-            1 : 3 - 7
-          </Text>
-        </View>
+        <Text style={styles.cardTitle}>{item.top}</Text>
+
         <View style={[styles.cardActions, styles.gridCardAction]}>
           <Pressable ref={infoIconRef} onPress={toggleNote}>
             <Image
@@ -119,9 +115,7 @@ const CardGridLayout = ({
           <View>
             <View>
               <Text style={styles.noteTitle}>NOTE</Text>
-              <Pressable
-                onPress={editNote}
-                style={styles.noteEditIcon}>
+              <Pressable onPress={editNote} style={styles.noteEditIcon}>
                 <Entypo
                   name="edit"
                   size={scale(11)}
@@ -134,9 +128,11 @@ const CardGridLayout = ({
             <Text style={styles.cardDescWithMargin}>{item?.note}</Text>
           </View>
         )}
-        <Text style={[styles.cardDesc, {width: scale(130)}]}>
-          {item.bottom}
-        </Text>
+        {!showNote && (
+          <Text style={[styles.cardDesc, {width: scale(130)}]}>
+            {item.bottom}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -177,32 +173,18 @@ const styles = StyleSheet.create({
   cardContainer: {
     marginBottom: verticalScale(10),
   },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ececec',
-    paddingVertical: verticalScale(10),
-    borderTopLeftRadius: scale(10),
-    borderTopRightRadius: scale(10),
-  },
   cardTitle: {
     fontSize: scale(14),
     fontFamily: Font.medium,
     color: Color.Black,
     paddingLeft: scale(10),
-  },
-  cardNumber: {
-    fontSize: scale(14),
-    fontFamily: Font.medium,
-    color: Color.Black,
-    paddingLeft: scale(20),
+    width: scale(110),
   },
   cardActions: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: scale(5),
-    position: 'absolute',
-    right: scale(10),
+    right: scale(-10),
   },
   dotIconView: {},
   cardBody: {
@@ -229,7 +211,7 @@ const styles = StyleSheet.create({
   },
   absoluteBlur: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: 1000, // Ensure the blur view is behind the text
+    zIndex: 1000,
   },
   modal: {
     position: 'absolute',
@@ -251,9 +233,10 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   gridCardHeader: {
+    flexDirection: 'row',
     backgroundColor: '#ececec',
     width: scale(150),
-    paddingVertical: scale(20),
+    paddingVertical: scale(10),
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10),
     alignItems: 'flex-start',

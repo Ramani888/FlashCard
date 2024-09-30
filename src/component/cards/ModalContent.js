@@ -25,7 +25,6 @@ const ModalContent = ({
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(false);
-  const {cardTypeId} = useSelector(state => state.myState);
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
@@ -109,7 +108,7 @@ const ModalContent = ({
           </Pressable>
         ) : (
           <Pressable
-            style={styles.container}
+            style={[styles.container, type == 'Folder' && styles.folderModal]}
             onPress={() => {
               deleteData();
               closeModal();
@@ -122,19 +121,21 @@ const ModalContent = ({
             <Text style={styles.text}>Delete Folder</Text>
           </Pressable>
         )}
-        <View style={styles.switchContainer}>
-          <Image source={userIcon} style={styles.icon} />
-          <View style={styles.switchContent}>
-            <Switch
-              value={value}
-              onValueChange={setValue}
-              thumbColor={value ? Color.theme1 : '#8E9494'}
-              trackColor={{false: '#E7EAEB', true: Color.theme2}}
-            />
-            <Text style={styles.switchLabel}>Public</Text>
+        {type == 'Set' && (
+          <View style={styles.switchContainer}>
+            <Image source={userIcon} style={styles.icon} />
+            <View style={styles.switchContent}>
+              <Switch
+                value={value}
+                onValueChange={setValue}
+                thumbColor={value ? Color.theme1 : '#8E9494'}
+                trackColor={{false: '#E7EAEB', true: Color.theme2}}
+              />
+              <Text style={styles.switchLabel}>Public</Text>
+            </View>
+            <Image source={lockIcon} style={styles.icon} />
           </View>
-          <Image source={lockIcon} style={styles.icon} />
-        </View>
+        )}
       </View>
     ),
     [value, iconSize, userIcon, lockIcon],
@@ -178,4 +179,5 @@ const styles = StyleSheet.create({
     width: scale(20),
     height: scale(20),
   },
+  folderModal:{borderBottomWidth:0,marginBottom:verticalScale(-5)}
 });

@@ -23,7 +23,7 @@ import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import AIScreen from '../../component/AIScreen';
 import {useSelector} from 'react-redux';
-import { ScreenName } from '../../component/Screen';
+import {ScreenName} from '../../component/Screen';
 
 const CreateCardScreen = () => {
   const navigation = useNavigation();
@@ -58,6 +58,8 @@ const CreateCardScreen = () => {
       setId: setId,
       note: note,
     };
+
+    console.log('rawData',rawData)
     try {
       setVisible(true);
       const response = await apiPost(Api.card, '', JSON.stringify(rawData));
@@ -189,13 +191,13 @@ const CreateCardScreen = () => {
             />
           )}
 
-          {!noteVisible && (
-            <Pressable
-              style={styles.optionalContainer}
-              onPress={() => setNoteVisible(true)}>
-              <Text style={styles.optionalText}>Optional - Add Note</Text>
-            </Pressable>
-          )}
+          <Pressable
+            style={styles.optionalContainer}
+            onPress={() => setNoteVisible(!noteVisible)}>
+            <Text style={styles.optionalText}>
+              {noteVisible ? 'Optional - Remove Note' : 'Optional - Add Note'}
+            </Text>
+          </Pressable>
 
           <Pressable
             onPress={() => navigation.navigate(ScreenName.aiScreen)}
@@ -293,7 +295,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop:verticalScale(-8)
+    marginTop: verticalScale(-8),
   },
   optionalText: {
     fontSize: scale(12.5),

@@ -174,7 +174,7 @@ const ImageComponent = () => {
         buttonColor={Color.theme1}
         buttonWidth="90%"
         buttonHeight={scale(45)}
-        title="UPLOAD PDF"
+        title="UPLOAD IMAGES"
         borderRadius={scale(10)}
         fontSize={scale(15)}
         fontColor={Color.White}

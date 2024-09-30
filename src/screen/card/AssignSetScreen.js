@@ -26,7 +26,6 @@ const AssignSetScreen = () => {
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
   const [selectedSetId, setSelectedSetId] = useState('');
-  const {cardTypeId} = useSelector(state => state.myState);
   const {folderId, cardId} = route.params;
 
   useEffect(() => {
@@ -57,7 +56,6 @@ const AssignSetScreen = () => {
       name: setName,
       isPrivate: setStatus,
       color: setColor,
-      cardTypeId: cardTypeId,
       userId: global?.user?._id,
       ...(folderId ? {folderId: folderId} : {}),
     };
@@ -80,6 +78,7 @@ const AssignSetScreen = () => {
         `${Api.moveCard}?setId=${selectedSetId}&cardId=${cardId}`,
       );
       if (response?.success == true) {
+        navigation.goBack();
         getSetData(true, response?.message);
       }
     } catch (error) {
@@ -140,7 +139,9 @@ const AssignSetScreen = () => {
               source={require('../../Assets/Img/folder.png')}
               style={styles.folderIcon}
             />
-            <Text style={styles.folderText}>folder</Text>
+            <Text style={styles.folderText}>
+              {item?.folderName ? item?.folderName : ''}
+            </Text>
           </View>
         </View>
       );

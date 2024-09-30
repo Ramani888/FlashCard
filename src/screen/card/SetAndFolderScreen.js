@@ -51,7 +51,7 @@ const SetAndFolderScreen = () => {
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={'MY CARD'}
+        title={'MY CARDS'}
         containerStyle={styles.headerStyle}
         searchIcon={true}
         setSearch={setSearch}
@@ -66,7 +66,7 @@ const SetAndFolderScreen = () => {
         buttonColor={tab == 'SET' ? Color.White : Color.theme1}
         buttonWidth={scale(150)}
         buttonHeight={scale(45)}
-        title={'SET'}
+        title={'SETS'}
         borderRadius={scale(10)}
         fontSize={scale(15)}
         fontColor={tab == 'SET' ? Color.Black : Color.White}
