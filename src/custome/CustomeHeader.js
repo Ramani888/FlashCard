@@ -57,7 +57,6 @@ const CustomeHeader = ({
       {title && <Text style={[styles.title, titleStyle]}>{title}</Text>}
       {profileImage && (
         <Pressable style={styles.avtarContainer}>
-          {console.log('global.user?.picture',global.user?.picture)}
           <Avatar
             size="large"
             rounded

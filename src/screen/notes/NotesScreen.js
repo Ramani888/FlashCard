@@ -39,6 +39,7 @@ const NotesScreen = () => {
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
   const [noteData, setNoteData] = useState([]);
+  console.log('noteData', noteData);
   const [noteName, setNoteName] = useState();
   const [noteStatus, setNoteStatus] = useState(0);
   const [noteColor, setNoteColor] = useState('');
@@ -201,7 +202,10 @@ const NotesScreen = () => {
               editNote,
             });
           }}>
+            <View style={{flexDirection:'row',alignItems:'center'}}>
+          <Text style={[styles.color, {backgroundColor: item?.color}]} />
           <Text style={styles.noteText}>{item?.name}</Text>
+          </View>
           <Pressable
             ref={threeDotIconRef}
             onPress={() => {
@@ -334,7 +338,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     textTransform: 'uppercase',
-    paddingLeft: scale(7),
+    paddingLeft: scale(10),
   },
   bodyContainer: {
     flex: 1,
@@ -349,5 +353,11 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: scale(0.3),
     shadowRadius: scale(4),
+  },
+  color: {
+    width: scale(12),
+    height: verticalScale(30),
+    borderRadius: scale(10),
+    marginLeft:scale(3)
   },
 });

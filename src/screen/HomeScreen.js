@@ -160,12 +160,12 @@ const HomeScreen = () => {
           </Pressable>
         </LinearGradient>
         {tabView()}
-
+        {/* 
         <Image
           source={require('../Assets/Img/ads.png')}
           style={styles.adsImage}
           resizeMode="contain"
-        />
+        /> */}
       </ScrollView>
     ),
     [cardTypeData],

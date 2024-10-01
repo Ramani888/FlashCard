@@ -13,6 +13,7 @@ const ProfileModalContent = ({
   openUserNameBottomSheets,
   openEmailBottomSheets,
   updateProfilePic,
+  handleLogout,
 }) => {
   const pickImage = async () => {
     try {
@@ -38,7 +39,6 @@ const ProfileModalContent = ({
           name: data[0].fileName,
         };
         updateProfilePic(file);
-        // console.log('Image selected: ', file);
       }
     } catch (error) {
       console.log('Error picking image: ', error);
@@ -50,16 +50,26 @@ const ProfileModalContent = ({
     return (
       <View>
         <Pressable
-          style={[
-            styles.container,
-            {borderBottomWidth: scale(0), marginBottom: verticalScale(-5)},
-          ]}
+          style={styles.container}
           onPress={() => {
             pickImage();
             closeModal();
           }}>
           <FontAwesome name="photo" size={scale(15)} color={Color.Black} />
           <Text style={styles.text}>Picture</Text>
+        </Pressable>
+
+        <Pressable
+          style={[
+            styles.container,
+            {borderBottomWidth: scale(0), marginBottom: verticalScale(-2)},
+          ]}
+          onPress={() => {
+            handleLogout();
+            closeModal();
+          }}>
+          <MaterialCommunityIcons name="logout" size={scale(16)} color={Color.Black} />
+          <Text style={styles.text}>Logout</Text>
         </Pressable>
 
         {/* <Pressable

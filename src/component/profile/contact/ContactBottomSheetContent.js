@@ -79,7 +79,7 @@ const ContactBottomSheetContent = ({
         style={styles.userContainer}
         onPress={() => {
           createContacts(item?._id);
-          closeContactBottomSheet()
+          closeContactBottomSheet();
         }}>
         <View style={styles.userDetails}>
           <Avatar
@@ -146,12 +146,25 @@ const ContactBottomSheetContent = ({
               />
             )}
 
-            <FlatList
-              data={userData}
-              renderItem={renderUser}
-              keyExtractor={keyExtractor}
-              style={styles.flatList}
-            />
+            {userData?.length > 0 ? (
+              <FlatList
+                data={userData}
+                renderItem={renderUser}
+                keyExtractor={keyExtractor}
+                style={styles.flatList}
+              />
+            ) : (
+              <View style={{height:verticalScale(130),justifyContent:'center',alignItems:'center'}}>
+                <Text
+                  style={{
+                    fontSize: scale(13),
+                    color: Color.Black,
+                    fontFamily: Font.medium,
+                  }}>
+                  User not found{' '}
+                </Text>
+              </View>
+            )}
           </View>
         )}
       </Formik>

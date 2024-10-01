@@ -46,6 +46,7 @@ const ProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [profileUpdate, setProfileUpdate] = useState(false);
   const refUserNameRBSheet = useRef();
   const refEmailRBSheet = useRef();
 
@@ -66,6 +67,7 @@ const ProfileScreen = () => {
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
         global.user = response.user;
+        setProfileUpdate(true)
       }
     } catch (error) {
       console.log('error in updateProfilePicture api', error);
@@ -124,6 +126,19 @@ const ProfileScreen = () => {
       setVisible(false);
     }
   };
+
+  const renderHeader = useCallback(() => {
+    return (
+      <CustomeHeader
+        headerBackgroundColor={Color.transparent}
+        goBack={true}
+        profileImage={true}
+        edit={true}
+        containerStyle={styles.headerStyle}
+        openEditModal={openModal}
+      />
+    );
+  }, [profileUpdate]);
 
   const renderTab = useCallback(({item}) => {
     const privacyTab = item.tabname === 'Privacy & Terms';
@@ -193,14 +208,7 @@ const ProfileScreen = () => {
       style={styles.container}>
       <StatusBar translucent backgroundColor={Color.transparent} />
       <Loader visible={visible} />
-      <CustomeHeader
-        headerBackgroundColor={Color.transparent}
-        goBack={true}
-        profileImage={true}
-        edit={true}
-        containerStyle={styles.headerStyle}
-        openEditModal={openModal}
-      />
+      {renderHeader()}
       <View style={styles.bodyContainer}>
         <View>
           <Text style={styles.label}>Username</Text>
@@ -263,7 +271,7 @@ const ProfileScreen = () => {
         contentContainerStyle={{paddingHorizontal: scale(15)}}
       />
 
-      <CustomeButton
+      {/* <CustomeButton
         title={'Logout'}
         buttonWidth={'90%'}
         buttonHeight={verticalScale(40)}
@@ -275,7 +283,7 @@ const ProfileScreen = () => {
         marginBottom={verticalScale(25)}
         alignSelf={'center'}
         onPress={handleLogout}
-      />
+      /> */}
 
       {userNameBottomSheets()}
       {emailBottomSheets()}
@@ -291,6 +299,7 @@ const ProfileScreen = () => {
             openUserNameBottomSheets={openUserNameBottomSheets}
             openEmailBottomSheets={openEmailBottomSheets}
             updateProfilePic={updateProfilePic}
+            handleLogout={handleLogout}
           />
         }
         width={scale(120)}
