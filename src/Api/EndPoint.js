@@ -17,6 +17,8 @@ const Api = {
   searchUser: `${Base_url}/contacts/users`,
   pdfFolder: `${Base_url}/pdf/folder`,
   pdf: `${Base_url}/pdf`,
+  FolderPdf: `${Base_url}/folder/pdf`,
+  assignPdfFolder: `${Base_url}/assign/pdf/folder`,
   imageFolder: `${Base_url}/images/folder`,
   profilePic: `${Base_url}/profile/picture`,
 };

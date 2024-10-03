@@ -16,15 +16,17 @@ import PdfModalContent from './PdfModalContent';
 import CustomeButton from '../../../custome/CustomeButton';
 import PdfBottomSheetContent from './PdfBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {apiGet, apiPost} from '../../../Api/ApiService';
+import {apiDelete, apiGet, apiPost, apiPut} from '../../../Api/ApiService';
 import Api from '../../../Api/EndPoint';
 import Loader from '../../Loader';
+import showMessageonTheScreen from '../../ShowMessageOnTheScreen';
 
 const {width, height} = Dimensions.get('window');
 
 const pdfData = [{name: 'pdf1'}, {name: 'pdf2'}, {name: 'pdf3'}];
 
-const PdfComponent = memo(() => {
+const PdfComponent = memo(({folderId}) => {
+  // console.log('folderId', folderId);
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,6 +34,7 @@ const PdfComponent = memo(() => {
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [pdfName, setPdfName] = useState('');
   const [pdfColor, setPdfColor] = useState('');
+  const [singlePdfData, setSinglePdfData] = useState({});
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
 
@@ -41,12 +44,17 @@ const PdfComponent = memo(() => {
 
   // ================================= Api =============================== //
 
-  const getPdf = async message => {
+  const getPdf = async (message, messageValue) => {
     try {
       message == false && setVisible(true);
-      const response = await apiGet(`${Api.pdf}?userId=${global.user?._id}`);
-      console.log('response', response);
-      setPdfData(response);
+      const url = folderId
+        ? `${Api.FolderPdf}?userId=${global?.user?._id}&folderId=${folderId}`
+        : `${Api.pdf}?userId=${global?.user?._id}`;
+      const response = await apiGet(url);
+      if (response) {
+        setPdfData(response);
+        message && showMessageonTheScreen(messageValue);
+      }
     } catch (error) {
       console.log('error in getpdf api', error);
     } finally {
@@ -55,6 +63,7 @@ const PdfComponent = memo(() => {
   };
 
   const createPdf = async pdf => {
+    console.log('pdf', pdf);
     var formdata = new FormData();
     formdata.append('userId', global.user?._id);
     formdata.append('color', pdfColor);
@@ -71,20 +80,34 @@ const PdfComponent = memo(() => {
     }
   };
 
-  const editPdf = async pdf => {
+  const editPdf = async (pdfId, pdf) => {
     var formdata = new FormData();
+    formdata.append('_id', pdfId);
     formdata.append('userId', global.user?._id);
     formdata.append('color', pdfColor);
     formdata.append('name', pdfName);
     formdata.append('pdf', pdf);
     try {
       setVisible(true);
-      const response = await apiPost(Api.pdf, '', formdata);
+      const response = await apiPut(Api.pdf, '', formdata);
       if (response?.success == true) {
         getPdf(true, response?.message);
       }
     } catch (error) {
       console.log('error in upload pdf api', error);
+    }
+  };
+
+  const deletePdf = async pdfId => {
+    try {
+      setVisible(true);
+      const response = await apiDelete(`${Api.pdf}?_id=${pdfId}`);
+      console.log('response', response);
+      if (response?.success == true) {
+        getPdf(true, response?.message);
+      }
+    } catch (error) {
+      console.log('error in delete pdf api', error);
     }
   };
 
@@ -114,7 +137,7 @@ const PdfComponent = memo(() => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.71}
+        height={height * 0.78}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -123,17 +146,18 @@ const PdfComponent = memo(() => {
         <View style={styles.sheetContainer}>
           <PdfBottomSheetContent
             closeBottomSheet={closeBottomSheet}
-            title={'UPLOAD PDF'}
+            title={editBottomSheet ? 'EDIT PDF' : 'UPLOAD PDF'}
             setName={setPdfName}
             name={pdfName}
             setColor={setPdfColor}
             color={pdfColor}
-            create={createPdf}
+            initialData={singlePdfData ? singlePdfData : ''}
+            create={editBottomSheet ? editPdf : createPdf}
           />
         </View>
       </RBSheet>
     );
-  }, [pdfName, pdfColor]);
+  }, [pdfName, pdfColor, editBottomSheet, singlePdfData]);
 
   const renderPdf = useCallback(
     ({item, index}) => {
@@ -145,6 +169,7 @@ const PdfComponent = memo(() => {
             <Pressable
               ref={threeDotIconRef}
               onPress={() => {
+                setSinglePdfData(item);
                 openModal(item, isLastItem);
               }}>
               <Entypo
@@ -192,6 +217,8 @@ const PdfComponent = memo(() => {
         alignSelf="center"
         bottom={verticalScale(10)}
         onPress={() => {
+          setEditBottomSheet(false);
+          setSinglePdfData({});
           openBottomSheet();
         }}
       />
@@ -200,7 +227,15 @@ const PdfComponent = memo(() => {
         onClose={closeModal}
         closeModal={false}
         mainPadding={scale(5)}
-        content={<PdfModalContent closeModal={closeModal} />}
+        content={
+          <PdfModalContent
+            closeModal={closeModal}
+            openBottomSheet={openBottomSheet}
+            setEditBottomSheet={setEditBottomSheet}
+            singlePdfData={singlePdfData}
+            deletePdf={deletePdf}
+          />
+        }
         width={scale(145)}
         justifyContent="flex-end"
         borderRadius={20}

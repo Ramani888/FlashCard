@@ -24,7 +24,7 @@ import Loader from '../Loader';
 
 const {height, width} = Dimensions.get('window');
 
-const PdfFolderComponent = () => {
+const PdfFolderComponent = ({onFolderClick}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});

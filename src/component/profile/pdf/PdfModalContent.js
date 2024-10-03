@@ -6,14 +6,21 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../../Color';
 import Font from '../../Font';
 
-const PdfModalContent = ({closeModal}) => {
+const PdfModalContent = ({
+  closeModal,
+  openBottomSheet,
+  setEditBottomSheet,
+  singlePdfData,
+  deletePdf,
+}) => {
   const renderBody = () => {
     return (
       <View>
         <Pressable
           style={styles.container}
           onPress={() => {
-            // openUserNameBottomSheets();
+            setEditBottomSheet(true);
+            openBottomSheet();
             closeModal();
           }}>
           <MaterialIcons name="edit" size={scale(15)} color={Color.Black} />
@@ -22,6 +29,7 @@ const PdfModalContent = ({closeModal}) => {
         <Pressable
           style={styles.container}
           onPress={() => {
+            deletePdf(singlePdfData?._id);
             closeModal();
           }}>
           <MaterialIcons name="delete" size={scale(15)} color={Color.Red} />
@@ -33,7 +41,6 @@ const PdfModalContent = ({closeModal}) => {
             {borderBottomWidth: scale(0), marginBottom: verticalScale(-5)},
           ]}
           onPress={() => {
-            // openUserNameBottomSheets();
             closeModal();
           }}>
           <Feather name="folder-plus" size={scale(15)} color={Color.Black} />
@@ -42,7 +49,7 @@ const PdfModalContent = ({closeModal}) => {
       </View>
     );
   };
-  return <View style={{flex:1}}>{renderBody()}</View>;
+  return <View style={{flex: 1}}>{renderBody()}</View>;
 };
 
 export default PdfModalContent;

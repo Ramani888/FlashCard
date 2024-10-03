@@ -11,6 +11,7 @@ import PdfFolderComponent from '../component/pdf/PdfFolderComponent';
 
 const PdfScreen = () => {
   const [tab, setTab] = useState('PDF');
+  const [folderId, setFolderId] = useState('');
 
   const renderHeader = () => {
     return (
@@ -22,6 +23,11 @@ const PdfScreen = () => {
         containerStyle={styles.headerStyle}
       />
     );
+  };
+
+  const handleFolderClick = folderId => {
+    setFolderId(folderId);
+    setTab('PDF');
   };
 
   const buttons = () => (
@@ -56,7 +62,7 @@ const PdfScreen = () => {
 
   const renderBody = () => {
     return (
-      <View style={{flex:1}}>
+      <View style={{flex: 1}}>
         <LinearGradient
           colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
           style={styles.headerContainer}>
@@ -65,13 +71,15 @@ const PdfScreen = () => {
           {buttons()}
         </LinearGradient>
 
-        {tab == 'PDF' && <PdfComponent />}
-        {tab == 'FOLDERS' && <PdfFolderComponent />}
+        {tab == 'PDF' && <PdfComponent folderId={folderId} />}
+        {tab == 'FOLDERS' && (
+          <PdfFolderComponent onFolderClick={handleFolderClick} />
+        )}
       </View>
     );
   };
 
-  return <View style={{flex:1}}>{renderBody()}</View>;
+  return <View style={{flex: 1}}>{renderBody()}</View>;
 };
 
 export default React.memo(PdfScreen);

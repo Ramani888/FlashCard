@@ -202,9 +202,9 @@ const NotesScreen = () => {
               editNote,
             });
           }}>
-            <View style={{flexDirection:'row',alignItems:'center'}}>
-          <Text style={[styles.color, {backgroundColor: item?.color}]} />
-          <Text style={styles.noteText}>{item?.name}</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={[styles.color, {backgroundColor: item?.color}]} />
+            <Text style={styles.noteText}>{item?.name}</Text>
           </View>
           <Pressable
             ref={threeDotIconRef}
@@ -358,6 +358,6 @@ const styles = StyleSheet.create({
     width: scale(12),
     height: verticalScale(30),
     borderRadius: scale(10),
-    marginLeft:scale(3)
+    marginLeft: scale(3),
   },
 });

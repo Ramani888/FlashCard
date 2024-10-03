@@ -38,7 +38,6 @@ const BottomSheetContent = ({
   create,
   initialData,
 }) => {
-  console.log('color',color)
   useEffect(() => {
     if (initialData) {
       setName(initialData?.name);
