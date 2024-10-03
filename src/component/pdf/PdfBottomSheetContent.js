@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {useState, useEffect, useCallback, useMemo} from 'react';
 import {
   Dimensions,
   Image,
@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import Color from '../Color';
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../Font';
 import CustomeInputField from '../../custome/CustomeInputField';
@@ -17,7 +17,7 @@ import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const PdfBottomSheetContent = ({
   closeBottomSheet,
@@ -31,11 +31,14 @@ const PdfBottomSheetContent = ({
 }) => {
   const [fileResponse, setFileResponse] = useState([]);
 
-  const file = useMemo(() => ({
-    name: fileResponse[0]?.name,
-    type: fileResponse[0]?.type,
-    uri: fileResponse[0]?.uri,
-  }), [fileResponse]);
+  const file = useMemo(
+    () => ({
+      name: fileResponse[0]?.name,
+      type: fileResponse[0]?.type,
+      uri: fileResponse[0]?.uri,
+    }),
+    [fileResponse],
+  );
 
   useEffect(() => {
     if (initialData) {
@@ -68,64 +71,84 @@ const PdfBottomSheetContent = ({
 
   const handleSubmit = useCallback(() => {
     if (name && color && fileResponse?.length > 0) {
-      initialData ? create(initialData?._id, file) : create(file);
+      initialData ? create(initialData?._id, file) : create('', file);
       closeBottomSheet();
       setName('');
       setColor('');
     } else {
       showMessageonTheScreen('All fields are required');
     }
-  }, [name, color, fileResponse, initialData, create, closeBottomSheet, setName, setColor, file]);
+  }, [
+    name,
+    color,
+    fileResponse,
+    initialData,
+    create,
+    closeBottomSheet,
+    setName,
+    setColor,
+    file,
+  ]);
 
-  const renderBody = useMemo(() => (
-    <View style={styles.bodyContainer}>
-      <Pressable style={styles.closeButton} onPress={closeBottomSheet}>
-        <AntDesign name="close" size={scale(15)} color={Color.Black} />
-      </Pressable>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.separator} />
-
-      <Pressable
-        onPress={handleDocumentPick}
-        style={styles.documentPickerContainer}>
-        {fileResponse?.length > 0 ? (
-          <Text style={styles.fileName}>
-            {fileResponse[0]?.name}
-          </Text>
-        ) : (
-          <Image
-            source={require('../../Assets/Img/folderFram.png')}
-            style={styles.folderImage}
-          />
-        )}
-      </Pressable>
-
-      <CustomeInputField
-        placeholder="Create Name"
-        placeholderTextColor={Color.mediumGray}
-        onChangeText={setName}
-        value={name}
-        borderWidth={1}
-        borderColor={Color.LightGray}
-        inputContainerStyles={styles.inputContainer}
-        inputStyles={styles.inputStyles}
-      />
-
-      <View style={styles.colorSection}>
-        <Text style={styles.colorTitle}>Color</Text>
+  const renderBody = useMemo(
+    () => (
+      <View style={styles.bodyContainer}>
+        <Pressable style={styles.closeButton} onPress={closeBottomSheet}>
+          <AntDesign name="close" size={scale(15)} color={Color.Black} />
+        </Pressable>
+        <Text style={styles.title}>{title}</Text>
         <View style={styles.separator} />
-        <View style={styles.colorOptionsContainer}>
-          <View style={styles.colorOption}>
-            <Text style={[styles.colorIndicator, { backgroundColor: color }]} />
-          </View>
-          <Text style={styles.orText}>Or</Text>
-          <View style={[styles.colorOptionLarge, { backgroundColor: color }]} />
-        </View>
 
-        <ColorCodePicker setSelectedColor={setColor} selectedColor={color} />
+        <Pressable
+          onPress={handleDocumentPick}
+          style={styles.documentPickerContainer}>
+          {fileResponse?.length > 0 ? (
+            <Text style={styles.fileName}>{fileResponse[0]?.name}</Text>
+          ) : (
+            <Image
+              source={require('../../Assets/Img/folderFram.png')}
+              style={styles.folderImage}
+            />
+          )}
+        </Pressable>
+
+        <CustomeInputField
+          placeholder="Create Name"
+          placeholderTextColor={Color.mediumGray}
+          onChangeText={setName}
+          value={name}
+          borderWidth={1}
+          borderColor={Color.LightGray}
+          inputContainerStyles={styles.inputContainer}
+          inputStyles={styles.inputStyles}
+        />
+
+        <View style={styles.colorSection}>
+          <Text style={styles.colorTitle}>Color</Text>
+          <View style={styles.separator} />
+          <View style={styles.colorOptionsContainer}>
+            <View style={styles.colorOption}>
+              <Text style={[styles.colorIndicator, {backgroundColor: color}]} />
+            </View>
+            <Text style={styles.orText}>Or</Text>
+            <View style={[styles.colorOptionLarge, {backgroundColor: color}]} />
+          </View>
+
+          <ColorCodePicker setSelectedColor={setColor} selectedColor={color} />
+        </View>
       </View>
-    </View>
-  ), [closeBottomSheet, title, fileResponse, name, color, setName, setColor, handleDocumentPick]);
+    ),
+    [
+      closeBottomSheet,
+      title,
+      fileResponse,
+      name,
+      color,
+      setName,
+      setColor,
+      handleDocumentPick,
+    ],
+  );
 
   return (
     <View style={styles.container}>

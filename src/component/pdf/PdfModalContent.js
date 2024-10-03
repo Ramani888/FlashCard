@@ -34,6 +34,7 @@ const PdfModalContent = ({
           onPress={() => {
             setEditBottomSheet(true);
             openBottomSheet();
+            closeModal();
           }}>
           <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
           <Text style={styles.text}>Edit Folder</Text>

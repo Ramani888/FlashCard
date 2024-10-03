@@ -63,7 +63,7 @@ const PdfComponent = memo(({folderId}) => {
     }
   };
 
-  const createPdf = async pdf => {
+  const createPdf = async (pdfId, pdf) => {
     console.log('pdf', pdf);
     var formdata = new FormData();
     formdata.append('userId', global.user?._id);
@@ -191,11 +191,17 @@ const PdfComponent = memo(({folderId}) => {
   const renderBody = () => {
     return (
       <View style={styles.listContainer}>
-        <FlatList
-          data={pdfData}
-          renderItem={renderPdf}
-          keyExtractor={item => item.name}
-        />
+        {pdfData?.length > 0 ? (
+          <FlatList
+            data={pdfData}
+            renderItem={renderPdf}
+            keyExtractor={item => item.name}
+          />
+        ) : (
+          <View style={styles.noDataView}>
+            <Text style={styles.noDataText}>No Data Found</Text>
+          </View>
+        )}
         {BottomSheets()}
       </View>
     );
@@ -234,7 +240,6 @@ const PdfComponent = memo(({folderId}) => {
             closeModal={closeModal}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
-            // singlePdfData={singlePdfData}
             deletePdf={deletePdf}
             pdfId={pdfId}
           />
@@ -258,6 +263,7 @@ const styles = StyleSheet.create({
     height: height * 0.79,
   },
   listContainer: {
+    flex: 1,
     marginTop: verticalScale(15),
   },
   itemContainer: {
@@ -302,5 +308,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: scale(50),
     marginVertical: verticalScale(15),
+  },
+  noDataView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  noDataText: {
+    fontSize: scale(18),
+    color: Color.Black,
+    fontFamily: Font.medium,
   },
 });
