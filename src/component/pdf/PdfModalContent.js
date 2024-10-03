@@ -14,14 +14,10 @@ import {useSelector} from 'react-redux';
 
 const PdfModalContent = ({
   closeModal,
-  type,
   openBottomSheet,
   setEditBottomSheet,
-  deleteData,
-  handleCreateSetClick,
-  singleItem,
-  folderId,
-  setId,
+  deletePdf,
+  pdfId,
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(false);
@@ -43,9 +39,9 @@ const PdfModalContent = ({
           <Text style={styles.text}>Edit Folder</Text>
         </Pressable>
         <Pressable
-          style={[styles.container, styles.lastItem]}
+          style={[styles.container]}
           onPress={() => {
-            deleteData();
+            deletePdf(pdfId);
             closeModal();
           }}>
           <MaterialCommunityIcons
@@ -54,6 +50,15 @@ const PdfModalContent = ({
             color={Color.Red}
           />
           <Text style={styles.text}>Delete Folder</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.container, styles.lastItem]}
+          onPress={() => {
+            navigation.navigate(ScreenName.assignPdfFolder, {pdfId: pdfId});
+            closeModal();
+          }}>
+          <Feather name="folder-plus" size={scale(15)} color={Color.Black} />
+          <Text style={styles.text}>Assign Folder</Text>
         </Pressable>
       </View>
     ),

@@ -10,7 +10,7 @@ import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
 import SetDetailScreen from '../screen/card/SetDetailScreen';
 import SignUpScreen from '../screen/auth/SignUpScreen';
 import SignInScreen from '../screen/auth/SignInScreen';
-import PdfScreen from '../screen/PdfScreen';
+import PdfScreen from '../screen/pdf/PdfScreen';
 import ImagesScreen from '../screen/ImagesScreen';
 import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
 import AssignSetScreen from '../screen/card/AssignSetScreen';
@@ -20,6 +20,7 @@ import PrivacyScreen from '../screen/profile/PrivacyScreen';
 import AboutUsScreen from '../screen/profile/AboutUsScreen';
 import CloudScreen from '../screen/profile/CloudScreen';
 import SubscriptionScreen from '../screen/SubscriptionScreen';
+import AssignPdfFolder from '../screen/pdf/AssignPdfFolder';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -38,12 +39,13 @@ export const ScreenName = {
   globalLiveFeed: 'GlobalLiveFeed',
   setDetail: 'SetDetail',
   pdf: 'Pdf',
+  assignPdfFolder: 'AssignPdfFolder',
   image: 'Image',
   aiScreen: 'AiScreen',
   privacy: 'Privacy',
   aboutUs: 'AboutUs',
   cloud: 'Cloud',
-  subscription: 'Subscription'
+  subscription: 'Subscription',
 };
 
 export const ScreenPath = {
@@ -63,10 +65,11 @@ export const ScreenPath = {
   GlobalLiveFeedScreen,
   SetDetailScreen,
   PdfScreen,
+  AssignPdfFolder,
   ImagesScreen,
   AiScreen,
   PrivacyScreen,
   AboutUsScreen,
   CloudScreen,
-  SubscriptionScreen
+  SubscriptionScreen,
 };

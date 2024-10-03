@@ -23,12 +23,13 @@ const AppStack = ({user}) => {
     notes,
     notesDetail,
     pdf,
+    assignPdfFolder,
     image,
     aiScreen,
     cloud,
     privacy,
     aboutUs,
-    subscription
+    subscription,
   } = ScreenName;
 
   const {
@@ -48,12 +49,13 @@ const AppStack = ({user}) => {
     NotesScreen,
     NoteDetailScreen,
     PdfScreen,
+    AssignPdfFolder,
     ImagesScreen,
     AiScreen,
     PrivacyScreen,
     AboutUsScreen,
     CloudScreen,
-    SubscriptionScreen
+    SubscriptionScreen,
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -153,6 +155,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={pdf}
         component={PdfScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={assignPdfFolder}
+        component={AssignPdfFolder}
         options={{headerShown: false}}
       />
 

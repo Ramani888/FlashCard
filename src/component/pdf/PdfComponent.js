@@ -9,17 +9,17 @@ import {
 import React, {useCallback, useRef, useState, memo, useEffect} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {scale, verticalScale} from 'react-native-size-matters';
-import Color from '../../Color';
-import Font from '../../Font';
-import CustomeModal from '../../../custome/CustomeModal';
+import Color from '../Color';
+import Font from '../Font';
+import CustomeModal from '../../custome/CustomeModal';
 import PdfModalContent from './PdfModalContent';
-import CustomeButton from '../../../custome/CustomeButton';
+import CustomeButton from '../../custome/CustomeButton';
 import PdfBottomSheetContent from './PdfBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {apiDelete, apiGet, apiPost, apiPut} from '../../../Api/ApiService';
-import Api from '../../../Api/EndPoint';
-import Loader from '../../Loader';
-import showMessageonTheScreen from '../../ShowMessageOnTheScreen';
+import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
+import Loader from '../Loader';
+import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 
 const {width, height} = Dimensions.get('window');
 
@@ -34,6 +34,7 @@ const PdfComponent = memo(({folderId}) => {
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [pdfName, setPdfName] = useState('');
   const [pdfColor, setPdfColor] = useState('');
+  const [pdfId, setPdfId] = useState('');
   const [singlePdfData, setSinglePdfData] = useState({});
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
@@ -170,6 +171,7 @@ const PdfComponent = memo(({folderId}) => {
               ref={threeDotIconRef}
               onPress={() => {
                 setSinglePdfData(item);
+                setPdfId(item?._id);
                 openModal(item, isLastItem);
               }}>
               <Entypo
@@ -232,8 +234,9 @@ const PdfComponent = memo(({folderId}) => {
             closeModal={closeModal}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
-            singlePdfData={singlePdfData}
+            // singlePdfData={singlePdfData}
             deletePdf={deletePdf}
+            pdfId={pdfId}
           />
         }
         width={scale(145)}

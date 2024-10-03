@@ -7,13 +7,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import Color from '../../Color';
+import Color from '../Color';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import CustomeButton from '../../../custome/CustomeButton';
-import Font from '../../Font';
-import CustomeInputField from '../../../custome/CustomeInputField';
-import ColorCodePicker from '../../cards/ColorCodePicker';
-import showMessageonTheScreen from '../../ShowMessageOnTheScreen';
+import CustomeButton from '../../custome/CustomeButton';
+import Font from '../Font';
+import CustomeInputField from '../../custome/CustomeInputField';
+import ColorCodePicker from '../cards/ColorCodePicker';
+import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
 
@@ -31,14 +31,12 @@ const PdfBottomSheetContent = ({
 }) => {
   const [fileResponse, setFileResponse] = useState([]);
 
-  // Memoized file object to avoid recalculation
   const file = useMemo(() => ({
     name: fileResponse[0]?.name,
     type: fileResponse[0]?.type,
     uri: fileResponse[0]?.uri,
   }), [fileResponse]);
 
-  // Set initial data if available
   useEffect(() => {
     if (initialData) {
       setName(initialData?.name);
@@ -46,7 +44,6 @@ const PdfBottomSheetContent = ({
     }
   }, [initialData, setName, setColor]);
 
-  // Handle document picking
   const handleDocumentPick = useCallback(async () => {
     try {
       const response = await DocumentPicker.pick({
@@ -69,7 +66,6 @@ const PdfBottomSheetContent = ({
     }
   }, []);
 
-  // Handle form submission
   const handleSubmit = useCallback(() => {
     if (name && color && fileResponse?.length > 0) {
       initialData ? create(initialData?._id, file) : create(file);
@@ -81,7 +77,6 @@ const PdfBottomSheetContent = ({
     }
   }, [name, color, fileResponse, initialData, create, closeBottomSheet, setName, setColor, file]);
 
-  // Memoized renderBody for optimization
   const renderBody = useMemo(() => (
     <View style={styles.bodyContainer}>
       <Pressable style={styles.closeButton} onPress={closeBottomSheet}>
@@ -99,7 +94,7 @@ const PdfBottomSheetContent = ({
           </Text>
         ) : (
           <Image
-            source={require('../../../Assets/Img/folderFram.png')}
+            source={require('../../Assets/Img/folderFram.png')}
             style={styles.folderImage}
           />
         )}

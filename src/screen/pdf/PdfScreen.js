@@ -1,13 +1,13 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import CustomeHeader from '../custome/CustomeHeader';
-import Color from '../component/Color';
+import CustomeHeader from '../../custome/CustomeHeader';
+import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomeButton from '../custome/CustomeButton';
-import Font from '../component/Font';
-import PdfComponent from '../component/profile/pdf/PdfComponent';
-import PdfFolderComponent from '../component/pdf/PdfFolderComponent';
+import CustomeButton from '../../custome/CustomeButton';
+import Font from '../../component/Font';
+import PdfComponent from '../../component/pdf/PdfComponent';
+import PdfFolderComponent from '../../component/pdf/PdfFolderComponent';
 
 const PdfScreen = () => {
   const [tab, setTab] = useState('PDF');
