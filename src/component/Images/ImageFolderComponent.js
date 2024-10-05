@@ -24,7 +24,7 @@ import ImageModalContent from './ImageModalContent';
 
 const {height, width} = Dimensions.get('window');
 
-const ImageFolderComponent = () => {
+const ImageFolderComponent = ({onFolderClick}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});

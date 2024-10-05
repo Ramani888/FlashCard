@@ -20,6 +20,9 @@ const Api = {
   FolderPdf: `${Base_url}/folder/pdf`,
   assignPdfFolder: `${Base_url}/assign/pdf/folder`,
   imageFolder: `${Base_url}/images/folder`,
+  assignImageFolder: `${Base_url}/assign/image/folder`,
+  folderImage: `${Base_url}/folder/images`,
+  Images: `${Base_url}/images`,
   profilePic: `${Base_url}/profile/picture`,
 };
 

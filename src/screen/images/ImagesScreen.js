@@ -1,16 +1,22 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import CustomeHeader from '../custome/CustomeHeader';
-import Color from '../component/Color';
+import CustomeHeader from '../../custome/CustomeHeader';
+import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomeButton from '../custome/CustomeButton';
-import Font from '../component/Font';
-import ImageComponent from '../component/profile/image/ImageComponent';
-import ImageFolderComponent from '../component/Images/ImageFolderComponent';
+import CustomeButton from '../../custome/CustomeButton';
+import Font from '../../component/Font';
+import ImageComponent from '../../component/Images/ImageComponent';
+import ImageFolderComponent from '../../component/Images/ImageFolderComponent';
 
 const ImagesScreen = () => {
   const [tab, setTab] = useState('IMAGES');
+  const [folderId, setFolderId] = useState('');
+
+  const handleFolderClick = folderId => {
+    setFolderId(folderId);
+    setTab('IMAGES');
+  };
 
   const renderHeader = () => {
     return (
@@ -56,7 +62,7 @@ const ImagesScreen = () => {
 
   const renderBody = () => {
     return (
-      <View style={{flex:1}}>
+      <View style={{flex: 1}}>
         <LinearGradient
           colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
           style={styles.headerContainer}>
@@ -65,13 +71,15 @@ const ImagesScreen = () => {
           {buttons()}
         </LinearGradient>
 
-        {tab == 'IMAGES' && <ImageComponent />}
-        {tab == 'FOLDERS' && <ImageFolderComponent/>}
+        {tab == 'IMAGES' && <ImageComponent folderId={folderId} />}
+        {tab == 'FOLDERS' && (
+          <ImageFolderComponent onFolderClick={handleFolderClick} />
+        )}
       </View>
     );
   };
 
-  return <View style={{flex:1}}>{renderBody()}</View>;
+  return <View style={{flex: 1}}>{renderBody()}</View>;
 };
 
 export default React.memo(ImagesScreen);

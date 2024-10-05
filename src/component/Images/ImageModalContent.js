@@ -1,27 +1,19 @@
 import React, {useMemo, useState} from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Switch} from '@rneui/themed';
+import Feather from 'react-native-vector-icons/Feather';
 import Color from '../Color';
 import Font from '../Font';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {useSelector} from 'react-redux';
 
 const ImageModalContent = ({
   closeModal,
-  type,
   openBottomSheet,
   setEditBottomSheet,
-  deleteData,
-  handleCreateSetClick,
-  singleItem,
-  folderId,
-  setId,
+  deleteImage,
+  imageId,
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(false);
@@ -36,16 +28,7 @@ const ImageModalContent = ({
         <Pressable
           style={styles.container}
           onPress={() => {
-            setEditBottomSheet(true);
-            openBottomSheet();
-          }}>
-          <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
-          <Text style={styles.text}>Edit Folder</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.container, styles.lastItem]}
-          onPress={() => {
-            deleteData();
+            deleteImage(imageId);
             closeModal();
           }}>
           <MaterialCommunityIcons
@@ -53,7 +36,18 @@ const ImageModalContent = ({
             size={iconSize}
             color={Color.Red}
           />
-          <Text style={styles.text}>Delete Folder</Text>
+          <Text style={styles.text}>Delete</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.container, styles.lastItem]}
+          onPress={() => {
+            navigation.navigate(ScreenName.assignImageFolder, {
+              imageId: imageId,
+            });
+            closeModal();
+          }}>
+          <Feather name="folder-plus" size={scale(15)} color={Color.Black} />
+          <Text style={styles.text}>Assign Folder</Text>
         </Pressable>
       </View>
     ),

@@ -25,6 +25,7 @@ const AppStack = ({user}) => {
     pdf,
     assignPdfFolder,
     image,
+    assignImageFolder,
     aiScreen,
     cloud,
     privacy,
@@ -51,6 +52,7 @@ const AppStack = ({user}) => {
     PdfScreen,
     AssignPdfFolder,
     ImagesScreen,
+    AssignImageFolder,
     AiScreen,
     PrivacyScreen,
     AboutUsScreen,
@@ -167,6 +169,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={image}
         component={ImagesScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={assignImageFolder}
+        component={AssignImageFolder}
         options={{headerShown: false}}
       />
 

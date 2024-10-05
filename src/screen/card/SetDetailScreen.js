@@ -19,6 +19,7 @@ import CardGridLayout from '../../component/cards/CardGridLayout';
 import SimpleLayout from '../../component/cards/SimpleLayout';
 import {useSelector} from 'react-redux';
 import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
+// import DraggableFlatList from 'react-native-draggable-flatlist';
 
 const SetDetailScreen = () => {
   const route = useRoute();
@@ -184,6 +185,28 @@ const SetDetailScreen = () => {
     [setName],
   );
 
+  const renderItem = ({item, drag, isActive}) => {
+    return (
+      <View
+        style={[
+          styles.item,
+          {backgroundColor: isActive ? 'lightgray' : 'white'},
+        ]}>
+        <SimpleLayout
+          item={item}
+          updateCard={updateCard}
+          threeDotIconRef={threeDotIconRef}
+          setItem={setItem}
+          folderId={folderId}
+          setId={setId}
+          openCardModal={openCardModal}
+          openNoteModal={openNoteModal}
+          onLongPress={drag} // Trigger drag on long press
+        />
+      </View>
+    );
+  };
+
   const renderBody = useMemo(
     () => (
       <View style={styles.bodyContainer}>
@@ -208,6 +231,14 @@ const SetDetailScreen = () => {
             style={styles.flatList}
             showsVerticalScrollIndicator={false}
           />
+          // <DraggableFlatList
+          //   data={data} // data to be rendered
+          //   renderItem={renderItem}
+          //   keyExtractor={(item, index) => index.toString()} // unique key for each item
+          //   onDragEnd={({data}) => setData(data)} // Update state with new order after drag
+          //   style={styles.flatList}
+          //   showsVerticalScrollIndicator={false}
+          // />
         ) : (
           <FlatList
             data={cardData}

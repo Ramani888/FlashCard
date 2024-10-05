@@ -11,7 +11,7 @@ import SetDetailScreen from '../screen/card/SetDetailScreen';
 import SignUpScreen from '../screen/auth/SignUpScreen';
 import SignInScreen from '../screen/auth/SignInScreen';
 import PdfScreen from '../screen/pdf/PdfScreen';
-import ImagesScreen from '../screen/ImagesScreen';
+import ImagesScreen from '../screen/images/ImagesScreen';
 import OtpVerifyScreen from '../screen/auth/OtpVerifyScreen';
 import AssignSetScreen from '../screen/card/AssignSetScreen';
 import NoteDetailScreen from '../screen/notes/NoteDetailScreen';
@@ -21,6 +21,7 @@ import AboutUsScreen from '../screen/profile/AboutUsScreen';
 import CloudScreen from '../screen/profile/CloudScreen';
 import SubscriptionScreen from '../screen/SubscriptionScreen';
 import AssignPdfFolder from '../screen/pdf/AssignPdfFolder';
+import AssignImageFolder from '../screen/images/AssignImageFolder';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -41,6 +42,7 @@ export const ScreenName = {
   pdf: 'Pdf',
   assignPdfFolder: 'AssignPdfFolder',
   image: 'Image',
+  assignImageFolder: 'AssignImageFolder',
   aiScreen: 'AiScreen',
   privacy: 'Privacy',
   aboutUs: 'AboutUs',
@@ -67,6 +69,7 @@ export const ScreenPath = {
   PdfScreen,
   AssignPdfFolder,
   ImagesScreen,
+  AssignImageFolder,
   AiScreen,
   PrivacyScreen,
   AboutUsScreen,
