@@ -16,6 +16,7 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import {useSelector} from 'react-redux';
+import NoDataView from '../NoDataView';
 
 const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
   const isFocused = useIsFocused();
@@ -250,13 +251,17 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
 
   const renderBody = () => (
     <View style={styles.bodyContainer}>
-      <FlatList
-        data={setData}
-        renderItem={renderSet}
-        keyExtractor={(item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
-        style={{flex: 1}}
-      />
+      {setData?.length > 0 ? (
+        <FlatList
+          data={setData}
+          renderItem={renderSet}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+          style={{flex: 1}}
+        />
+      ) : (
+        <NoDataView content={'Set not found'} />
+      )}
       <CustomeButton
         buttonColor={Color.theme1}
         buttonWidth="100%"

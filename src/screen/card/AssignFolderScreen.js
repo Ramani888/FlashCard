@@ -21,6 +21,7 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import {scale, verticalScale} from 'react-native-size-matters';
+import NoDataView from '../../component/NoDataView';
 
 const {height, width} = Dimensions.get('window');
 
@@ -168,12 +169,19 @@ const AssignFolderScreen = () => {
       <Loader visible={visible} />
       {renderHeader}
       <View style={styles.bodyContainer}>
-        <FlatList
-          data={folderData}
-          renderItem={renderFolder}
-          keyExtractor={keyExtractor}
-          contentContainerStyle={styles.flatListContainer}
-        />
+        {folderData?.length > 0 ? (
+          <FlatList
+            data={folderData}
+            renderItem={renderFolder}
+            keyExtractor={keyExtractor}
+            contentContainerStyle={styles.flatListContainer}
+          />
+        ) : (
+          <NoDataView
+            content={'Folder not found'}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+          />
+        )}
         {BottomSheets()}
         <CustomeButton
           buttonColor={Color.theme1}

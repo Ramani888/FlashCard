@@ -21,6 +21,7 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
+import NoDataView from '../NoDataView';
 
 const {height, width} = Dimensions.get('window');
 
@@ -179,12 +180,16 @@ const ImageComponent = ({folderId}) => {
   const renderBody = () => {
     return (
       <View style={styles.bodyContainer}>
-        <FlatList
-          data={imageData}
-          renderItem={renderImage}
-          numColumns={3}
-          keyExtractor={(_, index) => index.toString()}
-        />
+        {imageData?.length > 0 ? (
+          <FlatList
+            data={imageData}
+            renderItem={renderImage}
+            numColumns={3}
+            keyExtractor={(_, index) => index.toString()}
+          />
+        ) : (
+          <NoDataView content={'Image not found'} />
+        )}
         {BottomSheets()}
       </View>
     );
@@ -245,6 +250,7 @@ const styles = StyleSheet.create({
     height: height * 0.79,
   },
   bodyContainer: {
+    flex:1,
     marginBottom: verticalScale(60),
   },
   imageContainer: {

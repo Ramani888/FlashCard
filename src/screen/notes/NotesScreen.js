@@ -26,6 +26,7 @@ import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
+import NoDataView from '../../component/NoDataView';
 
 const {height, width} = Dimensions.get('window');
 
@@ -228,12 +229,16 @@ const NotesScreen = () => {
   const renderBody = useCallback(
     () => (
       <View style={styles.bodyContainer}>
-        <FlatList
-          data={noteData}
-          renderItem={renderNotes}
-          keyExtractor={(item, index) => index.toString()}
-          style={{flex: 1, marginBottom: verticalScale(60)}}
-        />
+        {noteData.length > 0 ? (
+          <FlatList
+            data={noteData}
+            renderItem={renderNotes}
+            keyExtractor={(item, index) => index.toString()}
+            style={{flex: 1, marginBottom: verticalScale(60)}}
+          />
+        ) : (
+          <NoDataView noDataViewStyle={{marginTop: verticalScale(-70)}} />
+        )}
         {BottomSheets()}
       </View>
     ),

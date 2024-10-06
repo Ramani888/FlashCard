@@ -21,6 +21,7 @@ import {useNavigation} from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loader from '../Loader';
+import NoDataView from '../NoDataView';
 
 const {height, width} = Dimensions.get('window');
 
@@ -207,12 +208,19 @@ const PdfFolderComponent = ({onFolderClick}) => {
           marginHorizontal: scale(15),
           marginTop: verticalScale(15),
         }}>
-        <FlatList
-          data={pdfFolderdata}
-          renderItem={renderFolder}
-          keyExtractor={keyExtractor}
-          style={styles.flatlist}
-        />
+        {pdfFolderdata?.length > 0 ? (
+          <FlatList
+            data={pdfFolderdata}
+            renderItem={renderFolder}
+            keyExtractor={keyExtractor}
+            style={styles.flatlist}
+          />
+        ) : (
+          <NoDataView
+            content={'Folder not found'}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+          />
+        )}
         {BottomSheets()}
 
         <CustomeButton

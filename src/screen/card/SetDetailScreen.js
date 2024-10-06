@@ -19,6 +19,7 @@ import CardGridLayout from '../../component/cards/CardGridLayout';
 import SimpleLayout from '../../component/cards/SimpleLayout';
 import {useSelector} from 'react-redux';
 import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
+import NoDataView from '../../component/NoDataView';
 // import DraggableFlatList from 'react-native-draggable-flatlist';
 
 const SetDetailScreen = () => {
@@ -211,26 +212,37 @@ const SetDetailScreen = () => {
     () => (
       <View style={styles.bodyContainer}>
         {layout == 'single' ? (
-          <FlatList
-            data={cardData}
-            renderItem={({item}) => {
-              return (
-                <SimpleLayout
-                  item={item}
-                  updateCard={updateCard}
-                  threeDotIconRef={threeDotIconRef}
-                  setItem={setItem}
-                  folderId={folderId}
-                  setId={setId}
-                  openCardModal={openCardModal}
-                  openNoteModal={openNoteModal}
-                />
-              );
-            }}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.flatList}
-            showsVerticalScrollIndicator={false}
-          />
+          <>
+            {cardData?.length > 0 ? (
+              <FlatList
+                data={cardData}
+                renderItem={({item}) => {
+                  return (
+                    <SimpleLayout
+                      item={item}
+                      updateCard={updateCard}
+                      threeDotIconRef={threeDotIconRef}
+                      setItem={setItem}
+                      folderId={folderId}
+                      setId={setId}
+                      openCardModal={openCardModal}
+                      openNoteModal={openNoteModal}
+                    />
+                  );
+                }}
+                keyExtractor={(item, index) => index.toString()}
+                style={styles.flatList}
+                showsVerticalScrollIndicator={false}
+              />
+            ) : (
+              <NoDataView
+                content={'Card not found'}
+                noDataViewStyle={{marginTop: verticalScale(-70)}}
+                noDataTextStyle={{color: Color.White}}
+              />
+            )}
+          </>
+        ) : (
           // <DraggableFlatList
           //   data={data} // data to be rendered
           //   renderItem={renderItem}
@@ -239,30 +251,39 @@ const SetDetailScreen = () => {
           //   style={styles.flatList}
           //   showsVerticalScrollIndicator={false}
           // />
-        ) : (
-          <FlatList
-            data={cardData}
-            renderItem={({item}) => {
-              return (
-                <CardGridLayout
-                  item={item}
-                  updateCard={updateCard}
-                  threeDotIconRef={threeDotIconRef}
-                  setItem={setItem}
-                  folderId={folderId}
-                  setId={setId}
-                  openCardModal={openCardModal}
-                  openNoteModal={openNoteModal}
-                />
-              );
-            }}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.flatList}
-            numColumns={2}
-            key={'_'}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingBottom: scale(50)}}
-          />
+          <>
+            {cardData?.length > 0 ? (
+              <FlatList
+                data={cardData}
+                renderItem={({item}) => {
+                  return (
+                    <CardGridLayout
+                      item={item}
+                      updateCard={updateCard}
+                      threeDotIconRef={threeDotIconRef}
+                      setItem={setItem}
+                      folderId={folderId}
+                      setId={setId}
+                      openCardModal={openCardModal}
+                      openNoteModal={openNoteModal}
+                    />
+                  );
+                }}
+                keyExtractor={(item, index) => index.toString()}
+                style={styles.flatList}
+                numColumns={2}
+                key={'_'}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{paddingBottom: scale(50)}}
+              />
+            ) : (
+              <NoDataView
+                content={'Card not found'}
+                noDataViewStyle={{marginTop: verticalScale(-70)}}
+                noDataTextStyle={{color: Color.White}}
+              />
+            )}
+          </>
         )}
       </View>
     ),

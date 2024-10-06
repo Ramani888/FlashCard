@@ -200,12 +200,16 @@ const AssignSetScreen = () => {
           marginHorizontal: verticalScale(15),
           marginVertical: verticalScale(10),
         }}>
-        <FlatList
-          data={setData}
-          renderItem={renderSet}
-          keyExtractor={keyExtractor}
-          style={{marginTop: verticalScale(10)}}
-        />
+        {setData?.length > 0 ? (
+          <FlatList
+            data={setData}
+            renderItem={renderSet}
+            keyExtractor={keyExtractor}
+            style={{marginTop: verticalScale(10)}}
+          />
+        ) : (
+          <NoDataView content={'Set not found'} />
+        )}
         {BottomSheets()}
 
         <CustomeButton

@@ -21,6 +21,7 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
+import NoDataView from '../NoDataView';
 
 const {height, width} = Dimensions.get('window');
 
@@ -218,12 +219,20 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
           <Text style={styles.folderText}>ALL SETS</Text>
         </Pressable>
 
-        <FlatList
-          data={folderData}
-          renderItem={renderFolder}
-          keyExtractor={keyExtractor}
-          style={styles.flatlist}
-        />
+        {folderData?.length > 0 ? (
+          <FlatList
+            data={folderData}
+            renderItem={renderFolder}
+            keyExtractor={keyExtractor}
+            style={styles.flatlist}
+          />
+        ) : (
+          <NoDataView
+            content={'Folder not found'}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+          />
+        )}
+
         {BottomSheets()}
 
         <CustomeButton

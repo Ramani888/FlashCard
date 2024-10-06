@@ -20,6 +20,7 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
+import NoDataView from '../NoDataView';
 
 const {width, height} = Dimensions.get('window');
 
@@ -198,9 +199,7 @@ const PdfComponent = memo(({folderId}) => {
             keyExtractor={item => item.name}
           />
         ) : (
-          <View style={styles.noDataView}>
-            <Text style={styles.noDataText}>No Data Found</Text>
-          </View>
+          <NoDataView content={'Pdf not found'} noDataViewStyle={{marginTop:verticalScale(-70)}}/>
         )}
         {BottomSheets()}
       </View>
@@ -309,11 +308,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: scale(50),
     marginVertical: verticalScale(15),
-  },
-  noDataView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
-  noDataText: {
-    fontSize: scale(18),
-    color: Color.Black,
-    fontFamily: Font.medium,
   },
 });

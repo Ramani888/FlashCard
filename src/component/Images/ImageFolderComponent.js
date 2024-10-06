@@ -21,6 +21,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loader from '../Loader';
 import ImageModalContent from './ImageModalContent';
+import NoDataView from '../NoDataView';
 
 const {height, width} = Dimensions.get('window');
 
@@ -91,7 +92,11 @@ const ImageFolderComponent = ({onFolderClick}) => {
     closeModal();
     setVisible(true);
     try {
-      const response = await apiPut(Api.imageFolder, '', JSON.stringify(rawData));
+      const response = await apiPut(
+        Api.imageFolder,
+        '',
+        JSON.stringify(rawData),
+      );
       setFolderName('');
       setFolderStatus(0);
       setFolderColor('');
@@ -206,12 +211,19 @@ const ImageFolderComponent = ({onFolderClick}) => {
           marginHorizontal: scale(15),
           marginTop: verticalScale(15),
         }}>
-        <FlatList
-          data={pdfFolderdata}
-          renderItem={renderFolder}
-          keyExtractor={keyExtractor}
-          style={styles.flatlist}
-        />
+        {pdfFolderdata?.length > 0 ? (
+          <FlatList
+            data={pdfFolderdata}
+            renderItem={renderFolder}
+            keyExtractor={keyExtractor}
+            style={styles.flatlist}
+          />
+        ) : (
+          <NoDataView
+            content={'Folder not found'}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+          />
+        )}
         {BottomSheets()}
 
         <CustomeButton
