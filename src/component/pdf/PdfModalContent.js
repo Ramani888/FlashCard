@@ -14,9 +14,10 @@ import {useSelector} from 'react-redux';
 
 const PdfModalContent = ({
   closeModal,
+  type,
   openBottomSheet,
   setEditBottomSheet,
-  deletePdf,
+  deleteItem,
   pdfId,
 }) => {
   const navigation = useNavigation();
@@ -29,38 +30,72 @@ const PdfModalContent = ({
   const renderBody = useMemo(
     () => (
       <View>
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            setEditBottomSheet(true);
-            openBottomSheet();
-            closeModal();
-          }}>
-          <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
-          <Text style={styles.text}>Edit Folder</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.container]}
-          onPress={() => {
-            deletePdf(pdfId);
-            closeModal();
-          }}>
-          <MaterialCommunityIcons
-            name="delete"
-            size={iconSize}
-            color={Color.Red}
-          />
-          <Text style={styles.text}>Delete Folder</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.container, styles.lastItem]}
-          onPress={() => {
-            navigation.navigate(ScreenName.assignPdfFolder, {pdfId: pdfId});
-            closeModal();
-          }}>
-          <Feather name="folder-plus" size={scale(15)} color={Color.Black} />
-          <Text style={styles.text}>Assign Folder</Text>
-        </Pressable>
+        {type == 'Folder' ? (
+          <View>
+            <Pressable
+              style={styles.container}
+              onPress={() => {
+                setEditBottomSheet(true);
+                openBottomSheet();
+                closeModal();
+              }}>
+              <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
+              <Text style={styles.text}>Edit</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.container, styles.lastItem]}
+              onPress={() => {
+                deleteItem(pdfId);
+                closeModal();
+              }}>
+              <MaterialCommunityIcons
+                name="delete"
+                size={iconSize}
+                color={Color.Red}
+              />
+              <Text style={styles.text}>Delete Folder</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <View>
+            <Pressable
+              style={styles.container}
+              onPress={() => {
+                setEditBottomSheet(true);
+                openBottomSheet();
+                closeModal();
+              }}>
+              <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
+              <Text style={styles.text}>Edit</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.container]}
+              onPress={() => {
+                deleteItem(pdfId);
+                closeModal();
+              }}>
+              <MaterialCommunityIcons
+                name="delete"
+                size={iconSize}
+                color={Color.Red}
+              />
+              <Text style={styles.text}>Delete</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.container, styles.lastItem]}
+              onPress={() => {
+                navigation.navigate(ScreenName.assignPdfFolder, {pdfId: pdfId});
+                closeModal();
+              }}>
+              <Feather
+                name="folder-plus"
+                size={scale(15)}
+                color={Color.Black}
+              />
+              <Text style={styles.text}>Assign Folder</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     ),
     [value, iconSize, userIcon, lockIcon],

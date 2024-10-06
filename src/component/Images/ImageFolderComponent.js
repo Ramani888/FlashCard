@@ -251,12 +251,11 @@ const ImageFolderComponent = ({onFolderClick}) => {
             type={'Folder'}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
-            deleteData={deletePdfFolder}
+            deleteItem={deletePdfFolder}
             singleItem={singleFolderItem}
           />
         }
         width={scale(145)}
-        // height={scale(165)}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

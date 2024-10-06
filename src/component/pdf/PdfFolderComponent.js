@@ -252,7 +252,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
             type={'Folder'}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
-            deleteData={deletePdfFolder}
+            deleteItem={deletePdfFolder}
             singleItem={singleFolderItem}
           />
         }

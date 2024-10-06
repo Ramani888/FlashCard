@@ -219,9 +219,10 @@ const ImageComponent = ({folderId}) => {
         content={
           <ImageModalContent
             closeModal={closeModal}
+            type={'Image'}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditImageBottomsheet}
-            deleteImage={deleteImage}
+            deleteItem={deleteImage}
             imageId={imageId}
           />
         }

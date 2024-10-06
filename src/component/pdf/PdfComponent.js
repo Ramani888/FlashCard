@@ -238,9 +238,10 @@ const PdfComponent = memo(({folderId}) => {
         content={
           <PdfModalContent
             closeModal={closeModal}
+            type={'Pdf'}
             openBottomSheet={openBottomSheet}
             setEditBottomSheet={setEditBottomSheet}
-            deletePdf={deletePdf}
+            deleteItem={deletePdf}
             pdfId={pdfId}
           />
         }

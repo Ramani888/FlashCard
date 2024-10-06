@@ -1,6 +1,7 @@
 import React, {useMemo, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Color from '../Color';
 import Font from '../Font';
@@ -10,9 +11,10 @@ import {ScreenName} from '../Screen';
 
 const ImageModalContent = ({
   closeModal,
+  type,
   openBottomSheet,
   setEditBottomSheet,
-  deleteImage,
+  deleteItem,
   imageId,
 }) => {
   const navigation = useNavigation();
@@ -25,30 +27,64 @@ const ImageModalContent = ({
   const renderBody = useMemo(
     () => (
       <View>
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            deleteImage(imageId);
-            closeModal();
-          }}>
-          <MaterialCommunityIcons
-            name="delete"
-            size={iconSize}
-            color={Color.Red}
-          />
-          <Text style={styles.text}>Delete</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.container, styles.lastItem]}
-          onPress={() => {
-            navigation.navigate(ScreenName.assignImageFolder, {
-              imageId: imageId,
-            });
-            closeModal();
-          }}>
-          <Feather name="folder-plus" size={scale(15)} color={Color.Black} />
-          <Text style={styles.text}>Assign Folder</Text>
-        </Pressable>
+        {type == 'Folder' ? (
+          <View>
+            <Pressable
+              style={styles.container}
+              onPress={() => {
+                setEditBottomSheet(true);
+                openBottomSheet();
+                closeModal();
+              }}>
+              <MaterialIcons name="edit" size={iconSize} color={Color.Black} />
+              <Text style={styles.text}>Edit</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.container, styles.lastItem]}
+              onPress={() => {
+                deleteItem(imageId);
+                closeModal();
+              }}>
+              <MaterialCommunityIcons
+                name="delete"
+                size={iconSize}
+                color={Color.Red}
+              />
+              <Text style={styles.text}>Delete Folder</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <View>
+            <Pressable
+              style={styles.container}
+              onPress={() => {
+                deleteItem(imageId);
+                closeModal();
+              }}>
+              <MaterialCommunityIcons
+                name="delete"
+                size={iconSize}
+                color={Color.Red}
+              />
+              <Text style={styles.text}>Delete</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.container, styles.lastItem]}
+              onPress={() => {
+                navigation.navigate(ScreenName.assignImageFolder, {
+                  imageId: imageId,
+                });
+                closeModal();
+              }}>
+              <Feather
+                name="folder-plus"
+                size={scale(15)}
+                color={Color.Black}
+              />
+              <Text style={styles.text}>Assign Folder</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     ),
     [value, iconSize, userIcon, lockIcon],
