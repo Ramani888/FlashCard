@@ -21,6 +21,7 @@ import {ScreenName} from '../../component/Screen';
 import {apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
+import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 
 const inputFields = [
   {
@@ -51,6 +52,8 @@ const SignUpScreen = () => {
       console.log('responsesignup', response);
       if (response?.success == true) {
         navigation?.navigate(ScreenName.otpVerify, {email: value.email});
+      } else {
+        showMessageonTheScreen(response?.message);
       }
     } catch (error) {
       console.log('error in signUp api', error);
@@ -122,9 +125,9 @@ const SignUpScreen = () => {
       <Text style={styles.subtitle}>Welcome 👋 Please enter your Account.</Text>
       <Formik
         initialValues={{
-          email: 'nikunjramani567@gmail.com',
-          userName: 'Nikunj',
-          password: 'Nikunj123@',
+          email: '',
+          userName: '',
+          password: '',
         }}
         validationSchema={validationSchema}
         onSubmit={values => {

@@ -1,7 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeButton from '../../custome/CustomeButton';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -11,23 +18,24 @@ import Color from '../../component/Color';
 import Font from '../../component/Font';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import { apiGet, apiPost, apiPut } from '../../Api/ApiService';
+import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import { scale, verticalScale } from 'react-native-size-matters';
+import {scale, verticalScale} from 'react-native-size-matters';
 
 const {height, width} = Dimensions.get('window');
 
 const AssignFolderScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const route = useRoute();
-  const refRBSheet = useRef(null); 
-  const { setId } = route.params;
+  const refRBSheet = useRef(null);
+  const {setId} = route.params;
 
   const [visible, setVisible] = useState(false);
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
+  const [colorView, setColorView] = useState('');
   const [selectedFolderId, setSelectedFolderId] = useState('');
 
   useEffect(() => {
@@ -39,7 +47,9 @@ const AssignFolderScreen = () => {
   const getFolderData = async (message = false, messageValue) => {
     if (!message) setVisible(true);
     try {
-      const response = await apiGet(`${Api.Folder}?userId=${global?.user?._id}`);
+      const response = await apiGet(
+        `${Api.Folder}?userId=${global?.user?._id}`,
+      );
       setFolderData(response);
       if (message) showMessageonTheScreen(messageValue);
     } catch (error) {
@@ -71,9 +81,11 @@ const AssignFolderScreen = () => {
   const assignFolder = async () => {
     try {
       setVisible(true);
-      const response = await apiPut(`${Api.assignedFolder}?folderId=${selectedFolderId}&setId=${setId}`);
+      const response = await apiPut(
+        `${Api.assignedFolder}?folderId=${selectedFolderId}&setId=${setId}`,
+      );
       if (response?.success) {
-        navigation.goBack()
+        navigation.goBack();
         getFolderData(true, response?.message);
       }
     } catch (error) {
@@ -83,21 +95,27 @@ const AssignFolderScreen = () => {
   // =================================================================== //
 
   const renderFolder = useCallback(
-    ({ item, index }) => {
+    ({item, index}) => {
       const selected = selectedFolderId === item?._id;
       return (
         <Pressable
-          style={[styles.folderItem, { backgroundColor: selected ? Color.DarkGray : Color.White }]}
-          onPress={() => setSelectedFolderId(item?._id)}
-        >
+          style={[
+            styles.folderItem,
+            {
+              borderColor: selected ? Color.Black : Color.transparent,
+              borderWidth: selected ? scale(1.5) : scale(0),
+              backgroundColor: colorView == 'full' ? item.color : Color.White,
+            },
+          ]}
+          onPress={() => setSelectedFolderId(item?._id)}>
           <View style={styles.folderInfo}>
-            <View style={[styles.iconColor, { backgroundColor: item.color }]} />
+            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
             <Text style={styles.folderName}>{item?.name}</Text>
           </View>
         </Pressable>
       );
     },
-    [selectedFolderId]
+    [selectedFolderId],
   );
 
   const renderHeader = useMemo(
@@ -113,31 +131,35 @@ const AssignFolderScreen = () => {
         plusIconAction={() => refRBSheet.current.open()}
       />
     ),
-    []
+    [],
   );
 
-  const BottomSheets = useCallback(() => (
-    <RBSheet
-      ref={refRBSheet}
-      height={height*0.65}
-      openDuration={250}
-      customStyles={{ container: styles.bottomSheetContainer }}
-    >
-      <View style={styles.sheetContainer}>
-        <BottomSheetContent
-          closeBottomSheet={() => refRBSheet.current.close()}
-          title="CREATE FOLDER"
-          name={folderName}
-          setName={setFolderName}
-          status={folderStatus}
-          setStatus={setFolderStatus}
-          color={folderColor}
-          setColor={setFolderColor}
-          create={createFolder}
-        />
-      </View>
-    </RBSheet>
-  ), [folderName, folderStatus, folderColor]);
+  const BottomSheets = useCallback(
+    () => (
+      <RBSheet
+        ref={refRBSheet}
+        height={height * 0.65}
+        openDuration={250}
+        customStyles={{container: styles.bottomSheetContainer}}>
+        <View style={styles.sheetContainer}>
+          <BottomSheetContent
+            closeBottomSheet={() => refRBSheet.current.close()}
+            title="CREATE FOLDER"
+            name={folderName}
+            setName={setFolderName}
+            status={folderStatus}
+            setStatus={setFolderStatus}
+            color={folderColor}
+            setColor={setFolderColor}
+            setColorView={setColorView}
+            colorView={colorView}
+            create={createFolder}
+          />
+        </View>
+      </RBSheet>
+    ),
+    [folderName, folderStatus, folderColor, colorView],
+  );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
@@ -165,7 +187,13 @@ const AssignFolderScreen = () => {
           marginTop={verticalScale(15)}
           position="absolute"
           bottom={verticalScale(10)}
-          onPress={assignFolder}
+          onPress={() => {
+            if (selectedFolderId) {
+              assignFolder();
+            } else {
+              showMessageonTheScreen('Please select the folder');
+            }
+          }}
         />
       </View>
     </View>

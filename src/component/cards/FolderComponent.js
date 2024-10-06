@@ -21,7 +21,6 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
-import {useSelector} from 'react-redux';
 
 const {height, width} = Dimensions.get('window');
 
@@ -36,6 +35,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
+  const [colorView, setColorView] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
@@ -137,12 +137,17 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
       const isLastItem = index === folderData.length - 1;
       return (
         <Pressable
-          style={styles.folderItem}
+          style={[
+            styles.folderItem,
+            {backgroundColor: colorView == 'full' ? item.color : Color.White},
+          ]}
           onPress={() => {
             onFolderClick(item._id);
           }}>
           <View style={styles.folderInfo}>
-            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            {colorView == 'short' && (
+              <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            )}
             <Text style={styles.folderName}>{item.name}</Text>
           </View>
           <Pressable
@@ -161,7 +166,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
         </Pressable>
       );
     },
-    [openModal],
+    [openModal, colorView],
   );
 
   const openBottomSheet = () => {
@@ -192,13 +197,15 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
             setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
+            setColorView={setColorView}
+            colorView={colorView}
             create={editBottomSheet ? editFolder : createFolder}
             initialData={singleFolderItem ? singleFolderItem : ''}
           />
         </View>
       </RBSheet>
     );
-  }, [folderName, folderStatus, folderColor, editBottomSheet]);
+  }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 

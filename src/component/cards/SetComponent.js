@@ -29,6 +29,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
   const [setName, setSetName] = useState();
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
+  const [colorView, setColorView] = useState('');
   const [setId, setSetId] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
@@ -152,7 +153,10 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
       return (
         <View style={styles.itemContainer}>
           <Pressable
-            style={styles.setContainer}
+            style={[
+              styles.setContainer,
+              {backgroundColor: colorView == 'full' ? item.color : Color.White},
+            ]}
             onPress={() =>
               navigation.navigate(ScreenName.setDetail, {
                 setName: item?.name,
@@ -161,12 +165,18 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
               })
             }>
             <View style={styles.rowContainer}>
-              <Image
-                source={require('../../Assets/Img/bibleSign.png')}
-                style={styles.bibleIcon}
-                tintColor={item?.color}
-              />
-              <Text style={styles.setTitle}>{item?.name}</Text>
+              {colorView == 'short' && (
+                <Text
+                  style={[styles.colorBox, {backgroundColor: item?.color}]}
+                />
+              )}
+              <Text
+                style={[
+                  styles.setTitle,
+                  {color: colorView == 'full' ? Color.White : Color.Black},
+                ]}>
+                {item?.name}
+              </Text>
             </View>
             <View style={styles.rowWithGap}>
               <View style={styles.subSetContainer}>
@@ -174,6 +184,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
                 <Image
                   source={require('../../Assets/Img/cardIcon.png')}
                   style={styles.cardIcon}
+                  tintColor={colorView == 'full' ? Color.White : Color.Black}
                 />
               </View>
               <Pressable
@@ -227,13 +238,15 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
             setStatus={setSetStatus}
             color={setColor}
             setColor={setSetColor}
+            setColorView={setColorView}
+            colorView={colorView}
             create={editBottomSheet ? editSet : createSet}
             initialData={singleSetData ? singleSetData : ''}
           />
         </View>
       </RBSheet>
     );
-  }, [setName, setStatus, setColor, editBottomSheet]);
+  }, [setName, setStatus, setColor, editBottomSheet, colorView]);
 
   const renderBody = () => (
     <View style={styles.bodyContainer}>
@@ -327,6 +340,11 @@ const styles = StyleSheet.create({
   bibleIcon: {
     width: scale(13),
     height: scale(40),
+  },
+  colorBox: {
+    width: scale(13),
+    height: verticalScale(35),
+    borderRadius: scale(10),
   },
   setTitle: {
     fontSize: scale(15),

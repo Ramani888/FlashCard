@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../../component/Font';
@@ -61,7 +61,6 @@ const OtpVerifyScreen = () => {
         '',
         JSON.stringify(rawData),
       );
-      // console.log('responseverify', response);
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
         navigation.navigate(ScreenName.signIn);
@@ -109,29 +108,44 @@ const OtpVerifyScreen = () => {
           offTintColor={Color.mediumGray}
         />
 
-        <Text
-          style={{
-            fontSize: scale(14),
-            color: Color.Black,
-            fontFamily: Font.regular,
-            paddingBottom: verticalScale(10),
-          }}>
-          Didn’t recive email?
-        </Text>
-
         {isCounting && (
-          <Text style={styles.recendOtpText}>
-            You can resend code in{' '}
+          <View style={{alignItems:'center'}}>
             <Text
               style={{
                 fontSize: scale(14),
-                color: Color.Red,
+                color: Color.Black,
                 fontFamily: Font.regular,
+                paddingBottom: verticalScale(10),
               }}>
-              {countdown}{' '}
-            </Text>{' '}
-            Second
-          </Text>
+              Didn’t recive email?
+            </Text>
+
+            <Text style={styles.recendOtpText}>
+              You can resend code in{' '}
+              <Text
+                style={{
+                  fontSize: scale(14),
+                  color: Color.Red,
+                  fontFamily: Font.regular,
+                }}>
+                {countdown}{' '}
+              </Text>{' '}
+              Second
+            </Text>
+          </View>
+        )}
+
+        {!isCounting && (
+          <Pressable style={{alignSelf: 'flex-end', marginRight: scale(20)}}>
+            <Text
+              style={{
+                fontSize: scale(14),
+                color: Color.Black,
+                fontFamily: Font.medium,
+              }}>
+              Resend OTP
+            </Text>
+          </Pressable>
         )}
 
         <CustomeButton

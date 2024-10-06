@@ -8,6 +8,7 @@ import Font from '../component/Font';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomeHeader from '../custome/CustomeHeader';
+import LinearGradient from 'react-native-linear-gradient';
 
 const {height} = Dimensions.get('window');
 
@@ -28,6 +29,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     () => (
       <CustomeHeader
         goBack={true}
+        title={'AI'}
         iconColor={Color.White}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
@@ -37,48 +39,49 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   );
 
   return (
-    <View style={{flex:1}}>
+    <LinearGradient
+      colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
+      style={styles.container}>
       {renderHeader()}
-      <View style={{flex: 1, justifyContent: 'center',marginHorizontal:scale(15)}}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require('../Assets/Img/ai.png')}
-            style={styles.imageStyle}
-          />
-          <View style={styles.innerContainer}>
-            <View style={styles.textContainer}>
-              <Text style={styles.textStyle}>Get Verse or Ask Questions</Text>
-            </View>
-            <View style={styles.disclaimerContainer}>
-              <Text style={styles.disclaimerTitle}>DISCLAIMER</Text>
-              <Text style={styles.disclaimerText}>
-                AI is a tool to assist you and is not always accurate. Make sure
-                you always check the information provided.
-              </Text>
-            </View>
-            <View style={styles.iconRow}>
-              <IconWithLabel IconComponent={Feather} name="copy" label="Copy" />
-              <IconWithLabel
-                IconComponent={MaterialIcons}
-                name="refresh"
-                label="Refresh"
-              />
-            </View>
-          </View>
+
+      <View style={styles.innerContainer}>
+        <View style={styles.textContainer}>
+          <Text style={styles.textStyle}>Get Verse or Ask Questions</Text>
         </View>
-        <CustomeButton
-          buttonColor={Color.theme1}
-          buttonWidth="100%"
-          title="ENTER"
-          borderRadius={scale(10)}
-          fontSize={scale(15)}
-          fontColor={Color.White}
-          fontFamily={Font.semiBold}
-          marginTop={verticalScale(15)}
-          onPress={handleEnterPress}
-        />
+        <View style={styles.topView}>
+          <Text style={styles.text}>Example : </Text>
+          <Text style={styles.text}>Get John 3-16 kjv</Text>
+          <Text style={styles.text}>What are the name of the 12 opposites</Text>
+        </View>
+        <View style={styles.disclaimerContainer}>
+          <Text style={styles.disclaimerTitle}>DISCLAIMER</Text>
+          <Text style={styles.disclaimerText}>
+            AI is a tool to assist you and is not always accurate. Make sure you
+            always check the information provided.
+          </Text>
+        </View>
+        <View style={styles.iconRow}>
+          <IconWithLabel IconComponent={Feather} name="copy" label="Copy" />
+          <IconWithLabel
+            IconComponent={MaterialIcons}
+            name="refresh"
+            label="Refresh"
+          />
+        </View>
       </View>
-    </View>
+      <CustomeButton
+        buttonColor={Color.theme1}
+        buttonWidth="90%"
+        title="ENTER"
+        borderRadius={scale(10)}
+        fontSize={scale(15)}
+        fontColor={Color.White}
+        fontFamily={Font.semiBold}
+        alignSelf={'center'}
+        marginTop={verticalScale(15)}
+        onPress={handleEnterPress}
+      />
+    </LinearGradient>
   );
 };
 
@@ -92,6 +95,9 @@ const IconWithLabel = ({IconComponent, name, label}) => (
 export default React.memo(AiScreen);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   headerStyle: {
     height: verticalScale(90),
     alignItems: 'flex-end',
@@ -113,11 +119,12 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(15),
   },
   innerContainer: {
-    margin: scale(13),
-    borderRadius: scale(20),
+    marginHorizontal: scale(17),
+    borderRadius: scale(10),
     borderWidth: scale(1),
     borderColor: Color.LightGray,
-    height: height * 0.43,
+    height: height * 0.8,
+    backgroundColor: Color.White,
   },
   textContainer: {
     backgroundColor: '#ECECEC',
@@ -131,6 +138,8 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(10),
     paddingLeft: scale(20),
   },
+  topView: {margin: scale(10)},
+  text: {fontSize: scale(12), color: Color.Black, fontFamily: Font.regular},
   disclaimerContainer: {
     flex: 1,
     justifyContent: 'center',

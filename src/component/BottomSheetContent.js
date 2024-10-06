@@ -1,5 +1,12 @@
 import React, {useMemo, useState, useCallback, useEffect} from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Color from './Color';
 import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import CustomeButton from '../custome/CustomeButton';
@@ -35,6 +42,8 @@ const BottomSheetContent = ({
   setStatus,
   color,
   setColor,
+  setColorView,
+  colorView,
   create,
   initialData,
 }) => {
@@ -110,18 +119,48 @@ const BottomSheetContent = ({
           <View style={styles.separator} />
 
           <View style={styles.colorOptionsContainer}>
-            <View style={styles.colorOption}>
+            <Pressable
+              style={[
+                styles.colorOption,
+                {
+                  borderWidth: colorView == 'short' ? scale(1.8) : scale(1),
+                  borderColor:
+                    colorView == 'short' ? Color.Black : Color.LightGray,
+                },
+              ]}
+              onPress={() => setColorView('short')}>
               <Text style={[styles.colorIndicator, {backgroundColor: color}]} />
-            </View>
+            </Pressable>
             <Text style={styles.orText}>Or</Text>
-            <View style={[styles.colorOptionLarge, {backgroundColor: color}]} />
+            <Pressable
+              style={[
+                styles.colorOptionLarge,
+                {
+                  backgroundColor: color,
+                  borderWidth: colorView == 'full' ? scale(1.8) : scale(1),
+                  borderColor:
+                    colorView == 'full' ? Color.Black : Color.LightGray,
+                },
+              ]}
+              onPress={() => setColorView('full')}
+            />
           </View>
 
           <ColorCodePicker setSelectedColor={setColor} selectedColor={color} />
         </View>
       </View>
     ),
-    [name, color, setStatus, title, userIcon, lockIcon, toggleSwitch],
+    [
+      name,
+      color,
+      setStatus,
+      title,
+      userIcon,
+      lockIcon,
+      toggleSwitch,
+      setColorView,
+      colorView,
+    ],
   );
 
   return (

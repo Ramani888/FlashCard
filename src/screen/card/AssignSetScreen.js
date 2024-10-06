@@ -4,7 +4,6 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import CustomeButton from '../../custome/CustomeButton';
-import Entypo from 'react-native-vector-icons/Entypo';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import Font from '../../component/Font';
@@ -13,8 +12,6 @@ import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import {ScreenName} from '../../component/Screen';
-import {useSelector} from 'react-redux';
 
 const AssignSetScreen = () => {
   const navigation = useNavigation();
@@ -25,6 +22,7 @@ const AssignSetScreen = () => {
   const [setName, setSetName] = useState('');
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
+  const [colorView, setColorView] = useState('');
   const [selectedSetId, setSelectedSetId] = useState('');
   const {folderId, cardId} = route.params;
 
@@ -113,15 +111,21 @@ const AssignSetScreen = () => {
           <Pressable
             style={[
               styles.setContainer,
-              {backgroundColor: selected ? Color.DarkGray : Color.White},
+              {
+                borderColor: selected ? Color.theme1 : Color.transparent,
+                borderWidth: selected ? scale(1.5) : scale(0),
+                backgroundColor: colorView == 'full' ? item.color : Color.White,
+              },
             ]}
             onPress={() => setSelectedSetId(item?._id)}>
             <View style={styles.rowContainer}>
-              <Image
-                source={require('../../Assets/Img/bibleSign.png')}
-                style={styles.bibleIcon}
-                tintColor={item?.color}
-              />
+              {colorView == 'short' && (
+                <Image
+                  source={require('../../Assets/Img/bibleSign.png')}
+                  style={styles.bibleIcon}
+                  tintColor={item?.color}
+                />
+              )}
               <Text style={styles.setTitle}>{item?.name}</Text>
             </View>
             <View style={styles.rowWithGap}>
@@ -177,12 +181,14 @@ const AssignSetScreen = () => {
             setStatus={setSetStatus}
             color={setColor}
             setColor={setSetColor}
+            setColorView={setColorView}
+            colorView={colorView}
             create={createSet}
           />
         </View>
       </RBSheet>
     );
-  }, [setName, setStatus, setColor]);
+  }, [setName, setStatus, setColor, colorView]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
@@ -214,7 +220,13 @@ const AssignSetScreen = () => {
           marginTop={verticalScale(15)}
           position={'absolute'}
           bottom={verticalScale(10)}
-          onPress={() => assignSet()}
+          onPress={() => {
+            if (selectedSetId) {
+              assignSet();
+            } else {
+              showMessageonTheScreen('Please select the set');
+            }
+          }}
         />
       </View>
     );
@@ -257,6 +269,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: Color.White,
     padding: scale(5),
+    paddingVertical: verticalScale(10),
     borderRadius: scale(10),
   },
   rowContainer: {
