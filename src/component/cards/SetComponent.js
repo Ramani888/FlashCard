@@ -388,8 +388,8 @@ const styles = StyleSheet.create({
     height: scale(35),
     borderRadius: scale(10),
     marginTop: verticalScale(5),
-    paddingHorizontal: scale(5), // Add some padding if needed
-    alignSelf: 'flex-start', // Ensure the width wraps content
+    paddingHorizontal: scale(5), 
+    alignSelf: 'flex-start', 
   },
   folderIcon: {
     width: scale(26),

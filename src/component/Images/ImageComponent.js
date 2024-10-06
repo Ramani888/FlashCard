@@ -22,12 +22,14 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
+import {useIsFocused} from '@react-navigation/native';
 
 const {height, width} = Dimensions.get('window');
 
 const ImageComponent = ({folderId}) => {
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
+  const isFocused = useIsFocused();
   const [visible, setVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -37,7 +39,7 @@ const ImageComponent = ({folderId}) => {
 
   useEffect(() => {
     getImagesData(false);
-  }, []);
+  }, [isFocused]);
 
   // ==================================== Api ==================================== //
 
@@ -74,27 +76,10 @@ const ImageComponent = ({folderId}) => {
     }
   };
 
-  // const editImage = async (ImageId, imageFile) => {
-  //   var formdata = new FormData();
-  //   formdata.append('_id', pdfId);
-  //   formdata.append('image', imageFile);
-
-  //   try {
-  //     setVisible(true);
-  //     const response = await apiPut(Api.Images, '', formdata);
-  //     if (response?.success == true) {
-  //       getImagesData(true, response?.message);
-  //     }
-  //   } catch (error) {
-  //     console.log('error in upload image api', error);
-  //   }
-  // };
-
   const deleteImage = async imageId => {
     try {
       setVisible(true);
       const response = await apiDelete(`${Api.Images}?_id=${imageId}`);
-      // console.log('response', response);
       if (response?.success == true) {
         getImagesData(true, response?.message);
       }
@@ -155,26 +140,41 @@ const ImageComponent = ({folderId}) => {
     ({item, index}) => {
       const isLastItem = index === imageData.length - 1;
       return (
-        <View style={styles.imageContainer}>
-          <Image source={{uri: item?.url}} style={styles.image} />
-          <Pressable
-            ref={threeDotIconRef}
-            onPress={() => {
-              setImageId(item?._id);
-              openModal(isLastItem, index);
-            }}
-            style={styles.pressableIcon}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(13)}
-              color={Color.Black}
-              style={styles.dotsIcon}
+        <View>
+          <View style={styles.imageContainer}>
+            <Image
+              source={{uri: item?.url}}
+              style={styles.image}
+              resizeMode="cover"
             />
-          </Pressable>
+            <Pressable
+              ref={threeDotIconRef}
+              onPress={() => {
+                setImageId(item?._id);
+                openModal(isLastItem, index);
+              }}
+              style={styles.pressableIcon}>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(13)}
+                color={Color.Black}
+                style={styles.dotsIcon}
+              />
+            </Pressable>
+          </View>
+          <View style={[styles.folderContainer, {alignSelf: 'flex-end'}]}>
+            <Image
+              source={require('../../Assets/Img/folder.png')}
+              style={styles.folderIcon}
+            />
+            <Text style={styles.folderText}>
+              {item?.folderName ? item?.folderName : ''}
+            </Text>
+          </View>
         </View>
       );
     },
-    [openModal],
+    [imageData],
   );
 
   const renderBody = () => {
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     height: height * 0.79,
   },
   bodyContainer: {
-    flex:1,
+    flex: 1,
     marginBottom: verticalScale(60),
   },
   imageContainer: {
@@ -291,5 +291,26 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: scale(0.3),
     shadowRadius: scale(4),
+  },
+  folderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: scale(5),
+    backgroundColor: Color.White,
+    height: scale(25),
+    borderRadius: scale(5),
+    marginRight: scale(6),
+    alignSelf: 'flex-start',
+  },
+  folderIcon: {
+    width: scale(26),
+    height: scale(26),
+  },
+  folderText: {
+    fontSize: scale(11),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    textTransform: 'capitalize',
+    marginRight: scale(5),
   },
 });
