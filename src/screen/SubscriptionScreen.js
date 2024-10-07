@@ -53,7 +53,6 @@ const data = [
   },
 ];
 
-// Memoized list item component to prevent unnecessary re-renders
 const SubscriptionItem = memo(({item}) => (
   <View style={styles.subscriptionContainer}>
     <View style={styles.subscriptionInfo}>
@@ -73,7 +72,6 @@ const SubscriptionItem = memo(({item}) => (
 const SubscriptionScreen = () => {
   const navigation = useNavigation();
 
-  // Use useCallback to memoize functions
   const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
@@ -119,7 +117,7 @@ const SubscriptionScreen = () => {
   );
 };
 
-export default SubscriptionScreen;
+export default React.memo(SubscriptionScreen);
 
 const styles = StyleSheet.create({
   container: {
