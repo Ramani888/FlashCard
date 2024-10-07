@@ -67,7 +67,7 @@ const ProfileScreen = () => {
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
         global.user = response.user;
-        setProfileUpdate(true)
+        setProfileUpdate(true);
       }
     } catch (error) {
       console.log('error in updateProfilePicture api', error);
@@ -133,6 +133,7 @@ const ProfileScreen = () => {
         headerBackgroundColor={Color.transparent}
         goBack={true}
         profileImage={true}
+        profileUrl={global.user?.picture}
         edit={true}
         containerStyle={styles.headerStyle}
         openEditModal={openModal}
@@ -249,18 +250,31 @@ const ProfileScreen = () => {
         <View style={styles.separator} />
 
         <View style={styles.subscriptionContainer}>
-          <Text style={styles.subscriptionText}>Subscription</Text>
-          <Pressable
-            style={styles.subscriptionBox}
-            onPress={() => navigation.navigate(ScreenName.subscription)}>
-            <Image
-              source={require('../../Assets/Img/subscription.png')}
-              style={styles.subscriptionImage}
-            />
-            <Text style={styles.subscriptionTier}>TIER 4</Text>
-          </Pressable>
-          <View style={styles.separator} />
+          <View style={styles.subscriptionBoxContainer}>
+            <Text style={styles.subscriptionText}>Subscription</Text>
+            <Pressable
+              style={styles.subscriptionBox}
+              onPress={() => navigation.navigate(ScreenName.subscription)}>
+              <Image
+                source={require('../../Assets/Img/subscription.png')}
+                style={styles.subscriptionImage}
+              />
+              <Text style={styles.subscriptionTier}>TIER 1</Text>
+            </Pressable>
+          </View>
+          <View style={styles.subscriptionRightView}>
+            <View style={styles.aiCreditsContainer}>
+              <Text style={styles.aiCreditsText}>AI CREDITS</Text>
+              <Text style={styles.aiCreditsText}>50</Text>
+            </View>
+            <View style={styles.aiCreditsContainer}>
+              <Text style={styles.aiCreditsText}>STORAGE (2.3/3 GB)</Text>
+              <Text style={styles.aiCreditsText}>50</Text>
+            </View>
+          </View>
         </View>
+
+        <View style={styles.separator} />
       </View>
 
       <FlatList
@@ -268,22 +282,11 @@ const ProfileScreen = () => {
         renderItem={renderTab}
         numColumns={3}
         key={'_'}
-        contentContainerStyle={{paddingHorizontal: scale(15)}}
+        contentContainerStyle={{
+          paddingHorizontal: scale(15),
+          marginTop: verticalScale(20),
+        }}
       />
-
-      {/* <CustomeButton
-        title={'Logout'}
-        buttonWidth={'90%'}
-        buttonHeight={verticalScale(40)}
-        buttonColor={Color.White}
-        fontSize={scale(15)}
-        fontFamily={Font.semiBold}
-        fontColor={Color.theme1}
-        borderRadius={scale(10)}
-        marginBottom={verticalScale(25)}
-        alignSelf={'center'}
-        onPress={handleLogout}
-      /> */}
 
       {userNameBottomSheets()}
       {emailBottomSheets()}
@@ -361,25 +364,31 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(10),
   },
   subscriptionContainer: {
-    paddingVertical: verticalScale(15),
+    paddingTop: verticalScale(25),
+    paddingBottom: verticalScale(8),
+    flexDirection: 'row',
+  },
+  subscriptionBoxContainer: {
+    borderWidth: scale(2),
+    borderColor: '#146D8B',
+    padding: scale(10),
+    borderRadius: scale(10),
   },
   subscriptionText: {
-    fontSize: scale(20),
+    fontSize: scale(16),
     fontFamily: Font.medium,
     color: Color.White,
     textAlign: 'center',
   },
   subscriptionBox: {
-    flexDirection: 'row',
+    gap: verticalScale(5),
     alignItems: 'center',
-    borderWidth: scale(1),
-    borderColor: Color.WhiteDefault,
     alignSelf: 'center',
     paddingHorizontal: scale(10),
     borderRadius: scale(10),
     height: verticalScale(60),
-    marginTop: verticalScale(15),
-    marginBottom: verticalScale(3),
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(10),
   },
   subscriptionImage: {
     width: scale(36),
@@ -390,6 +399,23 @@ const styles = StyleSheet.create({
     color: Color.White,
     fontFamily: Font.medium,
     paddingLeft: scale(10),
+  },
+  subscriptionRightView: {gap: verticalScale(10)},
+  aiCreditsContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: scale(2),
+    borderColor: '#146D8B',
+    paddingVertical: verticalScale(9),
+    paddingHorizontal: scale(5),
+    marginLeft: scale(10),
+    borderRadius: scale(10),
+  },
+  aiCreditsText: {
+    fontSize: scale(15),
+    fontFamily: Font.medium,
+    color: Color.White,
   },
   tabContainer: {
     flex: 1,

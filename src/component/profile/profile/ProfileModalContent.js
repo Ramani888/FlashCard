@@ -68,36 +68,13 @@ const ProfileModalContent = ({
             handleLogout();
             closeModal();
           }}>
-          <MaterialCommunityIcons name="logout" size={scale(16)} color={Color.Black} />
-          <Text style={styles.text}>Logout</Text>
-        </Pressable>
-
-        {/* <Pressable
-          style={styles.container}
-          onPress={() => {
-            openUserNameBottomSheets();
-            closeModal();
-          }}>
-          <MaterialIcons name="edit" size={scale(15)} color={Color.Black} />
-          <Text style={styles.text}>Username</Text>
-        </Pressable> */}
-
-        {/* <Pressable
-          style={[
-            styles.container,
-            {borderBottomWidth: scale(0), marginBottom: verticalScale(-5)},
-          ]}
-          onPress={() => {
-            openEmailBottomSheets();
-            closeModal();
-          }}>
           <MaterialCommunityIcons
-            name="email-outline"
-            size={scale(19)}
-            color={Color.Black}
+            name="logout"
+            size={scale(16)}
+            color={Color.Red}
           />
-          <Text style={[styles.text, {marginLeft: scale(-3)}]}>Email</Text>
-        </Pressable> */}
+          <Text style={[styles.text, {color: Color.Red}]}>Logout</Text>
+        </Pressable>
       </View>
     );
   };

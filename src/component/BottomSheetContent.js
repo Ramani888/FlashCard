@@ -123,12 +123,11 @@ const BottomSheetContent = ({
               style={[
                 styles.colorOption,
                 {
-                  borderWidth: colorView == 'short' ? scale(1.8) : scale(1),
-                  borderColor:
-                    colorView == 'short' ? Color.Black : Color.LightGray,
+                  borderWidth: !colorView ? scale(1.8) : scale(1),
+                  borderColor: !colorView ? Color.Black : Color.LightGray,
                 },
               ]}
-              onPress={() => setColorView('short')}>
+              onPress={() => setColorView(false)}>
               <Text style={[styles.colorIndicator, {backgroundColor: color}]} />
             </Pressable>
             <Text style={styles.orText}>Or</Text>
@@ -137,12 +136,11 @@ const BottomSheetContent = ({
                 styles.colorOptionLarge,
                 {
                   backgroundColor: color,
-                  borderWidth: colorView == 'full' ? scale(1.8) : scale(1),
-                  borderColor:
-                    colorView == 'full' ? Color.Black : Color.LightGray,
+                  borderWidth: colorView ? scale(1.8) : scale(1),
+                  borderColor: colorView ? Color.Black : Color.LightGray,
                 },
               ]}
-              onPress={() => setColorView('full')}
+              onPress={() => setColorView(true)}
             />
           </View>
 

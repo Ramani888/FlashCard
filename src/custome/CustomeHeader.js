@@ -13,6 +13,7 @@ const CustomeHeader = ({
   goBack,
   title,
   profileImage,
+  profileUrl,
   edit,
   titleStyle,
   headerBackgroundColor,
@@ -61,9 +62,7 @@ const CustomeHeader = ({
             size="large"
             rounded
             source={{
-              uri: global.user?.picture
-                ? global.user?.picture
-                : 'https://example.com/avatar.jpg',
+              uri: profileUrl ? profileUrl : 'https://example.com/avatar.jpg',
             }}
             title="JD"
             containerStyle={styles.avatar}

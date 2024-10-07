@@ -36,7 +36,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
-  const [colorView, setColorView] = useState('');
+  const [colorView, setColorView] = useState(false);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
@@ -74,6 +74,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -93,6 +94,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     closeModal();
     setVisible(true);
@@ -140,13 +142,13 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
         <Pressable
           style={[
             styles.folderItem,
-            {backgroundColor: colorView == 'full' ? item.color : Color.White},
+            {backgroundColor: item?.isHighlight ? item.color : Color.White},
           ]}
           onPress={() => {
             onFolderClick(item._id);
           }}>
           <View style={styles.folderInfo}>
-            {colorView == 'short' && (
+            {!colorView && (
               <View style={[styles.iconColor, {backgroundColor: item.color}]} />
             )}
             <Text style={styles.folderName}>{item.name}</Text>

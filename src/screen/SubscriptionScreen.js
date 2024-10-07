@@ -1,4 +1,11 @@
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useCallback, memo} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../component/Color';
@@ -6,26 +13,32 @@ import {useNavigation} from '@react-navigation/native';
 import CustomeHeader from '../custome/CustomeHeader';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../component/Font';
+import Entypo from 'react-native-vector-icons/Entypo';
 
-// Move the data outside of the component to avoid recreating it on every render
 const data = [
   {
     id: '1',
     image: require('../Assets/Img/tier1.png'),
     name: 'Tier 1',
-    price: '$1',
+    price: '$5',
+    credits: 50,
+    cloud_storage: 3,
   },
   {
     id: '2',
     image: require('../Assets/Img/tier2.png'),
     name: 'Tier 2',
-    price: '$5',
+    price: '$20',
+    credits: 400,
+    cloud_storage: 15,
   },
   {
     id: '3',
     image: require('../Assets/Img/tier3.png'),
     name: 'Tier 3',
-    price: '$10',
+    price: '$40',
+    credits: 1000,
+    cloud_storage: 40,
   },
   {
     id: '4',
@@ -53,25 +66,47 @@ const data = [
   },
 ];
 
-const SubscriptionItem = memo(({item}) => (
-  <View style={styles.subscriptionContainer}>
-    <View style={styles.subscriptionInfo}>
-      <Image
-        source={item?.image}
-        style={styles.subscriptionImage}
-        resizeMode="contain"
-      />
-      <Text style={styles.subscriptionName}>{item?.name}</Text>
+// Optimized SubscriptionItem component with memo to prevent unnecessary re-renders
+const SubscriptionItem = memo(({item}) => {
+  return (
+    <View style={styles.subscriptionView}>
+      <View style={styles.subscriptionContainer}>
+        <View style={styles.subscriptionInfo}>
+          <Image
+            source={item?.image}
+            style={styles.subscriptionImage}
+            resizeMode="contain"
+          />
+          <Text style={styles.subscriptionName}>{item?.name}</Text>
+        </View>
+        <View style={styles.subscriptionPriceContainer}>
+          <Text style={styles.subscriptionPrice}>{item?.price}</Text>
+        </View>
+      </View>
+      <View style={styles.bottomView}>
+        {item?.credits && (
+          <View style={styles.creditView}>
+            <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
+            <Text style={styles.credit}>{item?.credits} AI credits</Text>
+          </View>
+        )}
+        {item?.cloud_storage && (
+          <View style={styles.creditView}>
+            <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
+            <Text style={styles.credit}>
+              {item?.cloud_storage} GB cloud storage
+            </Text>
+          </View>
+        )}
+      </View>
     </View>
-    <View style={styles.subscriptionPriceContainer}>
-      <Text style={styles.subscriptionPrice}>{item?.price}</Text>
-    </View>
-  </View>
-));
+  );
+});
 
 const SubscriptionScreen = () => {
   const navigation = useNavigation();
 
+  // Optimized header rendering using useCallback
   const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
@@ -84,6 +119,7 @@ const SubscriptionScreen = () => {
     );
   }, []);
 
+  // Optimized FlatList render item using useCallback
   const renderSubscription = useCallback(({item}) => {
     return <SubscriptionItem item={item} />;
   }, []);
@@ -96,23 +132,47 @@ const SubscriptionScreen = () => {
         {renderHeader()}
         <View style={styles.contentContainer}>
           <Image
-            source={require('../Assets/Img/multiStar.png')}
+            source={require('../Assets/Img/threeStar.png')}
             style={styles.image}
+            resizeMode='contain'
           />
           <Text style={styles.description}>
-            Subscription removes advertisement and is a way you can contribute
-            monthly to the ministry. The tiers are simply there if you feel led
-            to helping more.
+            Subscription is charged monthly. AI credits replenish monthly. All
+            information saved in cloud monthly.
           </Text>
         </View>
       </LinearGradient>
-      <FlatList
-        data={data}
-        renderItem={renderSubscription}
-        keyExtractor={item => item.id}
-        style={styles.list}
-        showsVerticalScrollIndicator={false}
-      />
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={[styles.subscriptionView, styles.freeSubscription]}>
+          <View style={styles.subscriptionContainer}>
+            <Text style={[styles.subscriptionName, styles.freeTierText]}>
+              FREE
+            </Text>
+            <View style={styles.subscriptionPriceContainer}>
+              <Text style={styles.subscriptionPrice}>$0</Text>
+            </View>
+          </View>
+          <View style={styles.bottomView}>
+            <View style={styles.creditView}>
+              <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
+              <Text style={styles.credit}>Watch ad to earn 3 AI credits</Text>
+            </View>
+            <View style={styles.creditView}>
+              <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
+              <Text style={styles.credit}>250 MB cloud storage</Text>
+            </View>
+          </View>
+        </View>
+
+        <FlatList
+          data={data}
+          renderItem={renderSubscription}
+          keyExtractor={item => item.id}
+          style={styles.list}
+          showsVerticalScrollIndicator={false}
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -124,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   gradient: {
-    // flex: 1,
+    // Adjust or remove the flex property based on your design needs
   },
   headerStyle: {
     backgroundColor: Color.transparent,
@@ -139,9 +199,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: scale(36),
-    width: scale(288),
-    marginVertical: verticalScale(5),
+    height: scale(70),
+    width: scale(300),
+    marginVertical: verticalScale(-10),
+    marginBottom:verticalScale(0)
   },
   description: {
     fontSize: scale(11),
@@ -154,17 +215,20 @@ const styles = StyleSheet.create({
   },
   list: {
     margin: scale(15),
+    marginTop: verticalScale(0),
   },
-  subscriptionContainer: {
+  subscriptionView: {
     backgroundColor: '#146D8B33',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     borderWidth: scale(1),
-    borderColor: Color.theme1,
-    alignItems: 'center',
     paddingVertical: scale(5),
     borderRadius: scale(14),
     marginBottom: verticalScale(10),
+    borderColor: Color.theme1,
+  },
+  subscriptionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   subscriptionInfo: {
     flexDirection: 'row',
@@ -196,5 +260,28 @@ const styles = StyleSheet.create({
     fontSize: scale(15),
     fontFamily: Font.regular,
     color: Color.White,
+  },
+  bottomView: {
+    marginTop: verticalScale(10),
+    gap: verticalScale(5),
+  },
+  creditView: {
+    flexDirection: 'row',
+    gap: scale(5),
+    alignItems: 'center',
+    marginLeft: scale(15),
+  },
+  credit: {
+    fontSize: scale(15),
+    fontFamily: Font.regular,
+    color: Color.Black,
+  },
+  freeSubscription: {
+    marginHorizontal: scale(15),
+    paddingVertical: scale(5),
+    marginTop: verticalScale(10),
+  },
+  freeTierText: {
+    marginLeft: scale(10),
   },
 });

@@ -30,7 +30,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
   const [setName, setSetName] = useState();
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
-  const [colorView, setColorView] = useState('');
+  const [colorView, setColorView] = useState(false);
   const [setId, setSetId] = useState('');
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
@@ -80,6 +80,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
       color: setColor,
       userId: global?.user?._id,
       ...(folderId ? {folderId: folderId} : {}),
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -100,6 +101,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
       isPrivate: setStatus,
       color: setColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     closeModal();
     setVisible(true);
@@ -156,7 +158,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
           <Pressable
             style={[
               styles.setContainer,
-              {backgroundColor: colorView == 'full' ? item.color : Color.White},
+              {backgroundColor: item?.isHighlight ? item.color : Color.White},
             ]}
             onPress={() =>
               navigation.navigate(ScreenName.setDetail, {
@@ -166,7 +168,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
               })
             }>
             <View style={styles.rowContainer}>
-              {colorView == 'short' && (
+              {!colorView && (
                 <Text
                   style={[styles.colorBox, {backgroundColor: item?.color}]}
                 />
@@ -174,7 +176,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
               <Text
                 style={[
                   styles.setTitle,
-                  {color: colorView == 'full' ? Color.White : Color.Black},
+                  {color: item?.isHighlight ? Color.White : Color.Black},
                 ]}>
                 {item?.name}
               </Text>
@@ -185,7 +187,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
                 <Image
                   source={require('../../Assets/Img/cardIcon.png')}
                   style={styles.cardIcon}
-                  tintColor={colorView == 'full' ? Color.White : Color.Black}
+                  tintColor={item?.isHighlight ? Color.White : Color.Black}
                 />
               </View>
               <Pressable
@@ -388,8 +390,8 @@ const styles = StyleSheet.create({
     height: scale(35),
     borderRadius: scale(10),
     marginTop: verticalScale(5),
-    paddingHorizontal: scale(5), 
-    alignSelf: 'flex-start', 
+    paddingHorizontal: scale(5),
+    alignSelf: 'flex-start',
   },
   folderIcon: {
     width: scale(26),

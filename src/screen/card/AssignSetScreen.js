@@ -22,7 +22,7 @@ const AssignSetScreen = () => {
   const [setName, setSetName] = useState('');
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
-  const [colorView, setColorView] = useState('');
+  const [colorView, setColorView] = useState(false);
   const [selectedSetId, setSelectedSetId] = useState('');
   const {folderId, cardId} = route.params;
 
@@ -56,6 +56,7 @@ const AssignSetScreen = () => {
       color: setColor,
       userId: global?.user?._id,
       ...(folderId ? {folderId: folderId} : {}),
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -114,12 +115,12 @@ const AssignSetScreen = () => {
               {
                 borderColor: selected ? Color.theme1 : Color.transparent,
                 borderWidth: selected ? scale(1.5) : scale(0),
-                backgroundColor: colorView == 'full' ? item.color : Color.White,
+                backgroundColor: item?.isHighlight ? item.color : Color.White,
               },
             ]}
             onPress={() => setSelectedSetId(item?._id)}>
             <View style={styles.rowContainer}>
-              {colorView == 'short' && (
+              {!colorView && (
                 <Image
                   source={require('../../Assets/Img/bibleSign.png')}
                   style={styles.bibleIcon}

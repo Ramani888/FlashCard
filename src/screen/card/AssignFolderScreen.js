@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -36,7 +37,7 @@ const AssignFolderScreen = () => {
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
-  const [colorView, setColorView] = useState('');
+  const [colorView, setColorView] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState('');
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const AssignFolderScreen = () => {
       isPrivate: folderStatus,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -105,12 +107,14 @@ const AssignFolderScreen = () => {
             {
               borderColor: selected ? Color.Black : Color.transparent,
               borderWidth: selected ? scale(1.5) : scale(0),
-              backgroundColor: colorView == 'full' ? item.color : Color.White,
+              backgroundColor: item?.isHighlight ? item.color : Color.White,
             },
           ]}
           onPress={() => setSelectedFolderId(item?._id)}>
           <View style={styles.folderInfo}>
-            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            {!colorView && (
+              <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            )}
             <Text style={styles.folderName}>{item?.name}</Text>
           </View>
         </Pressable>
@@ -273,5 +277,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: scale(50),
     marginVertical: verticalScale(15),
+  },
+  colorBox: {
+    width: scale(13),
+    height: verticalScale(35),
+    borderRadius: scale(10),
   },
 });
