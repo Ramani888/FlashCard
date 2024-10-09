@@ -36,6 +36,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
+  const [colorView, setColorView] = useState(false);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
@@ -65,6 +66,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -88,6 +90,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     closeModal();
     setVisible(true);
@@ -157,13 +160,15 @@ const PdfFolderComponent = ({onFolderClick}) => {
             setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
+            setColorView={setColorView}
+            colorView={colorView}
             create={editBottomSheet ? editPdfFolder : createPdfFolder}
             initialData={singleFolderItem ? singleFolderItem : ''}
           />
         </View>
       </RBSheet>
     );
-  }, [folderName, folderStatus, folderColor, editBottomSheet]);
+  }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
 
   const renderFolder = useCallback(
     ({item, index}) => {
@@ -171,12 +176,17 @@ const PdfFolderComponent = ({onFolderClick}) => {
 
       return (
         <Pressable
-          style={styles.folderItem}
+          style={[
+            styles.folderItem,
+            {backgroundColor: item?.isHighlight ? item.color : Color.White},
+          ]}
           onPress={() => {
             onFolderClick(item._id);
           }}>
           <View style={styles.folderInfo}>
-            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            {!colorView && (
+              <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            )}
             <Text style={styles.folderName}>{item.name}</Text>
           </View>
           <Pressable

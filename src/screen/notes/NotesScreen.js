@@ -39,11 +39,13 @@ const NotesScreen = () => {
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
+  console.log('singleNoteData0000000000000000000', singleNoteData);
   const [noteData, setNoteData] = useState([]);
-  console.log('noteData', noteData);
   const [noteName, setNoteName] = useState();
   const [noteStatus, setNoteStatus] = useState(0);
   const [noteColor, setNoteColor] = useState('');
+  const [colorView, setColorView] = useState(false);
+  console.log('colorView0000000000000000000', colorView);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
@@ -74,6 +76,7 @@ const NotesScreen = () => {
       name: noteName,
       color: noteColor,
       note: '',
+      isHighlight: colorView,
     };
     try {
       setVisible(true);
@@ -93,6 +96,7 @@ const NotesScreen = () => {
       name: editWithNote ? name : noteName,
       color: editWithNote ? color : noteColor,
       note: noteDesc,
+      isHighlight: colorView,
     };
     try {
       setVisible(true);
@@ -177,13 +181,22 @@ const NotesScreen = () => {
             setStatus={setNoteStatus}
             color={noteColor}
             setColor={setNoteColor}
+            setColorView={setColorView}
+            colorView={colorView}
             create={editBottomSheet ? editNote : createNote}
             initialData={singleNoteData ? singleNoteData : ''}
           />
         </View>
       </RBSheet>
     ),
-    [noteName, noteStatus, noteColor, editBottomSheet],
+    [
+      noteName,
+      noteStatus,
+      noteColor,
+      editBottomSheet,
+      colorView,
+      singleNoteData,
+    ],
   );
 
   const renderNotes = useCallback(
@@ -192,7 +205,10 @@ const NotesScreen = () => {
 
       return (
         <Pressable
-          style={styles.noteContainer}
+          style={[
+            styles.noteContainer,
+            {backgroundColor: item?.isHighlight ? item.color : Color.White},
+          ]}
           onPress={() => {
             setSingleNoteData(item);
             navigation.navigate(ScreenName.notesDetail, {
@@ -204,7 +220,9 @@ const NotesScreen = () => {
             });
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={[styles.color, {backgroundColor: item?.color}]} />
+            {!colorView && (
+              <Text style={[styles.color, {backgroundColor: item?.color}]} />
+            )}
             <Text style={styles.noteText}>{item?.name}</Text>
           </View>
           <Pressable

@@ -36,6 +36,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
+  const [colorView, setColorView] = useState(false);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
@@ -60,11 +61,12 @@ const ImageFolderComponent = ({onFolderClick}) => {
     }
   };
 
-  const createPdfFolder = async (message, messageValue) => {
+  const createImageFolder = async () => {
     const rawData = {
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -82,12 +84,13 @@ const ImageFolderComponent = ({onFolderClick}) => {
     }
   };
 
-  const editPdfFolder = async (message, messageValue) => {
+  const editImageFolder = async () => {
     const rawData = {
       _id: singleFolderItem?._id,
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     closeModal();
     setVisible(true);
@@ -160,13 +163,15 @@ const ImageFolderComponent = ({onFolderClick}) => {
             setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
-            create={editBottomSheet ? editPdfFolder : createPdfFolder}
+            setColorView={setColorView}
+            colorView={colorView}
+            create={editBottomSheet ? editImageFolder : createImageFolder}
             initialData={singleFolderItem ? singleFolderItem : ''}
           />
         </View>
       </RBSheet>
     );
-  }, [folderName, folderStatus, folderColor, editBottomSheet]);
+  }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
 
   const renderFolder = useCallback(
     ({item, index}) => {
@@ -174,13 +179,24 @@ const ImageFolderComponent = ({onFolderClick}) => {
 
       return (
         <Pressable
-          style={styles.folderItem}
+          style={[
+            styles.folderItem,
+            {backgroundColor: item?.isHighlight ? item.color : Color.White},
+          ]}
           onPress={() => {
             onFolderClick(item._id);
           }}>
           <View style={styles.folderInfo}>
-            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
-            <Text style={styles.folderName}>{item.name}</Text>
+            {!colorView && (
+              <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            )}
+            <Text
+              style={[
+                styles.folderName,
+                {color: item?.isHighlight ? Color.White : Color.Black},
+              ]}>
+              {item.name}
+            </Text>
           </View>
           <Pressable
             ref={threeDotIconRef}

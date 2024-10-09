@@ -37,6 +37,7 @@ const AssignImageFolder = () => {
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [selectedFolderId, setSelectedFolderId] = useState('');
+  const [colorView, setColorView] = useState(false);
 
   useEffect(() => {
     getImageFolderData(false);
@@ -59,11 +60,12 @@ const AssignImageFolder = () => {
     }
   };
 
-  const createPdfFolder = async (message, messageValue) => {
+  const createImageFolder = async (message, messageValue) => {
     const rawData = {
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -81,7 +83,7 @@ const AssignImageFolder = () => {
     }
   };
 
-  const assignPdfFolder = async () => {
+  const assignImageFolder = async () => {
     try {
       setVisible(true);
       const response = await apiPut(
@@ -105,12 +107,25 @@ const AssignImageFolder = () => {
         <Pressable
           style={[
             styles.folderItem,
-            {backgroundColor: selected ? Color.DarkGray : Color.White},
+            {
+              borderColor: selected ? Color.Black : Color.transparent,
+              borderWidth: selected ? scale(1.5) : scale(0),
+              backgroundColor: item?.isHighlight ? item.color : Color.White,
+            },
           ]}
           onPress={() => setSelectedFolderId(item?._id)}>
           <View style={styles.folderInfo}>
-            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
-            <Text style={styles.folderName}>{item?.name}</Text>
+            {!colorView && (
+              <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            )}
+            <Text
+              style={[
+                styles.folderName,
+                ,
+                {color: item?.isHighlight ? Color.White : Color.Black},
+              ]}>
+              {item?.name}
+            </Text>
           </View>
         </Pressable>
       );
@@ -151,12 +166,14 @@ const AssignImageFolder = () => {
             setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
-            create={createPdfFolder}
+            setColorView={setColorView}
+            colorView={colorView}
+            create={createImageFolder}
           />
         </View>
       </RBSheet>
     ),
-    [folderName, folderStatus, folderColor],
+    [folderName, folderStatus, folderColor, colorView],
   );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
@@ -192,7 +209,13 @@ const AssignImageFolder = () => {
           marginTop={verticalScale(15)}
           position="absolute"
           bottom={verticalScale(10)}
-          onPress={assignPdfFolder}
+          onPress={() => {
+            if (selectedFolderId) {
+              assignImageFolder();
+            } else {
+              showMessageonTheScreen('Please select the folder');
+            }
+          }}
         />
       </View>
     </View>

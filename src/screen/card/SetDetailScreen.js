@@ -21,6 +21,8 @@ import {useSelector} from 'react-redux';
 import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
 import NoDataView from '../../component/NoDataView';
 // import DraggableFlatList from 'react-native-draggable-flatlist';
+import MasonryFlatlist from 'react-native-masonry-grid';
+import DragList from 'react-native-draglist';
 
 const SetDetailScreen = () => {
   const route = useRoute();
@@ -208,14 +210,45 @@ const SetDetailScreen = () => {
     );
   };
 
+  async function onReordered(fromIndex, toIndex) {
+    const copy = [...data]; // Don't modify react data in-place
+    const removed = copy.splice(fromIndex, 1);
+
+    copy.splice(toIndex, 0, removed[0]); // Now insert at the new pos
+    console.log('copy',copy)
+    // setData(copy);
+  }
+
   const renderBody = useMemo(
     () => (
       <View style={styles.bodyContainer}>
         {layout == 'single' ? (
           <>
             {cardData?.length > 0 ? (
-              <FlatList
+              // <FlatList
+              //   data={cardData}
+              //   renderItem={({item}) => {
+              //     return (
+              //       <SimpleLayout
+              //         item={item}
+              //         updateCard={updateCard}
+              //         threeDotIconRef={threeDotIconRef}
+              //         setItem={setItem}
+              //         folderId={folderId}
+              //         setId={setId}
+              //         openCardModal={openCardModal}
+              //         openNoteModal={openNoteModal}
+              //       />
+              //     );
+              //   }}
+              //   keyExtractor={(item, index) => index.toString()}
+              //   style={styles.flatList}
+              //   showsVerticalScrollIndicator={false}
+              // />
+              <DragList
                 data={cardData}
+                keyExtractor={(item, index) => index.toString()}
+                onReordered={onReordered}
                 renderItem={({item}) => {
                   return (
                     <SimpleLayout
@@ -230,9 +263,8 @@ const SetDetailScreen = () => {
                     />
                   );
                 }}
-                keyExtractor={(item, index) => index.toString()}
-                style={styles.flatList}
                 showsVerticalScrollIndicator={false}
+                style={styles.flatList}
               />
             ) : (
               <NoDataView
@@ -243,18 +275,14 @@ const SetDetailScreen = () => {
             )}
           </>
         ) : (
-          // <DraggableFlatList
-          //   data={data} // data to be rendered
-          //   renderItem={renderItem}
-          //   keyExtractor={(item, index) => index.toString()} // unique key for each item
-          //   onDragEnd={({data}) => setData(data)} // Update state with new order after drag
-          //   style={styles.flatList}
-          //   showsVerticalScrollIndicator={false}
-          // />
           <>
             {cardData?.length > 0 ? (
-              <FlatList
+              <MasonryFlatlist
                 data={cardData}
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{paddingBottom: scale(50)}}
+                style={styles.masonryFlatlist}
                 renderItem={({item}) => {
                   return (
                     <CardGridLayout
@@ -269,12 +297,6 @@ const SetDetailScreen = () => {
                     />
                   );
                 }}
-                keyExtractor={(item, index) => index.toString()}
-                style={styles.flatList}
-                numColumns={2}
-                key={'_'}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{paddingBottom: scale(50)}}
               />
             ) : (
               <NoDataView

@@ -26,6 +26,8 @@ const PdfBottomSheetContent = ({
   name,
   setColor,
   color,
+  setColorView,
+  colorView,
   initialData,
   create,
 }) => {
@@ -44,6 +46,7 @@ const PdfBottomSheetContent = ({
     if (initialData) {
       setName(initialData?.name);
       setColor(initialData?.color);
+      initialData?.isHighlight ? setColorView(true) : setColorView(false);
     }
   }, [initialData, setName, setColor]);
 
@@ -70,11 +73,12 @@ const PdfBottomSheetContent = ({
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (name && color && fileResponse?.length > 0) {
+    if (name && color && initialData?.url || fileResponse?.length > 0) {
       initialData ? create(initialData?._id, file) : create('', file);
       closeBottomSheet();
       setName('');
       setColor('');
+      setColorView(false);
     } else {
       showMessageonTheScreen('All fields are required');
     }
@@ -127,11 +131,29 @@ const PdfBottomSheetContent = ({
           <Text style={styles.colorTitle}>Color</Text>
           <View style={styles.separator} />
           <View style={styles.colorOptionsContainer}>
-            <View style={styles.colorOption}>
-              <Text style={[styles.colorIndicator, {backgroundColor: color}]} />
-            </View>
+            <Pressable
+              style={[
+                styles.colorOption,
+                {
+                  borderWidth: !colorView ? scale(1.8) : scale(1),
+                  borderColor: !colorView ? Color.Black : Color.LightGray,
+                },
+              ]}
+              onPress={() => setColorView(false)}>
+              <Text style={[styles.colorIndicator,{backgroundColor: color}]} />
+            </Pressable>
             <Text style={styles.orText}>Or</Text>
-            <View style={[styles.colorOptionLarge, {backgroundColor: color}]} />
+            <Pressable
+              onPress={() => setColorView(true)}
+              style={[
+                styles.colorOptionLarge,
+                {
+                  backgroundColor: color,
+                  borderWidth: colorView ? scale(1.8) : scale(1),
+                  borderColor: colorView ? Color.Black : Color.LightGray,
+                },
+              ]}
+            />
           </View>
 
           <ColorCodePicker setSelectedColor={setColor} selectedColor={color} />
@@ -147,6 +169,7 @@ const PdfBottomSheetContent = ({
       setName,
       setColor,
       handleDocumentPick,
+      colorView,
     ],
   );
 

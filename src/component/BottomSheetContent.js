@@ -51,6 +51,7 @@ const BottomSheetContent = ({
     if (initialData) {
       setName(initialData?.name);
       setColor(initialData?.color);
+      initialData?.isHighlight ? setColorView(true) : setColorView(false);
     }
   }, [initialData]);
 
@@ -67,6 +68,7 @@ const BottomSheetContent = ({
       setName('');
       setStatus('');
       setColor('');
+      setColorView(false);
     } else {
       showMessageonTheScreen('All fields are required');
     }

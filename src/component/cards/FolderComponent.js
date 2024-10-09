@@ -208,7 +208,14 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
         </View>
       </RBSheet>
     );
-  }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
+  }, [
+    folderName,
+    folderStatus,
+    folderColor,
+    editBottomSheet,
+    colorView,
+    singleFolderItem,
+  ]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 

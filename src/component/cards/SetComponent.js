@@ -249,7 +249,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
         </View>
       </RBSheet>
     );
-  }, [setName, setStatus, setColor, editBottomSheet, colorView]);
+  }, [setName, setStatus, setColor, editBottomSheet, colorView, singleSetData]);
 
   const renderBody = () => (
     <View style={styles.bodyContainer}>

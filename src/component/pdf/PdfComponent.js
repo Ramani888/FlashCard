@@ -27,7 +27,6 @@ const {width, height} = Dimensions.get('window');
 const pdfData = [{name: 'pdf1'}, {name: 'pdf2'}, {name: 'pdf3'}];
 
 const PdfComponent = memo(({folderId}) => {
-  // console.log('folderId', folderId);
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,6 +36,7 @@ const PdfComponent = memo(({folderId}) => {
   const [pdfColor, setPdfColor] = useState('');
   const [pdfId, setPdfId] = useState('');
   const [singlePdfData, setSinglePdfData] = useState({});
+  const [colorView, setColorView] = useState(false);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
 
@@ -71,6 +71,7 @@ const PdfComponent = memo(({folderId}) => {
     formdata.append('color', pdfColor);
     formdata.append('name', pdfName);
     formdata.append('pdf', pdf);
+    formdata.append('isHighlight', colorView);
     try {
       setVisible(true);
       const response = await apiPost(Api.pdf, '', formdata);
@@ -88,7 +89,8 @@ const PdfComponent = memo(({folderId}) => {
     formdata.append('userId', global.user?._id);
     formdata.append('color', pdfColor);
     formdata.append('name', pdfName);
-    formdata.append('pdf', pdf);
+    formdata.append('pdf', pdf?.name ? pdf : '');
+    formdata.append('isHighlight', colorView);
     try {
       setVisible(true);
       const response = await apiPut(Api.pdf, '', formdata);
@@ -153,21 +155,41 @@ const PdfComponent = memo(({folderId}) => {
             name={pdfName}
             setColor={setPdfColor}
             color={pdfColor}
+            setColorView={setColorView}
+            colorView={colorView}
             initialData={singlePdfData ? singlePdfData : ''}
             create={editBottomSheet ? editPdf : createPdf}
           />
         </View>
       </RBSheet>
     );
-  }, [pdfName, pdfColor, editBottomSheet, singlePdfData]);
+  }, [pdfName, pdfColor, editBottomSheet, singlePdfData, colorView]);
 
   const renderPdf = useCallback(
     ({item, index}) => {
       const isLastItem = index === pdfData.length - 1;
       return (
         <View style={styles.itemContainer}>
-          <Pressable style={styles.folderItem} onPress={() => ''}>
-            <Text style={styles.folderName}>{item.name}</Text>
+          <Pressable
+            style={[
+              styles.folderItem,
+              {backgroundColor: item?.isHighlight ? item.color : Color.White},
+            ]}
+            onPress={() => ''}>
+            <View style={styles.folderInfo}>
+              {!colorView && (
+                <View
+                  style={[styles.iconColor, {backgroundColor: item.color}]}
+                />
+              )}
+              <Text
+                style={[
+                  styles.folderName,
+                  {color: item?.isHighlight ? Color.White : Color.Black},
+                ]}>
+                {item.name}
+              </Text>
+            </View>
             <Pressable
               ref={threeDotIconRef}
               onPress={() => {
@@ -199,7 +221,10 @@ const PdfComponent = memo(({folderId}) => {
             keyExtractor={item => item.name}
           />
         ) : (
-          <NoDataView content={'Pdf not found'} noDataViewStyle={{marginTop:verticalScale(-70)}}/>
+          <NoDataView
+            content={'Pdf not found'}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+          />
         )}
         {BottomSheets()}
       </View>
@@ -308,5 +333,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: scale(50),
     marginVertical: verticalScale(15),
+  },
+  iconColor: {
+    width: scale(11),
+    height: scale(35),
+    borderRadius: scale(8),
+  },
+  folderInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

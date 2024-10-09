@@ -36,6 +36,7 @@ const AssignPdfFolder = () => {
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
+  const [colorView, setColorView] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState('');
 
   useEffect(() => {
@@ -64,6 +65,7 @@ const AssignPdfFolder = () => {
       name: folderName,
       color: folderColor,
       userId: global?.user?._id,
+      isHighlight: colorView,
     };
     setVisible(true);
     try {
@@ -105,12 +107,18 @@ const AssignPdfFolder = () => {
         <Pressable
           style={[
             styles.folderItem,
-            {backgroundColor: selected ? Color.DarkGray : Color.White},
+            {
+              borderColor: selected ? Color.Black : Color.transparent,
+              borderWidth: selected ? scale(1.5) : scale(0),
+              backgroundColor: item?.isHighlight ? item.color : Color.White,
+            },
           ]}
           onPress={() => setSelectedFolderId(item?._id)}>
           <View style={styles.folderInfo}>
-            <View style={[styles.iconColor, {backgroundColor: item.color}]} />
-            <Text style={styles.folderName}>{item?.name}</Text>
+            {!colorView && (
+              <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+            )}
+            <Text style={[styles.folderName,{color: item?.isHighlight ? Color.White : Color.Black}]}>{item?.name}</Text>
           </View>
         </Pressable>
       );
@@ -151,12 +159,14 @@ const AssignPdfFolder = () => {
             setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
+            setColorView={setColorView}
+            colorView={colorView}
             create={createPdfFolder}
           />
         </View>
       </RBSheet>
     ),
-    [folderName, folderStatus, folderColor],
+    [folderName, folderStatus, folderColor, colorView],
   );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
