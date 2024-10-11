@@ -1,6 +1,7 @@
 import React, {useRef} from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
 import {useNavigation} from '@react-navigation/native';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../component/Color';
@@ -30,6 +31,8 @@ const CustomeHeader = ({
   plusIconAction,
   threeDotIcon,
   openSetDetailModal,
+  setChangeOrder,
+  changeOrder,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -55,6 +58,15 @@ const CustomeHeader = ({
           <AntDesign name="arrowleft" size={iconSize} color={iconColor} />
         </Pressable>
       )}
+
+      {changeOrder && (
+        <Pressable
+          onPress={() => setChangeOrder(false)}
+          style={[styles.iconContainer, iconStyle]}
+          hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+          <AntDesign name="close" size={iconSize} color={iconColor} />
+        </Pressable>
+      )}
       {title && <Text style={[styles.title, titleStyle]}>{title}</Text>}
       {profileImage && (
         <Pressable style={styles.avtarContainer}>
@@ -66,6 +78,15 @@ const CustomeHeader = ({
             }}
             title="JD"
             containerStyle={styles.avatar}
+          />
+        </Pressable>
+      )}
+      {changeOrder && (
+        <Pressable style={styles.check} onPress={() => setChangeOrder(false)}>
+          <FontAwesome6
+            name="check"
+            size={scale(23)}
+            color={Color.White}
           />
         </Pressable>
       )}
@@ -181,4 +202,5 @@ const styles = StyleSheet.create({
     padding: scale(10),
     marginBottom: verticalScale(5),
   },
+  check: {position: 'absolute', right: scale(15),top:verticalScale(54)},
 });

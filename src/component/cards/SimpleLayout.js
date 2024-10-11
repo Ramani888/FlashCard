@@ -1,4 +1,12 @@
-import {Alert, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState, useCallback, memo, useRef} from 'react';
 import Color from '../Color';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -17,6 +25,8 @@ const SimpleLayout = ({
   setId,
   openCardModal,
   openNoteModal,
+  onDragStart,
+  onDragEnd,
 }) => {
   const navigation = useNavigation();
   const infoIconRef = useRef();
@@ -58,7 +68,9 @@ const SimpleLayout = ({
   };
 
   return (
-    <View
+    <Pressable
+      onPressIn={onDragStart}
+      onPressOut={onDragEnd}
       ref={cardContainerRef}
       onLayout={onCardLayout}
       style={styles.cardContainer}>
@@ -120,7 +132,7 @@ const SimpleLayout = ({
         )}
         {!showNote && <Text style={styles.cardDesc}>{item?.bottom}</Text>}
       </View>
-    </View>
+    </Pressable>
   );
 };
 

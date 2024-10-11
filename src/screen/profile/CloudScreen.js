@@ -12,3 +12,4 @@ const CloudScreen = () => {
 export default React.memo(CloudScreen);
 
 const styles = StyleSheet.create({});
+

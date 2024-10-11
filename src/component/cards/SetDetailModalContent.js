@@ -25,7 +25,7 @@ const SetDetailModalContent = ({
   setLayout,
   layout,
   blurAllCard,
-  changeOrder,
+  setChangeOrder,
 }) => {
   const navigation = useNavigation();
 
@@ -41,7 +41,7 @@ const SetDetailModalContent = ({
         }
         text="Change Order"
         onPress={() => {
-          changeOrder();
+          setChangeOrder(true);
           closeModal();
         }}
       />

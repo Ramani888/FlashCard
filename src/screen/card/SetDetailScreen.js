@@ -2,9 +2,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import {scale, verticalScale} from 'react-native-size-matters';
-import {BlurView} from '@react-native-community/blur';
 import LinearGradient from 'react-native-linear-gradient';
-import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
@@ -37,6 +35,7 @@ const SetDetailScreen = () => {
   const [cardData, setCardData] = useState([]);
   const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
+  const [changeOrder, setChangeOrder] = useState(false);
   const {setName} = route.params;
   const threeDotIconRef = useRef();
   const {setId, folderId} = route.params;
@@ -121,10 +120,10 @@ const SetDetailScreen = () => {
 
   // ====================================== End ===================================== //
 
-  const changeOrder = () => {
-    const newData = [...cardData].reverse();
-    setCardData(newData);
-  };
+  // const changeOrder = () => {
+  //   const newData = [...cardData].reverse();
+  //   setCardData(newData);
+  // };
 
   const openModal = useCallback(ref => {
     if (ref.current) {
@@ -171,8 +170,8 @@ const SetDetailScreen = () => {
   const header = useMemo(
     () => (
       <CustomeHeader
-        goBack={true}
-        threeDotIcon={true}
+        goBack={changeOrder ? false : true}
+        threeDotIcon={changeOrder ? false : true}
         headerBackgroundColor={Color.transparent}
         title={
           <View style={styles.titleContainer}>
@@ -181,42 +180,48 @@ const SetDetailScreen = () => {
         }
         iconStyle={styles.iconStyle}
         openSetDetailModal={openModal}
+        setChangeOrder={setChangeOrder}
+        changeOrder={changeOrder ? true : false}
         titleStyle={styles.headerTitle}
         containerStyle={styles.headerStyle}
       />
     ),
-    [setName],
+    [setName, changeOrder],
   );
 
-  const renderItem = ({item, drag, isActive}) => {
+  function keyExtractor(str, _index) {
+    return str;
+  }
+
+  const renderItem = ({item, onDragStart, onDragEnd, isActive}) => {
     return (
-      <View
-        style={[
-          styles.item,
-          {backgroundColor: isActive ? 'lightgray' : 'white'},
-        ]}>
-        <SimpleLayout
-          item={item}
-          updateCard={updateCard}
-          threeDotIconRef={threeDotIconRef}
-          setItem={setItem}
-          folderId={folderId}
-          setId={setId}
-          openCardModal={openCardModal}
-          openNoteModal={openNoteModal}
-          onLongPress={drag} // Trigger drag on long press
-        />
-      </View>
+      // <TouchableOpacity
+      //   key={item}
+      //   onPressIn={onDragStart}
+      //   onPressOut={onDragEnd}>
+      //   <Text>{item}</Text>
+      // </TouchableOpacity>
+      <SimpleLayout
+        item={item}
+        updateCard={updateCard}
+        threeDotIconRef={threeDotIconRef}
+        setItem={setItem}
+        folderId={folderId}
+        setId={setId}
+        openCardModal={openCardModal}
+        openNoteModal={openNoteModal}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      />
     );
   };
 
-  async function onReordered(fromIndex, toIndex) {
-    const copy = [...data]; // Don't modify react data in-place
+  function onReordered(fromIndex, toIndex) {
+    const copy = [...cardData]; // Don't modify react data in-place
     const removed = copy.splice(fromIndex, 1);
 
     copy.splice(toIndex, 0, removed[0]); // Now insert at the new pos
-    console.log('copy',copy)
-    // setData(copy);
+    setCardData(copy);
   }
 
   const renderBody = useMemo(
@@ -225,7 +230,7 @@ const SetDetailScreen = () => {
         {layout == 'single' ? (
           <>
             {cardData?.length > 0 ? (
-              // <FlatList
+              // <DragList
               //   data={cardData}
               //   renderItem={({item}) => {
               //     return (
@@ -241,30 +246,16 @@ const SetDetailScreen = () => {
               //       />
               //     );
               //   }}
-              //   keyExtractor={(item, index) => index.toString()}
-              //   style={styles.flatList}
               //   showsVerticalScrollIndicator={false}
+              //   keyExtractor={item => item.id}
+              //   onDragEnd={onDragEnd}
+              //   lockScroll={false}
               // />
               <DragList
                 data={cardData}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={keyExtractor}
                 onReordered={onReordered}
-                renderItem={({item}) => {
-                  return (
-                    <SimpleLayout
-                      item={item}
-                      updateCard={updateCard}
-                      threeDotIconRef={threeDotIconRef}
-                      setItem={setItem}
-                      folderId={folderId}
-                      setId={setId}
-                      openCardModal={openCardModal}
-                      openNoteModal={openNoteModal}
-                    />
-                  );
-                }}
-                showsVerticalScrollIndicator={false}
-                style={styles.flatList}
+                renderItem={renderItem}
               />
             ) : (
               <NoDataView
@@ -336,7 +327,7 @@ const SetDetailScreen = () => {
             setLayout={setLayout}
             layout={layout}
             blurAllCard={blurAllCard}
-            changeOrder={changeOrder}
+            setChangeOrder={setChangeOrder}
           />
         }
         width={scale(150)}
