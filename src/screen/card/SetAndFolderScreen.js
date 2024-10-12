@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useRef, useEffect} from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   KeyboardAvoidingView,
   ScrollView,
@@ -25,7 +26,8 @@ const {width, height} = Dimensions.get('window');
 const SetAndFolderScreen = () => {
   const route = useRoute();
   const [search, setSearch] = useState(false);
-  const [searchHashtags, setSearchHashtags] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [tab, setTab] = useState('SET`');
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
@@ -75,6 +77,7 @@ const SetAndFolderScreen = () => {
         onPress={() => {
           setTab('SET');
           setFolderId('');
+          setSearchValue('');
         }}
       />
 
@@ -91,6 +94,7 @@ const SetAndFolderScreen = () => {
         onPress={() => {
           setTab('FOLDERS');
           setOpenSetSheet(false);
+          setSearchValue('');
         }}
       />
     </View>
@@ -113,8 +117,8 @@ const SetAndFolderScreen = () => {
                 <CustomeInputField
                   placeholder={'Search'}
                   placeholderTextColor={Color.Gainsboro}
-                  onChangeText={setSearchHashtags}
-                  value={searchHashtags}
+                  onChangeText={setSearchValue}
+                  value={searchValue}
                   backgroundColor={'#3a6675'}
                   width={width * 0.88}
                   height={height * 0.065}
@@ -137,23 +141,35 @@ const SetAndFolderScreen = () => {
             )}
             {buttons()}
           </LinearGradient>
+          {loading && (
+            <ActivityIndicator
+              animating={true}
+              size={'small'}
+              color={Color.theme1}
+              style={styles.loadingIndicator}
+            />
+          )}
           {tab == 'SET' && (
             <SetComponent
               folderId={folderId}
               openSetSheet={openSetSheet}
               setOpenSetSheet={setOpenSetSheet}
+              setLoading={setLoading}
+              search={searchValue}
             />
           )}
           {tab == 'FOLDERS' && (
             <FolderComponent
               onFolderClick={handleFolderClick}
               handleCreateSetClick={handleCreateSetClick}
+              setLoading={setLoading}
+              search={searchValue}
             />
           )}
         </View>
       </KeyboardAvoidingView>
     );
-  }, [renderHeader, search, tab]);
+  }, [renderHeader, search, tab, searchValue]);
 
   return renderBody();
 };
@@ -178,7 +194,7 @@ const styles = StyleSheet.create({
   },
   inputStyles: {
     fontSize: scale(13),
-    color: Color.Black,
+    color: Color.White,
     fontFamily: Font.regular,
     height: verticalScale(45),
   },
@@ -196,5 +212,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: scale(10),
+  },
+  loadingIndicator: {
+    alignSelf: 'center',
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(-10),
   },
 });

@@ -25,7 +25,12 @@ import NoDataView from '../NoDataView';
 
 const {height, width} = Dimensions.get('window');
 
-const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
+const FolderComponent = ({
+  onFolderClick,
+  handleCreateSetClick,
+  setLoading,
+  search,
+}) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -41,8 +46,12 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
   const refRBSheet = useRef();
 
   useEffect(() => {
-    getFolderData();
+    getFolderData(false);
   }, []);
+
+  useEffect(() => {
+    getFolderData(true, '');
+  }, [search]);
 
   useEffect(() => {
     if (singleFolderItem) {
@@ -54,18 +63,20 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
 
   // ================================== Api =================================== //
 
-  const getFolderData = async (message = '') => {
-    !message && setVisible(true);
+  const getFolderData = async (message, messageValue) => {
+    message == false && setVisible(true);
+    search && setLoading(true);
     try {
       const response = await apiGet(
-        `${Api.Folder}?userId=${global?.user?._id}`,
+        `${Api.Folder}?userId=${global?.user?._id}&search=${search}`,
       );
       setFolderData(response);
-      message && showMessageonTheScreen(message);
+      messageValue && showMessageonTheScreen(messageValue);
     } catch (error) {
       console.log('error in get folder api', error);
     } finally {
       setVisible(false);
+      setLoading(false);
     }
   };
 
@@ -82,7 +93,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
       setFolderName('');
       setFolderStatus(0);
       setFolderColor('');
-      getFolderData(response?.message);
+      getFolderData(true, response?.message);
     } catch (error) {
       console.log('error in create folder api', error);
     }
@@ -103,7 +114,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
       setFolderName('');
       setFolderStatus(0);
       setFolderColor('');
-      getFolderData(response?.message);
+      getFolderData(true, response?.message);
     } catch (error) {
       console.log('error in edit folder api', error);
     }
@@ -115,7 +126,7 @@ const FolderComponent = ({onFolderClick, handleCreateSetClick}) => {
       const response = await apiDelete(
         `${Api.Folder}?_id=${singleFolderItem?._id}`,
       );
-      getFolderData(response?.message);
+      getFolderData(true, response?.message);
     } catch (error) {
       console.log('error in delete folder api', error);
     }

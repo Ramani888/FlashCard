@@ -18,7 +18,14 @@ import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import {useSelector} from 'react-redux';
 import NoDataView from '../NoDataView';
 
-const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
+const SetComponent = ({
+  folderId,
+  openSetSheet,
+  setOpenSetSheet,
+  setLoading,
+  search,
+}) => {
+  console.log('search', search);
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,8 +43,12 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
   const refRBSheet = useRef();
 
   useEffect(() => {
-    getSetData();
+    getSetData(false);
   }, [isFocused]);
+
+  useEffect(() => {
+    getSetData(true, '');
+  }, [search]);
 
   useEffect(() => {
     if (singleSetData) {
@@ -57,19 +68,21 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
 
   // ===================================== Api ===================================== //
 
-  const getSetData = async (message = '') => {
-    !message && setVisible(true);
+  const getSetData = async (message, messageValue) => {
+    message == false && setVisible(true);
+    search && setLoading(true);
     try {
       const url = folderId
-        ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}`
-        : `${Api.Set}?userId=${global?.user?._id}`;
+        ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}&search=${search}`
+        : `${Api.Set}?userId=${global?.user?._id}&search=${search}`;
       const response = await apiGet(url);
       setSetData(response);
-      message && showMessageonTheScreen(message);
+      messageValue && showMessageonTheScreen(messageValue);
     } catch (error) {
       console.log('error in get folder api', error);
     } finally {
       setVisible(false);
+      setLoading(false);
     }
   };
 
@@ -88,7 +101,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
       setSetName('');
       setSetStatus('');
       setSetColor('');
-      getSetData(response?.message);
+      getSetData(true, response?.message);
     } catch (error) {
       console.log('error in create set api', error);
     }
@@ -110,7 +123,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
       setSetName('');
       setSetStatus(0);
       setSetColor('');
-      getSetData(response?.message);
+      getSetData(true, response?.message);
     } catch (error) {
       console.log('error in edit Set api', error);
     }
@@ -120,7 +133,7 @@ const SetComponent = ({folderId, openSetSheet, setOpenSetSheet}) => {
     try {
       setVisible(true);
       const response = await apiDelete(`${Api.Set}?_id=${singleSetData?._id}`);
-      getSetData(response?.message);
+      getSetData(true, response?.message);
     } catch (error) {
       console.log('error in delete set api', error);
     }
