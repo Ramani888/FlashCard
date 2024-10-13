@@ -6,7 +6,7 @@ import Color from '../../component/Color';
 import OTPTextInput from 'react-native-otp-textinput';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import CustomeButton from '../../custome/CustomeButton';
-import {apiPost} from '../../Api/ApiService';
+import {apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {ScreenName} from '../../component/Screen';
@@ -72,6 +72,21 @@ const OtpVerifyScreen = () => {
     }
   };
 
+  const ResendOtp = async () => {
+    try {
+      setVisible(true);
+      const response = await apiPut(`${Api.resendOtp}?email=${email}`);
+      if (response?.success == true) {
+        showMessageonTheScreen(response?.message);
+        setIsCounting(true);
+      }
+    } catch (error) {
+      console.log('error in verify otp api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
   // ===================================== End ==================================== //
 
   const handleOtpChange = text => {
@@ -96,7 +111,7 @@ const OtpVerifyScreen = () => {
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={styles.title}>Input OTP</Text>
         <Text style={styles.subtitle}>
-          We have sent the OTP Verification code to your haecal78@gmail.com.
+          We have sent the OTP Verification code to your {email}{' '}
           Check your Email and enter the code below.
         </Text>
         <OTPTextInput
@@ -109,7 +124,7 @@ const OtpVerifyScreen = () => {
         />
 
         {isCounting && (
-          <View style={{alignItems:'center'}}>
+          <View style={{alignItems: 'center'}}>
             <Text
               style={{
                 fontSize: scale(14),
@@ -136,7 +151,9 @@ const OtpVerifyScreen = () => {
         )}
 
         {!isCounting && (
-          <Pressable style={{alignSelf: 'flex-end', marginRight: scale(20)}}>
+          <Pressable
+            style={{alignSelf: 'flex-end', marginRight: scale(20)}}
+            onPress={() => ResendOtp()}>
             <Text
               style={{
                 fontSize: scale(14),

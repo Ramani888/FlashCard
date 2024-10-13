@@ -22,11 +22,13 @@ import CloudScreen from '../screen/profile/CloudScreen';
 import SubscriptionScreen from '../screen/SubscriptionScreen';
 import AssignPdfFolder from '../screen/pdf/AssignPdfFolder';
 import AssignImageFolder from '../screen/images/AssignImageFolder';
+import ResetPassword from '../screen/auth/ResetPassword';
 
 export const ScreenName = {
   signUp: 'SignUp',
   otpVerify: 'OtpVerify',
   signIn: 'SignIn',
+  resetPassword: 'ResetPassword',
   home: 'Home',
   setAndFolder: 'SetAndFolder',
   createCard: 'CreateCard',
@@ -54,6 +56,7 @@ export const ScreenPath = {
   SignUpScreen,
   OtpVerifyScreen,
   SignInScreen,
+  ResetPassword,
   HomeScreen,
   SetAndFolderScreen,
   CreateCardScreen,

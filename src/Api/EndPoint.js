@@ -3,6 +3,7 @@ const Base_url = 'https://biblestudycards.app/api';
 const Api = {
   signUp: `${Base_url}/signUp`,
   verifyOtp: `${Base_url}/signUp/verifyOtp`,
+  resendOtp: `${Base_url}/signUp/resendOtp`,
   signIn: `${Base_url}/login`,
   getCardType: `${Base_url}/card/type`,
   Folder: `${Base_url}/folder`,

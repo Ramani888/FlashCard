@@ -10,6 +10,7 @@ const AppStack = ({user}) => {
     signIn,
     signUp,
     otpVerify,
+    resetPassword,
     home,
     globalLiveFeed,
     setAndFolder,
@@ -37,6 +38,7 @@ const AppStack = ({user}) => {
     SignUpScreen,
     OtpVerifyScreen,
     SignInScreen,
+    ResetPassword,
     HomeScreen,
     GlobalLiveFeedScreen,
     SetAndFolderScreen,
@@ -79,6 +81,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={signIn}
         component={SignInScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={resetPassword}
+        component={ResetPassword}
         options={{headerShown: false}}
       />
 

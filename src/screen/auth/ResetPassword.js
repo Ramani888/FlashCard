@@ -1,20 +1,27 @@
-import React, {useState, memo, useEffect} from 'react';
-import {Pressable, StyleSheet, Text, View, Linking} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  ScrollView,
+} from 'react-native';
+import React, {useState} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters'; // moderateScale for balanced scaling
+import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
 import CustomeInputField from '../../custome/CustomeInputField';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeButton from '../../custome/CustomeButton';
+import {CheckBox} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import {apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
+import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 
 const inputFields = [
   {
@@ -25,52 +32,19 @@ const inputFields = [
   },
 ];
 
-const SignInScreen = () => {
+const ResetPassword = () => {
   const navigation = useNavigation();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState('');
 
-  // ===================================== Api =================================== //
-
-  const loginUser = async (email, password) => {
-    const rawData = {
-      email: email,
-      password: password,
-    };
-    try {
-      setVisible(true);
-      const response = await apiPost(Api.signIn, '', JSON.stringify(rawData));
-      console.log('response', response);
-      if (response?.success == true) {
-        await AsyncStorage.setItem('user', JSON.stringify(response?.user));
-        LoggedInUser();
-        showMessageonTheScreen(response?.message);
-      } else {
-        setError(response?.message);
-        setVisible(false);
-      }
-    } catch (error) {
-      console.log('error in login api', error);
-    }
-  };
-
-  const LoggedInUser = async () => {
-    try {
-      const userData = await AsyncStorage.getItem('user');
-      global.user = JSON.parse(userData);
-      navigation.navigate(ScreenName.home);
-    } catch (error) {
-      console.log('error in logged in', error);
-    } finally {
-      setVisible(false);
-    }
-  };
-
-  // ===================================== Api =================================== //
-
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
+
+  const toggleConfirmPasswordVisibility = () =>
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
   const openLink = url => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
@@ -81,6 +55,9 @@ const SignInScreen = () => {
     password: Yup.string()
       .min(8, 'Password must be at least 8 characters')
       .required('Password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm Password is required'),
   });
 
   const renderInputFields = (
@@ -103,11 +80,12 @@ const SignInScreen = () => {
         iconLeft={true}
         keyboardType={field.keyboardType || 'default'}
         inputStyles={styles.inputStyles}
+        errorTextStyles={styles.errorText}
         IconLeftComponent={
           <View style={styles.iconWrapper}>
             <MaterialCommunityIcons
               name={field.iconName}
-              size={moderateScale(17)}
+              size={scale(17)}
               color={Color.Gray}
             />
           </View>
@@ -118,15 +96,21 @@ const SignInScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}>
       <Loader visible={visible} />
-      <Text style={styles.title}>Sign In</Text>
-      <Text style={styles.subtitle}>Welcome 👋 Please enter your Account.</Text>
+      <Text style={styles.title}>Resset Password</Text>
       <Formik
-        initialValues={{email: '', password: ''}}
+        initialValues={{
+          email: '',
+          password: '',
+          confirmPassword: '',
+        }}
         validationSchema={validationSchema}
         onSubmit={values => {
-          loginUser(values.email, values.password);
+          console.log('values', values);
+          navigation?.navigate(ScreenName.otpVerify, {email: values.email});
         }}>
         {({
           handleChange,
@@ -147,7 +131,7 @@ const SignInScreen = () => {
 
             <CustomeInputField
               key={'password'}
-              placeholder={'Enter password'}
+              placeholder={'New Password'}
               placeholderTextColor={Color.mediumGray}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
@@ -157,11 +141,12 @@ const SignInScreen = () => {
               iconLeft={true}
               secureTextEntry={!isPasswordVisible}
               inputStyles={styles.inputStyles}
+              errorTextStyles={styles.errorText}
               IconLeftComponent={
                 <View style={styles.iconWrapper}>
                   <MaterialCommunityIcons
                     name={'key-outline'}
-                    size={moderateScale(17)}
+                    size={scale(17)}
                     color={Color.Gray}
                   />
                 </View>
@@ -173,7 +158,7 @@ const SignInScreen = () => {
                   onPress={togglePasswordVisibility}>
                   <MaterialCommunityIcons
                     name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
-                    size={moderateScale(17)}
+                    size={scale(17)}
                     color={Color.Gray}
                   />
                 </Pressable>
@@ -181,64 +166,83 @@ const SignInScreen = () => {
               inputContainerStyles={styles.inputContainer}
             />
 
-            <Pressable
-              style={styles.forgotPassBtn}
-              onPress={() => navigation.navigate(ScreenName.resetPassword)}>
-              <Text style={styles.forgotPassText}>Forgot Password?</Text>
-            </Pressable>
-
-            {error?.length > 0 && (
-              <Text style={styles.errorMessage}>{error}</Text>
-            )}
+            <CustomeInputField
+              key={'confrim password'}
+              placeholder={'Confirm New Password'}
+              placeholderTextColor={Color.mediumGray}
+              onChangeText={handleChange('confirmPassword')}
+              onBlur={handleBlur('confirmPassword')}
+              value={values.confirmPassword}
+              errors={errors.confirmPassword}
+              touched={touched.confirmPassword}
+              iconLeft={true}
+              secureTextEntry={!isConfirmPasswordVisible}
+              inputStyles={styles.inputStyles}
+              errorTextStyles={styles.errorText}
+              IconLeftComponent={
+                <View style={styles.iconWrapper}>
+                  <MaterialCommunityIcons
+                    name={'key-outline'}
+                    size={scale(17)}
+                    color={Color.Gray}
+                  />
+                </View>
+              }
+              iconRight={true}
+              IconRightComponent={
+                <Pressable
+                  style={styles.iconWrapper}
+                  onPress={toggleConfirmPasswordVisibility}>
+                  <MaterialCommunityIcons
+                    name={
+                      isConfirmPasswordVisible
+                        ? 'eye-outline'
+                        : 'eye-off-outline'
+                    }
+                    size={scale(17)}
+                    color={Color.Gray}
+                  />
+                </Pressable>
+              }
+              inputContainerStyles={styles.inputContainer}
+            />
 
             <CustomeButton
-              title={'SIGN IN'}
+              title={'COFIRM'}
               buttonWidth={'100%'}
               buttonHeight={verticalScale(45)}
               buttonColor={Color.theme1}
-              fontSize={moderateScale(15)}
+              fontSize={scale(15)}
               fontFamily={Font.semiBold}
               fontColor={Color.White}
-              borderRadius={moderateScale(10)}
-              marginTop={verticalScale(10)}
+              borderRadius={scale(10)}
+              marginTop={verticalScale(30)}
               onPress={handleSubmit}
             />
           </View>
         )}
       </Formik>
-
-      <View style={styles.signUpContainer}>
-        <Text style={styles.infoText}>
-          Don't have an account?{' '}
-          <Text
-            style={styles.signUpText}
-            onPress={() => navigation.navigate(ScreenName.signUp)}>
-            {' '}
-            Sign Up
-          </Text>
-        </Text>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
-export default memo(SignInScreen);
+export default React.memo(ResetPassword);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: scale(20),
+    padding: moderateScale(20),
   },
   title: {
-    fontSize: moderateScale(22),
+    fontSize: scale(20),
     color: Color.Black,
     fontFamily: Font.semiBold,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: moderateScale(14),
+    fontSize: scale(13),
     color: Color.mediumGray,
     fontFamily: Font.regular,
     textAlign: 'center',
@@ -252,31 +256,44 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: scale(1),
     borderColor: Color.LightGray,
-    paddingHorizontal: scale(10),
+    paddingHorizontal: moderateScale(8),
     backgroundColor: Color.White,
-    borderRadius: moderateScale(10),
-    marginTop: verticalScale(15),
+    borderRadius: scale(10),
+    marginTop: verticalScale(10),
     height: verticalScale(45),
   },
   inputStyles: {
-    fontSize: moderateScale(14),
-    height: verticalScale(45),
+    fontSize: scale(13),
     color: Color.Black,
     fontFamily: Font.regular,
+    height: verticalScale(45),
   },
   iconWrapper: {
     backgroundColor: Color.WhiteDefault,
-    padding: scale(5),
+    padding: moderateScale(5),
     borderRadius: scale(5),
   },
-  forgotPassBtn: {
-    marginVertical: verticalScale(10),
-    alignSelf: 'flex-end',
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: verticalScale(20),
   },
-  forgotPassText: {
-    fontSize: moderateScale(13),
-    fontFamily: Font.medium,
+  agreementText: {
+    fontSize: scale(12),
+    color: Color.mediumGray,
+    fontFamily: Font.regular,
+    flexShrink: 1,
+    lineHeight: verticalScale(20),
+  },
+  linkText: {
+    fontSize: scale(12),
     color: Color.Black,
+    fontFamily: Font.regular,
+    textDecorationLine: 'underline',
+  },
+  checkBox: {
+    backgroundColor: Color.transparent,
+    padding: 0,
   },
   signUpContainer: {
     flexDirection: 'row',
@@ -285,23 +302,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   infoText: {
-    fontSize: moderateScale(13),
+    fontSize: scale(13),
     color: Color.mediumGray,
     fontFamily: Font.regular,
-    width: '90%',
-    lineHeight: verticalScale(20),
     textAlign: 'center',
   },
   signUpText: {
-    fontSize: moderateScale(12),
-    color: Color.Black,
-    fontFamily: Font.medium,
-    textDecorationLine: 'underline',
+    fontSize: scale(13),
+    color: Color.theme1,
+    fontFamily: Font.semiBold,
   },
-  errorMessage: {
-    fontSize: moderateScale(13),
-    fontFamily: Font.medium,
+  errorText: {
+    fontSize: scale(12),
     color: Color.Red,
-    textAlign: 'center',
+    fontFamily: Font.regular,
+    marginTop: verticalScale(5),
   },
 });
