@@ -28,6 +28,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
+import * as Progress from 'react-native-progress';
 
 const {width, height} = Dimensions.get('window');
 
@@ -203,6 +204,11 @@ const ProfileScreen = () => {
     );
   }, []);
 
+  const currentStorage = 2.3;
+  const totalStorage = 3;
+
+  const progress = currentStorage / totalStorage;
+
   return (
     <LinearGradient
       colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
@@ -268,8 +274,16 @@ const ProfileScreen = () => {
               <Text style={styles.aiCreditsText}>50</Text>
             </View>
             <View style={styles.aiCreditsContainer}>
-              <Text style={styles.aiCreditsText}>STORAGE (2.3/3 GB)</Text>
-              <Text style={styles.aiCreditsText}>50</Text>
+              <Text style={styles.aiCreditsText}>
+                STORAGE ({currentStorage}/{totalStorage} GB)
+              </Text>
+              <Progress.Bar
+                progress={progress} // Dynamically set progress
+                width={150}
+                style={{marginTop: verticalScale(10)}}
+                color={Color.theme1}
+                height={verticalScale(15)}
+              />
             </View>
           </View>
         </View>

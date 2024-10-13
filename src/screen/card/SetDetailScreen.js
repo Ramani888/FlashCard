@@ -18,7 +18,6 @@ import SimpleLayout from '../../component/cards/SimpleLayout';
 import {useSelector} from 'react-redux';
 import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
 import NoDataView from '../../component/NoDataView';
-// import DraggableFlatList from 'react-native-draggable-flatlist';
 import MasonryFlatlist from 'react-native-masonry-grid';
 import DragList from 'react-native-draglist';
 
@@ -47,7 +46,7 @@ const SetDetailScreen = () => {
 
   // ====================================== Api ===================================== //
 
-  const getCardData = async (update, isBlur, deleteCard) => {
+  const getCardData = async (update, isBlur, deleteCard, position) => {
     try {
       if (!update && !deleteCard) {
         setVisible(true);
@@ -56,10 +55,14 @@ const SetDetailScreen = () => {
         `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${global.user?._id}`,
       );
       setCardData(response);
-      if (update) {
-        isBlur
-          ? showMessageonTheScreen('card is blured')
-          : showMessageonTheScreen('card is unBlured');
+      if (position) {
+        showMessageonTheScreen('Position changed successfully');
+      } else {
+        if (update) {
+          isBlur
+            ? showMessageonTheScreen('card is blured')
+            : showMessageonTheScreen('card is unBlured');
+        }
       }
     } catch (error) {
       console.log('error', error);
@@ -68,8 +71,8 @@ const SetDetailScreen = () => {
     }
   };
 
-  const updateCard = async (cardId, top, bottom, note, isBlur) => {
-    setVisible(true);
+  const updateCard = async (cardId, top, bottom, note, isBlur, position) => {
+    !position && setVisible(true);
     const rawData = {
       _id: cardId,
       userId: global?.user?._id,
@@ -79,11 +82,12 @@ const SetDetailScreen = () => {
       bottom: bottom,
       note: note,
       isBlur: isBlur,
+      position: position,
     };
     try {
       const response = await apiPut(Api.card, '', JSON.stringify(rawData));
       if (response) {
-        getCardData(true, isBlur);
+        getCardData(true, isBlur, '', true);
       }
     } catch (error) {
       console.log('error in update card', error);
@@ -118,12 +122,25 @@ const SetDetailScreen = () => {
     }
   };
 
-  // ====================================== End ===================================== //
+  const updatePosition = () => {
+    try {
+      setVisible(true);
+      cardData?.map((item, index) =>
+        updateCard(
+          item?._id,
+          item?.top,
+          item?.bottom,
+          item?.note,
+          item?.isBlur,
+          index,
+        ),
+      );
+    } catch (error) {
+      console.log('error in update position functionality');
+    }
+  };
 
-  // const changeOrder = () => {
-  //   const newData = [...cardData].reverse();
-  //   setCardData(newData);
-  // };
+  // ====================================== End ===================================== //
 
   const openModal = useCallback(ref => {
     if (ref.current) {
@@ -181,12 +198,13 @@ const SetDetailScreen = () => {
         iconStyle={styles.iconStyle}
         openSetDetailModal={openModal}
         setChangeOrder={setChangeOrder}
+        updatePosition={updatePosition}
         changeOrder={changeOrder ? true : false}
         titleStyle={styles.headerTitle}
         containerStyle={styles.headerStyle}
       />
     ),
-    [setName, changeOrder],
+    [setName, changeOrder, cardData],
   );
 
   function keyExtractor(str, _index) {
@@ -195,12 +213,6 @@ const SetDetailScreen = () => {
 
   const renderItem = ({item, onDragStart, onDragEnd, isActive}) => {
     return (
-      // <TouchableOpacity
-      //   key={item}
-      //   onPressIn={onDragStart}
-      //   onPressOut={onDragEnd}>
-      //   <Text>{item}</Text>
-      // </TouchableOpacity>
       <SimpleLayout
         item={item}
         updateCard={updateCard}
@@ -217,10 +229,10 @@ const SetDetailScreen = () => {
   };
 
   function onReordered(fromIndex, toIndex) {
-    const copy = [...cardData]; // Don't modify react data in-place
+    const copy = [...cardData];
     const removed = copy.splice(fromIndex, 1);
 
-    copy.splice(toIndex, 0, removed[0]); // Now insert at the new pos
+    copy.splice(toIndex, 0, removed[0]);
     setCardData(copy);
   }
 
@@ -230,33 +242,36 @@ const SetDetailScreen = () => {
         {layout == 'single' ? (
           <>
             {cardData?.length > 0 ? (
-              // <DragList
-              //   data={cardData}
-              //   renderItem={({item}) => {
-              //     return (
-              //       <SimpleLayout
-              //         item={item}
-              //         updateCard={updateCard}
-              //         threeDotIconRef={threeDotIconRef}
-              //         setItem={setItem}
-              //         folderId={folderId}
-              //         setId={setId}
-              //         openCardModal={openCardModal}
-              //         openNoteModal={openNoteModal}
-              //       />
-              //     );
-              //   }}
-              //   showsVerticalScrollIndicator={false}
-              //   keyExtractor={item => item.id}
-              //   onDragEnd={onDragEnd}
-              //   lockScroll={false}
-              // />
-              <DragList
-                data={cardData}
-                keyExtractor={keyExtractor}
-                onReordered={onReordered}
-                renderItem={renderItem}
-              />
+              changeOrder ? (
+                <DragList
+                  data={cardData}
+                  keyExtractor={keyExtractor}
+                  onReordered={onReordered}
+                  renderItem={renderItem}
+                  isActive={false}
+                />
+              ) : (
+                <FlatList
+                  data={cardData}
+                  keyExtractor={keyExtractor}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{paddingBottom: scale(50)}}
+                  renderItem={item => {
+                    return (
+                      <SimpleLayout
+                        item={item?.item}
+                        updateCard={updateCard}
+                        threeDotIconRef={threeDotIconRef}
+                        setItem={setItem}
+                        folderId={folderId}
+                        setId={setId}
+                        openCardModal={openCardModal}
+                        openNoteModal={openNoteModal}
+                      />
+                    );
+                  }}
+                />
+              )
             ) : (
               <NoDataView
                 content={'Card not found'}
@@ -300,7 +315,7 @@ const SetDetailScreen = () => {
         )}
       </View>
     ),
-    [cardData, layout],
+    [cardData, layout, changeOrder],
   );
 
   return (

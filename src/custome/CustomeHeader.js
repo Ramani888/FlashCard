@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../component/Color';
@@ -33,6 +33,7 @@ const CustomeHeader = ({
   openSetDetailModal,
   setChangeOrder,
   changeOrder,
+  updatePosition,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -82,12 +83,13 @@ const CustomeHeader = ({
         </Pressable>
       )}
       {changeOrder && (
-        <Pressable style={styles.check} onPress={() => setChangeOrder(false)}>
-          <FontAwesome6
-            name="check"
-            size={scale(23)}
-            color={Color.White}
-          />
+        <Pressable
+          style={styles.check}
+          onPress={() => {
+            updatePosition();
+            setChangeOrder(false);
+          }}>
+          <FontAwesome6 name="check" size={scale(23)} color={Color.White} />
         </Pressable>
       )}
       {searchIcon && (
@@ -202,5 +204,5 @@ const styles = StyleSheet.create({
     padding: scale(10),
     marginBottom: verticalScale(5),
   },
-  check: {position: 'absolute', right: scale(15),top:verticalScale(54)},
+  check: {position: 'absolute', right: scale(15), top: verticalScale(54)},
 });
