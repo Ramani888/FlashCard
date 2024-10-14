@@ -23,7 +23,7 @@ const OtpVerifyScreen = () => {
   const [otp, setOtp] = useState('');
   const [countdown, setCountdown] = useState(60);
   const [isCounting, setIsCounting] = useState(false);
-  const {email} = route.params;
+  const {email, password} = route.params;
 
   useEffect(() => {
     let timer;
@@ -64,6 +64,32 @@ const OtpVerifyScreen = () => {
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
         navigation.navigate(ScreenName.signIn);
+      } else {
+        showMessageonTheScreen(response?.message);
+      }
+    } catch (error) {
+      console.log('error in verify otp api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const forgotPasswordVerifyOtp = async () => {
+    const rawData = {
+      email: email,
+      password: password,
+      otp: otp,
+    };
+    try {
+      setVisible(true);
+      const response = await apiPut(
+        Api.forgotPasswordVerifyOtp,
+        '',
+        JSON.stringify(rawData),
+      );
+      if (response?.success == true) {
+        showMessageonTheScreen(response?.message);
+        navigation.navigate(ScreenName.signIn);
       }
     } catch (error) {
       console.log('error in verify otp api', error);
@@ -76,6 +102,7 @@ const OtpVerifyScreen = () => {
     try {
       setVisible(true);
       const response = await apiPut(`${Api.resendOtp}?email=${email}`);
+      console.log('response', response);
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
         setIsCounting(true);
@@ -100,7 +127,7 @@ const OtpVerifyScreen = () => {
 
   const handleVerify = () => {
     if (isValid && otp.length === 4) {
-      verifyOtp();
+      password ? forgotPasswordVerifyOtp() : verifyOtp();
     } else {
       showMessageonTheScreen('Invalid OTP, please check your input.');
     }
@@ -111,8 +138,8 @@ const OtpVerifyScreen = () => {
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={styles.title}>Input OTP</Text>
         <Text style={styles.subtitle}>
-          We have sent the OTP Verification code to your {email}{' '}
-          Check your Email and enter the code below.
+          We have sent the OTP Verification code to your {email} Check your
+          Email and enter the code below.
         </Text>
         <OTPTextInput
           handleTextChange={handleOtpChange}

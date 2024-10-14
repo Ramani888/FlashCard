@@ -5,6 +5,8 @@ const Api = {
   verifyOtp: `${Base_url}/signUp/verifyOtp`,
   resendOtp: `${Base_url}/signUp/resendOtp`,
   signIn: `${Base_url}/login`,
+  forgotPassword: `${Base_url}/profile/password`,
+  forgotPasswordVerifyOtp: `${Base_url}/profile/verifyOtp`,
   getCardType: `${Base_url}/card/type`,
   Folder: `${Base_url}/folder`,
   Set: `${Base_url}/set`,

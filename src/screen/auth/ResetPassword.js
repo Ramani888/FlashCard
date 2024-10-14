@@ -18,7 +18,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import {CheckBox} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
-import {apiPost} from '../../Api/ApiService';
+import {apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
@@ -39,6 +39,35 @@ const ResetPassword = () => {
     useState(false);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState('');
+
+  // ======================================= Api ====================================== //
+
+  const forgetPassword = async values => {
+    const rawData = {
+      email: values?.email,
+      password: values?.password,
+    };
+
+    try {
+      setVisible(true);
+      const response = await apiPut(
+        Api.forgotPassword,
+        '',
+        JSON.stringify(rawData),
+      );
+      if (response?.success == true) {
+        showMessageonTheScreen(response?.message);
+        navigation?.navigate(ScreenName.otpVerify, {
+          email: values.email,
+          password: values?.password,
+        });
+      }
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setVisible(false);
+    }
+  };
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
@@ -110,7 +139,7 @@ const ResetPassword = () => {
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log('values', values);
-          navigation?.navigate(ScreenName.otpVerify, {email: values.email});
+          forgetPassword(values);
         }}>
         {({
           handleChange,
