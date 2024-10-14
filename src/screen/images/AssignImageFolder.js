@@ -278,6 +278,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
+    width: '95%'
   },
   bottomSheetContainer: {
     borderTopLeftRadius: scale(30),

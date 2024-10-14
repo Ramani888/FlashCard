@@ -227,6 +227,12 @@ const ImageFolderComponent = ({onFolderClick}) => {
           marginHorizontal: scale(15),
           marginTop: verticalScale(15),
         }}>
+        <Pressable
+          style={styles.folderContainer}
+          onPress={() => onFolderClick('')}>
+          <Text style={styles.folderText}>ALL IMAGES</Text>
+        </Pressable>
+
         {pdfFolderdata?.length > 0 ? (
           <FlatList
             data={pdfFolderdata}
@@ -343,6 +349,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
+    width: '85%',
   },
   dotsIcon: {
     backgroundColor: Color.WhiteDefault,

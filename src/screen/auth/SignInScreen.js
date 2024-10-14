@@ -41,17 +41,18 @@ const SignInScreen = () => {
     try {
       setVisible(true);
       const response = await apiPost(Api.signIn, '', JSON.stringify(rawData));
-      console.log('response', response);
       if (response?.success == true) {
         await AsyncStorage.setItem('user', JSON.stringify(response?.user));
         LoggedInUser();
         showMessageonTheScreen(response?.message);
       } else {
-        setError(response?.message);
+        showMessageonTheScreen(response?.message);
         setVisible(false);
       }
     } catch (error) {
       console.log('error in login api', error);
+    } finally {
+      setVisible(false);
     }
   };
 
@@ -186,10 +187,6 @@ const SignInScreen = () => {
               onPress={() => navigation.navigate(ScreenName.resetPassword)}>
               <Text style={styles.forgotPassText}>Forgot Password?</Text>
             </Pressable>
-
-            {error?.length > 0 && (
-              <Text style={styles.errorMessage}>{error}</Text>
-            )}
 
             <CustomeButton
               title={'SIGN IN'}

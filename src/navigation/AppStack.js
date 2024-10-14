@@ -32,6 +32,7 @@ const AppStack = ({user}) => {
     privacy,
     aboutUs,
     subscription,
+    viewFullImage,
   } = ScreenName;
 
   const {
@@ -60,6 +61,7 @@ const AppStack = ({user}) => {
     AboutUsScreen,
     CloudScreen,
     SubscriptionScreen,
+    ViewFullImage,
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -183,6 +185,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={assignImageFolder}
         component={AssignImageFolder}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={viewFullImage}
+        component={ViewFullImage}
         options={{headerShown: false}}
       />
 

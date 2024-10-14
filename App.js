@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => {
       LottieSplashScreen.hide();
-    }, 1000);
+    }, 1500);
   }, []);
 
   return (

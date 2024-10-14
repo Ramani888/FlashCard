@@ -22,11 +22,13 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {ScreenName} from '../Screen';
 
 const {height, width} = Dimensions.get('window');
 
 const ImageComponent = ({folderId}) => {
+  const navigation = useNavigation();
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
   const isFocused = useIsFocused();
@@ -142,11 +144,19 @@ const ImageComponent = ({folderId}) => {
       return (
         <View>
           <View style={styles.imageContainer}>
-            <Image
-              source={{uri: item?.url}}
-              style={styles.image}
-              resizeMode="cover"
-            />
+            <Pressable
+              onPress={() =>
+                navigation.navigate(ScreenName.viewFullImage, {
+                  data: imageData,
+                  imageIndex: index,
+                })
+              }>
+              <Image
+                source={{uri: item?.url}}
+                style={styles.image}
+                resizeMode="cover"
+              />
+            </Pressable>
             <Pressable
               ref={threeDotIconRef}
               onPress={() => {
@@ -162,12 +172,20 @@ const ImageComponent = ({folderId}) => {
               />
             </Pressable>
           </View>
-          <View style={[styles.folderContainer, {alignSelf: 'flex-end'}]}>
+          {console.log('item?.folderName', item?.folderName?.length)}
+          <View style={styles.folderContainer}>
             <Image
               source={require('../../Assets/Img/folder.png')}
-              style={styles.folderIcon}
+              style={[
+                styles.folderIcon,
+                {marginRight: item?.folderName ? '' : scale(-10)},
+              ]}
             />
-            <Text style={styles.folderText}>
+            <Text
+              style={[
+                styles.folderText,
+                {width: item?.folderName?.length > 12 ? scale(68) : ''},
+              ]}>
               {item?.folderName ? item?.folderName : ''}
             </Text>
           </View>
@@ -297,10 +315,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: scale(5),
     backgroundColor: Color.White,
-    height: scale(25),
     borderRadius: scale(5),
     marginRight: scale(6),
     alignSelf: 'flex-start',
+    marginLeft: scale(6),
   },
   folderIcon: {
     width: scale(26),
@@ -312,5 +330,6 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     textTransform: 'capitalize',
     marginRight: scale(5),
+    width: scale(60),
   },
 });
