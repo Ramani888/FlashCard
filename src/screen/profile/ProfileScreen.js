@@ -278,7 +278,7 @@ const ProfileScreen = () => {
                 STORAGE ({currentStorage}/{totalStorage} GB)
               </Text>
               <Progress.Bar
-                progress={progress} // Dynamically set progress
+                progress={progress} 
                 width={150}
                 style={{marginTop: verticalScale(10)}}
                 color={Color.theme1}
@@ -383,6 +383,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   subscriptionBoxContainer: {
+    width:'42%',
     borderWidth: scale(2),
     borderColor: '#146D8B',
     padding: scale(10),
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     paddingLeft: scale(10),
   },
-  subscriptionRightView: {gap: verticalScale(10)},
+  subscriptionRightView: {gap: verticalScale(10),width:'55%'},
   aiCreditsContainer: {
     width: '100%',
     alignItems: 'center',

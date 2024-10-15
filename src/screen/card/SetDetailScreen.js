@@ -35,6 +35,7 @@ const SetDetailScreen = () => {
   const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
   const [changeOrder, setChangeOrder] = useState(false);
+  const [isAllBlur, setIsAllBlur] = useState(false);
   const {setName} = route.params;
   const threeDotIconRef = useRef();
   const {setId, folderId} = route.params;
@@ -95,6 +96,7 @@ const SetDetailScreen = () => {
   };
 
   const blurAllCard = async isBlur => {
+    setIsAllBlur(isBlur);
     try {
       setVisible(true);
       const response = await apiPut(
@@ -342,6 +344,7 @@ const SetDetailScreen = () => {
             setLayout={setLayout}
             layout={layout}
             blurAllCard={blurAllCard}
+            isBlur={isAllBlur}
             setChangeOrder={setChangeOrder}
           />
         }

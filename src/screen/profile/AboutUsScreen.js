@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import Color from '../../component/Color';
-import { scale, verticalScale } from 'react-native-size-matters';
+import {scale, verticalScale} from 'react-native-size-matters';
 import CustomeHeader from '../../custome/CustomeHeader';
 
 const AboutUsScreen = () => {
@@ -18,11 +18,10 @@ const AboutUsScreen = () => {
     );
   }, []);
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       {renderHeader()}
       <ScrollView style={styles.container}>
-        <View style={{marginBottom:verticalScale(20)}}>
-          {/* <Text style={styles.heading}>About Us</Text> */}
+        <View style={styles.section}>
           <Text style={styles.paragraph}>
             Welcome to <Text style={styles.bold}>Bible Study Toolkit</Text>, an
             all-in-one app created by a born-again Christian with the goal of
@@ -54,7 +53,7 @@ const AboutUsScreen = () => {
           <Text style={styles.listItem}>
             - Use AI to assist with your study and evangelism efforts
           </Text>
-          <Text style={[styles.listItem,styles.extra]}>
+          <Text style={[styles.listItem, styles.extra]}>
             - Equip yourself to share the Gospel with confidence
           </Text>
 
@@ -87,8 +86,6 @@ export default React.memo(AboutUsScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: scale(16),
-    backgroundColor: '#fff',
   },
   headerStyle: {
     backgroundColor: Color.transparent,
@@ -104,7 +101,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: verticalScale(15),
     textAlign: 'center',
-    color:Color.Black
+    color: Color.Black,
   },
   paragraph: {
     fontSize: scale(14),
@@ -123,5 +120,14 @@ const styles = StyleSheet.create({
     lineHeight: verticalScale(21),
     color: Color.Black,
   },
-  extra:{marginBottom:verticalScale(10)}
+  extra: {marginBottom: verticalScale(10)},
+  section: {
+    marginBottom: verticalScale(20),
+    backgroundColor: '#fff',
+    padding: scale(15),
+    borderRadius: scale(10),
+    elevation: scale(1),
+    margin: scale(15),
+    marginTop: verticalScale(5),
+  },
 });

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Platform,
   Pressable,
+  Keyboard,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -35,6 +36,23 @@ const CreateCardScreen = () => {
   const [note, setNote] = useState('');
   const [openAiBottomSheets, setOpenAIBottomsheet] = useState('');
   const {folderId, setId, initialData, editNote} = route.params;
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => setKeyboardOpen(true),
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => setKeyboardOpen(false),
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (initialData) {
@@ -59,7 +77,7 @@ const CreateCardScreen = () => {
       note: note,
     };
 
-    console.log('rawData',rawData)
+    console.log('rawData', rawData);
     try {
       setVisible(true);
       const response = await apiPost(Api.card, '', JSON.stringify(rawData));
@@ -203,7 +221,7 @@ const CreateCardScreen = () => {
             onPress={() => navigation.navigate(ScreenName.aiScreen)}
             style={[
               styles.aiButton,
-              {marginBottom: noteVisible ? verticalScale(90) : 0},
+              {marginBottom: noteVisible ? verticalScale(30) : 0},
             ]}>
             <Image
               source={require('../../Assets/Img/ai.png')}
@@ -220,9 +238,8 @@ const CreateCardScreen = () => {
             fontSize={scale(15)}
             fontColor={Color.White}
             fontFamily={Font.semiBold}
-            marginTop={verticalScale(15)}
+            marginTop={noteVisible ? verticalScale(0) : verticalScale(35)}
             marginBottom={verticalScale(0)}
-            position={'absolute'}
             bottom={verticalScale(10)}
             onPress={() => {
               if (initialData) {

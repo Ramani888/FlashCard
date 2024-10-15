@@ -25,8 +25,10 @@ const SetDetailModalContent = ({
   setLayout,
   layout,
   blurAllCard,
+  isBlur,
   setChangeOrder,
 }) => {
+  // console.log('isBlur',isBlur)
   const navigation = useNavigation();
 
   return (
@@ -53,9 +55,9 @@ const SetDetailModalContent = ({
             color={Color.Black}
           />
         }
-        text={'Blur All'}
+        text={isBlur ? 'Remove Blur' : 'Blur All'}
         onPress={() => {
-          blurAllCard(true);
+          isBlur ? blurAllCard(false) : blurAllCard(true);
           closeModal();
         }}
       />

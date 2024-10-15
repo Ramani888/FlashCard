@@ -116,11 +116,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: scale(10),
+    padding: scale(5),
     backgroundColor: '#f9f9f9',
   },
   section: {
     marginBottom: verticalScale(20),
+    backgroundColor: Color.White,
+    elevation: scale(1),
+    margin: scale(6),
+    marginTop:verticalScale(5),
+    padding: scale(15),
+    borderRadius:scale(10)
   },
   heading: {
     fontSize: scale(20),

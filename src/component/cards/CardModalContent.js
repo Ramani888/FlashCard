@@ -36,6 +36,7 @@ const CardModalContent = ({
         text="Edit"
         onPress={() => {
           navigation.navigate(ScreenName.createCard, {
+            editNote: true,
             initialData: item,
             folderId: folderId,
             setId: setId,

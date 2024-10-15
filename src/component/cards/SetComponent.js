@@ -186,13 +186,7 @@ const SetComponent = ({
                   style={[styles.colorBox, {backgroundColor: item?.color}]}
                 />
               )}
-              <Text
-                style={[
-                  styles.setTitle,
-                  {color: item?.isHighlight ? Color.White : Color.Black},
-                ]}>
-                {item?.name}
-              </Text>
+              <Text style={styles.setTitle}>{item?.name}</Text>
             </View>
             <View style={styles.rowWithGap}>
               <View style={styles.subSetContainer}>
@@ -200,7 +194,7 @@ const SetComponent = ({
                 <Image
                   source={require('../../Assets/Img/cardIcon.png')}
                   style={styles.cardIcon}
-                  tintColor={item?.isHighlight ? Color.White : Color.Black}
+                  tintColor={Color.Black}
                 />
               </View>
               <Pressable

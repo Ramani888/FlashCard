@@ -12,6 +12,7 @@ import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
+import NoDataView from '../../component/NoDataView';
 
 const AssignSetScreen = () => {
   const navigation = useNavigation();
@@ -113,7 +114,7 @@ const AssignSetScreen = () => {
             style={[
               styles.setContainer,
               {
-                borderColor: selected ? Color.theme1 : Color.transparent,
+                borderColor: selected ? Color.Black : Color.transparent,
                 borderWidth: selected ? scale(1.5) : scale(0),
                 backgroundColor: item?.isHighlight ? item.color : Color.White,
               },
@@ -206,7 +207,8 @@ const AssignSetScreen = () => {
             data={setData}
             renderItem={renderSet}
             keyExtractor={keyExtractor}
-            style={{marginTop: verticalScale(10)}}
+            style={{marginTop: verticalScale(10),marginBottom:verticalScale(55)}}
+            showsVerticalScrollIndicator={false}
           />
         ) : (
           <NoDataView content={'Set not found'} />
@@ -274,7 +276,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: Color.White,
     padding: scale(5),
-    paddingVertical: verticalScale(10),
+    paddingVertical: verticalScale(5),
     borderRadius: scale(10),
   },
   rowContainer: {
@@ -282,8 +284,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bibleIcon: {
-    width: scale(13),
-    height: scale(40),
+    width: scale(11),
+    height: scale(36),
+    borderRadius:scale(10)
   },
   setTitle: {
     fontSize: scale(15),
