@@ -39,13 +39,11 @@ const NotesScreen = () => {
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
-  console.log('singleNoteData0000000000000000000', singleNoteData);
   const [noteData, setNoteData] = useState([]);
   const [noteName, setNoteName] = useState();
   const [noteStatus, setNoteStatus] = useState(0);
   const [noteColor, setNoteColor] = useState('');
   const [colorView, setColorView] = useState(false);
-  console.log('colorView0000000000000000000', colorView);
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
 
@@ -89,14 +87,22 @@ const NotesScreen = () => {
     }
   };
 
-  const editNote = async (editWithNote, noteId, name, color, noteDesc) => {
+  const editNote = async (
+    editWithNote,
+    noteId,
+    name,
+    color,
+    noteDesc,
+    isColorView,
+  ) => {
+    console.log('isColorView', isColorView);
     const rawData = {
       _id: editWithNote ? noteId : singleNoteData?._id,
       userId: global?.user?._id,
       name: editWithNote ? name : noteName,
       color: editWithNote ? color : noteColor,
       note: noteDesc,
-      isHighlight: colorView,
+      isHighlight: isColorView ? isColorView : colorView,
     };
     try {
       setVisible(true);
@@ -216,6 +222,7 @@ const NotesScreen = () => {
               note: item?.note,
               noteId: item?._id,
               noteColor: item?.color,
+              colorView: item?.isHighlight,
               editNote,
             });
           }}>

@@ -16,7 +16,7 @@ const NoteDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [notes, setNotes] = useState('');
-  const {noteName, note, noteId, noteColor, editNote} = route.params;
+  const {noteName, note, noteId, noteColor, editNote, colorView} = route.params;
 
   useEffect(() => {
     if (note) {
@@ -56,7 +56,7 @@ const NoteDetailScreen = () => {
   };
 
   const saveNote = () => {
-    editNote(true, noteId, noteName, noteColor, notes);
+    editNote(true, noteId, noteName, noteColor, notes, colorView);
     navigation.goBack();
   };
 

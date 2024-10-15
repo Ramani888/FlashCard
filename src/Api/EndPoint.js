@@ -27,6 +27,7 @@ const Api = {
   folderImage: `${Base_url}/folder/images`,
   Images: `${Base_url}/images`,
   profilePic: `${Base_url}/profile/picture`,
+  subscription: `${Base_url}/profile/subscription`,
 };
 
 export default Api;

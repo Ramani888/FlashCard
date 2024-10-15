@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, memo} from 'react';
+import React, {useCallback, memo, useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../component/Color';
 import {useNavigation} from '@react-navigation/native';
@@ -14,88 +14,44 @@ import CustomeHeader from '../custome/CustomeHeader';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Font from '../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {apiGet} from '../Api/ApiService';
+import Api from '../Api/EndPoint';
+import Loader from '../component/Loader';
 
-const data = [
-  {
-    id: '1',
-    image: require('../Assets/Img/tier1.png'),
-    name: 'Tier 1',
-    price: '$5',
-    credits: 50,
-    cloud_storage: 3,
-  },
-  {
-    id: '2',
-    image: require('../Assets/Img/tier2.png'),
-    name: 'Tier 2',
-    price: '$20',
-    credits: 400,
-    cloud_storage: 15,
-  },
-  {
-    id: '3',
-    image: require('../Assets/Img/tier3.png'),
-    name: 'Tier 3',
-    price: '$40',
-    credits: 1000,
-    cloud_storage: 40,
-  },
-  {
-    id: '4',
-    image: require('../Assets/Img/tier4.png'),
-    name: 'Tier 4',
-    price: '$25',
-  },
-  {
-    id: '5',
-    image: require('../Assets/Img/tier5.png'),
-    name: 'Tier 5',
-    price: '$50',
-  },
-  {
-    id: '6',
-    image: require('../Assets/Img/tier6.png'),
-    name: 'Tier 6',
-    price: '$75',
-  },
-  {
-    id: '7',
-    image: require('../Assets/Img/tier7.png'),
-    name: 'Tier 7',
-    price: '$100',
-  },
-];
-
-// Optimized SubscriptionItem component with memo to prevent unnecessary re-renders
 const SubscriptionItem = memo(({item}) => {
+  console.log('item?.points[0]', item?.points[0]);
   return (
     <View style={styles.subscriptionView}>
       <View style={styles.subscriptionContainer}>
         <View style={styles.subscriptionInfo}>
           <Image
-            source={item?.image}
+            source={{uri: item?.icon}}
             style={styles.subscriptionImage}
             resizeMode="contain"
           />
-          <Text style={styles.subscriptionName}>{item?.name}</Text>
+          <Text
+            style={[
+              styles.subscriptionName,
+              item?.name == 'FREE' && styles.freeName,
+            ]}>
+            {item?.name}
+          </Text>
         </View>
         <View style={styles.subscriptionPriceContainer}>
-          <Text style={styles.subscriptionPrice}>{item?.price}</Text>
+          <Text style={styles.subscriptionPrice}>${item?.price}</Text>
         </View>
       </View>
       <View style={styles.bottomView}>
-        {item?.credits && (
+        {item?.points[0] && (
           <View style={styles.creditView}>
             <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
-            <Text style={styles.credit}>{item?.credits} AI credits</Text>
+            <Text style={styles.credit}>{item?.points[0]}</Text>
           </View>
         )}
-        {item?.cloud_storage && (
+        {item?.points[1] && (
           <View style={styles.creditView}>
             <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
-            <Text style={styles.credit}>
-              {item?.cloud_storage} GB cloud storage
-            </Text>
+            <Text style={styles.credit}>{item?.points[1]}</Text>
           </View>
         )}
       </View>
@@ -105,8 +61,33 @@ const SubscriptionItem = memo(({item}) => {
 
 const SubscriptionScreen = () => {
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
+  const [subscriptionData, setSubscriptionData] = useState([]);
 
-  // Optimized header rendering using useCallback
+  useEffect(() => {
+    getSubscriptionData();
+  }, []);
+
+  // ================================= Api =============================== //
+
+  const getSubscriptionData = async (message, messageValue) => {
+    try {
+      setVisible(true);
+      const url = `${Api.subscription}`;
+
+      const response = await apiGet(url);
+      if (response) {
+        setSubscriptionData(response);
+      }
+    } catch (error) {
+      console.log('error in getpdf api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  // ================================= End =============================== //
+
   const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
@@ -119,13 +100,13 @@ const SubscriptionScreen = () => {
     );
   }, []);
 
-  // Optimized FlatList render item using useCallback
   const renderSubscription = useCallback(({item}) => {
     return <SubscriptionItem item={item} />;
   }, []);
 
   return (
     <View style={styles.container}>
+      <Loader visible={visible} />
       <LinearGradient
         colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
         style={styles.gradient}>
@@ -134,7 +115,7 @@ const SubscriptionScreen = () => {
           <Image
             source={require('../Assets/Img/threeStar.png')}
             style={styles.image}
-            resizeMode='contain'
+            resizeMode="contain"
           />
           <Text style={styles.description}>
             Subscription is charged monthly. AI credits replenish monthly. All
@@ -143,36 +124,13 @@ const SubscriptionScreen = () => {
         </View>
       </LinearGradient>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={[styles.subscriptionView, styles.freeSubscription]}>
-          <View style={styles.subscriptionContainer}>
-            <Text style={[styles.subscriptionName, styles.freeTierText]}>
-              FREE
-            </Text>
-            <View style={styles.subscriptionPriceContainer}>
-              <Text style={styles.subscriptionPrice}>$0</Text>
-            </View>
-          </View>
-          <View style={styles.bottomView}>
-            <View style={styles.creditView}>
-              <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
-              <Text style={styles.credit}>Watch ad to earn 3 AI credits</Text>
-            </View>
-            <View style={styles.creditView}>
-              <Entypo name="dot-single" size={scale(20)} color={Color.Black} />
-              <Text style={styles.credit}>250 MB cloud storage</Text>
-            </View>
-          </View>
-        </View>
-
-        <FlatList
-          data={data}
-          renderItem={renderSubscription}
-          keyExtractor={item => item.id}
-          style={styles.list}
-          showsVerticalScrollIndicator={false}
-        />
-      </ScrollView>
+      <FlatList
+        data={subscriptionData}
+        renderItem={renderSubscription}
+        keyExtractor={item => item.id}
+        style={styles.list}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 };
@@ -202,7 +160,7 @@ const styles = StyleSheet.create({
     height: scale(70),
     width: scale(300),
     marginVertical: verticalScale(-10),
-    marginBottom:verticalScale(0)
+    marginBottom: verticalScale(0),
   },
   description: {
     fontSize: scale(11),
@@ -215,7 +173,7 @@ const styles = StyleSheet.create({
   },
   list: {
     margin: scale(15),
-    marginTop: verticalScale(0),
+    marginTop: verticalScale(15),
   },
   subscriptionView: {
     backgroundColor: '#146D8B33',
@@ -281,7 +239,5 @@ const styles = StyleSheet.create({
     paddingVertical: scale(5),
     marginTop: verticalScale(10),
   },
-  freeTierText: {
-    marginLeft: scale(10),
-  },
+  freeName: {marginLeft: scale(-40)},
 });
