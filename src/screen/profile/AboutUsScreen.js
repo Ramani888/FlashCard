@@ -82,6 +82,8 @@ const AboutUsScreen = () => {
   );
 };
 
+export default React.memo(AboutUsScreen);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -123,5 +125,3 @@ const styles = StyleSheet.create({
   },
   extra:{marginBottom:verticalScale(10)}
 });
-
-export default AboutUsScreen;

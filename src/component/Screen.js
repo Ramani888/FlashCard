@@ -24,6 +24,7 @@ import AssignPdfFolder from '../screen/pdf/AssignPdfFolder';
 import AssignImageFolder from '../screen/images/AssignImageFolder';
 import ResetPassword from '../screen/auth/ResetPassword';
 import ViewFullImage from '../screen/images/ViewFullImage';
+import ViewPdfScreen from '../screen/pdf/ViewPdfScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -44,14 +45,15 @@ export const ScreenName = {
   setDetail: 'SetDetail',
   pdf: 'Pdf',
   assignPdfFolder: 'AssignPdfFolder',
+  viewPdfScreen: 'ViewPdfScreen',
   image: 'Image',
   assignImageFolder: 'AssignImageFolder',
+  viewFullImage: 'ViewFullImage',
   aiScreen: 'AiScreen',
   privacy: 'Privacy',
   aboutUs: 'AboutUs',
   cloud: 'Cloud',
   subscription: 'Subscription',
-  viewFullImage: 'ViewFullImage'
 };
 
 export const ScreenPath = {
@@ -80,5 +82,6 @@ export const ScreenPath = {
   AboutUsScreen,
   CloudScreen,
   SubscriptionScreen,
-  ViewFullImage
+  ViewFullImage,
+  ViewPdfScreen,
 };

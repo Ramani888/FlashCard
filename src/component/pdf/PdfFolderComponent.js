@@ -218,6 +218,11 @@ const PdfFolderComponent = ({onFolderClick}) => {
           marginHorizontal: scale(15),
           marginTop: verticalScale(15),
         }}>
+        <Pressable
+          style={styles.folderContainer}
+          onPress={() => onFolderClick('')}>
+          <Text style={styles.folderText}>ALL PDF</Text>
+        </Pressable>
         {pdfFolderdata?.length > 0 ? (
           <FlatList
             data={pdfFolderdata}
@@ -326,8 +331,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconColor: {
-    width: scale(13),
-    height: scale(30),
+    width: scale(11),
+    height: scale(35),
     borderRadius: scale(8),
   },
   folderName: {

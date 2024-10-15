@@ -34,6 +34,7 @@ const CustomeHeader = ({
   setChangeOrder,
   changeOrder,
   updatePosition,
+  saveNote,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -53,7 +54,13 @@ const CustomeHeader = ({
       style={[styles.headerContainer, containerStyle]}>
       {goBack && (
         <Pressable
-          onPress={navigation.goBack}
+          onPress={() => {
+            if (saveNote) {
+              saveNote();
+            } else {
+              navigation.goBack();
+            }
+          }}
           style={[styles.iconContainer, iconStyle]}
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
           <AntDesign name="arrowleft" size={iconSize} color={iconColor} />

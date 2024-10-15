@@ -109,7 +109,7 @@ const ProfileScreen = () => {
   const handleTabPress = tabname => {
     tabname == 'Contacts' && navigation.navigate(ScreenName.contact);
     tabname == 'Support' && navigation.navigate(ScreenName.support);
-    tabname == 'Cloud' && navigation.navigate(ScreenName.cloud);
+    // tabname == 'Cloud' && navigation.navigate(ScreenName.cloud);
     tabname == 'Privacy & Terms' && navigation.navigate(ScreenName.privacy);
     tabname == 'About Us' && navigation.navigate(ScreenName.aboutUs);
   };

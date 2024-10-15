@@ -1,6 +1,7 @@
 import {
   Dimensions,
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -21,12 +22,17 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
+import RNFetchBlob from 'rn-fetch-blob';
+import {ScreenName} from '../Screen';
+import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
 const pdfData = [{name: 'pdf1'}, {name: 'pdf2'}, {name: 'pdf3'}];
 
 const PdfComponent = memo(({folderId}) => {
+  const navigation = useNavigation()
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -117,6 +123,27 @@ const PdfComponent = memo(({folderId}) => {
 
   // ================================= End =============================== //
 
+  const PdfDownload = pdfUrl => {
+    setVisible(true);
+    RNFetchBlob.config({
+      fileCache: true,
+      appendExt: 'pdf',
+      path:
+        RNFetchBlob.fs.dirs.DocumentDir +
+        '/' +
+        `pdf_${moment().format('YYYYMMDD_HHmmss')}.pdf`,
+    })
+      .fetch('GET', pdfUrl)
+      .then(res => {
+        console.log('PDF downloaded at:', res.path());
+        setVisible(false);
+        navigation.navigate(ScreenName.viewPdfScreen, {url: res.path()});
+      })
+      .catch(error => {
+        console.log('Error downloading PDF:', error);
+      });
+  };
+
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
       const offsetY = isLastItem ? -height - 15 : height + 15;
@@ -175,20 +202,14 @@ const PdfComponent = memo(({folderId}) => {
               styles.folderItem,
               {backgroundColor: item?.isHighlight ? item.color : Color.White},
             ]}
-            onPress={() => ''}>
+            onPress={() => PdfDownload(item?.url)}>
             <View style={styles.folderInfo}>
               {!colorView && (
                 <View
                   style={[styles.iconColor, {backgroundColor: item.color}]}
                 />
               )}
-              <Text
-                style={[
-                  styles.folderName,
-                  {color: item?.isHighlight ? Color.White : Color.Black},
-                ]}>
-                {item.name}
-              </Text>
+              <Text style={styles.folderName}>{item.name}</Text>
             </View>
             <Pressable
               ref={threeDotIconRef}
@@ -205,6 +226,15 @@ const PdfComponent = memo(({folderId}) => {
               />
             </Pressable>
           </Pressable>
+          <View style={[styles.folderContainer, {alignSelf: 'flex-start'}]}>
+            <Image
+              source={require('../../Assets/Img/folder.png')}
+              style={styles.folderIcon}
+            />
+            <Text style={styles.folderText}>
+              {item?.folderName ? item?.folderName : ''}
+            </Text>
+          </View>
         </View>
       );
     },
@@ -219,6 +249,8 @@ const PdfComponent = memo(({folderId}) => {
             data={pdfData}
             renderItem={renderPdf}
             keyExtractor={item => item.name}
+            showsVerticalScrollIndicator={false}
+            style={{flex: 1,marginBottom:verticalScale(60)}}
           />
         ) : (
           <NoDataView
@@ -342,5 +374,27 @@ const styles = StyleSheet.create({
   folderInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  folderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // gap: scale(10),
+    backgroundColor: Color.White,
+    height: scale(35),
+    borderRadius: scale(10),
+    marginTop: verticalScale(-5),
+    marginBottom: verticalScale(10),
+    paddingHorizontal: scale(5),
+    alignSelf: 'flex-start',
+  },
+  folderIcon: {
+    width: scale(26),
+    height: scale(26),
+  },
+  folderText: {
+    fontSize: scale(12),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    textTransform: 'capitalize',
   },
 });

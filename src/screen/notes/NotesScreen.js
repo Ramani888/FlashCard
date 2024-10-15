@@ -60,7 +60,7 @@ const NotesScreen = () => {
       initialLoader && setVisible(true);
       const response = await apiGet(`${Api.notes}?userId=${global?.user?._id}`);
       setNoteData(response);
-      if (!initialLoader) {
+      if (!initialLoader && message) {
         showMessageonTheScreen(message);
       }
     } catch (error) {
@@ -102,7 +102,7 @@ const NotesScreen = () => {
       setVisible(true);
       const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
       if (response?.success == true) {
-        getNoteData(false, response?.message);
+        getNoteData(false, noteDesc ? response?.message : '');
       }
     } catch (error) {
       console.log('error in update note api', error);

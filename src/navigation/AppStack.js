@@ -33,7 +33,9 @@ const AppStack = ({user}) => {
     aboutUs,
     subscription,
     viewFullImage,
+    viewPdfScreen,
   } = ScreenName;
+  console.log('viewPdf',ScreenName.viewPdfScreen)
 
   const {
     SignUpScreen,
@@ -62,6 +64,7 @@ const AppStack = ({user}) => {
     CloudScreen,
     SubscriptionScreen,
     ViewFullImage,
+    ViewPdfScreen,
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -173,6 +176,12 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={assignPdfFolder}
         component={AssignPdfFolder}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={viewPdfScreen}
+        component={ViewPdfScreen}
         options={{headerShown: false}}
       />
 

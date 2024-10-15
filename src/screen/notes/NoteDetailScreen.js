@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {BackHandler, Dimensions, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -28,16 +28,36 @@ const NoteDetailScreen = () => {
     setNotes(text);
   };
 
+  useEffect(() => {
+    const backAction = () => {
+      saveNote();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   const renderHeader = () => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
+        saveNote={saveNote}
         title={noteName}
         titleStyle={styles.title}
         containerStyle={styles.headerStyle}
       />
     );
+  };
+
+  const saveNote = () => {
+    editNote(true, noteId, noteName, noteColor, notes);
+    navigation.goBack();
   };
 
   return (
@@ -49,7 +69,7 @@ const NoteDetailScreen = () => {
       <View style={{marginHorizontal: scale(15)}}>
         <CustomeInputField
           placeholder={'Add Note'}
-          height={height - 160}
+          height={height - 100}
           onChangeText={handleNoteDesc}
           value={notes}
           textArea={true}
@@ -59,26 +79,6 @@ const NoteDetailScreen = () => {
           numberOfLines={32}
           textAlignVertical="top"
           inputContainerStyles={styles.inputContainerStyle}
-        />
-
-        <CustomeButton
-          buttonColor={Color.White}
-          buttonWidth="100%"
-          buttonHeight={scale(45)}
-          title="EDIT NOTE"
-          borderRadius={scale(10)}
-          fontSize={scale(15)}
-          fontColor={Color.theme1}
-          fontFamily={Font.semiBold}
-          alignSelf="center"
-          onPress={() => {
-            if (notes) {
-              editNote(true, noteId, noteName, noteColor, notes);
-              navigation.goBack();
-            } else {
-              showMessageonTheScreen('Please enter any note');
-            }
-          }}
         />
       </View>
     </LinearGradient>
