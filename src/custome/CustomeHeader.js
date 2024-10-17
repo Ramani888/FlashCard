@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: scale(10),
     paddingBottom: verticalScale(15),
-    zIndex: 1, // Ensure it appears above other elements
+    zIndex: 1,
   },
   title: {
     fontSize: scale(15),
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    paddingBottom: verticalScale(15),
+    paddingBottom: verticalScale(12),
   },
   searchIcon: {
     backgroundColor: Color.iconBackground,

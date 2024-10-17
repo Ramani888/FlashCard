@@ -30,6 +30,7 @@ const FolderComponent = ({
   handleCreateSetClick,
   setLoading,
   search,
+  setSearchValue
 }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -157,6 +158,7 @@ const FolderComponent = ({
           ]}
           onPress={() => {
             onFolderClick(item._id);
+            setSearchValue('')
           }}>
           <View style={styles.folderInfo}>
             {!colorView && (
@@ -235,7 +237,10 @@ const FolderComponent = ({
       <View style={{flex: 1}}>
         <Pressable
           style={styles.folderContainer}
-          onPress={() => onFolderClick('')}>
+          onPress={() => {
+            onFolderClick('');
+            setSearchValue('')
+          }}>
           <Text style={styles.folderText}>ALL SETS</Text>
         </Pressable>
 
@@ -358,6 +363,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
+    width: scale(200),
   },
   dotsIcon: {
     backgroundColor: Color.WhiteDefault,

@@ -163,6 +163,7 @@ const SetAndFolderScreen = () => {
               onFolderClick={handleFolderClick}
               handleCreateSetClick={handleCreateSetClick}
               setLoading={setLoading}
+              setSearchValue={setSearchValue}
               search={searchValue}
             />
           )}

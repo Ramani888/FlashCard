@@ -30,7 +30,9 @@ const AssignFolderScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const refRBSheet = useRef(null);
-  const {setId} = route.params;
+  const {setId, screen} = route.params;
+  console.log('setId',setId)
+  console.log('screen',screen)
 
   const [visible, setVisible] = useState(false);
   const [folderData, setFolderData] = useState([]);
@@ -95,6 +97,23 @@ const AssignFolderScreen = () => {
       console.error('Error in assigning folder', error);
     }
   };
+
+  const assignOtherSet = async () => {
+    try {
+      setVisible(true);
+      const response = await apiPut(
+        `${Api.mediatorUserSet}?folderId=${selectedFolderId}&setId=${setId}&userId=${global?.user?._id}`,
+      );
+      console.log('response',response)
+      if (response?.success) {
+        navigation.goBack();
+        getFolderData(true, response?.message);
+      }
+    } catch (error) {
+      console.error('Error in assigning folder', error);
+    }
+  };
+  // ?userId&setId&folderId
   // =================================================================== //
 
   const renderFolder = useCallback(
@@ -201,7 +220,7 @@ const AssignFolderScreen = () => {
           bottom={verticalScale(10)}
           onPress={() => {
             if (selectedFolderId) {
-              assignFolder();
+              screen == 'OtherUserScreen' ? assignOtherSet() : assignFolder();
             } else {
               showMessageonTheScreen('Please select the folder');
             }

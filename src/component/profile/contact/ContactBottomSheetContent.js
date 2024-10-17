@@ -73,29 +73,29 @@ const ContactBottomSheetContent = ({
 
   // ==================== Render User Function ========================= //
 
-  const renderUser = useCallback(({item}) => {
-    return (
-      <Pressable
-        style={styles.userContainer}
-        onPress={() => {
-          createContacts(item?._id);
-          closeContactBottomSheet();
-        }}>
-        <View style={styles.userDetails}>
-          <Avatar
-            size={42}
-            rounded
-            source={{uri: 'https://randomuser.me/api/portraits/men/36.jpg'}}
+  const renderUser = useCallback(
+    ({item}) => {
+      // console.log('item', item);
+      return (
+        <Pressable
+          style={styles.userContainer}
+          onPress={() => {
+            createContacts(item?._id);
+            closeContactBottomSheet();
+          }}>
+          <View style={styles.userDetails}>
+            <Image source={{uri: item?.picture}} style={styles.profileImage}/>
+            <Text style={styles.userName}>{item?.userName}</Text>
+          </View>
+          <Image
+            source={require('../../../Assets/Img/searchUser.png')}
+            style={styles.userImage}
           />
-          <Text style={styles.userName}>{item?.userName}</Text>
-        </View>
-        <Image
-          source={require('../../../Assets/Img/searchUser.png')}
-          style={styles.userImage}
-        />
-      </Pressable>
-    );
-  }, []);
+        </Pressable>
+      );
+    },
+    [userData],
+  );
 
   const keyExtractor = useCallback(item => item._id, []);
 
@@ -154,7 +154,12 @@ const ContactBottomSheetContent = ({
                 style={styles.flatList}
               />
             ) : (
-              <View style={{height:verticalScale(130),justifyContent:'center',alignItems:'center'}}>
+              <View
+                style={{
+                  height: verticalScale(130),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 <Text
                   style={{
                     fontSize: scale(13),
@@ -237,6 +242,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  profileImage:{height:scale(40),width:scale(40),borderRadius:scale(20)},
   userName: {
     fontSize: scale(12),
     fontFamily: Font.semiBold,

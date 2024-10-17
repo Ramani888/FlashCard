@@ -25,7 +25,6 @@ const SetComponent = ({
   setLoading,
   search,
 }) => {
-  console.log('search', search);
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -365,6 +364,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
+    width:scale(200),
   },
   rowWithGap: {
     flexDirection: 'row',

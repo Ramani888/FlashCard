@@ -1,6 +1,6 @@
 import CreateCardScreen from '../screen/card/CreateCardScreen';
 import HomeScreen from '../screen/HomeScreen';
-import ContactScreen from '../screen/profile/ContactScreen';
+import ContactScreen from '../screen/profile/contact/ContactScreen';
 import NotesScreen from '../screen/notes/NotesScreen';
 import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
@@ -25,6 +25,8 @@ import AssignImageFolder from '../screen/images/AssignImageFolder';
 import ResetPassword from '../screen/auth/ResetPassword';
 import ViewFullImage from '../screen/images/ViewFullImage';
 import ViewPdfScreen from '../screen/pdf/ViewPdfScreen';
+import OtherUserScreen from '../screen/profile/contact/OtherUserScreen';
+import OtherUserCardScreen from '../screen/profile/contact/OtherUserCardScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -54,6 +56,8 @@ export const ScreenName = {
   aboutUs: 'AboutUs',
   cloud: 'Cloud',
   subscription: 'Subscription',
+  otherUser: 'OtherUser',
+  otherUserCard: 'OtherUserCard'
 };
 
 export const ScreenPath = {
@@ -84,4 +88,6 @@ export const ScreenPath = {
   SubscriptionScreen,
   ViewFullImage,
   ViewPdfScreen,
+  OtherUserScreen,
+  OtherUserCardScreen
 };

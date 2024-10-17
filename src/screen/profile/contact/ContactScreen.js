@@ -5,22 +5,23 @@ import {
   FlatList,
   Pressable,
   Dimensions,
+  Image,
 } from 'react-native';
 import React, {useCallback, useRef, useState, useMemo, useEffect} from 'react';
-import CustomeHeader from '../../custome/CustomeHeader';
-import Color from '../../component/Color';
+import CustomeHeader from '../../../custome/CustomeHeader';
+import Color from '../../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
-import Font from '../../component/Font';
+import Font from '../../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
-import CustomeModal from '../../custome/CustomeModal';
-import ContactModalContent from '../../component/profile/contact/ContactModalContent';
-import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
-import ContactBottomSheetContent from '../../component/profile/contact/ContactBottomSheetContent';
+import CustomeModal from '../../../custome/CustomeModal';
+import ContactModalContent from '../../../component/profile/contact/ContactModalContent';
+import UserNameBottomSheetsContent from '../../../component/profile/profile/UserNameBottomSheetsContent';
+import ContactBottomSheetContent from '../../../component/profile/contact/ContactBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {apiDelete, apiGet, apiPost} from '../../Api/ApiService';
-import Api from '../../Api/EndPoint';
-import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import Loader from '../../component/Loader';
+import {apiDelete, apiGet, apiPost} from '../../../Api/ApiService';
+import Api from '../../../Api/EndPoint';
+import showMessageonTheScreen from '../../../component/ShowMessageOnTheScreen';
+import Loader from '../../../component/Loader';
 
 const {height, width} = Dimensions.get('window');
 
@@ -45,7 +46,6 @@ const ContactScreen = () => {
       const response = await apiGet(
         `${Api.contacts}?userId=${global.user?._id}`,
       );
-      console.log('response', response);
       if (response) {
         setContactData(response);
         message && showMessageonTheScreen(messageValue);
@@ -153,7 +153,10 @@ const ContactScreen = () => {
 
       return (
         <View style={styles.contactContainer}>
-          <Text style={styles.contactText}>{item?.userName}</Text>
+          <View style={styles.userDetails}>
+            <Image source={{uri: item?.picture}} style={styles.profileImage} />
+            <Text style={styles.contactText}>{item?.userName}</Text>
+          </View>
           <Pressable
             ref={threeDotIconRef}
             onPress={() => {
@@ -279,4 +282,9 @@ const styles = StyleSheet.create({
     shadowOpacity: scale(0.3),
     shadowRadius: scale(4),
   },
+  userDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileImage:{height:scale(35),width:scale(35),borderRadius:scale(17.5)},
 });

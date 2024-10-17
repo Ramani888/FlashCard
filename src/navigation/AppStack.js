@@ -34,8 +34,10 @@ const AppStack = ({user}) => {
     subscription,
     viewFullImage,
     viewPdfScreen,
+    otherUser,
+    otherUserCard
   } = ScreenName;
-  console.log('viewPdf',ScreenName.viewPdfScreen)
+  console.log('viewPdf', ScreenName.viewPdfScreen);
 
   const {
     SignUpScreen,
@@ -65,6 +67,8 @@ const AppStack = ({user}) => {
     SubscriptionScreen,
     ViewFullImage,
     ViewPdfScreen,
+    OtherUserScreen,
+    OtherUserCardScreen
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -146,6 +150,18 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={contact}
         component={ContactScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={otherUser}
+        component={OtherUserScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={otherUserCard}
+        component={OtherUserCardScreen}
         options={{headerShown: false}}
       />
 

@@ -5,8 +5,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../../Color';
 import Font from '../../Font';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenName} from '../../Screen';
 
 const ContactModalContent = ({closeModal, item, deleteContacts}) => {
+  const navigation = useNavigation();
+
   const renderBody = useCallback(
     () => (
       <View>
@@ -26,9 +30,14 @@ const ContactModalContent = ({closeModal, item, deleteContacts}) => {
 
         <Pressable
           style={[styles.container, styles.viewContactContainer]}
-          onPress={closeModal}>
+          onPress={() => {
+            navigation.navigate(ScreenName.otherUser, {
+              item: item,
+            });
+            closeModal();
+          }}>
           <Entypo name="eye" size={scale(17)} color={Color.Black} />
-          <Text style={styles.text}>View Contact</Text>
+          <Text style={styles.text}>View Card</Text>
         </Pressable>
       </View>
     ),

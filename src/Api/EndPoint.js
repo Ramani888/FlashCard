@@ -28,6 +28,9 @@ const Api = {
   Images: `${Base_url}/images`,
   profilePic: `${Base_url}/profile/picture`,
   subscription: `${Base_url}/profile/subscription`,
+  support: `${Base_url}/profile/support`,
+  mediatorUserSet: `${Base_url}/mediator/set`,
+  mediatorCard: `${Base_url}/mediator/card`,
 };
 
 export default Api;

@@ -25,10 +25,10 @@ const AssignSetScreen = () => {
   const [setColor, setSetColor] = useState('');
   const [colorView, setColorView] = useState(false);
   const [selectedSetId, setSelectedSetId] = useState('');
-  const {folderId, cardId} = route.params;
+  const {folderId, cardId, screen} = route.params;
 
   useEffect(() => {
-    getSetData();
+    getSetData(false);
   }, []);
 
   // ===================================== Api ===================================== //
@@ -83,6 +83,21 @@ const AssignSetScreen = () => {
       }
     } catch (error) {
       console.log('error in assignSet api', error);
+    }
+  };
+
+  const assignOtherUserCard = async () => {
+    try {
+      setVisible(true);
+      const response = await apiPut(
+        `${Api.mediatorCard}?setId=${selectedSetId}&cardId=${cardId}&userId=${global.user?._id}`,
+      );
+      if (response?.success == true) {
+        navigation.goBack();
+        getSetData(true, response?.message);
+      }
+    } catch (error) {
+      console.log('error in assignOtherUserCard api', error);
     }
   };
 
@@ -207,7 +222,10 @@ const AssignSetScreen = () => {
             data={setData}
             renderItem={renderSet}
             keyExtractor={keyExtractor}
-            style={{marginTop: verticalScale(10),marginBottom:verticalScale(55)}}
+            style={{
+              marginTop: verticalScale(10),
+              marginBottom: verticalScale(55),
+            }}
             showsVerticalScrollIndicator={false}
           />
         ) : (
@@ -229,7 +247,11 @@ const AssignSetScreen = () => {
           bottom={verticalScale(10)}
           onPress={() => {
             if (selectedSetId) {
-              assignSet();
+              if (screen == 'OtherUserCardScreen') {
+                assignOtherUserCard();
+              } else {
+                assignSet();
+              }
             } else {
               showMessageonTheScreen('Please select the set');
             }
@@ -286,7 +308,7 @@ const styles = StyleSheet.create({
   bibleIcon: {
     width: scale(11),
     height: scale(36),
-    borderRadius:scale(10)
+    borderRadius: scale(10),
   },
   setTitle: {
     fontSize: scale(15),
