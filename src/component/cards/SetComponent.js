@@ -311,6 +311,7 @@ const SetComponent = ({
             folderId={folderId}
             setId={setId}
             singleItem={singleSetData}
+            getSetData={getSetData}
           />
         }
         width={'42%'}

@@ -56,15 +56,15 @@ const SetDetailScreen = () => {
         `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${global.user?._id}`,
       );
       setCardData(response);
-      if (position) {
-        showMessageonTheScreen('Position changed successfully');
-      } else {
-        if (update) {
-          isBlur
-            ? showMessageonTheScreen('card is blured')
-            : showMessageonTheScreen('card is unBlured');
-        }
-      }
+      // if (position) {
+      //   showMessageonTheScreen('Position changed successfully');
+      // } else {
+      //   if (update) {
+      //     isBlur
+      //       ? showMessageonTheScreen('card is blured')
+      //       : showMessageonTheScreen('card is unBlured');
+      //   }
+      // }
     } catch (error) {
       console.log('error', error);
     } finally {

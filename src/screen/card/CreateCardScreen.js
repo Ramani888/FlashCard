@@ -128,7 +128,7 @@ const CreateCardScreen = () => {
         goBack={true}
         title={
           <View style={styles.titleContainer}>
-            <Text style={styles.titleLine}>CREATED CARD</Text>
+            <Text style={styles.titleLine}>CREATE CARD</Text>
           </View>
         }
         titleStyle={styles.headerTitle}
@@ -213,7 +213,7 @@ const CreateCardScreen = () => {
             style={styles.optionalContainer}
             onPress={() => setNoteVisible(!noteVisible)}>
             <Text style={styles.optionalText}>
-              {noteVisible ? 'Optional - Remove Note' : 'Optional - Add Note'}
+              {noteVisible ? 'Notes' : 'Notes'}
             </Text>
           </Pressable>
 

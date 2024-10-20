@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
@@ -11,6 +11,8 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import {useSelector} from 'react-redux';
+import { apiPut } from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
 
 const ModalContent = ({
   closeModal,
@@ -22,9 +24,29 @@ const ModalContent = ({
   singleItem,
   folderId,
   setId,
+  getSetData
 }) => {
   const navigation = useNavigation();
-  const [value, setValue] = useState(false);
+  const [value, setValue] = useState(singleItem?.isPrivate);
+  const isFirstRender = useRef(true); // To track the initial render
+
+  const handleUpdateSetSecret = async () => {
+    try {
+      const response = await apiPut(Api.Set, '', JSON.stringify({...singleItem, isPrivate: value}));
+      getSetData(true, response?.message);
+    } catch (error) {
+      console.log('error in edit Set api', error);
+    }
+  };
+
+  useEffect(() => {
+    // Skip the first render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      handleUpdateSetSecret();
+    }
+  }, [value]);
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
@@ -127,11 +149,11 @@ const ModalContent = ({
             <View style={styles.switchContent}>
               <Switch
                 value={value}
-                onValueChange={setValue}
+                onValueChange={() => setValue(!value)}
                 thumbColor={value ? Color.theme1 : '#8E9494'}
                 trackColor={{false: '#E7EAEB', true: Color.theme2}}
               />
-              <Text style={styles.switchLabel}>Public</Text>
+              <Text style={styles.switchLabel}>{value ? 'Private' : 'Public'}</Text>
             </View>
             <Image source={lockIcon} style={styles.icon} />
           </View>
