@@ -1,5 +1,5 @@
-// const Base_url = 'https://biblestudycards.app/api';
-const Base_url = 'https://flash-card-backend-bice.vercel.app/api';
+const Base_url = 'https://biblestudycards.app/api';
+// const Base_url = 'https://flash-card-backend-bice.vercel.app/api';
 
 const Api = {
   signUp: `${Base_url}/signUp`,

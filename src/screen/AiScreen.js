@@ -21,24 +21,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import {apiPost} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
+import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const {height} = Dimensions.get('window');
 
 const AiScreen = ({setOpenAIBottomsheet}) => {
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] =
-    useState(`It depends on what you are looking for in a notebook. Some popular options include Moleskine, Leuchtturm1917, and Rhodia. 
-htturm1917, and Rhodia.
-
-
-Moleskine notebooks are known for their high quality paper and classic design. They are available in a variety of sizes and formats, making them versatile for different needs.
-mats, making them versatile for different needs.
-
-Leuchtturm1917 notebooks are also known for their high quality paper and durable construction. They come with numbered pages, a table of contents, and stickers for labeling, making them great for organizing notes and thoughts.
-
-Rhodia notebooks are known for their smooth, fountain pen-friendly paper and bright white color. They come in various sizes and formats, including dot grid, lined, and blank pages, making them suitable for different types of writing and drawing.
-
-Ultimately, the best notebook for you will depend on your personal preferences and needs. Consider factors such as paper quality, size, format, and style when choosing a notebook.`);
+  const [answer, setAnswer] = useState('');
 
   const [visible, setVisible] = useState(false);
   const refAiRBSheet = useRef();
@@ -84,6 +74,11 @@ Ultimately, the best notebook for you will depend on your personal preferences a
     getAnswer();
   };
 
+  const copyToClipboard = () => {
+    Clipboard.setString(answer);
+    showMessageonTheScreen('Copied');
+  };
+
   const renderHeader = useCallback(
     () => (
       <CustomeHeader
@@ -117,7 +112,7 @@ Ultimately, the best notebook for you will depend on your personal preferences a
           <Text style={styles.answer}>{answer}</Text>
         </ScrollView>
         <View style={styles.iconRow}>
-          <Pressable onPress={() => ''}>
+          <Pressable onPress={() => answer && copyToClipboard()}>
             <IconWithLabel IconComponent={Feather} name="copy" label="Copy" />
           </Pressable>
           <Pressable
