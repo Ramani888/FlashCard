@@ -11,6 +11,8 @@ import {scale, verticalScale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import {useSelector} from 'react-redux';
+import { apiPut } from '../../Api/ApiService';
+import Api from '../../Api/EndPoint';
 
 const ModalContent = ({
   closeModal,
@@ -24,7 +26,16 @@ const ModalContent = ({
   setId,
 }) => {
   const navigation = useNavigation();
-  const [value, setValue] = useState(false);
+  const [value, setValue] = useState(singleItem?.isPrivate);
+
+  const handleUpdateSetSecret = async () => {
+    setValue(!singleItem?.isPrivate)
+    try {
+      const response = await apiPut(Api.Set, '', JSON.stringify({...singleItem, isPrivate: !singleItem?.isPrivate}));
+    } catch (error) {
+      console.log('error in edit Set api', error);
+    }
+  };
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
@@ -127,11 +138,11 @@ const ModalContent = ({
             <View style={styles.switchContent}>
               <Switch
                 value={value}
-                onValueChange={setValue}
+                onValueChange={() => handleUpdateSetSecret()}
                 thumbColor={value ? Color.theme1 : '#8E9494'}
                 trackColor={{false: '#E7EAEB', true: Color.theme2}}
               />
-              <Text style={styles.switchLabel}>Public</Text>
+              <Text style={styles.switchLabel}>{value ? 'Private' : 'Public'}</Text>
             </View>
             <Image source={lockIcon} style={styles.icon} />
           </View>
