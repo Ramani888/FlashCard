@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
@@ -24,18 +24,29 @@ const ModalContent = ({
   singleItem,
   folderId,
   setId,
+  getSetData
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(singleItem?.isPrivate);
+  const isFirstRender = useRef(true); // To track the initial render
 
   const handleUpdateSetSecret = async () => {
-    setValue(!singleItem?.isPrivate)
     try {
-      const response = await apiPut(Api.Set, '', JSON.stringify({...singleItem, isPrivate: !singleItem?.isPrivate}));
+      const response = await apiPut(Api.Set, '', JSON.stringify({...singleItem, isPrivate: value}));
+      getSetData(true, response?.message);
     } catch (error) {
       console.log('error in edit Set api', error);
     }
   };
+
+  useEffect(() => {
+    // Skip the first render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      handleUpdateSetSecret();
+    }
+  }, [value]);
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
@@ -138,7 +149,7 @@ const ModalContent = ({
             <View style={styles.switchContent}>
               <Switch
                 value={value}
-                onValueChange={() => handleUpdateSetSecret()}
+                onValueChange={() => setValue(!value)}
                 thumbColor={value ? Color.theme1 : '#8E9494'}
                 trackColor={{false: '#E7EAEB', true: Color.theme2}}
               />
