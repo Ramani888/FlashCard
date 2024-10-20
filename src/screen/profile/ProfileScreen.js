@@ -8,6 +8,7 @@ import {
   Text,
   View,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../../component/Color';
@@ -215,121 +216,124 @@ const ProfileScreen = () => {
       style={styles.container}>
       <StatusBar translucent backgroundColor={Color.transparent} />
       <Loader visible={visible} />
-      {renderHeader()}
-      <View style={styles.bodyContainer}>
-        <View>
-          <Text style={styles.label}>Username</Text>
-          <CustomeInputField
-            placeholder="Username"
-            placeholderTextColor={Color.mediumGray}
-            onChangeText={setUserName}
-            value={username}
-            editable={false}
-            borderWidth={1}
-            borderColor={Color.LightGray}
-            height={verticalScale(40)}
-            marginTop={verticalScale(5)}
-            width="100%"
-            inputContainerStyles={styles.inputContainer}
-            inputStyles={styles.inputStyles}
-          />
-        </View>
+      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+        {renderHeader()}
 
-        <View>
-          <Text style={styles.label}>Email</Text>
-          <CustomeInputField
-            placeholder="Email"
-            placeholderTextColor={Color.mediumGray}
-            onChangeText={setEmail}
-            value={email}
-            editable={false}
-            borderWidth={1}
-            borderColor={Color.LightGray}
-            height={verticalScale(40)}
-            marginTop={verticalScale(5)}
-            width="100%"
-            inputContainerStyles={styles.inputContainer}
-            inputStyles={styles.inputStyles}
-          />
-        </View>
-
-        <View style={styles.separator} />
-
-        <View style={styles.subscriptionContainer}>
-          <View style={styles.subscriptionBoxContainer}>
-            <Text style={styles.subscriptionText}>Subscription</Text>
-            <Pressable
-              style={styles.subscriptionBox}
-              onPress={() => navigation.navigate(ScreenName.subscription)}>
-              <Image
-                source={require('../../Assets/Img/subscription.png')}
-                style={styles.subscriptionImage}
-              />
-              <Text style={styles.subscriptionTier}>TIER 1</Text>
-            </Pressable>
+        <View style={styles.bodyContainer}>
+          <View>
+            <Text style={styles.label}>Username</Text>
+            <CustomeInputField
+              placeholder="Username"
+              placeholderTextColor={Color.mediumGray}
+              onChangeText={setUserName}
+              value={username}
+              editable={false}
+              borderWidth={1}
+              borderColor={Color.LightGray}
+              height={scale(40)}
+              marginTop={verticalScale(5)}
+              width="100%"
+              inputContainerStyles={styles.inputContainer}
+              inputStyles={styles.inputStyles}
+            />
           </View>
-          <View style={styles.subscriptionRightView}>
-            <View style={styles.aiCreditsContainer}>
-              <Text style={styles.aiCreditsText}>AI CREDITS</Text>
-              <Text style={styles.aiCreditsText}>50</Text>
+
+          <View>
+            <Text style={styles.label}>Email</Text>
+            <CustomeInputField
+              placeholder="Email"
+              placeholderTextColor={Color.mediumGray}
+              onChangeText={setEmail}
+              value={email}
+              editable={false}
+              borderWidth={1}
+              borderColor={Color.LightGray}
+              height={scale(40)}
+              marginTop={verticalScale(5)}
+              width="100%"
+              inputContainerStyles={styles.inputContainer}
+              inputStyles={styles.inputStyles}
+            />
+          </View>
+
+          <View style={styles.separator} />
+
+          <View style={styles.subscriptionContainer}>
+            <View style={styles.subscriptionBoxContainer}>
+              <Text style={styles.subscriptionText}>Subscription</Text>
+              <Pressable
+                style={styles.subscriptionBox}
+                onPress={() => navigation.navigate(ScreenName.subscription)}>
+                <Image
+                  source={require('../../Assets/Img/subscription.png')}
+                  style={styles.subscriptionImage}
+                />
+                <Text style={styles.subscriptionTier}>TIER 1</Text>
+              </Pressable>
             </View>
-            <View style={styles.aiCreditsContainer}>
-              <Text style={styles.aiCreditsText}>
-                STORAGE ({currentStorage}/{totalStorage} GB)
-              </Text>
-              <Progress.Bar
-                progress={progress} 
-                width={150}
-                style={{marginTop: verticalScale(10)}}
-                color={Color.theme1}
-                height={verticalScale(15)}
-              />
+            <View style={styles.subscriptionRightView}>
+              <View style={styles.aiCreditsContainer}>
+                <Text style={styles.aiCreditsText}>AI CREDITS</Text>
+                <Text style={styles.aiCreditsText}>50</Text>
+              </View>
+              <View style={styles.aiCreditsContainer}>
+                <Text style={styles.aiCreditsText}>
+                  STORAGE ({currentStorage}/{totalStorage} GB)
+                </Text>
+                <Progress.Bar
+                  progress={progress}
+                  width={150}
+                  style={{marginTop: verticalScale(10)}}
+                  color={Color.theme1}
+                  height={verticalScale(15)}
+                />
+              </View>
             </View>
           </View>
+
+          <View style={styles.separator} />
         </View>
 
-        <View style={styles.separator} />
-      </View>
+        <FlatList
+          data={tabData}
+          renderItem={renderTab}
+          numColumns={3}
+          key={'_'}
+          contentContainerStyle={{
+            paddingHorizontal: scale(15),
+            marginTop: verticalScale(20),
+          }}
+        />
 
-      <FlatList
-        data={tabData}
-        renderItem={renderTab}
-        numColumns={3}
-        key={'_'}
-        contentContainerStyle={{
-          paddingHorizontal: scale(15),
-          marginTop: verticalScale(20),
-        }}
-      />
+        {userNameBottomSheets()}
+        {emailBottomSheets()}
 
-      {userNameBottomSheets()}
-      {emailBottomSheets()}
-
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        content={
-          <ProfileModalContent
-            closeModal={closeModal}
-            openUserNameBottomSheets={openUserNameBottomSheets}
-            openEmailBottomSheets={openEmailBottomSheets}
-            updateProfilePic={updateProfilePic}
-            handleLogout={handleLogout}
-          />
-        }
-        width={scale(120)}
-        justifyContent="flex-end"
-        borderRadius={scale(10)}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-          },
-        ]}
-      />
+        <CustomeModal
+          visible={modalVisible}
+          onClose={closeModal}
+          closeModal={false}
+          mainPadding={scale(5)}
+          content={
+            <ProfileModalContent
+              closeModal={closeModal}
+              openUserNameBottomSheets={openUserNameBottomSheets}
+              openEmailBottomSheets={openEmailBottomSheets}
+              updateProfilePic={updateProfilePic}
+              handleLogout={handleLogout}
+            />
+          }
+          width={scale(120)}
+          justifyContent="flex-end"
+          borderRadius={scale(10)}
+          modalContainerStyle={[
+            styles.modal,
+            {
+              top: modalPosition.y,
+              left: modalPosition.x,
+            },
+          ]}
+        />
+      </ScrollView>
     </LinearGradient>
   );
 };
@@ -357,8 +361,8 @@ const styles = StyleSheet.create({
     height: verticalScale(45),
   },
   inputStyles: {
-    height: verticalScale(45),
-    fontSize: scale(13),
+    height: scale(45),
+    fontSize: moderateScale(13),
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(5),
@@ -368,7 +372,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(30),
   },
   label: {
-    fontSize: scale(14),
+    fontSize: moderateScale(14),
     color: Color.White,
     fontFamily: Font.semiBold,
   },
@@ -383,14 +387,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   subscriptionBoxContainer: {
-    width:'42%',
+    width: '42%',
     borderWidth: scale(2),
     borderColor: '#146D8B',
     padding: scale(10),
     borderRadius: scale(10),
   },
   subscriptionText: {
-    fontSize: scale(16),
+    fontSize: moderateScale(16),
     fontFamily: Font.medium,
     color: Color.White,
     textAlign: 'center',
@@ -410,12 +414,12 @@ const styles = StyleSheet.create({
     height: scale(36),
   },
   subscriptionTier: {
-    fontSize: scale(16),
+    fontSize: moderateScale(16),
     color: Color.White,
     fontFamily: Font.medium,
     paddingLeft: scale(10),
   },
-  subscriptionRightView: {gap: verticalScale(10),width:'55%'},
+  subscriptionRightView: {gap: verticalScale(10), width: '55%'},
   aiCreditsContainer: {
     width: '100%',
     alignItems: 'center',
@@ -428,7 +432,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
   },
   aiCreditsText: {
-    fontSize: scale(15),
+    fontSize: moderateScale(15),
     fontFamily: Font.medium,
     color: Color.White,
   },
@@ -442,7 +446,7 @@ const styles = StyleSheet.create({
     height: moderateScale(24),
   },
   tabText: {
-    fontSize: scale(14),
+    fontSize: moderateScale(14),
     fontFamily: Font.regular,
     color: Color.WhiteDefault,
     paddingTop: verticalScale(5),

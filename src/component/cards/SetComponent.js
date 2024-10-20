@@ -313,7 +313,7 @@ const SetComponent = ({
             singleItem={singleSetData}
           />
         }
-        width={scale(145)}
+        width={'42%'}
         height={scale(195)}
         justifyContent="flex-end"
         borderRadius={20}

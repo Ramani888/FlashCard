@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     fontSize: scale(14),
     paddingLeft: scale(10),
     fontFamily: Font.regular,
-    color:Color.Black
+    color:Color.Black,
+    // backgroundColor:'red',
   },
   viewError: {
     marginTop: verticalScale(3),

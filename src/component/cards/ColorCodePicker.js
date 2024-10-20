@@ -65,15 +65,14 @@ const ColorCodePicker = ({setSelectedColor, selectedColor}) => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: scale(10),
     backgroundColor: Color.WhiteDefault,
     padding: scale(3),
     marginTop: height * 0.02,
     borderRadius: scale(10),
   },
   colorBox: {
-    width: width * 0.09,
-    height: height * 0.05,
+    width: scale(35),
+    height: verticalScale(35),
     margin: scale(5),
     borderRadius: scale(5),
     justifyContent: 'center',

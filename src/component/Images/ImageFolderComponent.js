@@ -190,13 +190,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
             {!colorView && (
               <View style={[styles.iconColor, {backgroundColor: item.color}]} />
             )}
-            <Text
-              style={[
-                styles.folderName,
-                {color: item?.isHighlight ? Color.White : Color.Black},
-              ]}>
-              {item.name}
-            </Text>
+            <Text style={styles.folderName}>{item.name}</Text>
           </View>
           <Pressable
             ref={threeDotIconRef}
@@ -239,6 +233,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
             renderItem={renderFolder}
             keyExtractor={keyExtractor}
             style={styles.flatlist}
+            showsVerticalScrollIndicator={false}
           />
         ) : (
           <NoDataView
@@ -289,7 +284,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
             singleItem={singleFolderItem}
           />
         }
-        width={scale(145)}
+        width={width * 0.42}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[
@@ -309,7 +304,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(15),
     flex: 1,
   },
-  flatlist: {marginTop: verticalScale(10), marginBottom: verticalScale(55)},
+  flatlist: {marginTop: verticalScale(10), marginBottom: height * 0.1},
   folderContainer: {
     backgroundColor: Color.White,
     borderRadius: scale(10),
@@ -370,6 +365,7 @@ const styles = StyleSheet.create({
     shadowRadius: scale(4),
   },
   bottomSheetContainer: {
+    // flex:2,
     alignItems: 'center',
     borderTopLeftRadius: scale(30),
     borderTopRightRadius: scale(30),

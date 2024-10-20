@@ -1,5 +1,5 @@
 import React, {useState, memo, useEffect} from 'react';
-import {Pressable, StyleSheet, Text, View, Linking} from 'react-native';
+import {Pressable, StyleSheet, Text, View, Linking, Dimensions} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
@@ -15,6 +15,8 @@ import Api from '../../Api/EndPoint';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
+
+const {height,width} = Dimensions.get('window')
 
 const inputFields = [
   {
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
     height: verticalScale(45),
   },
   inputStyles: {
-    fontSize: moderateScale(14),
+    fontSize: scale(14),
     height: verticalScale(45),
     color: Color.Black,
     fontFamily: Font.regular,

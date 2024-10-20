@@ -262,7 +262,10 @@ const NotesScreen = () => {
             style={{flex: 1, marginBottom: verticalScale(60)}}
           />
         ) : (
-          <NoDataView noDataViewStyle={{marginTop: verticalScale(-70)}} />
+          <NoDataView
+            content={'No Notes Found'}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+          />
         )}
         {BottomSheets()}
       </View>
@@ -310,7 +313,7 @@ const NotesScreen = () => {
             deleteData={deleteNote}
           />
         }
-        width={scale(145)}
+        width={'42%'}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

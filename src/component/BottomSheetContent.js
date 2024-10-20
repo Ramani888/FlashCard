@@ -3,6 +3,7 @@ import {
   Dimensions,
   Image,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -164,7 +165,7 @@ const BottomSheetContent = ({
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {renderBody}
       <CustomeButton
         buttonColor={Color.theme1}
@@ -175,9 +176,10 @@ const BottomSheetContent = ({
         fontColor={Color.White}
         fontFamily={Font.semiBold}
         marginTop={verticalScale(15)}
+        marginBottom={verticalScale(8)}
         onPress={handleSubmit}
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -185,14 +187,13 @@ export default React.memo(BottomSheetContent);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginHorizontal: scale(15),
+    height: verticalScale(400),
   },
   bodyContainer: {
     borderWidth: scale(1),
     borderColor: Color.LightGray,
     borderRadius: scale(10),
-    // height: verticalScale(405),
     padding: scale(10),
   },
   title: {
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
     borderColor: Color.LightGray,
     borderRadius: scale(10),
     width: width * 0.36,
-    height: verticalScale(40),
+    height: height * 0.06,
     justifyContent: 'center',
   },
   colorIndicator: {

@@ -19,7 +19,6 @@ const {height, width} = Dimensions.get('window');
 
 const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
   const [imageFile, setImageFile] = useState({});
-  console.log('imageFile', imageFile);
 
   const handleSubmit = useCallback(() => {
     if (imageFile?.name) {
@@ -28,7 +27,7 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
     } else {
       showMessageonTheScreen('Please select the image');
     }
-  }, [closeBottomSheet,imageFile]);
+  }, [closeBottomSheet, imageFile]);
 
   const options = {
     mediaType: 'photo',
@@ -58,6 +57,7 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
         <Image
           source={require('../../Assets/Img/imageFram.png')}
           style={styles.image}
+          resizeMode="contain"
         />
         {imageFile?.name && (
           <Text style={styles.imageName}>{imageFile?.name}</Text>
@@ -71,7 +71,6 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
         fontSize={scale(15)}
         fontColor={Color.White}
         fontFamily={Font.semiBold}
-        marginTop={verticalScale(5)}
         alignSelf={'center'}
         onPress={handleSubmit}
       />
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Color.LightGray,
   },
   image: {
-    height: scale(80),
+    height: verticalScale(80),
     width: scale(80),
     alignSelf: 'center',
     marginVertical: verticalScale(15),

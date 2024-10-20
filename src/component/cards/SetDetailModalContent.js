@@ -55,7 +55,7 @@ const SetDetailModalContent = ({
             color={Color.Black}
           />
         }
-        text={isBlur ? 'Remove Blur' : 'Blur All'}
+        text={isBlur ? 'Blur' : 'Blur'}
         onPress={() => {
           isBlur ? blurAllCard(false) : blurAllCard(true);
           closeModal();

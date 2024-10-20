@@ -23,57 +23,29 @@ const AboutUsScreen = () => {
       <ScrollView style={styles.container}>
         <View style={styles.section}>
           <Text style={styles.paragraph}>
-            Welcome to <Text style={styles.bold}>Bible Study Toolkit</Text>, an
-            all-in-one app created by a born-again Christian with the goal of
-            equipping the saints for their journey with Jesus. Our mission is to
-            provide believers with the tools they need to study the Word,
-            evangelize effectively, and stay organized in their spiritual
-            growth—anytime, anywhere.
+            Bible Flashcards & AI** was created by a born again Christian with a
+            mission to equip the saints with powerful tools to study God's Word
+            anywhere, anytime. This app is designed to help believers strengthen
+            their memory, grow in evangelism, and sharpen their apologetics
+            skills, ensuring you're always prepared to share the Gospel in any
+            situation.
+          </Text>
+
+          <Text style={[styles.paragraph,{marginTop:verticalScale(-23)}]}>
+            Our tools allow you to quickly grasp teachings, Scripture, history,
+            and much more, while building an organized treasure trove of content
+            that’s easy to access and reference. Whether you're learning alone
+            or with others, **Bible Flashcards & AI** helps you retain what
+            you've studied and always be ready in and out of season, no matter
+            who you meet.
           </Text>
 
           <Text style={styles.paragraph}>
-            With <Text style={styles.bold}>Bible Study Toolkit</Text>, you can:
-          </Text>
-          <Text style={styles.listItem}>
-            - Study and access Bible materials on the go
-          </Text>
-          <Text style={styles.listItem}>
-            - Create custom flashcards and copy your friends' flashcards
-          </Text>
-          <Text style={styles.listItem}>
-            - Add specific notes to each flashcard, allowing you to grasp and
-            remember study material more effectively
-          </Text>
-          <Text style={styles.listItem}>
-            - Save and organize images and PDFs for easy reference
-          </Text>
-          <Text style={styles.listItem}>
-            - Create and organize notes effortlessly
-          </Text>
-          <Text style={styles.listItem}>
-            - Use AI to assist with your study and evangelism efforts
-          </Text>
-          <Text style={[styles.listItem, styles.extra]}>
-            - Equip yourself to share the Gospel with confidence
-          </Text>
-
-          <Text style={styles.paragraph}>
-            This app was developed with a passion to serve fellow believers,
-            built on a tight budget, but designed to meet the needs of many
-            saints as it stands. We are always working on improvements and new
-            features, driven by the needs of our community.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            If you find <Text style={styles.bold}>Bible Study Toolkit</Text>{' '}
-            helpful, please consider becoming a monthly subscriber. Your support
-            will help us continue to grow and implement even more tools to
-            benefit believers worldwide.
-          </Text>
-
-          <Text style={styles.paragraph}>
-            Thank you for being part of this journey with us as we strive to
-            serve and grow together!
+            With no barriers to entry, this app ensures that every believer can
+            be fully equipped to live out their faith effectively. Key features
+            include AI-powered Bible assistance, customizable flashcards,
+            notetaking, image organization, and the ability to easily share and
+            copy study material.
           </Text>
         </View>
       </ScrollView>

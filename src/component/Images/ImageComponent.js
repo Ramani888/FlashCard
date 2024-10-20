@@ -121,7 +121,7 @@ const ImageComponent = ({folderId}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.38}
+        height={verticalScale(250)}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -172,8 +172,8 @@ const ImageComponent = ({folderId}) => {
               />
             </Pressable>
           </View>
-          {console.log('item?.folderName', item?.folderName?.length)}
-          <View style={styles.folderContainer}>
+          <View
+            style={[styles.folderContainer, item?.folderName && styles.folder]}>
             <Image
               source={require('../../Assets/Img/folder.png')}
               style={[
@@ -204,6 +204,8 @@ const ImageComponent = ({folderId}) => {
             renderItem={renderImage}
             numColumns={3}
             keyExtractor={(_, index) => index.toString()}
+            style={{marginBottom: verticalScale(10)}}
+            showsVerticalScrollIndicator={false}
           />
         ) : (
           <NoDataView content={'Image not found'} />
@@ -265,7 +267,7 @@ export default React.memo(ImageComponent);
 
 const styles = StyleSheet.create({
   container: {
-    height: height * 0.79,
+    flex: 1,
   },
   bodyContainer: {
     flex: 1,
@@ -291,6 +293,7 @@ const styles = StyleSheet.create({
     padding: scale(7),
   },
   bottomSheetContainer: {
+    // flex:0.6,
     alignItems: 'center',
     borderTopLeftRadius: scale(30),
     borderTopRightRadius: scale(30),
@@ -332,4 +335,8 @@ const styles = StyleSheet.create({
     marginRight: scale(5),
     width: scale(60),
   },
+  folder:{
+    width: scale(102),
+    paddingRight: scale(5),
+  }
 });

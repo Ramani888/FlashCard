@@ -1,5 +1,12 @@
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useRef, useCallback} from 'react';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import React, {useEffect, useRef, useCallback, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {scale, verticalScale} from 'react-native-size-matters';
 import Color from '../component/Color';
@@ -13,6 +20,8 @@ import LinearGradient from 'react-native-linear-gradient';
 const {height} = Dimensions.get('window');
 
 const AiScreen = ({setOpenAIBottomsheet}) => {
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
   const refAiRBSheet = useRef();
 
   useEffect(() => {
@@ -45,21 +54,15 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
       {renderHeader()}
 
       <View style={styles.innerContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.textStyle}>Get Verse or Ask Questions</Text>
-        </View>
-        <View style={styles.topView}>
-          <Text style={styles.text}>Example : </Text>
-          <Text style={styles.text}>Get John 3-16 kjv</Text>
-          <Text style={styles.text}>What are the name of the 12 opposites</Text>
-        </View>
-        <View style={styles.disclaimerContainer}>
-          <Text style={styles.disclaimerTitle}>DISCLAIMER</Text>
-          <Text style={styles.disclaimerText}>
-            AI is a tool to assist you and is not always accurate. Make sure you
-            always check the information provided.
-          </Text>
-        </View>
+        <TextInput
+          placeholder="Enter Message"
+          value={question}
+          onChangeText={setQuestion}
+          placeholderTextColor={Color.mediumGray}
+          style={{paddingLeft: scale(10)}}
+        />
+
+        <Text></Text>
         <View style={styles.iconRow}>
           <IconWithLabel IconComponent={Feather} name="copy" label="Copy" />
           <IconWithLabel
@@ -123,8 +126,9 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     borderWidth: scale(1),
     borderColor: Color.LightGray,
-    height: height * 0.8,
+    height: '75%',
     backgroundColor: Color.White,
+    marginTop: verticalScale(10),
   },
   textContainer: {
     backgroundColor: '#ECECEC',
@@ -159,10 +163,13 @@ const styles = StyleSheet.create({
     lineHeight: verticalScale(18),
   },
   iconRow: {
+    position: 'absolute',
+    bottom: verticalScale(10),
+    right: scale(10),
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: scale(10),
+    gap: scale(15),
     marginRight: scale(10),
     marginBottom: verticalScale(5),
   },

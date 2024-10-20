@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import {StyleSheet, Text, View, Pressable, Image} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
@@ -119,6 +119,14 @@ const CustomeHeader = ({
           <Entypo name="plus" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
+      {title == 'AI' && (
+        <Pressable style={styles.adIcon}>
+          <Image
+            source={require('../Assets/Img/adsIcon.jpg')}
+            style={styles.adImageIcon}
+          />
+        </Pressable>
+      )}
       {threeDotIcon && (
         <Pressable
           ref={threeDotIconRef}
@@ -212,4 +220,6 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(5),
   },
   check: {position: 'absolute', right: scale(15), top: verticalScale(54)},
+  adImageIcon: {width: scale(35), height: scale(35), borderRadius: scale(4)},
+  adIcon: {position: 'absolute', right: scale(20), top: verticalScale(45)},
 });

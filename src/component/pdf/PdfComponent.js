@@ -25,13 +25,14 @@ import NoDataView from '../NoDataView';
 import RNFetchBlob from 'rn-fetch-blob';
 import {ScreenName} from '../Screen';
 import moment from 'moment';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
 const pdfData = [{name: 'pdf1'}, {name: 'pdf2'}, {name: 'pdf3'}];
 
 const PdfComponent = memo(({folderId}) => {
+  const isFocused = useIsFocused()
   const navigation = useNavigation()
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
@@ -48,7 +49,7 @@ const PdfComponent = memo(({folderId}) => {
 
   useEffect(() => {
     getPdf(false);
-  }, []);
+  }, [isFocused]);
 
   // ================================= Api =============================== //
 
@@ -238,7 +239,7 @@ const PdfComponent = memo(({folderId}) => {
         </View>
       );
     },
-    [openModal],
+    [openModal,pdfData],
   );
 
   const renderBody = () => {
@@ -301,7 +302,7 @@ const PdfComponent = memo(({folderId}) => {
             pdfId={pdfId}
           />
         }
-        width={scale(145)}
+        width={'43%'}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[
@@ -317,7 +318,7 @@ export default PdfComponent;
 
 const styles = StyleSheet.create({
   container: {
-    height: height * 0.79,
+   flex:1
   },
   listContainer: {
     flex: 1,

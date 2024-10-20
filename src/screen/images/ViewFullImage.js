@@ -77,7 +77,7 @@ export default React.memo(ViewFullImage);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: Color.Black,
   },
   pinchableContainer: {
     flex: 1,
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: screenWidth,
-    height: verticalScale(300),
-    borderRadius: scale(5),
+    height: screenWidth,
+    // borderRadius: scale(5),
   },
   closeContainer: {
     position: 'absolute',

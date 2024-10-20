@@ -67,7 +67,7 @@ const ModalContent = ({
               closeModal();
             }}>
             <Feather name="folder-plus" size={iconSize} color={Color.Black} />
-            <Text style={styles.text}>Asign Folder</Text>
+            <Text style={styles.text}>Assign Folder</Text>
           </Pressable>
         )}
         {type == 'Set' && (
