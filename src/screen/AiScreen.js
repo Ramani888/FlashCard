@@ -1,6 +1,8 @@
 import {
   Dimensions,
   Image,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -8,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useRef, useCallback, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import Color from '../component/Color';
 import CustomeButton from '../custome/CustomeButton';
 import Font from '../component/Font';
@@ -16,13 +18,61 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomeHeader from '../custome/CustomeHeader';
 import LinearGradient from 'react-native-linear-gradient';
+import {apiPost} from '../Api/ApiService';
+import Api from '../Api/EndPoint';
+import Loader from '../component/Loader';
 
 const {height} = Dimensions.get('window');
 
 const AiScreen = ({setOpenAIBottomsheet}) => {
   const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] =
+    useState(`It depends on what you are looking for in a notebook. Some popular options include Moleskine, Leuchtturm1917, and Rhodia. 
+htturm1917, and Rhodia.
+
+
+Moleskine notebooks are known for their high quality paper and classic design. They are available in a variety of sizes and formats, making them versatile for different needs.
+mats, making them versatile for different needs.
+
+Leuchtturm1917 notebooks are also known for their high quality paper and durable construction. They come with numbered pages, a table of contents, and stickers for labeling, making them great for organizing notes and thoughts.
+
+Rhodia notebooks are known for their smooth, fountain pen-friendly paper and bright white color. They come in various sizes and formats, including dot grid, lined, and blank pages, making them suitable for different types of writing and drawing.
+
+Ultimately, the best notebook for you will depend on your personal preferences and needs. Consider factors such as paper quality, size, format, and style when choosing a notebook.`);
+
+  const [visible, setVisible] = useState(false);
   const refAiRBSheet = useRef();
+
+  useEffect(() => {
+    if (question) {
+      setAnswer('');
+    }
+  }, [question]);
+
+  // ================================== Api ==================================== //
+
+  const getAnswer = async () => {
+    const rawData = {
+      message: question,
+    };
+    try {
+      setVisible(true);
+      const response = await apiPost(
+        Api.chatGptAi,
+        '',
+        JSON.stringify(rawData),
+      );
+      if (response) {
+        setAnswer(response?.response);
+      }
+    } catch (error) {
+      console.log('error in chatGpt api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  // ================================== Api ==================================== //
 
   useEffect(() => {
     if (setOpenAIBottomsheet) {
@@ -30,9 +80,9 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     }
   }, [setOpenAIBottomsheet]);
 
-  const handleEnterPress = useCallback(() => {
-    // Add your functionality here
-  }, []);
+  const handleEnterPress = () => {
+    getAnswer();
+  };
 
   const renderHeader = useCallback(
     () => (
@@ -51,6 +101,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     <LinearGradient
       colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
       style={styles.container}>
+      <Loader visible={visible} />
       {renderHeader()}
 
       <View style={styles.innerContainer}>
@@ -58,18 +109,28 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
           placeholder="Enter Message"
           value={question}
           onChangeText={setQuestion}
+          multiline={true}
           placeholderTextColor={Color.mediumGray}
-          style={{paddingLeft: scale(10)}}
+          style={styles.textInput}
         />
-
-        <Text></Text>
+        <ScrollView style={styles.answerView}>
+          <Text style={styles.answer}>{answer}</Text>
+        </ScrollView>
         <View style={styles.iconRow}>
-          <IconWithLabel IconComponent={Feather} name="copy" label="Copy" />
-          <IconWithLabel
-            IconComponent={MaterialIcons}
-            name="refresh"
-            label="Refresh"
-          />
+          <Pressable onPress={() => ''}>
+            <IconWithLabel IconComponent={Feather} name="copy" label="Copy" />
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              setAnswer('');
+              setQuestion('');
+            }}>
+            <IconWithLabel
+              IconComponent={MaterialIcons}
+              name="refresh"
+              label="Refresh"
+            />
+          </Pressable>
         </View>
       </View>
       <CustomeButton
@@ -163,15 +224,13 @@ const styles = StyleSheet.create({
     lineHeight: verticalScale(18),
   },
   iconRow: {
-    position: 'absolute',
-    bottom: verticalScale(10),
-    right: scale(10),
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     gap: scale(15),
     marginRight: scale(10),
     marginBottom: verticalScale(5),
+    marginTop: verticalScale(10),
   },
   iconContainer: {
     alignItems: 'center',
@@ -181,5 +240,19 @@ const styles = StyleSheet.create({
     color: Color.theme1,
     fontFamily: Font.regular,
     textAlign: 'center',
+  },
+  answerView: {height: '80%', color: 'red'},
+  answer: {
+    fontSize: moderateScale(14),
+    color: Color.Black,
+    fontFamily: Font.regular,
+    paddingLeft: scale(10),
+    height: '100%',
+  },
+  textInput: {
+    paddingLeft: scale(10),
+    color: Color.mediumGray,
+    fontSize: moderateScale(14),
+    fontFamily: Font.medium,
   },
 });

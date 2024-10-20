@@ -32,6 +32,7 @@ const Api = {
   support: `${Base_url}/profile/support`,
   mediatorUserSet: `${Base_url}/mediator/set`,
   mediatorCard: `${Base_url}/mediator/card`,
+  chatGptAi: `${Base_url}/chat-gpt/ask/question`,
 };
 
 export default Api;
