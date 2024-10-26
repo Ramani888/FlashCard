@@ -34,7 +34,7 @@ const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
 
 const NotesScreen = () => {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -95,7 +95,7 @@ const NotesScreen = () => {
     noteDesc,
     isColorView,
   ) => {
-    console.log('isColorView', isColorView);
+    // console.log('isColorView', isColorView);
     const rawData = {
       _id: editWithNote ? noteId : singleNoteData?._id,
       userId: global?.user?._id,
@@ -262,10 +262,12 @@ const NotesScreen = () => {
             style={{flex: 1, marginBottom: verticalScale(60)}}
           />
         ) : (
-          <NoDataView
-            content={'No Notes Found'}
-            noDataViewStyle={{marginTop: verticalScale(-70)}}
-          />
+          visible == false && (
+            <NoDataView
+              content={'No Notes Found'}
+              noDataViewStyle={{marginTop: verticalScale(-70)}}
+            />
+          )
         )}
         {BottomSheets()}
       </View>

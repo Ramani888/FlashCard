@@ -267,7 +267,7 @@ const SetComponent = ({
           showsVerticalScrollIndicator={false}
           style={{flex: 1}}
         />
-      ) : (
+      ) : visible == false && (
         <NoDataView content={'Set not found'} />
       )}
       <CustomeButton

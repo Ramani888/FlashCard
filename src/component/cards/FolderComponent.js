@@ -30,7 +30,7 @@ const FolderComponent = ({
   handleCreateSetClick,
   setLoading,
   search,
-  setSearchValue
+  setSearchValue,
 }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -158,7 +158,7 @@ const FolderComponent = ({
           ]}
           onPress={() => {
             onFolderClick(item._id);
-            setSearchValue('')
+            setSearchValue('');
           }}>
           <View style={styles.folderInfo}>
             {!colorView && (
@@ -239,7 +239,7 @@ const FolderComponent = ({
           style={styles.folderContainer}
           onPress={() => {
             onFolderClick('');
-            setSearchValue('')
+            setSearchValue('');
           }}>
           <Text style={styles.folderText}>ALL SETS</Text>
         </Pressable>
@@ -252,10 +252,12 @@ const FolderComponent = ({
             style={styles.flatlist}
           />
         ) : (
-          <NoDataView
-            content={'Folder not found'}
-            noDataViewStyle={{marginTop: verticalScale(-70)}}
-          />
+          visible == false && (
+            <NoDataView
+              content={'Folder not found'}
+              noDataViewStyle={{marginTop: verticalScale(-70)}}
+            />
+          )
         )}
 
         {BottomSheets()}

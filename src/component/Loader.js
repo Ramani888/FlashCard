@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   Modal,
   StyleSheet,
   Dimensions,
@@ -9,39 +8,33 @@ import {
 } from 'react-native';
 import React from 'react';
 import {scale} from 'react-native-size-matters';
+import {UIActivityIndicator} from 'react-native-indicators';
 import Color from './Color';
 
-const Loader = ({visible}) => {
+const Loader = ({visible, color}) => {
   return (
-    <View>
-      <Modal visible={visible} transparent>
-        <View style={styles.modalView}>
-          <View style={styles.mainView}>
-            <ActivityIndicator size={'large'} color={Color.theme1} />
-          </View>
-        </View>
-      </Modal>
-    </View>
+    <Modal transparent={true} animationType="none" visible={visible}>
+      <View style={styles.loaderContainer}>
+        <UIActivityIndicator
+          color={color ? color : Color.Black}
+          animating={visible}
+          size={scale(30)}
+        />
+      </View>
+    </Modal>
   );
 };
 
 export default Loader;
 
 const styles = StyleSheet.create({
-  modalView: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    backgroundColor: 'rgba(0,0,0,0.9)',
+  loaderContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  mainView: {
-    height: scale(100),
-    width: scale(100),
-    borderRadius: scale(10),
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
-    elevation: scale(5),
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
 });

@@ -178,7 +178,7 @@ const TermsScreen = () => {
   }, []);
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex: 1}}>
       {renderHeader()}
       <ScrollView style={styles.container}>
         <View style={styles.section}>
@@ -199,8 +199,8 @@ const TermsScreen = () => {
             <Text style={styles.text}>
               By creating an account, you agree that any information you input,
               upload, or save in the App can be viewed and used by the Bible
-              Study Toolkit team as deemed necessary. This includes, but is not
-              limited to, usage for app improvement, analytics, and
+              Flashcards & AI team as deemed necessary. This includes, but is
+              not limited to, usage for app improvement, analytics, and
               troubleshooting.
             </Text>
 
@@ -284,14 +284,14 @@ const TermsScreen = () => {
             <Text style={styles.text}>
               While we strive to maintain the security of your data, we cannot
               guarantee complete protection against breaches or privacy issues.
-              Bible Study Toolkit is not responsible for any data breaches but
+              Bible Flashcards & AI is not responsible for any data breaches but
               will take reasonable measures to keep your information safe and
               secure.
             </Text>
 
             <Text style={styles.subTitle}>11. Changes to the Terms</Text>
             <Text style={styles.text}>
-              Bible Study Toolkit reserves the right to modify these terms at
+              Bible Flashcards & AI reserves the right to modify these terms at
               any time. Continued use of the App constitutes acceptance of the
               updated terms.
             </Text>
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
     lineHeight: verticalScale(24),
     marginBottom: verticalScale(10),
     color: Color.Black,
-    textAlign:'justify'
+    textAlign: 'justify',
   },
 });
 

@@ -8,7 +8,7 @@ import {scale, verticalScale, moderateScale} from 'react-native-size-matters'; /
 import CustomeInputField from '../../custome/CustomeInputField';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeButton from '../../custome/CustomeButton';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import {apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
@@ -62,7 +62,7 @@ const SignInScreen = () => {
     try {
       const userData = await AsyncStorage.getItem('user');
       global.user = JSON.parse(userData);
-      navigation.navigate(ScreenName.home);
+      navigation.dispatch(StackActions.replace(ScreenName.home));
     } catch (error) {
       console.log('error in logged in', error);
     } finally {

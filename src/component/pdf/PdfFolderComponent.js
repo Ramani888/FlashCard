@@ -231,10 +231,12 @@ const PdfFolderComponent = ({onFolderClick}) => {
             style={styles.flatlist}
           />
         ) : (
-          <NoDataView
-            content={'Folder not found'}
-            noDataViewStyle={{marginTop: verticalScale(-70)}}
-          />
+          visible == false && (
+            <NoDataView
+              content={'Folder not found'}
+              noDataViewStyle={{marginTop: verticalScale(-70)}}
+            />
+          )
         )}
         {BottomSheets()}
 

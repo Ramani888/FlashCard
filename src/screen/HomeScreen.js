@@ -8,6 +8,8 @@ import {
   View,
   Dimensions,
   ScrollView,
+  ToastAndroid,
+  BackHandler,
 } from 'react-native';
 import Color from '../component/Color';
 import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -18,7 +20,7 @@ import PushNotificationComponent from '../component/homescreen/PushNotificationC
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../component/Screen';
 import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
@@ -50,6 +52,20 @@ const HomeScreen = () => {
   const refRBSheet = useRef();
   const navigation = useNavigation();
   const [cardTypeData, setCardTypeData] = useState([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
 
   const tabView = () => {
     return (

@@ -208,7 +208,7 @@ const ImageComponent = ({folderId}) => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          <NoDataView content={'Image not found'} />
+          visible == false && <NoDataView content={'Image not found'} />
         )}
         {BottomSheets()}
       </View>
@@ -335,8 +335,8 @@ const styles = StyleSheet.create({
     marginRight: scale(5),
     width: scale(60),
   },
-  folder:{
+  folder: {
     width: scale(102),
     paddingRight: scale(5),
-  }
+  },
 });

@@ -3,6 +3,7 @@ import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
 import CustomeHeader from '../../custome/CustomeHeader';
+import Font from '../../component/Font';
 
 const AboutUsScreen = () => {
   const renderHeader = useCallback(() => {
@@ -23,7 +24,7 @@ const AboutUsScreen = () => {
       <ScrollView style={styles.container}>
         <View style={styles.section}>
           <Text style={styles.paragraph}>
-            Bible Flashcards & AI** was created by a born again Christian with a
+            Bible Flashcards & AI was created by a born again Christian with a
             mission to equip the saints with powerful tools to study God's Word
             anywhere, anytime. This app is designed to help believers strengthen
             their memory, grow in evangelism, and sharpen their apologetics
@@ -35,7 +36,7 @@ const AboutUsScreen = () => {
             Our tools allow you to quickly grasp teachings, Scripture, history,
             and much more, while building an organized treasure trove of content
             that’s easy to access and reference. Whether you're learning alone
-            or with others, **Bible Flashcards & AI** helps you retain what
+            or with others, Bible Flashcards & AI helps you retain what
             you've studied and always be ready in and out of season, no matter
             who you meet.
           </Text>
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
   },
   bold: {
-    fontWeight: 'bold',
+    fontFamily:Font.bold
   },
   listItem: {
     fontSize: scale(14),

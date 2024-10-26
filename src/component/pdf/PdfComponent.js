@@ -25,15 +25,15 @@ import NoDataView from '../NoDataView';
 import RNFetchBlob from 'rn-fetch-blob';
 import {ScreenName} from '../Screen';
 import moment from 'moment';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
 const pdfData = [{name: 'pdf1'}, {name: 'pdf2'}, {name: 'pdf3'}];
 
 const PdfComponent = memo(({folderId}) => {
-  const isFocused = useIsFocused()
-  const navigation = useNavigation()
+  const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -239,7 +239,7 @@ const PdfComponent = memo(({folderId}) => {
         </View>
       );
     },
-    [openModal,pdfData],
+    [openModal, pdfData],
   );
 
   const renderBody = () => {
@@ -251,13 +251,15 @@ const PdfComponent = memo(({folderId}) => {
             renderItem={renderPdf}
             keyExtractor={item => item.name}
             showsVerticalScrollIndicator={false}
-            style={{flex: 1,marginBottom:verticalScale(60)}}
+            style={{flex: 1, marginBottom: verticalScale(60)}}
           />
         ) : (
-          <NoDataView
-            content={'Pdf not found'}
-            noDataViewStyle={{marginTop: verticalScale(-70)}}
-          />
+          visible == false && (
+            <NoDataView
+              content={'Pdf not found'}
+              noDataViewStyle={{marginTop: verticalScale(-70)}}
+            />
+          )
         )}
         {BottomSheets()}
       </View>
@@ -318,7 +320,7 @@ export default PdfComponent;
 
 const styles = StyleSheet.create({
   container: {
-   flex:1
+    flex: 1,
   },
   listContainer: {
     flex: 1,
