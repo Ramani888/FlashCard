@@ -251,7 +251,7 @@ const ImageComponent = ({folderId}) => {
             imageId={imageId}
           />
         }
-        width={scale(135)}
+        width={'40%'}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   sheetContainer: {
     flexDirection: 'row',
     gap: scale(50),
-    marginVertical: verticalScale(15),
+    marginVertical: verticalScale(10),
   },
   modal: {
     position: 'absolute',

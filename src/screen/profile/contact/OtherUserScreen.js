@@ -12,6 +12,7 @@ import Api from '../../../Api/EndPoint';
 import CustomeModal from '../../../custome/CustomeModal';
 import {ScreenName} from '../../../component/Screen';
 import Loader from '../../../component/Loader';
+import NoDataView from '../../../component/NoDataView';
 
 const OtherUserScreen = () => {
   const route = useRoute();
@@ -80,15 +81,25 @@ const OtherUserScreen = () => {
           navigation.navigate(ScreenName.otherUserCard, {item: item})
         }>
         <Text style={styles.setName}>{item?.name}</Text>
-        <Pressable
-          ref={plusButtonRef}
-          style={styles.plusButton}
-          onPress={() => {
-            openModal();
-            setSingleSet(item);
-          }}>
-          <Entypo name="plus" size={scale(20)} color={Color.White} />
-        </Pressable>
+        <View style={styles.rowWithGap}>
+          <View style={styles.subSetContainer}>
+            <Text style={styles.subSetText}>{item?.cardCount}</Text>
+            <Image
+              source={require('../../../Assets/Img/cardIcon.png')}
+              style={styles.cardIcon}
+              tintColor={Color.Black}
+            />
+          </View>
+          <Pressable
+            ref={plusButtonRef}
+            style={styles.plusButton}
+            onPress={() => {
+              openModal();
+              setSingleSet(item);
+            }}>
+            <Entypo name="plus" size={scale(20)} color={Color.White} />
+          </Pressable>
+        </View>
       </Pressable>
     );
   };
@@ -104,11 +115,21 @@ const OtherUserScreen = () => {
           <Image source={{uri: item?.picture}} style={styles.profileImage} />
         </LinearGradient>
 
-        <FlatList
-          data={setData}
-          renderItem={renderItem}
-          style={styles.flatlist}
-        />
+        {setData?.length > 0 ? (
+          <FlatList
+            data={setData}
+            renderItem={renderItem}
+            style={styles.flatlist}
+          />
+        ) : (
+          visible == false && (
+            <NoDataView
+              content={'Set not found'}
+              noDataViewStyle={{}}
+              noDataTextStyle={{color: Color.Black}}
+            />
+          )
+        )}
       </View>
     );
   };
@@ -134,7 +155,7 @@ const OtherUserScreen = () => {
             <Text style={styles.modalContentText}>Add Entire Set</Text>
           </Pressable>
         }
-        width={scale(140)}
+        width={'40.5%'}
         justifyContent="flex-end"
         borderRadius={10}
         modalContainerStyle={[
@@ -193,7 +214,25 @@ const styles = StyleSheet.create({
     color: Color.Black,
     marginLeft: scale(15),
     textTransform: 'uppercase',
-    width: '81%',
+    width: '69%',
+  },
+  rowWithGap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: scale(10),
+  },
+  subSetContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: scale(4),
+  },
+  subSetText: {
+    fontSize: scale(15),
+    color: Color.Black,
+  },
+  cardIcon: {
+    width: scale(16),
+    height: scale(13),
   },
   plusButton: {
     backgroundColor: Color.theme1,

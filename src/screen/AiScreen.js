@@ -102,18 +102,18 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
       <View style={styles.innerContainer}>
         <TextInput
           placeholder={
-            "Example :\n" +
+            'Example :\n' +
             "'Get John 3:16 kjv'\n" +
             "'What Are the names of the 12 apostles?'\n\n" +
-            "AI can make mistakes. Always check information.\n\n" +
-            "1 credit is used each time the AI feature is used.\n" +
-            "Subscribe or watch Ad to earn 3 credits."
+            'AI can make mistakes. Always check information.\n\n' +
+            '1 credit is used each time the AI feature is used.\n' +
+            'Subscribe or watch Ad to earn 3 credits.'
           }
           value={question}
           onChangeText={setQuestion}
           multiline={true}
-          placeholderTextColor="#D1D1D6" 
-          style={[styles.textInput,{height: answer ? '13%' : '36%'}]}
+          placeholderTextColor="#D1D1D6"
+          style={styles.textInput}
         />
         <ScrollView style={styles.answerView}>
           <Text style={styles.answer}>{answer}</Text>

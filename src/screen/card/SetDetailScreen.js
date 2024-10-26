@@ -427,6 +427,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleLine: {
+    width:scale(200),
     fontSize: scale(20),
     color: Color.White,
     fontFamily: Font.medium,

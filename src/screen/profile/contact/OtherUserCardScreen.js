@@ -129,11 +129,13 @@ const OtherUserCardScreen = () => {
             renderItem={renderCard}
           />
         ) : (
-          <NoDataView
-            content={'Card not found'}
-            noDataViewStyle={{marginTop: verticalScale(-70)}}
-            noDataTextStyle={{color: Color.White}}
-          />
+          visible == false && (
+            <NoDataView
+              content={'Card not found'}
+              noDataViewStyle={{marginTop: verticalScale(-70)}}
+              noDataTextStyle={{color: Color.White}}
+            />
+          )
         )}
       </View>
     );
@@ -164,7 +166,7 @@ const OtherUserCardScreen = () => {
             <Text style={styles.modalContentText}>Add Card</Text>
           </Pressable>
         }
-        width={scale(110)}
+        width={'31%'}
         justifyContent="flex-end"
         borderRadius={10}
         modalContainerStyle={[

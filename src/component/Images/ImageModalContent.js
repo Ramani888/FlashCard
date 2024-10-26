@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   switchLabel: {
-    fontSize: scale(13),
+    fontSize: moderateScale(13),
     color: Color.Black,
     fontFamily: Font.regular,
   },

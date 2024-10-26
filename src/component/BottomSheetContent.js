@@ -188,7 +188,7 @@ export default React.memo(BottomSheetContent);
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: scale(15),
-    height: verticalScale(400),
+    height: '100%',
   },
   bodyContainer: {
     borderWidth: scale(1),
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: verticalScale(5),
+    // marginVertical: verticalScale(5),
   },
   switchContent: {
     alignItems: 'center',

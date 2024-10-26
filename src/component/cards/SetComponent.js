@@ -1,5 +1,13 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Color from '../Color';
 import Font from '../Font';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -17,6 +25,8 @@ import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import {useSelector} from 'react-redux';
 import NoDataView from '../NoDataView';
+
+const {height, width} = Dimensions.get('window');
 
 const SetComponent = ({
   folderId,
@@ -143,7 +153,7 @@ const SetComponent = ({
   const openModal = (item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
       const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - width * 3.3, y: y + offsetY});
+      setModalPosition({x: x - width * 3.45, y: y + offsetY});
       setModalVisible(true);
     });
   };
@@ -217,7 +227,7 @@ const SetComponent = ({
               source={require('../../Assets/Img/folder.png')}
               style={styles.folderIcon}
             />
-            <Text style={styles.folderText}>
+            <Text style={[styles.folderText,{marginLeft: item?.folderName ? scale(5) : 0 }]}>
               {item?.folderName ? item?.folderName : ''}
             </Text>
           </View>
@@ -231,7 +241,7 @@ const SetComponent = ({
     return (
       <RBSheet
         ref={refRBSheet}
-        height={verticalScale(510)}
+        height={height * 0.74}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -267,8 +277,8 @@ const SetComponent = ({
           showsVerticalScrollIndicator={false}
           style={{flex: 1}}
         />
-      ) : visible == false && (
-        <NoDataView content={'Set not found'} />
+      ) : (
+        visible == false && <NoDataView content={'Set not found'} />
       )}
       <CustomeButton
         buttonColor={Color.theme1}
@@ -314,7 +324,7 @@ const SetComponent = ({
             getSetData={getSetData}
           />
         }
-        width={'42%'}
+        width={'43.5%'}
         height={scale(195)}
         justifyContent="flex-end"
         borderRadius={20}
@@ -365,7 +375,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
-    width:scale(200),
+    width: scale(200),
   },
   rowWithGap: {
     flexDirection: 'row',
@@ -393,7 +403,7 @@ const styles = StyleSheet.create({
   folderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scale(10),
+    // gap: scale(10),
     backgroundColor: Color.White,
     height: scale(35),
     borderRadius: scale(10),
@@ -429,6 +439,6 @@ const styles = StyleSheet.create({
   sheetContainer: {
     flexDirection: 'row',
     gap: scale(50),
-    marginVertical: verticalScale(15),
+    marginVertical: height*0.01,
   },
 });

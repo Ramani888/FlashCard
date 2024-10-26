@@ -1,13 +1,14 @@
+import React, {useCallback, useState, memo} from 'react';
 import {
   FlatList,
   Image,
   Pressable,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -18,32 +19,40 @@ import Api from '../../Api/EndPoint';
 import {apiPost} from '../../Api/ApiService';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
+import CustomeInputField from '../../custome/CustomeInputField';
 
 const issueData = [
   {issueName: 'Bug Report'},
   {issueName: 'Feedback'},
   {issueName: 'Issues'},
   {issueName: 'Suggestions'},
-  {issueName: 'ETC'},
 ];
+
+const options = {
+  mediaType: 'photo',
+  quality: 1,
+  selectionLimit: 1,
+};
 
 const SupportScreen = () => {
   const [selectedIssue, setSelectedIssue] = useState('');
   const [visible, setVisible] = useState(false);
   const [imageFile, setImageFile] = useState({});
+  const [issueDesc, setIssueDesc] = useState('');
+  const [selectedIssueIndex, setSelectedIssueIndex] = useState(null);
 
-  // =================================== Api ================================ //
-
-  const submit = async () => {
-    var formdata = new FormData();
+  const submit = useCallback(async () => {
+    const formdata = new FormData();
     formdata.append('image', imageFile);
     formdata.append('supportType', selectedIssue);
+    formdata.append('supportMessage', issueDesc);
     formdata.append('userId', global.user?._id);
+
     try {
       setVisible(true);
       const response = await apiPost(Api.support, '', formdata);
-      if (response?.success == true) {
-        showMessageonTheScreen(response?.message);
+      if (response?.success) {
+        showMessageonTheScreen(response.message);
         setSelectedIssue('');
         setImageFile({});
       }
@@ -52,122 +61,134 @@ const SupportScreen = () => {
     } finally {
       setVisible(false);
     }
-  };
+  }, [imageFile, selectedIssue, issueDesc]);
 
-  // =================================== Api ================================ //
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (imageFile?.name && selectedIssue) {
       submit();
     } else {
-      if (!imageFile?.name && !selectedIssue) {
-        showMessageonTheScreen('Please enter issue detail');
-      } else {
-        !imageFile?.name &&
-          showMessageonTheScreen('Please attach the screenshot of your issue');
-        !selectedIssue && showMessageonTheScreen('Please select issue');
-      }
+      const message =
+        !imageFile?.name && !selectedIssue
+          ? 'Please enter issue detail'
+          : !imageFile?.name
+          ? 'Please attach the screenshot of your issue'
+          : 'Please select issue';
+      showMessageonTheScreen(message);
     }
-  };
+  }, [imageFile, selectedIssue, submit]);
 
-  const options = {
-    mediaType: 'photo',
-    quality: 1,
-    selectionLimit: 1,
-  };
-
-  const handleSelectFromGallery = async () => {
+  const handleSelectFromGallery = useCallback(async () => {
     const result = await launchImageLibrary(options);
     const data = result.assets;
-    const file = {
-      uri: data[0].uri,
-      type: data[0].type,
-      name: data[0].fileName,
-    };
-    setImageFile(file);
-  };
+    if (data && data.length > 0) {
+      setImageFile({
+        uri: data[0].uri,
+        type: data[0].type,
+        name: data[0].fileName,
+      });
+    }
+  }, []);
 
-  const renderHeader = () => {
-    return (
+  const renderHeader = useCallback(
+    () => (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={'SUPPORT'}
+        title="SUPPORT"
         iconColor={Color.Black}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
       />
-    );
-  };
+    ),
+    [],
+  );
 
-  const renderIssue = ({item}) => {
-    const isSelected = selectedIssue === item?.issueName;
-
-    return (
-      <Pressable
-        style={[
-          styles.issueView,
-          {backgroundColor: isSelected ? Color.theme1 : Color.WhiteDefault},
-        ]}
-        onPress={() => setSelectedIssue(item?.issueName)}>
-        <Text
-          style={[
-            styles.dot,
-            {backgroundColor: isSelected ? Color.White : Color.Black},
-          ]}
-        />
-        <Text
-          style={[
-            styles.issue,
-            {color: isSelected ? Color.White : Color.Gray},
-          ]}>
-          {item?.issueName}
-        </Text>
-      </Pressable>
-    );
-  };
-
-  const renderBody = () => {
-    return (
-      <View style={styles.bodyContainer}>
-        <Text style={styles.issueHeading}>Please let us know</Text>
+  const renderIssue = useCallback(
+    ({item, index}) => {
+      const isSelected = selectedIssue === item.issueName;
+      return (
         <View>
-          <FlatList
-            data={issueData}
-            renderItem={renderIssue}
-            style={{marginTop: verticalScale(10)}}
-          />
-          <Text style={styles.note}>
-            We will email you back as soon as posible.
-          </Text>
-        </View>
-        <Pressable
-          style={{marginTop: verticalScale(70), alignItems: 'center'}}
-          onPress={() => handleSelectFromGallery()}>
-          {imageFile?.uri ? (
-            <Image
-              source={{uri: imageFile?.uri}}
+          <Pressable
+            style={[
+              styles.issueView,
+              {backgroundColor: isSelected ? Color.theme1 : Color.WhiteDefault},
+            ]}
+            onPress={() => {
+              setSelectedIssue(item.issueName);
+              setSelectedIssueIndex(index);
+            }}>
+            <Text
               style={[
-                styles.image,
-                {borderRadius: scale(5), marginTop: verticalScale(30)},
+                styles.dot,
+                {backgroundColor: isSelected ? Color.White : Color.Black},
               ]}
             />
-          ) : (
-            <Image
-              source={require('../../Assets/Img/imageFram.png')}
-              style={styles.image}
+            <Text
+              style={[
+                styles.issue,
+                {color: isSelected ? Color.White : Color.Gray},
+              ]}>
+              {item.issueName}
+            </Text>
+          </Pressable>
+          {selectedIssueIndex === index && (
+            <CustomeInputField
+              placeholder={`Enter ${selectedIssue}...`}
+              height={verticalScale(180)}
+              onChangeText={setIssueDesc}
+              value={issueDesc}
+              textArea
+              placeholderTextColor={Color.LightGray}
+              borderRadius={scale(10)}
+              multiline
+              numberOfLines={8}
+              textAlignVertical="top"
+              inputContainerStyles={styles.inputContainerStyle}
             />
           )}
+        </View>
+      );
+    },
+    [selectedIssue, selectedIssueIndex, issueDesc],
+  );
+
+  const renderBody = useCallback(
+    () => (
+      <ScrollView
+        style={styles.bodyContainer}
+        showsVerticalScrollIndicator={false}>
+        <Text style={styles.issueHeading}>Please let us know</Text>
+        <FlatList
+          data={issueData}
+          renderItem={renderIssue}
+          style={{marginTop: verticalScale(10)}}
+          keyExtractor={(item, index) => index.toString()}
+        />
+        <Text style={styles.note}>
+          We will email you back as soon as possible.
+        </Text>
+        <View style={styles.screenshotContainer}>
+          <Pressable onPress={handleSelectFromGallery}>
+            <Image
+              source={
+                imageFile.uri
+                  ? {uri: imageFile.uri}
+                  : require('../../Assets/Img/imageFram.png')
+              }
+              style={imageFile.uri ? styles.selectedImage : styles.image}
+            />
+          </Pressable>
           <Text style={styles.screenshotText}>
-            {imageFile?.uri ? '' : 'Attach screenshot of issue'}
+            {imageFile.uri ? '' : 'Attach screenshot of issue'}
           </Text>
-        </Pressable>
-      </View>
-    );
-  };
+        </View>
+      </ScrollView>
+    ),
+    [handleSelectFromGallery, renderIssue, imageFile],
+  );
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
       <Loader visible={visible} />
       <StatusBar backgroundColor={Color.WhiteDefault} />
       {renderHeader()}
@@ -183,15 +204,16 @@ const SupportScreen = () => {
         fontFamily={Font.semiBold}
         marginHorizontal={scale(15)}
         marginBottom={verticalScale(10)}
-        onPress={() => handleSubmit()}
+        onPress={handleSubmit}
       />
     </View>
   );
 };
 
-export default React.memo(SupportScreen);
+export default memo(SupportScreen);
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   headerStyle: {
     backgroundColor: Color.transparent,
     height: verticalScale(90),
@@ -228,11 +250,33 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     marginTop: verticalScale(10),
   },
+  screenshotContainer: {
+    marginVertical: verticalScale(100),
+    alignItems: 'center',
+  },
   screenshotText: {
     fontSize: scale(15),
     color: Color.mediumGray,
     fontFamily: Font.regular,
     marginTop: verticalScale(10),
   },
-  image: {width: scale(95), height: scale(95)},
+  inputContainerStyle: {
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+    borderRadius: scale(10),
+    marginBottom: verticalScale(15),
+    backgroundColor: Color.White,
+  },
+  image: {
+    width: scale(95),
+    height: scale(95),
+    alignSelf: 'center',
+  },
+  selectedImage: {
+    width: scale(95),
+    height: scale(95),
+    alignSelf: 'center',
+    borderRadius: scale(5),
+    marginTop: verticalScale(30),
+  },
 });

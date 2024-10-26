@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {Switch} from '@rneui/themed';
 import Color from '../Color';
 import Font from '../Font';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import {useSelector} from 'react-redux';
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     height: verticalScale(33),
   },
   text: {
-    fontSize: scale(14),
+    fontSize: moderateScale(14),
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),

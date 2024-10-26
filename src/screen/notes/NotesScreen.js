@@ -34,7 +34,8 @@ const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
 
 const NotesScreen = () => {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
+  console.log('visible', visible);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -262,7 +263,7 @@ const NotesScreen = () => {
             style={{flex: 1, marginBottom: verticalScale(60)}}
           />
         ) : (
-          visible == false && (
+          visible === false && (
             <NoDataView
               content={'No Notes Found'}
               noDataViewStyle={{marginTop: verticalScale(-70)}}
@@ -272,7 +273,7 @@ const NotesScreen = () => {
         {BottomSheets()}
       </View>
     ),
-    [renderNotes, BottomSheets],
+    [renderNotes, BottomSheets, visible],
   );
 
   return (

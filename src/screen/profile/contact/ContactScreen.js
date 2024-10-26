@@ -201,7 +201,7 @@ const ContactScreen = () => {
             deleteContacts={deleteContacts}
           />
         }
-        width={scale(155)}
+        width={'44%'}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[
@@ -286,5 +286,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  profileImage:{height:scale(35),width:scale(35),borderRadius:scale(17.5)},
+  profileImage: {
+    height: scale(35),
+    width: scale(35),
+    borderRadius: scale(17.5),
+  },
 });

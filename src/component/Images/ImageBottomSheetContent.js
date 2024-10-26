@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Color.WhiteDefault,
     position: 'absolute',
-    top: verticalScale(-30),
+    top: verticalScale(-20),
     right: scale(9),
   },
   imageName: {

@@ -282,10 +282,10 @@ const ProfileScreen = () => {
                 </Text>
                 <Progress.Bar
                   progress={progress}
-                  width={150}
+                  width={scale(150)}
                   style={{marginTop: verticalScale(10)}}
                   color={Color.theme1}
-                  height={verticalScale(15)}
+                  height={verticalScale(12)}
                 />
               </View>
             </View>
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   subscriptionBoxContainer: {
-    width: '42%',
+    width: '43%',
     borderWidth: scale(2),
     borderColor: '#146D8B',
     padding: scale(10),
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     paddingLeft: scale(10),
   },
-  subscriptionRightView: {gap: verticalScale(10), width: '55%'},
+  subscriptionRightView: {gap: verticalScale(10), width: '54%'},
   aiCreditsContainer: {
     width: '100%',
     alignItems: 'center',
