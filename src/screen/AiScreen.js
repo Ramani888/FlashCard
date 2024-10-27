@@ -209,6 +209,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
             fontFamily={Font.semiBold}
             alignSelf={'center'}
             marginTop={verticalScale(15)}
+            marginBottom={verticalScale(10)}
             onPress={handleEnterPress}
           />
         </LinearGradient>
