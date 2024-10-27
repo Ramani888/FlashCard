@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  KeyboardAvoidingView,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -18,7 +19,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomeHeader from '../custome/CustomeHeader';
 import LinearGradient from 'react-native-linear-gradient';
-import {apiPost} from '../Api/ApiService';
+import {apiGet, apiPost, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
 import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
@@ -29,6 +30,9 @@ const {height} = Dimensions.get('window');
 const AiScreen = ({setOpenAIBottomsheet}) => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
+  const [inputHeight, setInputHeight] = useState(verticalScale(190));
+  const [userCredit, setUserCredit] = useState('');
+  console.log('userCredit', userCredit);
 
   const [visible, setVisible] = useState(false);
   const refAiRBSheet = useRef();
@@ -38,6 +42,10 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
       setAnswer('');
     }
   }, [question]);
+
+  useEffect(() => {
+    getProfileData(true);
+  }, []);
 
   // ================================== Api ==================================== //
 
@@ -54,11 +62,43 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
       );
       if (response) {
         setAnswer(response?.response);
+        updateCredit();
       }
     } catch (error) {
       console.log('error in chatGpt api', error);
     } finally {
       setVisible(false);
+    }
+  };
+
+  const getProfileData = async visible => {
+    try {
+      visible && setVisible(true);
+      const response = await apiGet(
+        `${Api.profile}?userId=${global.user?._id}`,
+      );
+      setUserCredit(response?.userCreditData?.credit);
+    } catch (error) {
+      console.log('error in get profile api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const updateCredit = async () => {
+    const rawData = {
+      userId: global.user?._id,
+      credit: 1,
+      type: 'debited',
+    };
+    try {
+      setVisible(true);
+      const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
+      if (response.success == true) {
+        getProfileData(false);
+      }
+    } catch (error) {
+      console.log('error in update card', error);
     }
   };
 
@@ -71,7 +111,13 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   }, [setOpenAIBottomsheet]);
 
   const handleEnterPress = () => {
-    getAnswer();
+    if (userCredit > 0) {
+      getAnswer();
+    } else {
+      showMessageonTheScreen(
+        'You’ve hit your credit limit! Watch a video ad to instantly earn more credits and continue using our services',
+      );
+    }
   };
 
   const copyToClipboard = () => {
@@ -93,61 +139,81 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   );
 
   return (
-    <LinearGradient
-      colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
-      <Loader visible={visible} />
-      {renderHeader()}
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled">
+        <LinearGradient
+          colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
+          style={styles.container}>
+          <Loader visible={visible} />
+          {renderHeader()}
 
-      <View style={styles.innerContainer}>
-        <TextInput
-          placeholder={
-            'Example :\n' +
-            "'Get John 3:16 kjv'\n" +
-            "'What Are the names of the 12 apostles?'\n\n" +
-            'AI can make mistakes. Always check information.\n\n' +
-            '1 credit is used each time the AI feature is used.\n' +
-            'Subscribe or watch Ad to earn 3 credits.'
-          }
-          value={question}
-          onChangeText={setQuestion}
-          multiline={true}
-          placeholderTextColor="#D1D1D6"
-          style={styles.textInput}
-        />
-        <ScrollView style={styles.answerView}>
-          <Text style={styles.answer}>{answer}</Text>
-        </ScrollView>
-        <View style={styles.iconRow}>
-          <Pressable onPress={() => answer && copyToClipboard()}>
-            <IconWithLabel IconComponent={Feather} name="copy" label="Copy" />
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              setAnswer('');
-              setQuestion('');
-            }}>
-            <IconWithLabel
-              IconComponent={MaterialIcons}
-              name="refresh"
-              label="Refresh"
+          <View style={styles.innerContainer}>
+            <TextInput
+              placeholder={
+                'Example :\n' +
+                "'Get John 3:16 kjv'\n" +
+                "'What Are the names of the 12 apostles?'\n\n" +
+                'AI can make mistakes. Always check information.\n\n' +
+                '1 credit is used each time the AI feature is used.\n' +
+                'Subscribe or watch Ad to earn 3 credits.'
+              }
+              value={question}
+              onChangeText={setQuestion}
+              multiline={true}
+              placeholderTextColor="#D1D1D6"
+              onContentSizeChange={event =>
+                setInputHeight(
+                  event.nativeEvent.contentSize.height + verticalScale(10),
+                )
+              }
+              style={[
+                styles.textInput,
+                {height: answer ? inputHeight : verticalScale(190)},
+              ]}
             />
-          </Pressable>
-        </View>
-      </View>
-      <CustomeButton
-        buttonColor={Color.theme1}
-        buttonWidth="90%"
-        title="ENTER"
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
-        fontColor={Color.White}
-        fontFamily={Font.semiBold}
-        alignSelf={'center'}
-        marginTop={verticalScale(15)}
-        onPress={handleEnterPress}
-      />
-    </LinearGradient>
+            <ScrollView style={styles.answerView}>
+              <Text style={styles.answer}>{answer}</Text>
+            </ScrollView>
+            <View style={styles.iconRow}>
+              <Pressable onPress={() => answer && copyToClipboard()}>
+                <IconWithLabel
+                  IconComponent={Feather}
+                  name="copy"
+                  label="Copy"
+                />
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setAnswer('');
+                  setQuestion('');
+                }}>
+                <IconWithLabel
+                  IconComponent={MaterialIcons}
+                  name="refresh"
+                  label="Refresh"
+                />
+              </Pressable>
+            </View>
+          </View>
+          <CustomeButton
+            buttonColor={Color.theme1}
+            buttonWidth="90%"
+            title="ENTER"
+            borderRadius={scale(10)}
+            fontSize={scale(15)}
+            fontColor={Color.White}
+            fontFamily={Font.semiBold}
+            alignSelf={'center'}
+            marginTop={verticalScale(15)}
+            onPress={handleEnterPress}
+          />
+        </LinearGradient>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -164,6 +230,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  scrollViewContent: {
+    flexGrow: 2,
+  },
   headerStyle: {
     height: verticalScale(90),
     alignItems: 'flex-end',
@@ -172,24 +241,12 @@ const styles = StyleSheet.create({
     color: Color.White,
     fontSize: scale(20),
   },
-  imageContainer: {
-    borderWidth: scale(1),
-    borderRadius: scale(20),
-    borderColor: Color.LightGray,
-    height: height * 0.58,
-  },
-  imageStyle: {
-    width: scale(60),
-    height: scale(60),
-    alignSelf: 'center',
-    marginTop: verticalScale(15),
-  },
   innerContainer: {
     marginHorizontal: scale(17),
     borderRadius: scale(10),
     borderWidth: scale(1),
     borderColor: Color.LightGray,
-    height: '75%',
+    height: verticalScale(540),
     backgroundColor: Color.White,
     marginTop: verticalScale(10),
   },

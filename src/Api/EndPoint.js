@@ -30,9 +30,11 @@ const Api = {
   profilePic: `${Base_url}/profile/picture`,
   subscription: `${Base_url}/profile/subscription`,
   support: `${Base_url}/profile/support`,
+  profile: `${Base_url}/profile`,
   mediatorUserSet: `${Base_url}/mediator/set`,
   mediatorCard: `${Base_url}/mediator/card`,
   chatGptAi: `${Base_url}/chat-gpt/ask/question`,
+  credit: `${Base_url}/credit`,
 };
 
 export default Api;

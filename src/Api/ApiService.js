@@ -3,6 +3,7 @@ import showMessageonTheScreen from "../component/ShowMessageOnTheScreen";
 const setAuthHeader = (userToken, isFormData = false) => {
   var myHeaders = new Headers();
   myHeaders.append('Authorization', global.token || userToken);
+  console.log('token',global.token)
 
   if (!isFormData) {
     myHeaders.append('Content-Type', 'application/json');

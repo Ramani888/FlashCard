@@ -56,7 +56,14 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
       <Pressable onPress={handleSelectFromGallery}>
         <Image
           source={require('../../Assets/Img/imageFram.png')}
-          style={styles.image}
+          style={[
+            styles.image,
+            {
+              marginBottom: imageFile?.name
+                ? verticalScale(5)
+                : verticalScale(15),
+            },
+          ]}
           resizeMode="contain"
         />
         {imageFile?.name && (
@@ -117,5 +124,6 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.medium,
     textAlign: 'center',
+    marginBottom: verticalScale(6),
   },
 });

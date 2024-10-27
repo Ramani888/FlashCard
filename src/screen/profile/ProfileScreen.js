@@ -27,7 +27,7 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
 import CustomeButton from '../../custome/CustomeButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {apiPost, apiPut} from '../../Api/ApiService';
+import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import * as Progress from 'react-native-progress';
 
@@ -49,12 +49,15 @@ const ProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [profileUpdate, setProfileUpdate] = useState(false);
+  const [userCreditData, setUserCreditData] = useState({});
+  const [userStorageData, setUserStorageData] = useState({});
   const refUserNameRBSheet = useRef();
   const refEmailRBSheet = useRef();
 
   useEffect(() => {
     setEmail(global.user?.email);
     setUserName(global.user?.userName);
+    getProfileData();
   }, []);
 
   // =================================== Api =================================== //
@@ -73,6 +76,22 @@ const ProfileScreen = () => {
       }
     } catch (error) {
       console.log('error in updateProfilePicture api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const getProfileData = async () => {
+    try {
+      setVisible(true);
+      const response = await apiGet(
+        `${Api.profile}?userId=${global.user?._id}`,
+      );
+      console.log('response', response);
+      setUserCreditData(response?.userCreditData);
+      setUserStorageData(response?.userStorageData);
+    } catch (error) {
+      console.log('error in get profile api', error);
     } finally {
       setVisible(false);
     }
@@ -205,10 +224,10 @@ const ProfileScreen = () => {
     );
   }, []);
 
-  const currentStorage = 2.3;
-  const totalStorage = 3;
+  const currentStorage = userStorageData?.coveredStorage;
+  const totalStorage = userStorageData?.storage;
 
-  const progress = currentStorage / totalStorage;
+  const progress = totalStorage ? currentStorage / totalStorage : 0;
 
   return (
     <LinearGradient
@@ -274,11 +293,14 @@ const ProfileScreen = () => {
             <View style={styles.subscriptionRightView}>
               <View style={styles.aiCreditsContainer}>
                 <Text style={styles.aiCreditsText}>AI CREDITS</Text>
-                <Text style={styles.aiCreditsText}>50</Text>
+                <Text style={styles.aiCreditsText}>
+                  {userCreditData?.credit}
+                </Text>
               </View>
               <View style={styles.aiCreditsContainer}>
                 <Text style={styles.aiCreditsText}>
-                  STORAGE ({currentStorage}/{totalStorage} GB)
+                  STORAGE ({currentStorage}/{totalStorage}{' '}
+                  {userStorageData?.unit})
                 </Text>
                 <Progress.Bar
                   progress={progress}
@@ -432,7 +454,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
   },
   aiCreditsText: {
-    fontSize: moderateScale(15),
+    fontSize: moderateScale(14),
     fontFamily: Font.medium,
     color: Color.White,
   },

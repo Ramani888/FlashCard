@@ -5,7 +5,7 @@ import CloudScreen from '../screen/profile/CloudScreen';
 
 const Stack = createStackNavigator();
 
-const AppStack = ({token}) => {
+const AppStack = ({user}) => {
   const {
     signIn,
     signUp,
@@ -69,7 +69,7 @@ const AppStack = ({token}) => {
     OtherUserCardScreen
   } = ScreenPath;
 
-  const initialRouteName = useMemo(() => (token ? home : signIn), [token]);
+  const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
 
   return (
     <Stack.Navigator initialRouteName={initialRouteName}>
