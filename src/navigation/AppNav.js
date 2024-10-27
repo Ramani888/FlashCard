@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../component/Loader';
 
 const AppNav = () => {
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,9 +17,9 @@ const AppNav = () => {
       const userData = await AsyncStorage.getItem('user');
       if (userData) {
         const parsedUser = JSON.parse(userData);
-        console.log('User',parsedUser)
-        setUser(parsedUser);
+        setToken(parsedUser.token)
         global.user = parsedUser;
+        global.token = parsedUser.token;
       } else {
         global.user = null;
         setUser(null);
@@ -39,7 +39,7 @@ const AppNav = () => {
 
   return (
     <View style={{flex: 1}}>
-      <AppStack user={user} />
+      <AppStack token={token} />
     </View>
   );
 };

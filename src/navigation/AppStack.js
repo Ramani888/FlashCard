@@ -5,7 +5,7 @@ import CloudScreen from '../screen/profile/CloudScreen';
 
 const Stack = createStackNavigator();
 
-const AppStack = ({user}) => {
+const AppStack = ({token}) => {
   const {
     signIn,
     signUp,
@@ -37,8 +37,6 @@ const AppStack = ({user}) => {
     otherUser,
     otherUserCard
   } = ScreenName;
-  console.log('viewPdf', ScreenName.viewPdfScreen);
-
   const {
     SignUpScreen,
     OtpVerifyScreen,
@@ -71,7 +69,7 @@ const AppStack = ({user}) => {
     OtherUserCardScreen
   } = ScreenPath;
 
-  const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
+  const initialRouteName = useMemo(() => (token ? home : signIn), [token]);
 
   return (
     <Stack.Navigator initialRouteName={initialRouteName}>
