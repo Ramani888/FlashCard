@@ -86,9 +86,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.flashcard"
+    namespace "com.flashcard.app"
     defaultConfig {
-        applicationId "com.flashcard"
+        applicationId "com.flashcard.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2

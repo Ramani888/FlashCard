@@ -1,4 +1,4 @@
-package com.flashcard;
+package com.flashcard.app;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
