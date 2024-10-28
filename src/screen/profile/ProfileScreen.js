@@ -234,7 +234,7 @@ const ProfileScreen = () => {
       colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
       style={styles.container}>
       <StatusBar translucent backgroundColor={Color.transparent} />
-      <Loader visible={visible} />
+      <Loader visible={visible} color={Color.White} />
       <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
         {renderHeader()}
 

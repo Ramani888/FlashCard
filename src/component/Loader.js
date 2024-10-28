@@ -16,7 +16,7 @@ const Loader = ({visible, color}) => {
     <Modal transparent={true} animationType="none" visible={visible}>
       <View style={styles.loaderContainer}>
         <UIActivityIndicator
-          color={color ? color : Color.Black}
+          color={color ? color : Color.theme2}
           animating={visible}
           size={scale(30)}
         />

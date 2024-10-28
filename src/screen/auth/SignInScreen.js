@@ -61,7 +61,9 @@ const SignInScreen = () => {
   const LoggedInUser = async () => {
     try {
       const userData = await AsyncStorage.getItem('user');
-      global.user = JSON.parse(userData);
+      const parseUserData = JSON.parse(userData);
+      global.user = parseUserData;
+      global.token = parseUserData?.token;
       navigation.dispatch(StackActions.replace(ScreenName.home));
     } catch (error) {
       console.log('error in logged in', error);
