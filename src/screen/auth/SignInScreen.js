@@ -1,10 +1,18 @@
 import React, {useState, memo, useEffect} from 'react';
-import {Pressable, StyleSheet, Text, View, Linking, Dimensions} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  Dimensions,
+} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters'; // moderateScale for balanced scaling
+// import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import CustomeInputField from '../../custome/CustomeInputField';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeButton from '../../custome/CustomeButton';
@@ -16,7 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
 
-const {height,width} = Dimensions.get('window')
+const {height, width} = Dimensions.get('window');
 
 const inputFields = [
   {
@@ -233,13 +241,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(20),
   },
   title: {
-    fontSize: moderateScale(22),
+    fontSize: scale(22),
     color: Color.Black,
     fontFamily: Font.semiBold,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: moderateScale(14),
+    fontSize: scale(14),
     color: Color.mediumGray,
     fontFamily: Font.regular,
     textAlign: 'center',
@@ -294,13 +302,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signUpText: {
-    fontSize: moderateScale(12),
+    fontSize: scale(12),
     color: Color.Black,
     fontFamily: Font.medium,
     textDecorationLine: 'underline',
   },
   errorMessage: {
-    fontSize: moderateScale(13),
+    fontSize: scale(13),
     fontFamily: Font.medium,
     color: Color.Red,
     textAlign: 'center',

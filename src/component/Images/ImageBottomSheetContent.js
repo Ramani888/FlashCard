@@ -7,7 +7,9 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {scale, verticalScale} from 'react-native-size-matters';
+// import {scale, verticalScale} from 'react-native-size-matters';
+// import {scale, verticalScale} from '../../custome/Responsive';
+import { scale,verticalScale } from '../../custome/Responsive';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../Color';
 import Font from '../Font';

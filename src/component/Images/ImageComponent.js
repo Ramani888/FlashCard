@@ -8,7 +8,8 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {scale, verticalScale} from 'react-native-size-matters';
+// import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
@@ -121,7 +122,7 @@ const ImageComponent = ({folderId}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={verticalScale(250)}
+        height={verticalScale(235)}
         openDuration={250}
         draggable={true}
         customStyles={{

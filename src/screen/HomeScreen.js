@@ -27,6 +27,7 @@ import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
 import AIScreen from '../component/AIScreen';
 import {useDispatch} from 'react-redux';
+import BannerAds from './BannerAds';
 
 const {width, height} = Dimensions.get('window');
 
@@ -126,6 +127,8 @@ const HomeScreen = () => {
             <Text style={styles.tabText}>Images</Text>
           </Pressable>
         </View>
+
+        {/* <BannerAds/> */}
       </View>
     );
   };
