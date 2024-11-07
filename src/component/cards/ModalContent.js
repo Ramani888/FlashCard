@@ -7,11 +7,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {Switch} from '@rneui/themed';
 import Color from '../Color';
 import Font from '../Font';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {useSelector} from 'react-redux';
-import { apiPut } from '../../Api/ApiService';
+import {apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 
 const ModalContent = ({
@@ -24,7 +23,7 @@ const ModalContent = ({
   singleItem,
   folderId,
   setId,
-  getSetData
+  getSetData,
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(singleItem?.isPrivate);
@@ -32,7 +31,11 @@ const ModalContent = ({
 
   const handleUpdateSetSecret = async () => {
     try {
-      const response = await apiPut(Api.Set, '', JSON.stringify({...singleItem, isPrivate: value}));
+      const response = await apiPut(
+        Api.Set,
+        '',
+        JSON.stringify({...singleItem, isPrivate: value}),
+      );
       getSetData(true, response?.message);
     } catch (error) {
       console.log('error in edit Set api', error);
@@ -153,7 +156,9 @@ const ModalContent = ({
                 thumbColor={value ? Color.theme1 : '#8E9494'}
                 trackColor={{false: '#E7EAEB', true: Color.theme2}}
               />
-              <Text style={styles.switchLabel}>{value ? 'Private' : 'Public'}</Text>
+              <Text style={styles.switchLabel}>
+                {value ? 'Private' : 'Public'}
+              </Text>
             </View>
             <Image source={lockIcon} style={styles.icon} />
           </View>
@@ -201,5 +206,5 @@ const styles = StyleSheet.create({
     width: scale(20),
     height: scale(20),
   },
-  folderModal:{borderBottomWidth:0,marginBottom:verticalScale(-5)}
+  folderModal: {borderBottomWidth: 0, marginBottom: verticalScale(-5)},
 });

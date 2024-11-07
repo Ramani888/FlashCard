@@ -2,7 +2,7 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
 import Font from '../Font';
 

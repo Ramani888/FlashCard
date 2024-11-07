@@ -9,7 +9,7 @@ import {
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import CustomeButton from '../../custome/CustomeButton';
 import Color from '../Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Font from '../Font';
 import Api from '../../Api/EndPoint';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
@@ -126,7 +126,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
       const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - width * 3.3, y: y + offsetY});
+      setModalPosition({x: x - scale(117), y: y + offsetY});
       setModalVisible(true);
     });
   }, []);
@@ -147,7 +147,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.65}
+        height={verticalScale(442)}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -286,7 +286,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
             singleItem={singleFolderItem}
           />
         }
-        width={width * 0.42}
+        width={scale(155)}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

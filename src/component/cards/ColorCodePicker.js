@@ -2,12 +2,11 @@ import React, {useState, useCallback, useEffect} from 'react';
 import {
   FlatList,
   View,
-  Text,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
 
 const colors = [

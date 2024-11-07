@@ -1,7 +1,7 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Color from '../../../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../../custome/Responsive';
 import Font from '../../../component/Font';
 import CustomeHeader from '../../../custome/CustomeHeader';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -20,7 +20,6 @@ const OtherUserCardScreen = () => {
   const [visible, setVisible] = useState(false);
   const [cardData, setCardData] = useState([]);
   const [cardHeight, setCardHeight] = useState(0);
-  console.log('cardHeight', cardHeight);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [singleCardItem, setSinglrCardItem] = useState({});
@@ -60,7 +59,7 @@ const OtherUserCardScreen = () => {
   const openCardModal = useCallback(() => {
     if (plusButtonRef.current) {
       plusButtonRef.current.measureInWindow((x, y, width, height) => {
-        setModalPosition({x: x - width * 2.8, y: y + height + 5});
+        setModalPosition({x: x - scale(85), y: y + height + 5});
         setModalVisible(true);
       });
     }
@@ -191,9 +190,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     top: verticalScale(50),
+    width:scale(290),
+    marginLeft:scale(45),
+    textAlign:'center'
   },
   titleContainer: {
     alignItems: 'center',
+    width:scale(290),
   },
   titleLine: {
     fontSize: scale(20),

@@ -11,7 +11,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import CustomeInputField from '../../custome/CustomeInputField';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeButton from '../../custome/CustomeButton';

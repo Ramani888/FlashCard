@@ -1,14 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Color from './Color';
-import { scale, verticalScale } from 'react-native-size-matters';
+import {scale, verticalScale} from '../custome/Responsive';
 import Font from './Font';
 
 const Calender = () => {
   const [selectedDays, setSelectedDays] = useState([]);
 
   // Toggle day selection
-  const toggleDaySelection = useCallback((day) => {
+  const toggleDaySelection = useCallback(day => {
     setSelectedDays(prevSelectedDays => {
       if (prevSelectedDays.includes(day)) {
         // If day is already selected, deselect it

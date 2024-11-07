@@ -9,10 +9,8 @@ import {
   View,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeButton from '../../custome/CustomeButton';
-import Entypo from 'react-native-vector-icons/Entypo';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import Color from '../../component/Color';
@@ -21,7 +19,7 @@ import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import NoDataView from '../../component/NoDataView';
 
 const {height, width} = Dimensions.get('window');
@@ -31,8 +29,8 @@ const AssignFolderScreen = () => {
   const route = useRoute();
   const refRBSheet = useRef(null);
   const {setId, screen} = route.params;
-  console.log('setId',setId)
-  console.log('screen',screen)
+  console.log('setId', setId);
+  console.log('screen', screen);
 
   const [visible, setVisible] = useState(false);
   const [folderData, setFolderData] = useState([]);
@@ -104,7 +102,7 @@ const AssignFolderScreen = () => {
       const response = await apiPut(
         `${Api.mediatorUserSet}?folderId=${selectedFolderId}&setId=${setId}&userId=${global?.user?._id}`,
       );
-      console.log('response',response)
+      console.log('response', response);
       if (response?.success) {
         navigation.goBack();
         getFolderData(true, response?.message);
@@ -162,7 +160,7 @@ const AssignFolderScreen = () => {
     () => (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.65}
+        height={verticalScale(410)}
         openDuration={250}
         customStyles={{container: styles.bottomSheetContainer}}>
         <View style={styles.sheetContainer}>
@@ -291,6 +289,7 @@ const styles = StyleSheet.create({
   bottomSheetContainer: {
     borderTopLeftRadius: scale(30),
     borderTopRightRadius: scale(30),
+    maxHeight: verticalScale(410),
   },
   sheetContainer: {
     flexDirection: 'row',

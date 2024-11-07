@@ -1,16 +1,13 @@
 import React, {useMemo, useState} from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Switch} from '@rneui/themed';
 import Color from '../Color';
 import Font from '../Font';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {useSelector} from 'react-redux';
 
 const PdfModalContent = ({
   closeModal,

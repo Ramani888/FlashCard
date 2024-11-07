@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useCallback, useRef, useState, memo, useEffect} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
 import Font from '../Font';
 import CustomeModal from '../../custome/CustomeModal';
@@ -147,8 +147,8 @@ const PdfComponent = memo(({folderId}) => {
 
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-      const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - width * 3.3, y: y + offsetY});
+      // const offsetY = isLastItem ? -height - 15 : height + 15;
+      setModalPosition({x: x - width * 3.7, y: y + height + 15});
       setModalVisible(true);
     });
   }, []);
@@ -169,9 +169,11 @@ const PdfComponent = memo(({folderId}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.78}
+        height={verticalScale(510)}
         openDuration={250}
         draggable={true}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
         customStyles={{
           container: styles.bottomSheetContainer,
         }}>

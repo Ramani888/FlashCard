@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import Color from '../Color';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../Font';
 import CustomeInputField from '../../custome/CustomeInputField';
@@ -73,7 +73,7 @@ const PdfBottomSheetContent = ({
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (name && color && initialData?.url || fileResponse?.length > 0) {
+    if ((name && color && initialData?.url) || fileResponse?.length > 0) {
       initialData ? create(initialData?._id, file) : create('', file);
       closeBottomSheet();
       setName('');
@@ -140,7 +140,7 @@ const PdfBottomSheetContent = ({
                 },
               ]}
               onPress={() => setColorView(false)}>
-              <Text style={[styles.colorIndicator,{backgroundColor: color}]} />
+              <Text style={[styles.colorIndicator, {backgroundColor: color}]} />
             </Pressable>
             <Text style={styles.orText}>Or</Text>
             <Pressable
@@ -226,10 +226,10 @@ const styles = StyleSheet.create({
     color: Color.Black,
   },
   folderImage: {
-    width: width * 0.23,
-    height: height * 0.12,
+    width: scale(60),
+    height: scale(60),
     alignSelf: 'center',
-    marginTop: verticalScale(10),
+    marginTop: verticalScale(5),
   },
   inputContainer: {
     width: '100%',
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(8),
     backgroundColor: Color.White,
     borderRadius: scale(10),
-    marginTop: verticalScale(10),
+    marginTop: verticalScale(5),
     marginBottom: verticalScale(10),
     height: verticalScale(45),
   },
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     paddingLeft: scale(5),
   },
   colorSection: {
-    marginTop: verticalScale(10),
+    // marginTop: verticalScale(10),
   },
   colorTitle: {
     fontSize: scale(20),

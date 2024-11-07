@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../../component/Color';

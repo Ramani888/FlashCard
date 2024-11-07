@@ -10,8 +10,7 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useRef, useCallback, useState} from 'react';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from '../custome/Responsive';
 import Color from '../component/Color';
 import CustomeButton from '../custome/CustomeButton';
 import Font from '../component/Font';
@@ -32,7 +31,6 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const [answer, setAnswer] = useState('');
   const [inputHeight, setInputHeight] = useState(verticalScale(190));
   const [userCredit, setUserCredit] = useState('');
-  console.log('userCredit', userCredit);
 
   const [visible, setVisible] = useState(false);
   const refAiRBSheet = useRef();
@@ -247,7 +245,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     borderWidth: scale(1),
     borderColor: Color.LightGray,
-    height: verticalScale(540),
+    height: verticalScale(525),
     backgroundColor: Color.White,
     marginTop: verticalScale(10),
   },

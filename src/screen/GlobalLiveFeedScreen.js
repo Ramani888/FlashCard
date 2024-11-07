@@ -3,13 +3,12 @@ import React, {useCallback, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../component/Color';
 import CustomeHeader from '../custome/CustomeHeader';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../custome/Responsive';
 import CustomeInputField from '../custome/CustomeInputField';
 import Feather from 'react-native-vector-icons/Feather';
 import CustomeButton from '../custome/CustomeButton';
 import Font from '../component/Font';
 import {useNavigation} from '@react-navigation/native';
-import {ScreenName} from '../component/Screen';
 
 const GlobalLiveFeedScreen = () => {
   const navigation = useNavigation();

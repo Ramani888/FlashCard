@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useIsFocused, useRoute} from '@react-navigation/native';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -431,6 +431,7 @@ const styles = StyleSheet.create({
     fontSize: scale(20),
     color: Color.White,
     fontFamily: Font.medium,
+    textAlign:"center"
   },
   iconStyle: {
     bottom: verticalScale(30),

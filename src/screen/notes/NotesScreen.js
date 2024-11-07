@@ -8,9 +8,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import Color from '../../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../custome/Responsive';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -18,7 +17,6 @@ import CustomeButton from '../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import CustomeModal from '../../custome/CustomeModal';
-import ModalContent from '../../component/cards/ModalContent';
 import NoteModalContent from '../../component/profile/NoteModalContent';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
@@ -96,7 +94,6 @@ const NotesScreen = () => {
     noteDesc,
     isColorView,
   ) => {
-    // console.log('isColorView', isColorView);
     const rawData = {
       _id: editWithNote ? noteId : singleNoteData?._id,
       userId: global?.user?._id,
@@ -109,7 +106,7 @@ const NotesScreen = () => {
       setVisible(true);
       const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
       if (response?.success == true) {
-        getNoteData(false, noteDesc ? response?.message : '');
+        getNoteData(false, false);
       }
     } catch (error) {
       console.log('error in update note api', error);
@@ -138,7 +135,7 @@ const NotesScreen = () => {
             ? -height - 15
             : height + 15
           : height + 15;
-      setModalPosition({x: x - width * 3.25, y: y + offsetY});
+      setModalPosition({x: x - scale(120), y: y + offsetY});
       setModalVisible(true);
     });
   }, []);
@@ -172,7 +169,7 @@ const NotesScreen = () => {
     () => (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.65}
+        height={verticalScale(442)}
         openDuration={250}
         draggable={true}
         customStyles={{

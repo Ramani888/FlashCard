@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../custome/Responsive';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeInputField from '../../custome/CustomeInputField';
 import Color from '../../component/Color';

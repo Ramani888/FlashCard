@@ -2,7 +2,7 @@ import React, {memo, useCallback} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../../custome/Responsive';
 import Color from '../../Color';
 import Font from '../../Font';
 import {useNavigation} from '@react-navigation/native';

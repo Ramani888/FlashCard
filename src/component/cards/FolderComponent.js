@@ -6,10 +6,10 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useMemo, useRef, useState, useCallback, useEffect} from 'react';
+import React, {useRef, useState, useCallback, useEffect} from 'react';
 import Color from '../Color';
 import Font from '../Font';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
@@ -197,7 +197,7 @@ const FolderComponent = ({
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.65}
+        height={verticalScale(442)}
         openDuration={250}
         draggable={true}
         customStyles={{

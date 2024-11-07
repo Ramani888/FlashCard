@@ -5,7 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Color from '../Color';
 import Font from '../Font';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 

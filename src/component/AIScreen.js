@@ -1,7 +1,7 @@
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useRef, useCallback} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../custome/Responsive';
 import Color from './Color';
 import CustomeButton from '../custome/CustomeButton';
 import Font from './Font';
@@ -30,8 +30,7 @@ const AIScreen = ({setOpenAIBottomsheet}) => {
         height={height * 0.75}
         openDuration={250}
         draggable
-        customStyles={{container: styles.bottomSheetContainer}}
-      >
+        customStyles={{container: styles.bottomSheetContainer}}>
         <View style={styles.sheetContainer}>
           <View style={styles.imageContainer}>
             <Image

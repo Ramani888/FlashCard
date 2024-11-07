@@ -13,7 +13,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../../component/Color';
 import CustomeHeader from '../../custome/CustomeHeader';
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import Font from '../../component/Font';
 import CustomeInputField from '../../custome/CustomeInputField';
 import CustomeModal from '../../custome/CustomeModal';
@@ -87,7 +87,6 @@ const ProfileScreen = () => {
       const response = await apiGet(
         `${Api.profile}?userId=${global.user?._id}`,
       );
-      console.log('response', response);
       setUserCreditData(response?.userCreditData);
       setUserStorageData(response?.userStorageData);
     } catch (error) {

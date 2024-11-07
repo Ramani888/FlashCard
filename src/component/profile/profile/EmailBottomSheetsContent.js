@@ -3,7 +3,7 @@ import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import CustomeInputField from '../../../custome/CustomeInputField';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../../custome/Responsive';
 import Color from '../../Color';
 import CustomeButton from '../../../custome/CustomeButton';
 import Font from '../../Font';

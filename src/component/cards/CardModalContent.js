@@ -1,9 +1,8 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
 import Font from '../Font';
 import {useNavigation} from '@react-navigation/native';
@@ -18,13 +17,7 @@ const PressableItem = ({icon, iconStyle, text, onPress, isLast}) => (
   </Pressable>
 );
 
-const CardModalContent = ({
-  closeModal,
-  deleteCard,
-  item,
-  folderId,
-  setId,
-}) => {
+const CardModalContent = ({closeModal, deleteCard, item, folderId, setId}) => {
   const navigation = useNavigation();
 
   return (

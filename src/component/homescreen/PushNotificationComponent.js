@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
 import Font from '../Font';
 import CustomeButton from '../../custome/CustomeButton';
@@ -46,8 +46,16 @@ const PushNotificationComponent = () => {
             onPress={() => setTime('PM')}
           />
         </View>
-        <Text style={{fontSize:scale(55),color:Color.Black,textAlign:'center',marginVertical:verticalScale(8)}}>07:35</Text>
-        <Calender/>
+        <Text
+          style={{
+            fontSize: scale(55),
+            color: Color.Black,
+            textAlign: 'center',
+            marginVertical: verticalScale(8),
+          }}>
+          07:35
+        </Text>
+        <Calender />
 
         <CustomeButton
           buttonColor={Color.theme1}
@@ -70,7 +78,7 @@ export default PushNotificationComponent;
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-  bodyContainer: {flex: 1,alignItems:'center'},
+  bodyContainer: {flex: 1, alignItems: 'center'},
   notificationHeading: {
     fontSize: scale(22),
     color: Color.Black,

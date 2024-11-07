@@ -9,7 +9,7 @@ import {
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import CustomeButton from '../../custome/CustomeButton';
 import Color from '../Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Font from '../Font';
 import Api from '../../Api/EndPoint';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
@@ -144,7 +144,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.65}
+        height={verticalScale(445)}
         openDuration={250}
         draggable={true}
         customStyles={{

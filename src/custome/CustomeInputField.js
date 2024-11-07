@@ -1,7 +1,6 @@
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import React from 'react';
-import PropTypes from 'prop-types';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale, moderateScale} from './Responsive';
 import Color from '../component/Color';
 import Font from '../component/Font';
 
@@ -35,7 +34,7 @@ const CustomeInputField = ({
   inputStyles,
   inputContainerStyles,
   errorContainerStyle,
-  onBlur
+  onBlur,
 }) => {
   return (
     <View style={[styles.containerStyles]}>
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: scale(14),
     paddingLeft: scale(10),
     fontFamily: Font.regular,
-    color:Color.Black,
+    color: Color.Black,
     // backgroundColor:'red',
   },
   viewError: {

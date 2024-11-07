@@ -7,7 +7,7 @@ import {
   Dimensions,
   Pressable,
 } from 'react-native';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Pinchable from 'react-native-pinchable';
 import AntDesign from 'react-native-vector-icons/AntDesign';

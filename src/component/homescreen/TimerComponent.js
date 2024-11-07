@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CustomeButton from '../../custome/CustomeButton';
 import Color from '../Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Font from '../Font';
 
 const TimerComponent = () => {
@@ -47,14 +47,16 @@ const TimerComponent = () => {
     };
   };
 
-  const { hours, minutes, seconds } = formatTime(time);
+  const {hours, minutes, seconds} = formatTime(time);
 
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
         <Text style={styles.timerHeading}>Set Timer</Text>
         <View style={styles.timerWrapper}>
-          <Text style={styles.timerText}>{hours}:{minutes}:{seconds}</Text>
+          <Text style={styles.timerText}>
+            {hours}:{minutes}:{seconds}
+          </Text>
           <View style={styles.labelContainer}>
             <Text style={styles.labelText}>Hours</Text>
             <Text style={styles.labelText}>Minutes</Text>
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.medium,
     marginTop: verticalScale(-25),
-    marginBottom:verticalScale(10)
+    marginBottom: verticalScale(10),
   },
   timerWrapper: {
     alignItems: 'center',
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '48%',
-    marginLeft:scale(25),
+    marginLeft: scale(25),
     marginTop: verticalScale(10),
   },
   labelText: {

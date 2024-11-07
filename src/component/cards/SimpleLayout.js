@@ -1,15 +1,7 @@
-import {
-  Alert,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useCallback, memo, useRef} from 'react';
 import Color from '../Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Font from '../Font';
 import {BlurView} from '@react-native-community/blur';
 import Entypo from 'react-native-vector-icons/Entypo';

@@ -1,4 +1,4 @@
-import {StyleSheet, View, ActivityIndicator} from 'react-native';
+import {View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AppStack from './AppStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';

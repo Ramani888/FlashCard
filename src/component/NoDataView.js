@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {scale} from 'react-native-size-matters';
+import { scale } from '../custome/Responsive';
 import Color from './Color';
 import Font from './Font';
 

@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Pressable, Image} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from './Responsive';
 import Color from '../component/Color';
 import Font from '../component/Font';
 import {Avatar} from '@rneui/themed';

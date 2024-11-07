@@ -11,14 +11,12 @@ import {
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import CustomeInputField from '../../../custome/CustomeInputField';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../../custome/Responsive';
 import Color from '../../Color';
-import CustomeButton from '../../../custome/CustomeButton';
 import Font from '../../Font';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {apiGet} from '../../../Api/ApiService';
 import Api from '../../../Api/EndPoint';
-import {Avatar} from '@rneui/themed';
 import debounce from 'lodash.debounce';
 
 const ContactBottomSheetContent = ({
@@ -84,7 +82,7 @@ const ContactBottomSheetContent = ({
             closeContactBottomSheet();
           }}>
           <View style={styles.userDetails}>
-            <Image source={{uri: item?.picture}} style={styles.profileImage}/>
+            <Image source={{uri: item?.picture}} style={styles.profileImage} />
             <Text style={styles.userName}>{item?.userName}</Text>
           </View>
           <Image
@@ -242,7 +240,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  profileImage:{height:scale(40),width:scale(40),borderRadius:scale(20)},
+  profileImage: {height: scale(40), width: scale(40), borderRadius: scale(20)},
   userName: {
     fontSize: scale(12),
     fontFamily: Font.semiBold,

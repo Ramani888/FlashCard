@@ -1,6 +1,6 @@
 import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Font from '../../component/Font';
 import Color from '../../component/Color';
 import OTPTextInput from 'react-native-otp-textinput';
@@ -11,6 +11,7 @@ import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {ScreenName} from '../../component/Screen';
 import Loader from '../../component/Loader';
+import { moderateScale } from 'react-native-size-matters';
 
 const {width, height} = Dimensions.get('window');
 
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     borderWidth: scale(0.3),
     borderColor: Color.LightGray,
     borderBottomWidth: scale(0.3),
-    borderRadius: scale(10),
+    borderRadius: scale(5),
     fontFamily: Font.regular,
     backgroundColor: Color.White,
   },

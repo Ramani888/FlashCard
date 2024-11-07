@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from './Responsive';
 import Color from '../component/Color';
 import CustomeButton from './CustomeButton';
 

@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Color from '../component/Color';
 import {useNavigation} from '@react-navigation/native';
 import CustomeHeader from '../custome/CustomeHeader';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../custome/Responsive';
 import Font from '../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {apiGet} from '../Api/ApiService';

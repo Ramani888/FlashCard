@@ -2,7 +2,7 @@ import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import CustomeButton from '../../custome/CustomeButton';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
@@ -182,7 +182,7 @@ const AssignSetScreen = () => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={verticalScale(510)}
+        height={verticalScale(490)}
         openDuration={250}
         draggable={true}
         customStyles={{

@@ -1,9 +1,8 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../../custome/Responsive';
 import Color from '../../Color';
 import Font from '../../Font';
 import {launchImageLibrary} from 'react-native-image-picker';

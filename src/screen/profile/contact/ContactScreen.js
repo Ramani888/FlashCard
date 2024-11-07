@@ -10,12 +10,11 @@ import {
 import React, {useCallback, useRef, useState, useMemo, useEffect} from 'react';
 import CustomeHeader from '../../../custome/CustomeHeader';
 import Color from '../../../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../../custome/Responsive';
 import Font from '../../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeModal from '../../../custome/CustomeModal';
 import ContactModalContent from '../../../component/profile/contact/ContactModalContent';
-import UserNameBottomSheetsContent from '../../../component/profile/profile/UserNameBottomSheetsContent';
 import ContactBottomSheetContent from '../../../component/profile/contact/ContactBottomSheetContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {apiDelete, apiGet, apiPost} from '../../../Api/ApiService';
@@ -95,7 +94,7 @@ const ContactScreen = () => {
             ? -height - 15
             : height + 15
           : height + 15;
-      setModalPosition({x: x - width * 3.47, y: y + offsetY});
+      setModalPosition({x: x - scale(130), y: y + offsetY});
       setModalVisible(true);
     });
   }, []);

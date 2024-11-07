@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Color from '../../../component/Color';
 import CustomeHeader from '../../../custome/CustomeHeader';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../../custome/Responsive';
 import Font from '../../../component/Font';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {apiGet} from '../../../Api/ApiService';
@@ -51,7 +51,7 @@ const OtherUserScreen = () => {
 
   const openModal = (item, isLastItem) => {
     plusButtonRef.current.measureInWindow((x, y, width, height) => {
-      setModalPosition({x: x - width * 3.5, y: y + (height + 15)});
+      setModalPosition({x: x - scale(115), y: y + (height + 15)});
       setModalVisible(true);
     });
   };
@@ -112,7 +112,13 @@ const OtherUserScreen = () => {
           style={styles.headerContainer}>
           {renderHeader()}
 
-          <Image source={{uri: item?.picture}} style={styles.profileImage} />
+          <Image
+            source={{uri: item?.picture}}
+            style={[
+              styles.profileImage,
+              item?.picture && styles.profileImageBorder,
+            ]}
+          />
         </LinearGradient>
 
         {setData?.length > 0 ? (
@@ -190,9 +196,8 @@ const styles = StyleSheet.create({
     borderRadius: scale(30),
     alignSelf: 'center',
     marginVertical: verticalScale(15),
-    borderWidth: scale(1),
-    borderColor: Color.White,
   },
+  profileImageBorder: {borderWidth: scale(1), borderColor: Color.White},
   flatlist: {
     flex: 1,
     marginVertical: scale(20),

@@ -3,11 +3,11 @@ import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import CustomeInputField from '../../../custome/CustomeInputField';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../../custome/Responsive';
 import Color from '../../Color';
 import CustomeButton from '../../../custome/CustomeButton';
 import Font from '../../Font';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const {width, height} = Dimensions.get('window');
 
@@ -73,7 +73,7 @@ const UserNameBottomSheetsContent = ({closeUserNameBottomSheet}) => {
               fontSize={scale(15)}
               fontColor={Color.White}
               fontFamily={Font.semiBold}
-              marginTop={verticalScale(height*0.03)}
+              marginTop={verticalScale(height * 0.03)}
               onPress={handleSubmit}
             />
           </View>
@@ -100,13 +100,13 @@ const styles = StyleSheet.create({
     borderColor: Color.LightGray,
     borderRadius: scale(10),
     backgroundColor: Color.White,
-    height:verticalScale(45)
+    height: verticalScale(45),
   },
   inputStyles: {
     fontSize: scale(13),
     color: Color.Black,
     fontFamily: Font.regular,
-    height:verticalScale(45)
+    height: verticalScale(45),
   },
   closeButton: {
     height: scale(26),

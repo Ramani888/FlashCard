@@ -3,12 +3,10 @@ import React, {useEffect, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../custome/Responsive';
 import Font from '../../component/Font';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomeInputField from '../../custome/CustomeInputField';
-import CustomeButton from '../../custome/CustomeButton';
-import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 
 const {height} = Dimensions.get('window');
 

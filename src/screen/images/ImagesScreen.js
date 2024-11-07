@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../../component/Font';

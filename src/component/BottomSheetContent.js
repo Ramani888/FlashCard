@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import Color from './Color';
-import {moderateScale, scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../custome/Responsive';
 import CustomeButton from '../custome/CustomeButton';
 import Font from './Font';
 import CustomeInputField from '../custome/CustomeInputField';
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.medium,
     textAlign: 'center',
-    paddingBottom: height * 0.01,
+    paddingBottom: verticalScale(5),
   },
   separator: {
     borderBottomWidth: scale(1),
@@ -231,7 +231,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginVertical: verticalScale(5),
   },
   switchContent: {
     alignItems: 'center',

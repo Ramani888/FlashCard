@@ -1,6 +1,5 @@
 import {View, Text, StyleSheet, Pressable, Dimensions} from 'react-native';
 import React from 'react';
-import {scale} from 'react-native-size-matters';
 
 const {width, height} = Dimensions.get('window');
 

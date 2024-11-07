@@ -12,7 +12,7 @@ import {
   BackHandler,
 } from 'react-native';
 import Color from '../component/Color';
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
+import { scale,verticalScale,moderateScale } from '../custome/Responsive';
 import Font from '../component/Font';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import TimerComponent from '../component/homescreen/TimerComponent';

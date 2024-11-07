@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Color from '../Color';
 import Font from '../Font';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 import CustomeModal from '../../custome/CustomeModal';
@@ -153,7 +153,7 @@ const SetComponent = ({
   const openModal = (item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
       const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - width * 3.45, y: y + offsetY});
+      setModalPosition({x: x - scale(125), y: y + offsetY});
       setModalVisible(true);
     });
   };
@@ -227,7 +227,11 @@ const SetComponent = ({
               source={require('../../Assets/Img/folder.png')}
               style={styles.folderIcon}
             />
-            <Text style={[styles.folderText,{marginLeft: item?.folderName ? scale(5) : 0 }]}>
+            <Text
+              style={[
+                styles.folderText,
+                {marginLeft: item?.folderName ? scale(5) : 0},
+              ]}>
               {item?.folderName ? item?.folderName : ''}
             </Text>
           </View>
@@ -241,7 +245,7 @@ const SetComponent = ({
     return (
       <RBSheet
         ref={refRBSheet}
-        height={height * 0.74}
+        height={verticalScale(483)}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -325,7 +329,7 @@ const SetComponent = ({
           />
         }
         width={'43.5%'}
-        height={scale(195)}
+        height={scale(207)}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[
@@ -439,6 +443,6 @@ const styles = StyleSheet.create({
   sheetContainer: {
     flexDirection: 'row',
     gap: scale(50),
-    marginVertical: height*0.01,
+    marginVertical: height * 0.01,
   },
 });

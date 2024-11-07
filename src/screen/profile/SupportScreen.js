@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import { scale,verticalScale } from '../../custome/Responsive';
 import Font from '../../component/Font';
 import CustomeButton from '../../custome/CustomeButton';
 import {launchImageLibrary} from 'react-native-image-picker';

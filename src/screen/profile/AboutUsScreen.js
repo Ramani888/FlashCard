@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import Color from '../../component/Color';
-import {scale, verticalScale} from 'react-native-size-matters';
+import {scale, verticalScale} from '../../custome/Responsive';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Font from '../../component/Font';
 
@@ -32,13 +32,13 @@ const AboutUsScreen = () => {
             situation.
           </Text>
 
-          <Text style={[styles.paragraph,{marginTop:verticalScale(-23)}]}>
+          <Text style={[styles.paragraph, {marginTop: verticalScale(-23)}]}>
             Our tools allow you to quickly grasp teachings, Scripture, history,
             and much more, while building an organized treasure trove of content
             that’s easy to access and reference. Whether you're learning alone
-            or with others, Bible Flashcards & AI helps you retain what
-            you've studied and always be ready in and out of season, no matter
-            who you meet.
+            or with others, Bible Flashcards & AI helps you retain what you've
+            studied and always be ready in and out of season, no matter who you
+            meet.
           </Text>
 
           <Text style={styles.paragraph}>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
   },
   bold: {
-    fontFamily:Font.bold
+    fontFamily: Font.bold,
   },
   listItem: {
     fontSize: scale(14),
