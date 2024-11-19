@@ -35,10 +35,10 @@ const {width, height} = Dimensions.get('window');
 
 const tabData = [
   {tabname: 'Contacts', image: require('../../Assets/Img/userIcon.png')},
-  {tabname: 'Cloud', image: require('../../Assets/Img/cloud.png')},
+  // {tabname: 'Cloud', image: require('../../Assets/Img/cloud.png')},
   {tabname: 'Support', image: require('../../Assets/Img/support.png')},
-  {tabname: 'Privacy & Terms', image: require('../../Assets/Img/privacy.png')},
   {tabname: 'About Us', image: require('../../Assets/Img/notes.png')},
+  {tabname: 'Privacy & Terms', image: require('../../Assets/Img/privacy.png')},
 ];
 
 const ProfileScreen = () => {
@@ -494,9 +494,70 @@ const styles = StyleSheet.create({
   },
   dragableIcon: {marginTop: verticalScale(20)},
   privacyTab: {
-    marginLeft: scale(30),
+    marginLeft: scale(-15),
   },
   aboutUsTab: {
     marginRight: scale(20),
   },
 });
+
+// import React, { useRef } from 'react';
+// import { View, Button, Text, TouchableOpacity, StyleSheet } from 'react-native';
+// import ActionSheet, { SheetManager, SheetProvider } from 'react-native-actions-sheet';
+// import Color from '../../component/Color';
+
+// const ProfileScreen = () => {
+//   const actionSheetRef = useRef(null);
+
+//   const openActionSheet = () => {
+//     SheetManager.show('example-sheet');
+//   };
+
+//   return (
+//     <SheetProvider>
+//       <View style={styles.container}>
+//         <Button title="Open Snap Action Sheet" onPress={openActionSheet} />
+//         <ActionSheet
+//           id="example-sheet"
+//           ref={actionSheetRef}
+//           gestureEnabled={true} // Enables swiping to close
+//           bounceOnOpen={true} // Adds bounce effect when opening
+//           initialSnapIndex={0} // Sets initial snap index (collapsed state)
+//           snapPoints={[200, 300, 400]} // Define snapping points (collapsed, mid, expanded)
+//           containerStyle={styles.actionSheetContainer}
+//         >
+//           <View style={styles.sheetContent}>
+//             <TouchableOpacity onPress={() => SheetManager.hide('example-sheet')}>
+//               <Text style={styles.sheetText}>Collapse</Text>
+//             </TouchableOpacity>
+//             <Text style={styles.sheetText}>Expanded Content</Text>
+//             <Text style={styles.sheetText}>More Options or Info Here</Text>
+//           </View>
+//         </ActionSheet>
+//       </View>
+//     </SheetProvider>
+//   );
+// };
+
+// export default ProfileScreen;
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   actionSheetContainer: {
+//     borderTopLeftRadius: 20,
+//     borderTopRightRadius: 20,
+//   },
+//   sheetContent: {
+//     padding: 16,
+//     alignItems: 'center',
+//   },
+//   sheetText: {
+//     fontSize: 16,
+//     marginVertical: 8,
+//     color:Color.Black
+//   },
+// });

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useIsFocused, useRoute} from '@react-navigation/native';
-import { scale,verticalScale } from '../../custome/Responsive';
+import {scale, verticalScale} from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -20,6 +20,11 @@ import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
 import NoDataView from '../../component/NoDataView';
 import MasonryFlatlist from 'react-native-masonry-grid';
 import DragList from 'react-native-draglist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const SetDetailScreen = () => {
   const route = useRoute();
@@ -144,10 +149,24 @@ const SetDetailScreen = () => {
 
   // ====================================== End ===================================== //
 
+  // const openModal = useCallback(ref => {
+  //   if (ref.current) {
+  //     ref.current.measureInWindow((x, y, width, height) => {
+  //       setModalPosition({x: x - width * 3.5, y: y + height + 10});
+  //       setModalVisible(true);
+  //     });
+  //   }
+  // }, []);
+
   const openModal = useCallback(ref => {
     if (ref.current) {
       ref.current.measureInWindow((x, y, width, height) => {
-        setModalPosition({x: x - width * 3.5, y: y + height + 10});
+        const responsiveX = wp((x / wp(100)) * 100); 
+        const responsiveY = hp((y / hp(100)) * 100); 
+        const modalX = responsiveX - wp(35); 
+        const modalY = responsiveY + hp(1.5); 
+
+        setModalPosition({x: modalX, y: modalY});
         setModalVisible(true);
       });
     }
@@ -213,7 +232,24 @@ const SetDetailScreen = () => {
     return str;
   }
 
-  const renderItem = ({item, onDragStart, onDragEnd, isActive}) => {
+  // const renderItem = ({item, onDragStart, onDragEnd, isActive}) => {
+  //   return (
+  //     <SimpleLayout
+  //       item={item}
+  //       updateCard={updateCard}
+  //       threeDotIconRef={threeDotIconRef}
+  //       setItem={setItem}
+  //       folderId={folderId}
+  //       setId={setId}
+  //       openCardModal={openCardModal}
+  //       openNoteModal={openNoteModal}
+  //       onDragStart={onDragStart}
+  //       onDragEnd={onDragEnd}
+  //     />
+  //   );
+  // };
+
+  const renderItem = ({item, drag, isActive}) => {
     return (
       <SimpleLayout
         item={item}
@@ -224,19 +260,24 @@ const SetDetailScreen = () => {
         setId={setId}
         openCardModal={openCardModal}
         openNoteModal={openNoteModal}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
+        onDragStart={drag} // Pass the drag function for starting the drag
+        onDragEnd={() => {}} // Optionally handle drag end if needed
       />
     );
   };
 
-  function onReordered(fromIndex, toIndex) {
-    const copy = [...cardData];
-    const removed = copy.splice(fromIndex, 1);
+  // function onReordered(fromIndex, toIndex) {
+  //   const copy = [...cardData];
+  //   const removed = copy.splice(fromIndex, 1);
 
-    copy.splice(toIndex, 0, removed[0]);
-    setCardData(copy);
-  }
+  //   copy.splice(toIndex, 0, removed[0]);
+  //   setCardData(copy);
+  // }
+
+  const handleReorder = reorderedData => {
+    setCardData(reorderedData);
+    // Optionally, call any external handler or update the state elsewhere
+  };
 
   const renderBody = useMemo(
     () => (
@@ -245,12 +286,18 @@ const SetDetailScreen = () => {
           <>
             {cardData?.length > 0 ? (
               changeOrder ? (
-                <DragList
+                // <DragList
+                //   data={cardData}
+                //   keyExtractor={keyExtractor}
+                //   onReordered={onReordered}
+                //   renderItem={renderItem}
+                //   isActive={false}
+                // />
+                <DraggableFlatList
                   data={cardData}
                   keyExtractor={keyExtractor}
-                  onReordered={onReordered}
                   renderItem={renderItem}
-                  isActive={false}
+                  onDragEnd={({data}) => handleReorder(data)}
                 />
               ) : (
                 <FlatList
@@ -427,11 +474,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleLine: {
-    width:scale(200),
+    width: scale(200),
     fontSize: scale(20),
     color: Color.White,
     fontFamily: Font.medium,
-    textAlign:"center"
+    textAlign: 'center',
   },
   iconStyle: {
     bottom: verticalScale(30),
