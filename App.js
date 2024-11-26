@@ -1,4 +1,3 @@
-import 'react-native-gesture-handler';
 import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
@@ -9,8 +8,9 @@ import AppNav from './src/navigation/AppNav';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
 import Color from './src/component/Color';
+import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 
-const App = () => {
+const App = gestureHandlerRootHOC(() => {
   useEffect(() => {
     setTimeout(() => {
       LottieSplashScreen.hide();
@@ -37,7 +37,7 @@ const App = () => {
       </NavigationContainer>
     </View>
   );
-};
+});
 
 export default App;
 

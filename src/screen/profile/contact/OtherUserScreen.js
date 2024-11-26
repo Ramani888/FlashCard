@@ -13,6 +13,7 @@ import CustomeModal from '../../../custome/CustomeModal';
 import {ScreenName} from '../../../component/Screen';
 import Loader from '../../../component/Loader';
 import NoDataView from '../../../component/NoDataView';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const OtherUserScreen = () => {
   const route = useRoute();
@@ -161,7 +162,7 @@ const OtherUserScreen = () => {
             <Text style={styles.modalContentText}>Add Entire Set</Text>
           </Pressable>
         }
-        width={'40.5%'}
+        width={wp('41%')}
         justifyContent="flex-end"
         borderRadius={10}
         modalContainerStyle={[
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   },
   modalContentView: {flexDirection: 'row', gap: scale(5), alignItems: 'center'},
   modalContentText: {
-    fontSize: scale(14),
+    fontSize: wp('4%'),
     color: Color.Black,
     fontFamily: Font.regular,
   },

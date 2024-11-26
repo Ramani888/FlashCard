@@ -23,8 +23,8 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
-import {useSelector} from 'react-redux';
 import NoDataView from '../NoDataView';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 const {height, width} = Dimensions.get('window');
 
@@ -328,8 +328,8 @@ const SetComponent = ({
             getSetData={getSetData}
           />
         }
-        width={'43.5%'}
-        height={scale(207)}
+        width={wp('43%')}
+        height={hp('28.5%')}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

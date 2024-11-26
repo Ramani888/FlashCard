@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image, Platform, Pressable, StyleSheet, Text, UIManager, View} from 'react-native';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import {scale, verticalScale} from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,12 +19,15 @@ import {useSelector} from 'react-redux';
 import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
 import NoDataView from '../../component/NoDataView';
 import MasonryFlatlist from 'react-native-masonry-grid';
-import DragList from 'react-native-draglist';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const SetDetailScreen = () => {
   const route = useRoute();
@@ -228,9 +231,9 @@ const SetDetailScreen = () => {
     [setName, changeOrder, cardData],
   );
 
-  function keyExtractor(str, _index) {
-    return str;
-  }
+  // function keyExtractor(str, _index) {
+  //   return str;
+  // }
 
   // const renderItem = ({item, onDragStart, onDragEnd, isActive}) => {
   //   return (
@@ -260,24 +263,19 @@ const SetDetailScreen = () => {
         setId={setId}
         openCardModal={openCardModal}
         openNoteModal={openNoteModal}
-        onDragStart={drag} // Pass the drag function for starting the drag
-        onDragEnd={() => {}} // Optionally handle drag end if needed
+        onDragStart={drag} 
+        onDragEnd={() => {}} 
       />
     );
   };
 
-  // function onReordered(fromIndex, toIndex) {
-  //   const copy = [...cardData];
-  //   const removed = copy.splice(fromIndex, 1);
-
-  //   copy.splice(toIndex, 0, removed[0]);
-  //   setCardData(copy);
-  // }
-
   const handleReorder = reorderedData => {
     setCardData(reorderedData);
-    // Optionally, call any external handler or update the state elsewhere
   };
+
+  const keyExtractor = (item, index) => {
+    return item._id ? item._id.toString() : index.toString(); 
+  }
 
   const renderBody = useMemo(
     () => (
@@ -286,13 +284,6 @@ const SetDetailScreen = () => {
           <>
             {cardData?.length > 0 ? (
               changeOrder ? (
-                // <DragList
-                //   data={cardData}
-                //   keyExtractor={keyExtractor}
-                //   onReordered={onReordered}
-                //   renderItem={renderItem}
-                //   isActive={false}
-                // />
                 <DraggableFlatList
                   data={cardData}
                   keyExtractor={keyExtractor}

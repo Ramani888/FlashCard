@@ -2,20 +2,22 @@ import {
   Dimensions,
   Image,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
-import { scale,verticalScale } from '../../custome/Responsive';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../Color';
 import Font from '../Font';
 import CustomeButton from '../../custome/CustomeButton';
 import {launchImageLibrary} from 'react-native-image-picker';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
-
-const {height, width} = Dimensions.get('window');
 
 const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
   const [imageFile, setImageFile] = useState({});
@@ -47,9 +49,9 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Pressable style={styles.closeButton} onPress={closeBottomSheet}>
-        <AntDesign name="close" size={scale(15)} color={Color.Black} />
+        <AntDesign name="close" size={wp('4%')} color={Color.Black} />
       </Pressable>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.separator} />
@@ -59,9 +61,7 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
           style={[
             styles.image,
             {
-              marginBottom: imageFile?.name
-                ? verticalScale(5)
-                : verticalScale(15),
+              marginBottom: imageFile?.name ? hp('1%') : hp('2%'),
             },
           ]}
           resizeMode="contain"
@@ -74,14 +74,14 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
         buttonColor={Color.theme1}
         buttonWidth="90%"
         title="DONE"
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
+        borderRadius={wp('2.5%')}
+        fontSize={wp('4%')}
         fontColor={Color.White}
         fontFamily={Font.semiBold}
-        alignSelf={'center'}
+        alignSelf="center"
         onPress={handleSubmit}
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -90,40 +90,41 @@ export default React.memo(ImageBottomSheetContent);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: hp('27%'),
   },
   title: {
-    fontSize: scale(20),
+    fontSize: wp('5%'),
     color: Color.Black,
     fontFamily: Font.medium,
     textAlign: 'center',
-    paddingBottom: height * 0.01,
+    paddingBottom: hp('1%'),
   },
   separator: {
-    borderBottomWidth: scale(1),
+    borderBottomWidth: wp('0.25%'),
     borderBottomColor: Color.LightGray,
   },
   image: {
-    height: verticalScale(80),
-    width: scale(80),
+    height: hp('10%'),
+    width: wp('20%'),
     alignSelf: 'center',
-    marginVertical: verticalScale(15),
+    marginVertical: hp('2%'),
   },
   closeButton: {
-    height: scale(26),
-    width: scale(26),
-    borderRadius: scale(13),
+    height: wp('6%'),
+    width: wp('6%'),
+    borderRadius: wp('3%'),
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Color.WhiteDefault,
     position: 'absolute',
-    top: verticalScale(-20),
-    right: scale(9),
+    top: hp('-2.5%'),
+    right: wp('2%'),
   },
   imageName: {
-    fontSize: scale(14),
+    fontSize: wp('3.5%'),
     color: Color.Black,
     fontFamily: Font.medium,
     textAlign: 'center',
-    marginBottom: verticalScale(6),
+    marginBottom: hp('1%'),
   },
 });

@@ -22,6 +22,10 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const {height, width} = Dimensions.get('window');
 
@@ -304,8 +308,7 @@ const FolderComponent = ({
             singleItem={singleFolderItem}
           />
         }
-        width={scale(145)}
-        // height={scale(165)}
+        width={wp('40%')}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

@@ -1,7 +1,10 @@
 import React, {useCallback} from 'react';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import Color from '../../component/Color';
-import {scale, verticalScale} from '../../custome/Responsive';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Font from '../../component/Font';
 
@@ -18,6 +21,7 @@ const AboutUsScreen = () => {
       />
     );
   }, []);
+
   return (
     <View style={{flex: 1}}>
       {renderHeader()}
@@ -32,7 +36,7 @@ const AboutUsScreen = () => {
             situation.
           </Text>
 
-          <Text style={[styles.paragraph, {marginTop: verticalScale(-23)}]}>
+          <Text style={styles.paragraph}>
             Our tools allow you to quickly grasp teachings, Scripture, history,
             and much more, while building an organized treasure trove of content
             that’s easy to access and reference. Whether you're learning alone
@@ -62,24 +66,24 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     backgroundColor: Color.transparent,
-    height: verticalScale(90),
+    height: hp('12%'),
     alignItems: 'flex-end',
   },
   headerTitleStyle: {
     color: Color.Black,
-    fontSize: scale(20),
+    fontSize: wp('5%'),
   },
   heading: {
-    fontSize: scale(20),
+    fontSize: wp('5%'),
     fontWeight: 'bold',
-    marginBottom: verticalScale(15),
+    marginBottom: hp('2%'),
     textAlign: 'center',
     color: Color.Black,
   },
   paragraph: {
-    fontSize: scale(14),
-    marginBottom: verticalScale(10),
-    lineHeight: verticalScale(21),
+    fontSize: wp('4%'),
+    marginBottom: hp('2%'),
+    lineHeight: hp('2.8%'),
     textAlign: 'justify',
     color: Color.Black,
   },
@@ -87,20 +91,22 @@ const styles = StyleSheet.create({
     fontFamily: Font.bold,
   },
   listItem: {
-    fontSize: scale(14),
-    marginBottom: verticalScale(5),
-    paddingLeft: scale(10),
-    lineHeight: verticalScale(21),
+    fontSize: wp('4%'),
+    marginBottom: hp('1%'),
+    paddingLeft: wp('2.5%'),
+    lineHeight: hp('2.8%'),
     color: Color.Black,
   },
-  extra: {marginBottom: verticalScale(10)},
+  extra: {
+    marginBottom: hp('2%'),
+  },
   section: {
-    marginBottom: verticalScale(20),
+    marginBottom: hp('2.5%'),
     backgroundColor: '#fff',
-    padding: scale(15),
-    borderRadius: scale(10),
-    elevation: scale(1),
-    margin: scale(15),
-    marginTop: verticalScale(5),
+    padding: wp('4%'),
+    borderRadius: wp('3%'),
+    elevation: wp('0.5%'),
+    margin: wp('4%'),
+    marginTop: hp('1%'),
   },
 });

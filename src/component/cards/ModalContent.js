@@ -8,6 +8,7 @@ import {Switch} from '@rneui/themed';
 import Color from '../Color';
 import Font from '../Font';
 import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import {apiPut} from '../../Api/ApiService';
@@ -177,34 +178,38 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: scale(5),
-    borderBottomWidth: scale(0.7),
+    paddingLeft: wp('2%'),
+    borderBottomWidth: wp('0.3%'),
     borderBottomColor: Color.mediumGray,
-    height: verticalScale(33),
+    height: hp('5%'),
   },
   text: {
-    fontSize: moderateScale(14),
+    fontSize: wp('3.5%'),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingLeft: scale(10),
+    paddingLeft: wp('2.5%'),
   },
   switchContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: verticalScale(5),
+    marginVertical: hp('1%'),
   },
   switchContent: {
     alignItems: 'center',
   },
   switchLabel: {
-    fontSize: scale(13),
+    fontSize: wp('3.3%'),
     color: Color.Black,
     fontFamily: Font.regular,
   },
   icon: {
-    width: scale(20),
-    height: scale(20),
+    width: wp('5%'),
+    height: wp('5%'),
   },
-  folderModal: {borderBottomWidth: 0, marginBottom: verticalScale(-5)},
+  folderModal: {
+    borderBottomWidth: 0,
+    marginBottom: hp('-1%'),
+  },
 });
+

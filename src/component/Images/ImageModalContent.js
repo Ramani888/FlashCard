@@ -8,6 +8,10 @@ import Font from '../Font';
 import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const ImageModalContent = ({
   closeModal,
@@ -105,7 +109,7 @@ const styles = StyleSheet.create({
     height: verticalScale(33),
   },
   text: {
-    fontSize: moderateScale(14),
+    fontSize: wp('3.8%'),
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),

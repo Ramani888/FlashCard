@@ -30,6 +30,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import * as Progress from 'react-native-progress';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 const {width, height} = Dimensions.get('window');
 
@@ -408,14 +409,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   subscriptionBoxContainer: {
-    width: '43%',
+    width: wp('40%'),
     borderWidth: scale(2),
     borderColor: '#146D8B',
     padding: scale(10),
     borderRadius: scale(10),
   },
   subscriptionText: {
-    fontSize: moderateScale(16),
+    fontSize: wp('4%'),
     fontFamily: Font.medium,
     color: Color.White,
     textAlign: 'center',
@@ -435,7 +436,7 @@ const styles = StyleSheet.create({
     height: scale(36),
   },
   subscriptionTier: {
-    fontSize: moderateScale(16),
+    fontSize: wp('4%'),
     color: Color.White,
     fontFamily: Font.medium,
     paddingLeft: scale(10),

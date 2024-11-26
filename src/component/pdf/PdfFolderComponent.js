@@ -22,6 +22,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loader from '../Loader';
 import NoDataView from '../NoDataView';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 const {height, width} = Dimensions.get('window');
 
@@ -281,8 +282,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
             singleItem={singleFolderItem}
           />
         }
-        width={scale(145)}
-        // height={scale(165)}
+        width={wp('40%')}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

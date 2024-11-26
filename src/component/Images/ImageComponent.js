@@ -8,7 +8,10 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {scale, verticalScale} from '../../custome/Responsive';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import Color from '../Color';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
@@ -25,8 +28,6 @@ import NoDataView from '../NoDataView';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 
-const {height, width} = Dimensions.get('window');
-
 const ImageComponent = ({folderId}) => {
   const navigation = useNavigation();
   const threeDotIconRef = useRef(null);
@@ -42,8 +43,6 @@ const ImageComponent = ({folderId}) => {
   useEffect(() => {
     getImagesData(false);
   }, [isFocused]);
-
-  // ==================================== Api ==================================== //
 
   const getImagesData = async (message, messageValue) => {
     try {
@@ -90,16 +89,13 @@ const ImageComponent = ({folderId}) => {
     }
   };
 
-  // ==================================== Api ==================================== //
-
   const openModal = useCallback((isLastItem, index) => {
     const xOffset = index % 3 === 0;
-    console.log('xOffset', xOffset);
 
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
       setModalPosition({
-        x: x - (xOffset ? width * 2.7 : width * 3.8),
-        y: y + (height + 5),
+        x: x - (xOffset ? wp('22%') : wp('32%')),
+        y: y + hp('4%'),
       });
       setModalVisible(true);
     });
@@ -121,7 +117,7 @@ const ImageComponent = ({folderId}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={verticalScale(235)}
+        height={hp('30%')}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -130,7 +126,7 @@ const ImageComponent = ({folderId}) => {
         <View style={styles.sheetContainer}>
           <ImageBottomSheetContent
             closeBottomSheet={closeBottomSheet}
-            title={'UPLOADE IMAGES'}
+            title={'UPLOAD IMAGES'}
             uploadeImage={uploadeImage}
           />
         </View>
@@ -166,7 +162,7 @@ const ImageComponent = ({folderId}) => {
               style={styles.pressableIcon}>
               <Entypo
                 name="dots-three-vertical"
-                size={scale(13)}
+                size={wp('3%')}
                 color={Color.Black}
                 style={styles.dotsIcon}
               />
@@ -176,15 +172,12 @@ const ImageComponent = ({folderId}) => {
             style={[styles.folderContainer, item?.folderName && styles.folder]}>
             <Image
               source={require('../../Assets/Img/folder.png')}
-              style={[
-                styles.folderIcon,
-                {marginRight: item?.folderName ? '' : scale(-10)},
-              ]}
+              style={styles.folderIcon}
             />
             <Text
               style={[
                 styles.folderText,
-                {width: item?.folderName?.length > 12 ? scale(68) : ''},
+                {width: item?.folderName?.length > 12 ? wp('20%') : 'auto'},
               ]}>
               {item?.folderName ? item?.folderName : ''}
             </Text>
@@ -204,7 +197,7 @@ const ImageComponent = ({folderId}) => {
             renderItem={renderImage}
             numColumns={3}
             keyExtractor={(_, index) => index.toString()}
-            style={{marginBottom: verticalScale(10)}}
+            style={{marginBottom: hp('2%'), marginHorizontal: wp(0.5)}}
             showsVerticalScrollIndicator={false}
           />
         ) : (
@@ -222,16 +215,16 @@ const ImageComponent = ({folderId}) => {
       <CustomeButton
         buttonColor={Color.theme1}
         buttonWidth="90%"
-        buttonHeight={scale(45)}
+        buttonHeight={hp('6%')}
         title="UPLOAD IMAGES"
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
+        borderRadius={wp('3%')}
+        fontSize={wp('4%')}
         fontColor={Color.White}
         fontFamily={Font.semiBold}
-        marginTop={verticalScale(15)}
+        marginTop={hp('2%')}
         position="absolute"
         alignSelf="center"
-        bottom={verticalScale(10)}
+        bottom={hp('1.5%')}
         onPress={() => {
           openBottomSheet();
         }}
@@ -240,7 +233,7 @@ const ImageComponent = ({folderId}) => {
         visible={modalVisible}
         onClose={closeModal}
         closeModal={false}
-        mainPadding={scale(5)}
+        mainPadding={wp('1.5%')}
         content={
           <ImageModalContent
             closeModal={closeModal}
@@ -251,9 +244,9 @@ const ImageComponent = ({folderId}) => {
             imageId={imageId}
           />
         }
-        width={'40%'}
+        width={wp('40%')}
         justifyContent="flex-end"
-        borderRadius={20}
+        borderRadius={wp('5%')}
         modalContainerStyle={[
           styles.modal,
           {top: modalPosition.y, left: modalPosition.x},
@@ -271,72 +264,72 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
-    marginBottom: verticalScale(60),
+    marginBottom: hp('7%'),
+    marginHorizontal: wp('3%'),
   },
   imageContainer: {
-    margin: scale(5.5),
+    marginTop: hp('1.2%'),
+    marginRight: wp('3%'),
     position: 'relative',
   },
   image: {
-    width: scale(105),
-    height: scale(105),
-    borderRadius: scale(10),
+    width: wp('29%'),
+    height: wp('28%'),
+    borderRadius: wp('2%'),
   },
   pressableIcon: {
     position: 'absolute',
-    right: scale(5),
-    top: verticalScale(5),
+    right: wp('1.5%'),
+    top: hp('1%'),
   },
   dotsIcon: {
     backgroundColor: Color.WhiteDefault,
-    borderRadius: scale(5),
-    padding: scale(7),
+    borderRadius: wp('1%'),
+    padding: wp('1.5%'),
   },
   bottomSheetContainer: {
-    // flex:0.6,
     alignItems: 'center',
-    borderTopLeftRadius: scale(30),
-    borderTopRightRadius: scale(30),
+    borderTopLeftRadius: wp('7%'),
+    borderTopRightRadius: wp('7%'),
   },
   sheetContainer: {
     flexDirection: 'row',
-    gap: scale(50),
-    marginVertical: verticalScale(10),
+    gap: wp('13%'),
+    marginVertical: hp('1%'),
   },
   modal: {
     position: 'absolute',
-    borderRadius: scale(10),
+    borderRadius: wp('2.5%'),
     backgroundColor: Color.White,
-    elevation: scale(10),
+    elevation: 10,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: scale(0.3),
-    shadowRadius: scale(4),
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   folderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: scale(5),
+    // gap: wp('1.5%'),
     backgroundColor: Color.White,
-    borderRadius: scale(5),
-    marginRight: scale(6),
+    borderRadius: wp('1.5%'),
+    marginRight: wp('1%'),
     alignSelf: 'flex-start',
-    marginLeft: scale(6),
+    marginLeft: wp('2%'),
   },
   folderIcon: {
-    width: scale(26),
-    height: scale(26),
+    width: wp('6%'),
+    height: wp('6%'),
   },
   folderText: {
-    fontSize: scale(11),
+    fontSize: wp('3%'),
     color: Color.Black,
     fontFamily: Font.regular,
     textTransform: 'capitalize',
-    marginRight: scale(5),
-    width: scale(60),
+    // marginRight: wp('1%'),
   },
   folder: {
-    width: scale(102),
-    paddingRight: scale(5),
+    width: wp('25%'),
+    paddingRight: wp('1%'),
   },
 });

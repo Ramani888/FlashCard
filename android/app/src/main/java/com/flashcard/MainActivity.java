@@ -6,6 +6,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import org.devio.rn.splashscreen.SplashScreen;
 import android.os.Bundle;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class MainActivity extends ReactActivity {
 
@@ -21,7 +22,8 @@ public class MainActivity extends ReactActivity {
     @Override
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this, R.id.lottie); 
-    SplashScreen.setAnimationFinished(true); 
+    SplashScreen.setAnimationFinished(true);
+    FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true); 
     super.onCreate(null);
   }
 

@@ -22,7 +22,7 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import {ScreenName} from '../Screen';
 import moment from 'moment';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
