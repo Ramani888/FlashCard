@@ -7,6 +7,7 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import org.devio.rn.splashscreen.SplashScreen;
 import android.os.Bundle;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 
 public class MainActivity extends ReactActivity {
 
