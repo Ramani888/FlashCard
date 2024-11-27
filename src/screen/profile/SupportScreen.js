@@ -37,7 +37,7 @@ const options = {
 const SupportScreen = () => {
   const [selectedIssue, setSelectedIssue] = useState('');
   const [visible, setVisible] = useState(false);
-  const [imageFile, setImageFile] = useState({});
+  const [imageFile, setImageFile] = useState('');
   const [issueDesc, setIssueDesc] = useState('');
   const [selectedIssueIndex, setSelectedIssueIndex] = useState(null);
 
@@ -64,15 +64,10 @@ const SupportScreen = () => {
   }, [imageFile, selectedIssue, issueDesc]);
 
   const handleSubmit = useCallback(() => {
-    if (imageFile?.name && selectedIssue) {
+    if (selectedIssue) {
       submit();
     } else {
-      const message =
-        !imageFile?.name && !selectedIssue
-          ? 'Please enter issue detail'
-          : !imageFile?.name
-          ? 'Please attach the screenshot of your issue'
-          : 'Please select issue';
+      const message = 'Please select issue';
       showMessageonTheScreen(message);
     }
   }, [imageFile, selectedIssue, submit]);

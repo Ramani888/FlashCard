@@ -117,7 +117,7 @@ const ImageComponent = ({folderId}) => {
     return (
       <RBSheet
         ref={refRBSheet}
-        height={hp('30%')}
+        height={hp('33%')}
         openDuration={250}
         draggable={true}
         customStyles={{
@@ -310,12 +310,13 @@ const styles = StyleSheet.create({
   folderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // gap: wp('1.5%'),
     backgroundColor: Color.White,
     borderRadius: wp('1.5%'),
     marginRight: wp('1%'),
     alignSelf: 'flex-start',
     marginLeft: wp('2%'),
+    marginTop: hp(0.6),
+    marginLeft: wp(0),
   },
   folderIcon: {
     width: wp('6%'),

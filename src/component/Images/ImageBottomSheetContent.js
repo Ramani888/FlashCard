@@ -50,9 +50,9 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Pressable style={styles.closeButton} onPress={closeBottomSheet}>
+      {/* <Pressable style={styles.closeButton} onPress={closeBottomSheet}>
         <AntDesign name="close" size={wp('4%')} color={Color.Black} />
-      </Pressable>
+      </Pressable> */}
       <Text style={styles.title}>{title}</Text>
       <View style={styles.separator} />
       <Pressable onPress={handleSelectFromGallery}>
@@ -79,6 +79,7 @@ const ImageBottomSheetContent = ({closeBottomSheet, title, uploadeImage}) => {
         fontColor={Color.White}
         fontFamily={Font.semiBold}
         alignSelf="center"
+        marginBottom={hp('0.5%')}
         onPress={handleSubmit}
       />
     </ScrollView>
@@ -90,7 +91,7 @@ export default React.memo(ImageBottomSheetContent);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: hp('27%'),
+    height: hp('27.7%'),
   },
   title: {
     fontSize: wp('5%'),
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Color.WhiteDefault,
     position: 'absolute',
-    top: hp('-2.5%'),
+    
     right: wp('2%'),
   },
   imageName: {
