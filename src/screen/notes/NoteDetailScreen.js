@@ -1,9 +1,9 @@
 import {BackHandler, Dimensions, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import { scale,verticalScale } from '../../custome/Responsive';
+import {scale, verticalScale} from '../../custome/Responsive';
 import Font from '../../component/Font';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomeInputField from '../../custome/CustomeInputField';
@@ -14,6 +14,7 @@ const NoteDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [notes, setNotes] = useState('');
+  const notesRef = useRef('')
   const {noteName, note, noteId, noteColor, editNote, colorView} = route.params;
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const NoteDetailScreen = () => {
 
   const handleNoteDesc = text => {
     setNotes(text);
+    notesRef.current = text;
   };
 
   useEffect(() => {
@@ -40,22 +42,23 @@ const NoteDetailScreen = () => {
     return () => backHandler.remove();
   }, []);
 
+  const saveNote = () => {
+    console.log('Saving notes:', notesRef.current);
+    editNote(true, noteId, noteName, noteColor, notesRef.current, colorView);
+    navigation.goBack();
+  };
+
   const renderHeader = () => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
         saveNote={saveNote}
-        title={noteName}
+        title={'Notes'}
         titleStyle={styles.title}
         containerStyle={styles.headerStyle}
       />
     );
-  };
-
-  const saveNote = () => {
-    editNote(true, noteId, noteName, noteColor, notes, colorView);
-    navigation.goBack();
   };
 
   return (
@@ -77,6 +80,7 @@ const NoteDetailScreen = () => {
           numberOfLines={32}
           textAlignVertical="top"
           inputContainerStyles={styles.inputContainerStyle}
+          inputStyles={styles.input}
         />
       </View>
     </LinearGradient>
@@ -104,4 +108,5 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(15),
     backgroundColor: Color.White,
   },
+  input: {lineHeight: verticalScale(22)},
 });

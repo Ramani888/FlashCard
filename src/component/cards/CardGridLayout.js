@@ -235,7 +235,6 @@ const styles = StyleSheet.create({
   gridCardHeader: {
     flexDirection: 'row',
     backgroundColor: '#ececec',
-    width: scale(150),
     paddingVertical: scale(10),
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10),

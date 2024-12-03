@@ -25,6 +25,7 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import NoDataView from '../../component/NoDataView';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
 
 const {height, width} = Dimensions.get('window');
 
@@ -33,7 +34,6 @@ const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
 const NotesScreen = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  console.log('visible', visible);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -94,6 +94,13 @@ const NotesScreen = () => {
     noteDesc,
     isColorView,
   ) => {
+    // console.log('editWithNote',editWithNote)
+    // console.log('noteId',noteId)
+    // console.log('name',name)
+    // console.log('color',color)
+    console.log('noteDesc',noteDesc)
+    // console.log('isColorView',isColorView)
+
     const rawData = {
       _id: editWithNote ? noteId : singleNoteData?._id,
       userId: global?.user?._id,
@@ -372,6 +379,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     textTransform: 'uppercase',
     paddingLeft: scale(10),
+    width:widthPercentageToDP(75)
   },
   bodyContainer: {
     flex: 1,

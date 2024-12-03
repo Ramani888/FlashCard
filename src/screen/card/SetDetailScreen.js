@@ -231,27 +231,6 @@ const SetDetailScreen = () => {
     [setName, changeOrder, cardData],
   );
 
-  // function keyExtractor(str, _index) {
-  //   return str;
-  // }
-
-  // const renderItem = ({item, onDragStart, onDragEnd, isActive}) => {
-  //   return (
-  //     <SimpleLayout
-  //       item={item}
-  //       updateCard={updateCard}
-  //       threeDotIconRef={threeDotIconRef}
-  //       setItem={setItem}
-  //       folderId={folderId}
-  //       setId={setId}
-  //       openCardModal={openCardModal}
-  //       openNoteModal={openNoteModal}
-  //       onDragStart={onDragStart}
-  //       onDragEnd={onDragEnd}
-  //     />
-  //   );
-  // };
-
   const renderItem = ({item, drag, isActive}) => {
     return (
       <SimpleLayout
@@ -289,6 +268,9 @@ const SetDetailScreen = () => {
                   keyExtractor={keyExtractor}
                   renderItem={renderItem}
                   onDragEnd={({data}) => handleReorder(data)}
+                  autoscrollThreshold={30} 
+                  autoscrollSpeed={100}
+                  activationDistance={10} 
                 />
               ) : (
                 <FlatList
