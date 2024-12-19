@@ -5,6 +5,7 @@ export default {
   homeTab3: 'Notes',
   homeTab4: 'PDFs',
   homeTab5: 'Images',
+  homeTab6: 'Flux en direct global',
   selectFolder: 'SÉLECTIONNER UN DOSSIER',
   createFolder: 'CRÉER UN DOSSIER',
   editFolder: 'MODIFIER UN DOSSIER',

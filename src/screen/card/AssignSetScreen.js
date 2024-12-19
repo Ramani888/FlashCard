@@ -289,7 +289,7 @@ const AssignSetScreen = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: colorTheme.background}}>
+    <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
       <Loader visible={visible} />
       {renderHeader()}
       {renderBody()}

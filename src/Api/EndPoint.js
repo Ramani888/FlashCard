@@ -35,6 +35,7 @@ const Api = {
   mediatorCard: `${Base_url}/mediator/card`,
   chatGptAi: `${Base_url}/chat-gpt/ask/question`,
   credit: `${Base_url}/credit`,
+  getLiveFeedData: `${Base_url}/card/all`,
 };
 
 export default Api;

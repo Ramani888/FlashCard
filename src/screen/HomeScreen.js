@@ -29,6 +29,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
 import CustomeButton from '../custome/CustomeButton';
+import {apiGet} from '../Api/ApiService';
+import Api from '../Api/EndPoint';
 
 const {width, height} = Dimensions.get('window');
 
@@ -143,6 +145,17 @@ const HomeScreen = () => {
         <View style={styles.tabRowSecondary}>
           <Pressable
             style={styles.tabContainer}
+            onPress={() => navigation.navigate(ScreenName.globalLiveFeed)}>
+            <Image
+              source={require('../Assets/Img/earthBigIcon.png')}
+              style={styles.tabIcon}
+              tintColor={Color.theme1}
+            />
+            <Text style={styles.tabText}>{strings.homeTab6}</Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.tabContainer}
             onPress={() => navigation.navigate(ScreenName.pdf)}>
             <Image
               source={require('../Assets/Img/pdf.png')}
@@ -203,14 +216,14 @@ const HomeScreen = () => {
     () => (
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <LinearGradient
-        colors={['#00394d', '#00394d', '#00394d']}
+          colors={['#00394d', '#00394d', '#00394d']}
           // colors={
           //   theme == 'Light'
           //     ? ['#00394d', '#00394d', '#00394d']
           //     : ['#00394d', '#001f2b', '#001f2b', '#00394d']
           // }
           style={styles.headerContainer}>
-            <View style={{marginTop:verticalScale(65)}}/>
+          <View style={{marginTop: verticalScale(65)}} />
           {/* <View
             style={{
               marginRight: verticalScale(15),
@@ -329,7 +342,6 @@ const styles = StyleSheet.create({
   tabRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: scale(400),
     alignSelf: 'center',
   },
   tabAiContainer: {
@@ -338,9 +350,9 @@ const styles = StyleSheet.create({
   },
   tabRowSecondary: {
     flexDirection: 'row',
-    width: scale(250),
     alignSelf: 'center',
     marginTop: verticalScale(15),
+    marginHorizontal: scale(10),
   },
   tabContainer: {
     flex: 1,
@@ -360,6 +372,8 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     color: Color.theme1,
     paddingTop: verticalScale(5),
+    width: scale(100),
+    textAlign: 'center',
   },
   adsImage: {
     width: '100%',

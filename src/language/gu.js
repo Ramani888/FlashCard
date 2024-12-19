@@ -5,6 +5,7 @@ export default {
   homeTab3: 'નોટ્સ',
   homeTab4: 'પીડીએફ',
   homeTab5: 'છબીઓ',
+  homeTab6: 'ગ્લોબલ લાઇવ ફીડ',
   selectFolder: 'ફોલ્ડર પસંદ કરો',
   createFolder: 'ફોલ્ડર બનાવો',
   editFolder: 'ફોલ્ડર સંપાદિત કરો',
