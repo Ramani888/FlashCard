@@ -78,6 +78,7 @@ import MobileAds, {
 } from 'react-native-google-mobile-ads';
 import AppNav from './src/navigation/AppNav';
 import {MenuProvider} from 'react-native-popup-menu';
+import { withIAPContext } from 'react-native-iap';
 
 const App = gestureHandlerRootHOC(() => {
   useEffect(() => {
@@ -108,6 +109,6 @@ const App = gestureHandlerRootHOC(() => {
   );
 });
 
-export default App;
+export default withIAPContext(App);
 
 const styles = StyleSheet.create({});

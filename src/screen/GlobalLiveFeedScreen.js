@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: verticalScale(10),
-    padding: scale(10),
+    padding: scale(5),
     backgroundColor: Color.White,
     borderRadius: scale(10),
     shadowColor: '#000',
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
     paddingVertical: scale(5),
     borderRadius: scale(5),
-    width: scale(150),
+    width: scale(175),
   },
   emptyStateContainer: {
     alignItems: 'center',
