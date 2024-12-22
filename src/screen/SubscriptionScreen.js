@@ -193,6 +193,7 @@ const SubscriptionScreen = () => {
   const [error, setError] = useState(null);
   const [subscriptions, setSubscriptions] = useState([]);
   const [isPopupVisible, setPopupVisible] = useState(false);
+  const [popupTitle, setPopupTitle] = useState('');
   const [popupMessage, setPopupMessage] = useState('');
   const [data, setData] = useState([]);
   // console.log('data', data);
@@ -308,16 +309,15 @@ const SubscriptionScreen = () => {
           subscriptionOffers: [{sku: sku?.productId, offerToken}],
         }),
       });
+      setPopupTitle('Success');
       setPopupMessage(
         `Subscription Successful', You subscribed to ${sku?.title}`,
       );
       setPopupVisible(true);
     } catch (error) {
       console.error('Subscription Error:', error);
-      setPopupMessage(
-        'Subscription Failed',
-        'Something went wrong. Please try again.',
-      );
+      setPopupTitle('Error');
+      setPopupMessage(`Subscription Cancelled`);
       setPopupVisible(true);
     }
   };
@@ -347,7 +347,11 @@ const SubscriptionScreen = () => {
           styles.subscriptionView,
           // {backgroundColor: colorTheme.subscriptionView},
         ]}
-        onPress={() => onSubscription(item?.sku)}>
+        onPress={() => {
+          if (item?.name !== 'FREE') {
+            onSubscription(item?.sku);
+          }
+        }}>
         <View style={styles.subscriptionContainer}>
           <View style={styles.subscriptionInfo}>
             <Image
@@ -427,7 +431,7 @@ const SubscriptionScreen = () => {
 
       <CustomeAlert
         isVisible={isPopupVisible}
-        title={'Success'}
+        title={popupTitle}
         message={popupMessage}
         onConfirm={closePopup}
       />

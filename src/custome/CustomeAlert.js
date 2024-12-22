@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {moderateScale, scale, verticalScale} from './Responsive';
 import Color from '../component/Color';
 import CustomeButton from './CustomeButton';
@@ -22,10 +18,16 @@ const CustomeAlert = ({isVisible, title, message, onConfirm, onCancel}) => {
       backgroundColor={colorTheme.modelBackground}
       content={
         <View style={styles.container}>
-          <Text style={styles.title}>{title}</Text>
+          <Text
+            style={[
+              styles.title,
+              {color: title == 'Error' ? Color.Red : Color.Black},
+            ]}>
+            {title}
+          </Text>
           <Text style={styles.message}>{message}</Text>
           <View style={styles.btnView}>
-             <CustomeButton
+            <CustomeButton
               title={'Ok'}
               buttonWidth={'30%'}
               buttonHeight={verticalScale(35)}
@@ -54,14 +56,14 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Color.White,
+    backgroundColor: Color.White,paddingHorizontal:scale(15)
   },
   title: {
     fontSize: scale(18),
     color: Color.theme1,
     fontFamily: Font.bold,
     textAlign: 'center',
-    marginTop:verticalScale(5)
+    marginTop: verticalScale(5),
   },
   message: {
     fontSize: scale(15),
@@ -69,8 +71,9 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     textAlign: 'center',
     marginTop: verticalScale(10),
-    marginHorizontal:scale(5),
-    lineHeight:verticalScale(18)
+    marginHorizontal: scale(15),
+    lineHeight: verticalScale(18),
+    // backgroundColor:'red'
   },
   btnView: {
     flexDirection: 'row',
