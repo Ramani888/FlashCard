@@ -81,9 +81,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  modalContent: {
-    backgroundColor: Color.White,
-  },
+  // modalContent: {
+  //   backgroundColor: Color.White,
+  // },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

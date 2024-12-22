@@ -61,7 +61,7 @@ const useTheme = () => {
     listAndBoxColor1: Color.WhiteDefault,
     cardHeader: '#ececec',
     modelBackgroundView: Color.White,
-    modelBackground: 'rgba(0,0,0,0.7)',
+    modelBackground: 'rgba(0,0,0,0.8)',
     subscriptionView: '#146D8B33',
     threeDotIcon: Color.WhiteDefault,
   };
