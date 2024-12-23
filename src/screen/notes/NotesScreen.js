@@ -105,7 +105,7 @@ const NotesScreen = () => {
       note: noteDesc,
       isHighlight: isColorView ? isColorView : colorView,
     };
-    // console.log('rawData',rawData)
+    console.log('rawData', rawData);
     try {
       setVisible(true);
       const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
@@ -234,6 +234,7 @@ const NotesScreen = () => {
               colorView: item?.isHighlight,
               editNote,
             });
+            global.note = item?.note;
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             {!colorView && (

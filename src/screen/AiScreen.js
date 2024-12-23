@@ -25,6 +25,13 @@ import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
 import Clipboard from '@react-native-clipboard/clipboard';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from 'react-native-google-mobile-ads';
+
+const rewarded = RewardedAd.createForAdRequest(TestIds.REWARDED);
 
 const {height} = Dimensions.get('window');
 
@@ -46,6 +53,18 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
 
   useEffect(() => {
     getProfileData(true);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = rewarded.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        rewarded.show();
+      },
+    );
+    rewarded.load();
+
+    return unsubscribe;
   }, []);
 
   // ================================== Api ==================================== //
@@ -129,6 +148,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
+        showVideoAd={showAd}
         title={strings.homeTab2}
         iconColor={Color.White}
         containerStyle={styles.headerStyle}
@@ -137,6 +157,10 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     ),
     [],
   );
+
+  const showAd = () => {
+    rewarded.show()
+  }
 
   return (
     <KeyboardAvoidingView
@@ -167,9 +191,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
                 {backgroundColor: colorTheme.listAndBoxColor},
               ]}>
               <TextInput
-                placeholder={
-                  strings.aiPlaceholder
-                }
+                placeholder={strings.aiPlaceholder}
                 value={question}
                 onChangeText={setQuestion}
                 multiline={true}

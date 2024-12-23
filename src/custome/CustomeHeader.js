@@ -36,11 +36,12 @@ const CustomeHeader = ({
   changeOrder,
   updatePosition,
   saveNote,
+  showVideoAd,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
   const threeDotIconRef = useRef(null);
-  const colorTheme = useTheme()
+  const colorTheme = useTheme();
 
   return (
     <LinearGradient
@@ -122,7 +123,7 @@ const CustomeHeader = ({
         </Pressable>
       )}
       {title == 'AI' && (
-        <Pressable style={styles.adIcon}>
+        <Pressable style={styles.adIcon} onPress={() => showVideoAd()}>
           <Image
             source={require('../Assets/Img/adsIcon.jpg')}
             style={styles.adImageIcon}

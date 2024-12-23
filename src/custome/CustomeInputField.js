@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(8),
     fontSize: scale(14),
     paddingHorizontal: scale(12),
-    paddingTop: verticalScale(10),
     paddingBottom: verticalScale(10),
     textAlignVertical: 'top',
   },

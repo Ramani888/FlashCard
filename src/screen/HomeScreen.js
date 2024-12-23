@@ -31,7 +31,8 @@ import strings from '../language/strings';
 import CustomeButton from '../custome/CustomeButton';
 import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
+import AdBanner from './BannerAds';
 
 const {width, height} = Dimensions.get('window');
 
@@ -178,11 +179,17 @@ const HomeScreen = () => {
           </Pressable>
         </View>
 
-        {/* <BannerAds/> */}
-        <View style={{width: '100%', height: '100px', display: 'flex', alignItems:'center', justifyContent: 'center'}}>
+        <View
+          style={styles.adView}>
           <BannerAd
-            unitId={TestIds.BANNER}  // Use TestIds.BANNER for testing
-            size={BannerAdSize.BANNER}  // Standard Banner
+            unitId={TestIds.BANNER}
+            size={BannerAdSize.BANNER}
+            onAdLoaded={() => console.log('Ad loaded successfully')} 
+            requestOptions={{
+              networkExtras: {
+                collapsible: 'bottom',
+              },
+            }}
           />
         </View>
       </View>
@@ -388,4 +395,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: verticalScale(30),
   },
+  adView:{
+    width: '100%',
+    height: '100px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

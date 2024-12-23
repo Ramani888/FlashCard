@@ -1,33 +1,78 @@
-// import React from 'react';
-// import { View, StyleSheet } from 'react-native';
-// import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { BannerAd, BannerAdSize, TestIds, MobileAds } from 'react-native-google-mobile-ads';
 
-// const BannerAdTest = () => {
-//   return (
-//     <View style={styles.container}>
-//       <BannerAd
-//         unitId={TestIds.BANNER} // Use TestIds.BANNER for testing purposes
-//         size={BannerAdSize.BANNER} // You can use other sizes like LARGE_BANNER or FULL_BANNER
-//         requestOptions={{
-//           requestNonPersonalizedAdsOnly: true, // Request non-personalized ads for GDPR compliance
-//         }}
-//         onAdFailedToLoad={(error) => console.error('Ad failed to load: ', error)}
-//         onAdLoaded={() => console.log('Ad loaded successfully')}
-//       />
-//     </View>
-//   );
-// };
+const AdBanner = () => {
+  const [adLoadError, setAdLoadError] = useState(false);
+  const adUnitId = __DEV__ ? TestIds.BANNER : 'your-real-ad-unit-id';
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-// });
+  // Initialize Mobile Ads and Configure Test Devices
+  useEffect(() => {
+    MobileAds()
+      .initialize()
+      .then(() => {
+        MobileAds().setRequestConfiguration({
+          testDeviceIdentifiers: ['EMULATOR', 'YOUR_DEVICE_ID'], // Add your test device ID
+        });
+      });
+  }, []);
 
-// export default BannerAdTest;
+  // Retry Logic for Ad Loading
+  const retryAdLoad = (retries = 3) => {
+    if (retries > 0) {
+      console.log(`Retrying ad load... attempts left: ${retries}`);
+      setTimeout(() => {
+        setAdLoadError(false);
+      }, 5000); // Retry after 5 seconds
+    } else {
+      console.error('All retries for ad load failed.');
+    }
+  };
 
+  return (
+    <View style={styles.container}>
+      {adLoadError ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Ad failed to load. Retrying...</Text>
+        </View>
+      ) : (
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+          onAdFailedToLoad={(error) => {
+            console.error('Ad failed to load:', error.message);
+            setAdLoadError(true);
+            retryAdLoad(); // Retry loading the ad
+          }}
+          onAdLoaded={() => {
+            console.log('Ad loaded successfully.');
+            setAdLoadError(false);
+          }}
+        />
+      )}
+    </View>
+  );
+};
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+});
 
-
+export default AdBanner;

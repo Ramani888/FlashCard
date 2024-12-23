@@ -238,7 +238,7 @@ const SubscriptionScreen = () => {
       if (firstDataItem) {
         return {
           ...item,
-          name: firstDataItem?.title,
+          // name: firstDataItem?.title,
           price: firstDataItem?.price,
           unit: firstDataItem?.currency,
           sku: firstDataItem?.sku,
@@ -341,6 +341,7 @@ const SubscriptionScreen = () => {
   }, []);
 
   const SubscriptionItem = memo(({item, colorTheme}) => {
+    console.log('item', item);
     return (
       <Pressable
         style={[
@@ -352,7 +353,12 @@ const SubscriptionScreen = () => {
             onSubscription(item?.sku);
           }
         }}>
-        <View style={styles.subscriptionContainer}>
+        <View
+          style={
+            item?.name == 'FREE'
+              ? styles.freeContainer
+              : styles.subscriptionContainer
+          }>
           <View style={styles.subscriptionInfo}>
             <Image
               source={{uri: item?.icon}}
@@ -479,7 +485,7 @@ const styles = StyleSheet.create({
   },
   subscriptionView: {
     backgroundColor: '#146D8B33',
-    borderWidth: scale(1),
+    borderWidth: scale(2),
     paddingVertical: scale(5),
     borderRadius: scale(14),
     marginBottom: verticalScale(10),
@@ -489,6 +495,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  freeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: verticalScale(35),
   },
   subscriptionInfo: {
     flexDirection: 'row',
@@ -501,19 +513,19 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(5),
   },
   subscriptionName: {
-    fontSize: scale(18),
-    fontFamily: Font.medium,
+    fontSize: scale(16),
+    fontFamily: Font.semiBold,
     color: Color.Black,
-    textTransform: 'capitalize',
+    textTransform: 'uppercase',
     paddingLeft: scale(10),
     width: scale(180),
   },
   subscriptionPriceContainer: {
     paddingHorizontal: scale(10),
-    height: verticalScale(28),
+    paddingVertical: verticalScale(4),
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: scale(7),
+    borderRadius: scale(10),
     backgroundColor: Color.theme1,
     marginRight: scale(10),
   },
@@ -523,7 +535,7 @@ const styles = StyleSheet.create({
     color: Color.White,
   },
   bottomView: {
-    marginTop: verticalScale(10),
+    marginTop: verticalScale(5),
     gap: verticalScale(5),
   },
   creditView: {
@@ -534,8 +546,9 @@ const styles = StyleSheet.create({
   },
   credit: {
     fontSize: scale(15),
-    fontFamily: Font.regular,
+    fontFamily: Font.medium,
     color: Color.Black,
+    marginTop: verticalScale(-5),
   },
   freeSubscription: {
     marginHorizontal: scale(15),

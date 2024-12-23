@@ -16,8 +16,8 @@ const NoteDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [notes, setNotes] = useState('');
-  const notesRef = useRef('')
-  const colorTheme = useTheme()
+  const notesRef = useRef('');
+  const colorTheme = useTheme();
   const {noteName, note, noteId, noteColor, editNote, colorView} = route.params;
 
   useEffect(() => {
@@ -46,7 +46,14 @@ const NoteDetailScreen = () => {
   }, []);
 
   const saveNote = () => {
-    editNote(true, noteId, noteName, noteColor, notesRef.current, colorView);
+    editNote(
+      true,
+      noteId,
+      noteName,
+      noteColor,
+      notesRef.current ? notesRef.current : global.note,
+      colorView,
+    );
     navigation.goBack();
   };
 
@@ -79,11 +86,11 @@ const NoteDetailScreen = () => {
           placeholderTextColor={Color.Gray}
           borderRadius={scale(10)}
           multiline={true}
-          numberOfLines={32}
+          numberOfLines={34}
           textAlignVertical="top"
           backgroundColor={colorTheme.listAndBoxColor}
           inputContainerStyles={styles.inputContainerStyle}
-          inputStyles={[styles.input,{color: colorTheme.textColor}]}
+          inputStyles={[styles.input, {color: colorTheme.textColor}]}
         />
       </View>
     </LinearGradient>
