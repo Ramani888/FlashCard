@@ -23,15 +23,10 @@ import {
 } from '@react-navigation/native';
 import {ScreenName} from '../component/Screen';
 import {useDispatch, useSelector} from 'react-redux';
-import BannerAds from './BannerAds';
 import {setState} from '../redux/StateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
-import CustomeButton from '../custome/CustomeButton';
-import {apiGet} from '../Api/ApiService';
-import Api from '../Api/EndPoint';
-import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
 import AdBanner from './BannerAds';
 
 const {width, height} = Dimensions.get('window');
@@ -178,20 +173,6 @@ const HomeScreen = () => {
             <Text style={styles.tabText}>{strings.homeTab5}</Text>
           </Pressable>
         </View>
-
-        <View
-          style={styles.adView}>
-          <BannerAd
-            unitId={TestIds.BANNER}
-            size={BannerAdSize.BANNER}
-            onAdLoaded={() => console.log('Ad loaded successfully')} 
-            requestOptions={{
-              networkExtras: {
-                collapsible: 'bottom',
-              },
-            }}
-          />
-        </View>
       </View>
     );
   };
@@ -261,12 +242,8 @@ const HomeScreen = () => {
           </Pressable>
         </LinearGradient>
         {tabView()}
-        {/* 
-        <Image
-          source={require('../Assets/Img/ads.png')}
-          style={styles.adsImage}
-          resizeMode="contain"
-        /> */}
+
+        <AdBanner />
       </ScrollView>
     ),
     [cardTypeData, theme],
@@ -389,17 +366,4 @@ const styles = StyleSheet.create({
     width: scale(100),
     textAlign: 'center',
   },
-  adsImage: {
-    width: '100%',
-    height: verticalScale(50),
-    position: 'absolute',
-    bottom: verticalScale(30),
-  },
-  adView:{
-    width: '100%',
-    height: '100px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
 });
