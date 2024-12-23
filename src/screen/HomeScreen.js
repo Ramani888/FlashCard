@@ -27,7 +27,7 @@ import {setState} from '../redux/StateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
-import AdBanner from './BannerAds';
+import AdBanner from './ads/BannerAds';
 
 const {width, height} = Dimensions.get('window');
 

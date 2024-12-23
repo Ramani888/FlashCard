@@ -20,6 +20,11 @@ const NoteDetailScreen = () => {
   const colorTheme = useTheme();
   const {noteName, note, noteId, noteColor, editNote, colorView} = route.params;
 
+  const lineHeight = 10; 
+  const paddingOffset = 80; 
+
+  const responsiveNumberOfLines = Math.floor((height - paddingOffset) / lineHeight);
+
   useEffect(() => {
     if (note) {
       setNotes(note);
@@ -86,7 +91,7 @@ const NoteDetailScreen = () => {
           placeholderTextColor={Color.Gray}
           borderRadius={scale(10)}
           multiline={true}
-          numberOfLines={34}
+          numberOfLines={responsiveNumberOfLines}
           textAlignVertical="top"
           backgroundColor={colorTheme.listAndBoxColor}
           inputContainerStyles={styles.inputContainerStyle}
@@ -118,5 +123,5 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(15),
     backgroundColor: Color.White,
   },
-  input: {lineHeight: verticalScale(22)},
+  input: {lineHeight: verticalScale(22),},
 });

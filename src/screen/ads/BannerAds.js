@@ -6,7 +6,6 @@ const AdBanner = () => {
   const [adLoadError, setAdLoadError] = useState(false);
   const adUnitId = __DEV__ ? TestIds.BANNER : 'your-real-ad-unit-id';
 
-  // Initialize Mobile Ads and Configure Test Devices
   useEffect(() => {
     MobileAds()
       .initialize()
@@ -17,13 +16,12 @@ const AdBanner = () => {
       });
   }, []);
 
-  // Retry Logic for Ad Loading
   const retryAdLoad = (retries = 3) => {
     if (retries > 0) {
       console.log(`Retrying ad load... attempts left: ${retries}`);
       setTimeout(() => {
         setAdLoadError(false);
-      }, 5000); // Retry after 5 seconds
+      }, 5000); 
     } else {
       console.error('All retries for ad load failed.');
     }
@@ -45,7 +43,7 @@ const AdBanner = () => {
           onAdFailedToLoad={(error) => {
             console.error('Ad failed to load:', error.message);
             setAdLoadError(true);
-            retryAdLoad(); // Retry loading the ad
+            retryAdLoad(); 
           }}
           onAdLoaded={() => {
             console.log('Ad loaded successfully.');

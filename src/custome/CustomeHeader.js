@@ -36,6 +36,7 @@ const CustomeHeader = ({
   changeOrder,
   updatePosition,
   saveNote,
+  videoIconStyle,
   showVideoAd,
 }) => {
   const navigation = useNavigation();
@@ -123,7 +124,9 @@ const CustomeHeader = ({
         </Pressable>
       )}
       {title == 'AI' && (
-        <Pressable style={styles.adIcon} onPress={() => showVideoAd()}>
+        <Pressable
+          style={[styles.adIcon, videoIconStyle]}
+          onPress={() => showVideoAd()}>
           <Image
             source={require('../Assets/Img/adsIcon.jpg')}
             style={styles.adImageIcon}
@@ -223,6 +226,6 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(5),
   },
   check: {position: 'absolute', right: scale(15), top: verticalScale(54)},
-  adImageIcon: {width: scale(35), height: scale(35), borderRadius: scale(4)},
+  adImageIcon: {width: scale(28), height: scale(28), borderRadius: scale(4)},
   adIcon: {position: 'absolute', right: scale(20), top: verticalScale(45)},
 });

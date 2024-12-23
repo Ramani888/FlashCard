@@ -1,3 +1,4 @@
+import React, {useEffect, useRef, useCallback, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -8,8 +9,8 @@ import {
   Text,
   TextInput,
   View,
+  Platform,
 } from 'react-native';
-import React, {useEffect, useRef, useCallback, useState} from 'react';
 import {scale, verticalScale, moderateScale} from '../custome/Responsive';
 import Color from '../component/Color';
 import CustomeButton from '../custome/CustomeButton';
@@ -25,13 +26,7 @@ import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
 import Clipboard from '@react-native-clipboard/clipboard';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
-import {
-  RewardedAd,
-  RewardedAdEventType,
-  TestIds,
-} from 'react-native-google-mobile-ads';
-
-const rewarded = RewardedAd.createForAdRequest(TestIds.REWARDED);
+import VideoAds from './ads/VideoAds';
 
 const {height} = Dimensions.get('window');
 
@@ -40,39 +35,22 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const [answer, setAnswer] = useState('');
   const [inputHeight, setInputHeight] = useState(verticalScale(190));
   const [userCredit, setUserCredit] = useState('');
-  const colorTheme = useTheme();
-
   const [visible, setVisible] = useState(false);
   const refAiRBSheet = useRef();
+  const colorTheme = useTheme();
+  const adRef = useRef();
 
   useEffect(() => {
-    if (question) {
-      setAnswer('');
-    }
+    if (question) setAnswer('');
   }, [question]);
 
   useEffect(() => {
     getProfileData(true);
+    if (setOpenAIBottomsheet) setOpenAIBottomsheet(refAiRBSheet);
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = rewarded.addAdEventListener(
-      RewardedAdEventType.LOADED,
-      () => {
-        rewarded.show();
-      },
-    );
-    rewarded.load();
-
-    return unsubscribe;
-  }, []);
-
-  // ================================== Api ==================================== //
 
   const getAnswer = async () => {
-    const rawData = {
-      message: question,
-    };
+    const rawData = {message: question};
     try {
       setVisible(true);
       const response = await apiPost(
@@ -82,85 +60,76 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
       );
       if (response) {
         setAnswer(response?.response);
-        updateCredit();
+        updateCredit(1, 'debited');
       }
     } catch (error) {
-      console.log('error in chatGpt api', error);
+      console.error('Error in chatGpt API:', error);
     } finally {
       setVisible(false);
     }
   };
 
-  const getProfileData = async visible => {
+  const getProfileData = async showLoader => {
     try {
-      visible && setVisible(true);
+      if (showLoader) setVisible(true);
       const response = await apiGet(
         `${Api.profile}?userId=${global.user?._id}`,
       );
       setUserCredit(response?.userCreditData?.credit);
     } catch (error) {
-      console.log('error in get profile api', error);
+      console.error('Error fetching profile data:', error);
     } finally {
       setVisible(false);
     }
   };
 
-  const updateCredit = async () => {
-    const rawData = {
-      userId: global.user?._id,
-      credit: 1,
-      type: 'debited',
-    };
+  const updateCredit = async (credit, type) => {
+    console.log('credit',credit)
+    console.log('type',type)
+    const rawData = {userId: global.user?._id, credit: credit, type: type};
     try {
       setVisible(true);
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
-      if (response.success == true) {
-        getProfileData(false);
-      }
+      if (response.success) getProfileData(false);
     } catch (error) {
-      console.log('error in update card', error);
+      console.error('Error updating credit:', error);
+    } finally {
+      setVisible(false);
     }
   };
 
-  // ================================== Api ==================================== //
-
-  useEffect(() => {
-    if (setOpenAIBottomsheet) {
-      setOpenAIBottomsheet(refAiRBSheet);
-    }
-  }, [setOpenAIBottomsheet]);
-
   const handleEnterPress = () => {
-    if (userCredit > 0) {
-      getAnswer();
-    } else {
-      showMessageonTheScreen(strings.aiLimitMessage);
-    }
+    if (userCredit > 0) getAnswer();
+    else showMessageonTheScreen(strings.aiLimitMessage);
   };
 
   const copyToClipboard = () => {
     Clipboard.setString(answer);
-    showMessageonTheScreen('Copied');
+    showMessageonTheScreen(strings.copied);
+  };
+
+  const handleShowAd = () => {
+    if (adRef.current) {
+      adRef.current.showAd();
+    }
   };
 
   const renderHeader = useCallback(
     () => (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
-        goBack={true}
-        showVideoAd={showAd}
+        goBack
+        showVideoAd={handleShowAd}
         title={strings.homeTab2}
         iconColor={Color.White}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
+        iconStyle={{bottom: verticalScale(5)}}
+        videoIconStyle={{top: verticalScale(47)}}
       />
     ),
     [],
   );
-
-  const showAd = () => {
-    rewarded.show()
-  }
 
   return (
     <KeyboardAvoidingView
@@ -174,12 +143,12 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
           style={styles.container}>
           <Loader visible={visible} />
           {renderHeader()}
-
+          <VideoAds ref={adRef} updateCredit={updateCredit} />
           <View>
             <View
               style={[
                 styles.headerView,
-                {backgroundColor: colorTheme.background},
+                {backgroundColor: colorTheme.background1},
               ]}>
               <Text style={[styles.headerText, {color: colorTheme.textColor}]}>
                 {strings.aiHeader}
@@ -194,7 +163,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
                 placeholder={strings.aiPlaceholder}
                 value={question}
                 onChangeText={setQuestion}
-                multiline={true}
+                multiline
                 placeholderTextColor="#D1D1D6"
                 onContentSizeChange={event =>
                   setInputHeight(
@@ -217,11 +186,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
                     label={strings.copy}
                   />
                 </Pressable>
-                <Pressable
-                  onPress={() => {
-                    setAnswer('');
-                    setQuestion('');
-                  }}>
+                <Pressable onPress={() => setAnswer('') || setQuestion('')}>
                   <IconWithLabel
                     IconComponent={MaterialIcons}
                     name="refresh"
@@ -239,7 +204,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
             fontSize={scale(15)}
             fontColor={Color.White}
             fontFamily={Font.semiBold}
-            alignSelf={'center'}
+            alignSelf="center"
             marginTop={verticalScale(15)}
             marginBottom={verticalScale(10)}
             onPress={handleEnterPress}
@@ -260,12 +225,8 @@ const IconWithLabel = ({IconComponent, name, label}) => (
 export default React.memo(AiScreen);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    flexGrow: 2,
-  },
+  container: {flex: 1},
+  scrollViewContent: {flexGrow: 2},
   headerStyle: {
     backgroundColor: Color.transparent,
     height: verticalScale(90),
@@ -273,7 +234,8 @@ const styles = StyleSheet.create({
   },
   headerTitleStyle: {
     color: Color.White,
-    fontSize: scale(20),
+    fontSize: scale(22),
+    bottom: verticalScale(5),
   },
   headerView: {
     marginHorizontal: scale(17),
@@ -290,40 +252,20 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: scale(15),
     borderBottomRightRadius: scale(15),
     height: verticalScale(490),
-    backgroundColor: Color.White,
-    // marginTop: verticalScale(10),
   },
-  textContainer: {
-    backgroundColor: '#ECECEC',
-    borderTopRightRadius: scale(20),
-    borderTopLeftRadius: scale(20),
-  },
-  textStyle: {
-    fontSize: scale(15),
+  textInput: {
+    paddingLeft: scale(10),
+    color: Color.mediumGray,
+    fontSize: moderateScale(14),
     fontFamily: Font.medium,
+    textAlignVertical: 'top',
+  },
+  answerView: {height: '80%', color: 'red'},
+  answer: {
+    fontSize: moderateScale(14),
     color: Color.Black,
-    paddingVertical: verticalScale(10),
-    paddingLeft: scale(20),
-  },
-  topView: {margin: scale(10)},
-  text: {fontSize: scale(12), color: Color.Black, fontFamily: Font.regular},
-  disclaimerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: verticalScale(10),
-  },
-  disclaimerTitle: {
-    fontSize: scale(15),
-    fontFamily: Font.medium,
-    color: Color.mediumGray,
-    textAlign: 'center',
-  },
-  disclaimerText: {
-    fontSize: scale(12),
     fontFamily: Font.regular,
-    color: Color.mediumGray,
-    textAlign: 'center',
-    lineHeight: verticalScale(18),
+    paddingLeft: scale(10),
   },
   iconRow: {
     flexDirection: 'row',
@@ -334,28 +276,11 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(5),
     marginTop: verticalScale(10),
   },
-  iconContainer: {
-    alignItems: 'center',
-  },
+  iconContainer: {alignItems: 'center'},
   iconText: {
-    fontSize: scale(12),
-    color: Color.theme1,
-    fontFamily: Font.regular,
-    textAlign: 'center',
-  },
-  answerView: {height: '80%', color: 'red'},
-  answer: {
-    fontSize: moderateScale(14),
+    fontSize: scale(8),
     color: Color.Black,
-    fontFamily: Font.regular,
-    paddingLeft: scale(10),
-    height: '100%',
-  },
-  textInput: {
-    paddingLeft: scale(10),
-    color: Color.mediumGray,
-    fontSize: moderateScale(14),
     fontFamily: Font.medium,
-    textAlignVertical: 'top',
+    paddingTop: verticalScale(3),
   },
 });
