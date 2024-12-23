@@ -72,10 +72,7 @@ import {Provider} from 'react-redux';
 import store from './src/redux/store';
 import Color from './src/component/Color';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
-import MobileAds, {
-  InterstitialAd,
-  AdEventType,
-} from 'react-native-google-mobile-ads';
+import mobileAds from 'react-native-google-mobile-ads';
 import AppNav from './src/navigation/AppNav';
 import {MenuProvider} from 'react-native-popup-menu';
 import { withIAPContext } from 'react-native-iap';
@@ -88,11 +85,11 @@ const App = gestureHandlerRootHOC(() => {
     }, 1500);
 
     // Initialize AdMob
-    MobileAds()
-      .initialize()
-      .then(() => {
-        console.log('AdMob initialized');
-      });
+    mobileAds()
+    .initialize()
+    .then(() => {
+      console.log('AdMob Initialized');
+    });
   });
 
   return (

@@ -31,6 +31,7 @@ import strings from '../language/strings';
 import CustomeButton from '../custome/CustomeButton';
 import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 const {width, height} = Dimensions.get('window');
 
@@ -178,6 +179,12 @@ const HomeScreen = () => {
         </View>
 
         {/* <BannerAds/> */}
+        <View style={{width: '100%', height: '100px', display: 'flex', alignItems:'center', justifyContent: 'center'}}>
+          <BannerAd
+            unitId={TestIds.BANNER}  // Use TestIds.BANNER for testing
+            size={BannerAdSize.BANNER}  // Standard Banner
+          />
+        </View>
       </View>
     );
   };
