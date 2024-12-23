@@ -13,7 +13,7 @@ import {
 
 const adUnitId = __DEV__
   ? 'ca-app-pub-3940256099942544/5224354917'
-  : 'your-real-ad-unit-id';
+  : 'ca-app-pub-9823475062473479/5214348018';
 
 const VideoAds = forwardRef(({updateCredit}, ref) => {
   const [rewardedAd, setRewardedAd] = useState(null);

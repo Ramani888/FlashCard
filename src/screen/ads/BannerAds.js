@@ -4,7 +4,7 @@ import { BannerAd, BannerAdSize, TestIds, MobileAds } from 'react-native-google-
 
 const AdBanner = () => {
   const [adLoadError, setAdLoadError] = useState(false);
-  const adUnitId = __DEV__ ? TestIds.BANNER : 'your-real-ad-unit-id';
+  const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-9823475062473479/1036117247';
 
   useEffect(() => {
     MobileAds()
