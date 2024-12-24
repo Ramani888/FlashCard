@@ -9,10 +9,11 @@ import {
   RewardedAd,
   RewardedAdEventType,
   AdEventType,
+  TestIds,
 } from 'react-native-google-mobile-ads';
 
 const adUnitId = __DEV__
-  ? 'ca-app-pub-3940256099942544/5224354917'
+  ? TestIds.REWARDED
   : 'ca-app-pub-9823475062473479/5214348018';
 
 const VideoAds = forwardRef(({updateCredit}, ref) => {
