@@ -30,7 +30,6 @@ const AssignFolderScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const refRBSheet = useRef(null);
-  const {setId, screen} = route.params;
   const [visible, setVisible] = useState(false);
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
@@ -38,7 +37,9 @@ const AssignFolderScreen = () => {
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState('');
+  const [noFolderClick, setNofolderClick] = useState(false);
   const colorTheme = useTheme();
+  const {setId, screen} = route.params;
 
   useEffect(() => {
     getFolderData();
@@ -129,7 +130,10 @@ const AssignFolderScreen = () => {
                 : colorTheme.listAndBoxColor,
             },
           ]}
-          onPress={() => setSelectedFolderId(item?._id)}>
+          onPress={() => {
+            setSelectedFolderId(item?._id);
+            setNofolderClick(false);
+          }}>
           <View style={styles.folderInfo}>
             {!colorView && (
               <View style={[styles.iconColor, {backgroundColor: item.color}]} />
@@ -199,7 +203,7 @@ const AssignFolderScreen = () => {
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   return (
-    <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
+    <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
       <Loader visible={visible} />
       {renderHeader}
       <View style={styles.bodyContainer}>
@@ -217,6 +221,19 @@ const AssignFolderScreen = () => {
           />
         )}
         {BottomSheets()}
+        {screen == 'OtherUserScreen' && (
+          <Pressable
+            style={[
+              styles.noFolderView,
+              {borderWidth: noFolderClick ? 1.5 : 0, borderColor: Color.Black},
+            ]}
+            onPress={() => {
+              setSelectedFolderId('');
+              setNofolderClick(!noFolderClick);
+            }}>
+            <Text style={styles.noFolderText}>{strings.noFolder}</Text>
+          </Pressable>
+        )}
         <CustomeButton
           buttonColor={Color.theme1}
           buttonWidth="100%"
@@ -227,10 +244,10 @@ const AssignFolderScreen = () => {
           fontColor={Color.White}
           fontFamily={Font.semiBold}
           marginTop={verticalScale(15)}
-          position="absolute"
+          // position="absolute"
           bottom={verticalScale(10)}
           onPress={() => {
-            if (selectedFolderId) {
+            if (selectedFolderId || noFolderClick) {
               screen == 'OtherUserScreen' ? assignOtherSet() : assignFolder();
             } else {
               showMessageonTheScreen(strings.pleaseSelectFolder);
@@ -280,7 +297,7 @@ const styles = StyleSheet.create({
   },
   folderItem: {
     flexDirection: 'row',
-    padding: scale(7),
+    padding: scale(4),
     borderRadius: scale(10),
     marginBottom: verticalScale(10),
   },
@@ -290,7 +307,7 @@ const styles = StyleSheet.create({
   },
   iconColor: {
     width: scale(13),
-    height: scale(30),
+    height: scale(40),
     borderRadius: scale(8),
   },
   folderName: {
@@ -298,6 +315,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
+    textTransform: 'uppercase',
   },
   bottomSheetContainer: {
     borderTopLeftRadius: scale(30),
@@ -313,5 +331,19 @@ const styles = StyleSheet.create({
     width: scale(13),
     height: verticalScale(35),
     borderRadius: scale(10),
+  },
+  noFolderView: {
+    height: verticalScale(45),
+    backgroundColor: 'rgba(159, 159, 159, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: scale(10),
+    marginBottom: verticalScale(10),
+  },
+  noFolderText: {
+    fontSize: scale(15),
+    color: Color.theme1,
+    fontFamily: Font.semiBold,
+    textTransform: 'uppercase',
   },
 });

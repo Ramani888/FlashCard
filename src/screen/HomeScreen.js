@@ -142,7 +142,7 @@ const HomeScreen = () => {
         <View style={styles.tabRowSecondary}>
           <Pressable
             style={styles.tabContainer}
-            onPress={() => navigation.navigate(ScreenName.globalLiveFeed)}>
+            onPress={() => navigation.navigate(ScreenName.community)}>
             <Image
               source={require('../Assets/Img/earthBigIcon.png')}
               style={styles.tabIcon}

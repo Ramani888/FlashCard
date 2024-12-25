@@ -11,7 +11,8 @@ import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeModal from '../custome/CustomeModal';
-import { ScreenName } from '../component/Screen';
+import {ScreenName} from '../component/Screen';
+import strings from '../language/strings';
 
 const GlobalLiveFeedScreen = () => {
   const navigation = useNavigation();
@@ -65,7 +66,9 @@ const GlobalLiveFeedScreen = () => {
   const renderHeader = useCallback(
     () => (
       <CustomeHeader
+        headerBackgroundColor={Color.transparent}
         goBack={true}
+        title={strings.homeTab6}
         iconStyle={styles.iconStyle}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
@@ -83,7 +86,9 @@ const GlobalLiveFeedScreen = () => {
             style={styles.profileImage}
           />
           <Text style={styles.itemTitle}>Set Name:</Text>
-          <Text style={styles.itemBadge}>{item?.setData?.name}</Text>
+          <Text style={styles.itemBadge} ellipsizeMode="tail" numberOfLines={1}>
+            {item?.setData?.name}
+          </Text>
         </View>
         <Pressable onLayout={onCardLayout} style={styles.cardContainer}>
           <View style={styles.cardHeader}>
@@ -124,12 +129,12 @@ const GlobalLiveFeedScreen = () => {
         />
       </LinearGradient>
 
-        <FlatList
-          data={liveFeedData}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => `liveFeed-${index}`}
-          contentContainerStyle={styles.flatListContainer}
-        />
+      <FlatList
+        data={liveFeedData}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => `liveFeed-${index}`}
+        contentContainerStyle={styles.flatListContainer}
+      />
     </View>
   );
 
@@ -184,6 +189,7 @@ const styles = StyleSheet.create({
   headerStyle: {
     height: verticalScale(90),
     alignItems: 'flex-end',
+    backgroundColor: Color.transparent,
   },
   headerTitleStyle: {
     color: Color.White,
@@ -196,7 +202,7 @@ const styles = StyleSheet.create({
     width: scale(96),
     height: scale(96),
     alignSelf: 'center',
-    marginTop: verticalScale(-10),
+    marginTop: verticalScale(17),
   },
   bodyContainer: {
     flex: 1,
@@ -239,7 +245,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
     paddingVertical: scale(5),
     borderRadius: scale(5),
-    width: scale(175),
+    maxWidth: scale(175),
+    // width: scale(175),
   },
   emptyStateContainer: {
     alignItems: 'center',
@@ -253,8 +260,8 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginBottom: verticalScale(10),
-    elevation:scale(5),
-    borderRadius:scale(10)
+    elevation: scale(5),
+    borderRadius: scale(10),
   },
   cardHeader: {
     flexDirection: 'row',

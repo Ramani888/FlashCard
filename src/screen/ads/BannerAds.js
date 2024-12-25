@@ -40,11 +40,11 @@ const AdBanner = () => {
           requestOptions={{
             requestNonPersonalizedAdsOnly: true,
           }}
-          onAdFailedToLoad={(error) => {
-            console.error('Ad failed to load:', error.message);
-            setAdLoadError(true);
-            retryAdLoad(); 
-          }}
+          // onAdFailedToLoad={(error) => {
+          //   console.error('Ad failed to load:', error.message);
+          //   setAdLoadError(true);
+          //   retryAdLoad(); 
+          // }}
           onAdLoaded={() => {
             console.log('Ad loaded successfully.');
             setAdLoadError(false);

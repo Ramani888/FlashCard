@@ -69,6 +69,10 @@ const SignUpScreen = () => {
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
 
+  const handleSignIn = () => {
+    navigation.navigate(ScreenName.signIn);
+  };
+
   const openLink = url => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
@@ -229,22 +233,36 @@ const SignUpScreen = () => {
               fontFamily={Font.semiBold}
               fontColor={Color.White}
               borderRadius={scale(10)}
-              marginTop={verticalScale(30)}
+              marginTop={verticalScale(15)}
               textTransform={'uppercase'}
               onPress={handleSubmit}
             />
 
-            <View style={styles.signUpContainer}>
+            <CustomeButton
+              title={strings.signIn}
+              buttonWidth={'100%'}
+              buttonHeight={verticalScale(45)}
+              buttonColor={Color.WhiteDefault}
+              fontSize={scale(15)}
+              fontFamily={Font.semiBold}
+              fontColor={Color.theme1}
+              borderRadius={scale(10)}
+              marginTop={verticalScale(20)}
+              textTransform={'uppercase'}
+              onPress={handleSignIn}
+            />
+
+            {/* <View style={styles.signUpContainer}>
               <Text style={styles.infoText}>
                 {strings.alreadyAccountmsg}{' '}
                 <Text
                   style={styles.signUpText}
-                  onPress={() => navigation.navigate(ScreenName.signIn)}>
+                  onPress={() => }>
                   {' '}
                   {strings.signIn}
                 </Text>
               </Text>
-            </View>
+            </View> */}
           </View>
         )}
       </Formik>

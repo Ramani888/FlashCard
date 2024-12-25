@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notes',
   homeTab4: 'PDFs',
   homeTab5: 'Images',
-  homeTab6: 'Flux en direct global',
+  homeTab6: 'Communauté',
   selectFolder: 'SÉLECTIONNER UN DOSSIER',
   createFolder: 'CRÉER UN DOSSIER',
   editFolder: 'MODIFIER UN DOSSIER',
@@ -134,4 +134,5 @@ export default {
   logout: 'Déconnexion',
   selectUsername: 'SÉLECTIONNER UN NOM D’UTILISATEUR',
   noDataFound: 'Aucune donnée trouvée',
+   noFolder: 'Aucun dossier'
 };

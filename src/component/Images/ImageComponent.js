@@ -30,7 +30,7 @@ import {ScreenName} from '../Screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 
-const ImageComponent = ({folderId}) => {
+const ImageComponent = ({folderId, showFolder}) => {
   const navigation = useNavigation();
   const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
@@ -175,24 +175,29 @@ const ImageComponent = ({folderId}) => {
               />
             </Pressable>
           </View>
-          <View
-            style={[styles.folderContainer, item?.folderName && styles.folder]}>
-            <Image
-              source={require('../../Assets/Img/folder.png')}
-              style={styles.folderIcon}
-            />
-            <Text
+          {showFolder && (
+            <View
               style={[
-                styles.folderText,
-                {width: item?.folderName?.length > 12 ? wp('23%') : 'auto'},
+                styles.folderContainer,
+                item?.folderName && styles.folder,
               ]}>
-              {item?.folderName ? item?.folderName : ''}
-            </Text>
-          </View>
+              <Image
+                source={require('../../Assets/Img/folder.png')}
+                style={styles.folderIcon}
+              />
+              <Text
+                style={[
+                  styles.folderText,
+                  {width: item?.folderName?.length > 12 ? wp('23%') : 'auto'},
+                ]}>
+                {item?.folderName ? item?.folderName : ''}
+              </Text>
+            </View>
+          )}
         </View>
       );
     },
-    [imageData],
+    [imageData,showFolder],
   );
 
   const renderBody = () => {

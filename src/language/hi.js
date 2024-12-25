@@ -5,7 +5,7 @@ export default {
   homeTab3: 'नोट्स',
   homeTab4: 'पीडीएफ्स',
   homeTab5: 'चित्र',
-  homeTab6: 'ग्लोबल लाइव फीड',
+  homeTab6: 'समुदाय',
   selectFolder: 'फ़ोल्डर चुनें',
   createFolder: 'फ़ोल्डर बनाएं',
   editFolder: 'फ़ोल्डर संपादित करें',
@@ -134,4 +134,5 @@ export default {
   logout: 'लॉगआउट',
   selectUsername: 'उपयोगकर्ता नाम चुनें',
   noDataFound: 'कोई डेटा नहीं मिला',
+  noFolder: 'कोई फ़ोल्डर नहीं'
 };

@@ -38,6 +38,9 @@ const CustomeHeader = ({
   saveNote,
   videoIconStyle,
   showVideoAd,
+  imageFolder,
+  setShowFolder,
+  showFolder
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -146,6 +149,17 @@ const CustomeHeader = ({
           />
         </Pressable>
       )}
+
+      {imageFolder && (
+        <Pressable
+          style={[styles.adIcon, videoIconStyle]}
+          onPress={() => setShowFolder(!showFolder)}>
+          <Image
+            source={require('../Assets/Img/imageFolder.png')}
+            style={styles.imageFolder}
+          />
+        </Pressable>
+      )}
     </LinearGradient>
   );
 };
@@ -228,4 +242,5 @@ const styles = StyleSheet.create({
   check: {position: 'absolute', right: scale(15), top: verticalScale(54)},
   adImageIcon: {width: scale(28), height: scale(28), borderRadius: scale(4)},
   adIcon: {position: 'absolute', right: scale(20), top: verticalScale(45)},
+  imageFolder:{width:scale(48),height:scale(48),marginTop:verticalScale(-3)}
 });

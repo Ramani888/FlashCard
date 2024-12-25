@@ -12,7 +12,7 @@ const AppStack = ({user}) => {
     otpVerify,
     resetPassword,
     home,
-    globalLiveFeed,
+    community,
     setAndFolder,
     createCard,
     asignFolder,
@@ -44,7 +44,7 @@ const AppStack = ({user}) => {
     SignInScreen,
     ResetPassword,
     HomeScreen,
-    GlobalLiveFeedScreen,
+    CommunityScreen,
     SetAndFolderScreen,
     CreateCardScreen,
     AssignFolderScreen,
@@ -106,8 +106,8 @@ const AppStack = ({user}) => {
       />
 
       <Stack.Screen
-        name={globalLiveFeed}
-        component={GlobalLiveFeedScreen}
+        name={community}
+        component={CommunityScreen}
         options={{headerShown: false}}
       />
 

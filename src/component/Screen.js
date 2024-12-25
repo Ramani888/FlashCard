@@ -6,7 +6,6 @@ import ProfileScreen from '../screen/profile/ProfileScreen';
 import SupportScreen from '../screen/profile/SupportScreen';
 import SetAndFolderScreen from '../screen/card/SetAndFolderScreen';
 import AssignFolderScreen from '../screen/card/AssignFolderScreen';
-import GlobalLiveFeedScreen from '../screen/GlobalLiveFeedScreen';
 import SetDetailScreen from '../screen/card/SetDetailScreen';
 import SignUpScreen from '../screen/auth/SignUpScreen';
 import SignInScreen from '../screen/auth/SignInScreen';
@@ -28,6 +27,7 @@ import ViewPdfScreen from '../screen/pdf/ViewPdfScreen';
 import OtherUserScreen from '../screen/profile/contact/OtherUserScreen';
 import OtherUserCardScreen from '../screen/profile/contact/OtherUserCardScreen';
 import LanguageScreen from '../screen/LanguageScreen';
+import CommunityScreen from '../screen/CommunityScreen';
 
 export const ScreenName = {
   signUp: 'SignUp',
@@ -44,7 +44,7 @@ export const ScreenName = {
   notesDetail: 'NotesDetail',
   asignFolder: 'AsignFolder',
   assignSet: 'AssignSet',
-  globalLiveFeed: 'GlobalLiveFeed',
+  community: 'Community',
   setDetail: 'SetDetail',
   pdf: 'Pdf',
   assignPdfFolder: 'AssignPdfFolder',
@@ -77,7 +77,7 @@ export const ScreenPath = {
   NoteDetailScreen,
   AssignFolderScreen,
   AssignSetScreen,
-  GlobalLiveFeedScreen,
+  CommunityScreen,
   SetDetailScreen,
   PdfScreen,
   AssignPdfFolder,

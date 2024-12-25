@@ -14,6 +14,7 @@ import strings from '../../language/strings';
 const ImagesScreen = () => {
   const [tab, setTab] = useState('IMAGES');
   const [folderId, setFolderId] = useState('');
+  const [showFolder, setShowFolder] = useState(false);
   const colorTheme = useTheme();
 
   const handleFolderClick = folderId => {
@@ -26,6 +27,9 @@ const ImagesScreen = () => {
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
+        imageFolder={true}
+        setShowFolder={setShowFolder}
+        showFolder={showFolder}
         title={strings.homeTab5}
         titleStyle={styles.title}
         containerStyle={styles.headerStyle}
@@ -76,7 +80,7 @@ const ImagesScreen = () => {
           {buttons()}
         </LinearGradient>
 
-        {tab == 'IMAGES' && <ImageComponent folderId={folderId} />}
+        {tab == 'IMAGES' && <ImageComponent folderId={folderId} showFolder={showFolder}/>}
         {tab == 'FOLDERS' && (
           <ImageFolderComponent onFolderClick={handleFolderClick} />
         )}
@@ -84,7 +88,11 @@ const ImagesScreen = () => {
     );
   };
 
-  return <View style={{flex: 1,backgroundColor: colorTheme.background1}}>{renderBody()}</View>;
+  return (
+    <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
+      {renderBody()}
+    </View>
+  );
 };
 
 export default React.memo(ImagesScreen);
@@ -99,7 +107,11 @@ const styles = StyleSheet.create({
     height: verticalScale(90),
     alignItems: 'flex-end',
   },
-  title: {fontSize: scale(20), fontFamily: Font.medium,textTransform:'uppercase'},
+  title: {
+    fontSize: scale(20),
+    fontFamily: Font.medium,
+    textTransform: 'uppercase',
+  },
   buttonContainer: {
     alignSelf: 'center',
     flexDirection: 'row',

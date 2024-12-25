@@ -13,12 +13,10 @@ import { withIAPContext } from 'react-native-iap';
 
 const App = gestureHandlerRootHOC(() => {
   useEffect(() => {
-    // Hide the splash screen
     setTimeout(() => {
       LottieSplashScreen.hide();
     }, 1500);
 
-    // Initialize AdMob
     mobileAds()
     .initialize()
     .then(() => {

@@ -95,6 +95,10 @@ const SignInScreen = () => {
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
 
+  const handleSignUp = () => {
+    navigation.navigate(ScreenName.signUp);
+  };
+
   const openLink = url => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
@@ -230,21 +234,23 @@ const SignInScreen = () => {
               textTransform={'uppercase'}
               onPress={handleSubmit}
             />
+
+            <CustomeButton
+              title={strings.signUp}
+              buttonWidth={'100%'}
+              buttonHeight={verticalScale(45)}
+              buttonColor={Color.WhiteDefault}
+              fontSize={moderateScale(15)}
+              fontFamily={Font.semiBold}
+              fontColor={Color.theme1}
+              borderRadius={moderateScale(10)}
+              marginTop={verticalScale(20)}
+              textTransform={'uppercase'}
+              onPress={handleSignUp}
+            />
           </View>
         )}
       </Formik>
-
-      <View style={styles.signUpContainer}>
-        <Text style={styles.infoText}>
-          {strings.dontAccount}{' '}
-          <Text
-            style={[styles.signUpText, {color: themeColor.textColor}]}
-            onPress={() => navigation.navigate(ScreenName.signUp)}>
-            {' '}
-            {strings.signUp}
-          </Text>
-        </Text>
-      </View>
     </View>
   );
 };

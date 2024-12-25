@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notes',
   homeTab4: `PDF's`,
   homeTab5: 'Images',
-  homeTab6: 'Global Live Feed',
+  homeTab6: 'Community',
   selectFolder: 'SELECT FOLDER',
   createFolder: 'CREATE FOLDER',
   editFolder: 'EDIT FOLDER',
@@ -134,4 +134,5 @@ export default {
   logout: 'Logout',
   selectUsername: 'SELECT USERNAME',
   noDataFound: 'No Data Found',
+  noFolder: 'No Folder'
 };
