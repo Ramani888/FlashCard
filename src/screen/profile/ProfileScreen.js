@@ -49,6 +49,7 @@ const ProfileScreen = () => {
   const [profileUpdate, setProfileUpdate] = useState(false);
   const [userCreditData, setUserCreditData] = useState({});
   const [userStorageData, setUserStorageData] = useState({});
+  const [userSubscriptionData, setUserSubscriptionData] = useState({});
   const refUserNameRBSheet = useRef();
   const refEmailRBSheet = useRef();
   const colorTheme = useTheme();
@@ -108,6 +109,7 @@ const ProfileScreen = () => {
       );
       setUserCreditData(response?.userCreditData);
       setUserStorageData(response?.userStorageData);
+      setUserSubscriptionData(response?.userSubscriptionData)
     } catch (error) {
       console.log('error in get profile api', error);
     } finally {

@@ -195,21 +195,15 @@ const SubscriptionScreen = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [popupTitle, setPopupTitle] = useState('');
   const [popupMessage, setPopupMessage] = useState('');
+  // const [subscriptionIds, setSubscriptionIds] = useState('');
   const [data, setData] = useState([]);
-  // console.log('data', data);
   const colorTheme = useTheme();
 
-  const subscriptionIds = ['tier_1_plan', 'tier_2_plan', 'tier_3_plan'];
+  // const subscriptionIds = ['tier_1_plan', 'tier_2_plan', 'tier_3_plan'];
 
   useEffect(() => {
     initializeIAP();
   }, []);
-
-  useEffect(() => {
-    if (iapInitialized) {
-      getSubscriptionInfo();
-    }
-  }, [iapInitialized]);
 
   const initializeIAP = async () => {
     try {
@@ -229,8 +223,10 @@ const SubscriptionScreen = () => {
   };
 
   useEffect(() => {
-    getSubscriptionData();
-  }, []);
+    if (iapInitialized) {
+      getSubscriptionData();
+    }
+  }, [iapInitialized]);
 
   useEffect(() => {
     const updatedArray = subscriptionData.map((item, index) => {
@@ -259,7 +255,8 @@ const SubscriptionScreen = () => {
 
       const response = await apiGet(url);
       if (response) {
-        setSubscriptionData(response);
+        setSubscriptionData(response?.data);
+        getSubscriptionInfo(response?.productIds);
       }
     } catch (error) {
       console.log('error in getpdf api', error);
@@ -270,7 +267,7 @@ const SubscriptionScreen = () => {
 
   // ====================== react native in-app-purchase function ====================== //
 
-  const getSubscriptionInfo = async () => {
+  const getSubscriptionInfo = async subscriptionIds => {
     try {
       const subscriptions = await getSubscriptions({skus: subscriptionIds});
       const subscriptionData = [];
@@ -309,6 +306,7 @@ const SubscriptionScreen = () => {
           subscriptionOffers: [{sku: sku?.productId, offerToken}],
         }),
       });
+      console.log('purchaseData', purchaseData);
       setPopupTitle('Success');
       setPopupMessage(
         `Subscription Successful', You subscribed to ${sku?.title}`,
@@ -341,7 +339,6 @@ const SubscriptionScreen = () => {
   }, []);
 
   const SubscriptionItem = memo(({item, colorTheme}) => {
-    console.log('item', item);
     return (
       <Pressable
         style={[
