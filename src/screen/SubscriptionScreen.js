@@ -1,158 +1,3 @@
-// import React, {useEffect, useState} from 'react';
-// import {Platform, Text, View, StyleSheet, Alert} from 'react-native';
-// import {
-//   initConnection,
-//   flushFailedPurchasesCachedAsPendingAndroid,
-//   getSubscriptions,
-//   requestSubscription,
-// } from 'react-native-iap';
-// import Color from '../component/Color';
-// import {verticalScale} from 'react-native-size-matters';
-// import CustomeAlert from '../custome/CustomeAlert';
-
-// const isAndroid = Platform.OS === 'android';
-
-// const SubscriptionScreen = () => {
-//   const [iapInitialized, setIapInitialized] = useState(false);
-//   const [error, setError] = useState(null);
-//   const [subscriptions, setSubscriptions] = useState([]);
-//   const [isPopupVisible, setPopupVisible] = useState(true);
-//   const [title, setTitle] = useState('');
-
-//   const subscriptionIds = ['tier_1_plan', 'tier_2_plan', 'tier_3_plan']; // Subscription IDs
-
-//   useEffect(() => {
-//     initializeIAP();
-//   }, []);
-
-//   useEffect(() => {
-//     if (iapInitialized) {
-//       getSubscriptionInfo();
-//     }
-//   }, [iapInitialized]);
-
-//   const initializeIAP = async () => {
-//     try {
-//       const connection = await initConnection();
-//       if (connection) {
-//         setIapInitialized(true);
-//         if (isAndroid) {
-//           await flushFailedPurchasesCachedAsPendingAndroid();
-//         }
-//       } else {
-//         console.warn('IAP connection failed');
-//       }
-//     } catch (err) {
-//       console.error('Error initializing IAP:', err);
-//       setError(err);
-//     }
-//   };
-
-//   const getSubscriptionInfo = async () => {
-//     try {
-//       const fetchedSubscriptions = await getSubscriptions({
-//         skus: subscriptionIds,
-//       });
-//       setSubscriptions(fetchedSubscriptions);
-//     } catch (error) {
-//       console.error('Error fetching subscriptions:', error);
-//       setError(error);
-//     }
-//   };
-
-//   const onSubscription = async sku => {
-//     try {
-//       const offerToken = isAndroid
-//         ? sku?.subscriptionOfferDetails[0]?.offerToken
-//         : null;
-
-//       const purchaseData = await requestSubscription({
-//         sku: sku?.productId,
-//         ...(offerToken && {
-//           subscriptionOffers: [{sku: sku?.productId, offerToken}],
-//         }),
-//       });
-//       setTitle(sku?.title);
-//       setPopupVisible(true);
-//     } catch (error) {
-//       console.error('Subscription Error:', error);
-//       Alert.alert(
-//         'Subscription Failed',
-//         'Something went wrong. Please try again.',
-//       );
-//     }
-//   };
-
-//   const closePopup = () => {
-//     setPopupVisible(false);
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>IAP is initialized</Text>
-//       <Text style={styles.subtitle}>Subscriptions:</Text>
-//       {subscriptions.length > 0 ? (
-//         subscriptions.map((sub, index) => {
-//           let price = '';
-//           let currency = '';
-//           sub?.subscriptionOfferDetails.forEach(item => {
-//             const pricingPhaseList = item.pricingPhases?.pricingPhaseList;
-//             price = pricingPhaseList[0]?.formattedPrice;
-//             currency = pricingPhaseList[0]?.priceCurrencyCode;
-//           });
-
-//           return (
-//             <Text
-//               key={index}
-//               style={styles.item}
-//               onPress={() => onSubscription(sub)}>
-//               {sub.title} - {price} {currency}
-//             </Text>
-//           );
-//         })
-//       ) : (
-//         <Text>No subscriptions found</Text>
-//       )}
-
-//       <CustomeAlert
-//         isVisible={isPopupVisible}
-//         title={'Success'}
-//         message={`Subscription Successful', You subscribed to ${title}`}
-//         onConfirm={closePopup}
-//       />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 16,
-//     backgroundColor: '#fff',
-//   },
-//   title: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginBottom: 16,
-//     color: Color.Black,
-//   },
-//   subtitle: {
-//     fontSize: 16,
-//     fontWeight: '600',
-//     marginTop: 16,
-//     marginBottom: 8,
-//     color: Color.Black,
-//   },
-//   item: {
-//     fontSize: 14,
-//     marginBottom: 4,
-//     color: Color.Black,
-//     marginBottom: verticalScale(15),
-//   },
-// });
-
-// export default SubscriptionScreen;
-
 import {
   FlatList,
   Image,
@@ -165,12 +10,12 @@ import {
 import React, {useCallback, memo, useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../component/Color';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import CustomeHeader from '../custome/CustomeHeader';
 import {scale, verticalScale} from '../custome/Responsive';
 import Font from '../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {apiGet} from '../Api/ApiService';
+import {apiGet, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Loader from '../component/Loader';
 import useTheme from '../component/Theme';
@@ -182,10 +27,12 @@ import {
   requestSubscription,
 } from 'react-native-iap';
 import CustomeAlert from '../custome/CustomeAlert';
+import moment from 'moment';
 
 const isAndroid = Platform.OS === 'android';
 
 const SubscriptionScreen = () => {
+  const route = useRoute();
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [subscriptionData, setSubscriptionData] = useState([]);
@@ -195,11 +42,10 @@ const SubscriptionScreen = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [popupTitle, setPopupTitle] = useState('');
   const [popupMessage, setPopupMessage] = useState('');
-  // const [subscriptionIds, setSubscriptionIds] = useState('');
   const [data, setData] = useState([]);
   const colorTheme = useTheme();
-
-  // const subscriptionIds = ['tier_1_plan', 'tier_2_plan', 'tier_3_plan'];
+  const {id} = route.params;
+  // console.log('id',id)
 
   useEffect(() => {
     initializeIAP();
@@ -265,6 +111,29 @@ const SubscriptionScreen = () => {
     }
   };
 
+  const updateSubscription = async (startDate, endDate, productId, tierId) => {
+    const rawData = {
+      _id: id,
+      productId: productId,
+      userId: global?.user?._id,
+      tierId: tierId,
+      startDate: startDate,
+      endDate: endDate,
+    };
+    setVisible(true);
+    try {
+      const response = await apiPut(
+        Api.updateSubscription,
+        '',
+        JSON.stringify(rawData),
+      );
+    } catch (error) {
+      console.log('error in edit Set api', error);
+    }finally{
+      setVisible(false)
+    }
+  };
+
   // ====================== react native in-app-purchase function ====================== //
 
   const getSubscriptionInfo = async subscriptionIds => {
@@ -294,7 +163,7 @@ const SubscriptionScreen = () => {
     }
   };
 
-  const onSubscription = async sku => {
+  const onSubscription = async (sku, tierId) => {
     try {
       const offerToken = isAndroid
         ? sku?.subscriptionOfferDetails[0]?.offerToken
@@ -306,7 +175,12 @@ const SubscriptionScreen = () => {
           subscriptionOffers: [{sku: sku?.productId, offerToken}],
         }),
       });
-      console.log('purchaseData', purchaseData);
+      const currentDate = new Date();
+      const startDate = moment(currentDate).format('YYYY-MM-DD');
+      const endDate = moment(currentDate).add(1, 'month').format('YYYY-MM-DD');
+      const productId = purchaseData[0]?.productId;
+      updateSubscription(startDate, endDate, productId, tierId);
+
       setPopupTitle('Success');
       setPopupMessage(
         `Subscription Successful', You subscribed to ${sku?.title}`,
@@ -347,7 +221,7 @@ const SubscriptionScreen = () => {
         ]}
         onPress={() => {
           if (item?.name !== 'FREE') {
-            onSubscription(item?.sku);
+            onSubscription(item?.sku, item?._id);
           }
         }}>
         <View

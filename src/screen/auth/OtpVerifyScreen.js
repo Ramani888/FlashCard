@@ -51,6 +51,8 @@ const OtpVerifyScreen = () => {
     setIsCounting(true);
   }, [isFocused]);
 
+  // console.log('Api.verifyOtp',Api.verifyOtp)
+
   // ===================================== Api ==================================== //
 
   const verifyOtp = async () => {
@@ -65,6 +67,7 @@ const OtpVerifyScreen = () => {
         '',
         JSON.stringify(rawData),
       );
+      console.log('response9999999999999999',response)
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
         navigation.navigate(ScreenName.signIn);

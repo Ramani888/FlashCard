@@ -36,6 +36,7 @@ const Api = {
   chatGptAi: `${Base_url}/chat-gpt/ask/question`,
   credit: `${Base_url}/credit`,
   getLiveFeedData: `${Base_url}/card/all`,
+  updateSubscription: `${Base_url}/subscription`,
 };
 
 export default Api;

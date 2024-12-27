@@ -21,7 +21,7 @@ import ProfileModalContent from '../../component/profile/profile/ProfileModalCon
 import RBSheet from 'react-native-raw-bottom-sheet';
 import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
 import EmailBottomSheetsContent from '../../component/profile/profile/EmailBottomSheetsContent';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
@@ -40,6 +40,7 @@ import strings from '../../language/strings';
 const {width, height} = Dimensions.get('window');
 
 const ProfileScreen = () => {
+  const isFocused = useIsFocused()
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [username, setUserName] = useState('');
@@ -50,6 +51,7 @@ const ProfileScreen = () => {
   const [userCreditData, setUserCreditData] = useState({});
   const [userStorageData, setUserStorageData] = useState({});
   const [userSubscriptionData, setUserSubscriptionData] = useState({});
+  const [subscribedPlan, setSubscribedPlan] = useState({});
   const refUserNameRBSheet = useRef();
   const refEmailRBSheet = useRef();
   const colorTheme = useTheme();
@@ -58,7 +60,7 @@ const ProfileScreen = () => {
     setEmail(global.user?.email);
     setUserName(global.user?.userName);
     getProfileData();
-  }, []);
+  }, [isFocused]);
 
   const tabData = [
     {
@@ -109,7 +111,8 @@ const ProfileScreen = () => {
       );
       setUserCreditData(response?.userCreditData);
       setUserStorageData(response?.userStorageData);
-      setUserSubscriptionData(response?.userSubscriptionData)
+      setUserSubscriptionData(response?.userSubscriptionData);
+      setSubscribedPlan(response?.userTierData)
     } catch (error) {
       console.log('error in get profile api', error);
     } finally {
@@ -304,12 +307,17 @@ const ProfileScreen = () => {
               </Text>
               <Pressable
                 style={styles.subscriptionBox}
-                onPress={() => navigation.navigate(ScreenName.subscription)}>
+                onPress={() =>
+                  navigation.navigate(ScreenName.subscription, {
+                    id: userSubscriptionData?._id,
+                  })
+                }>
                 <Image
-                  source={require('../../Assets/Img/subscription.png')}
+                  source={{uri: subscribedPlan?.icon}}
                   style={styles.subscriptionImage}
+                  resizeMode='contain'
                 />
-                <Text style={styles.subscriptionTier}>{strings.tier1}</Text>
+                <Text style={styles.subscriptionTier}>{subscribedPlan?.name}</Text>
               </Pressable>
             </View>
             <View style={styles.subscriptionRightView}>
@@ -445,12 +453,12 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     color: Color.White,
     textAlign: 'center',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
   subscriptionBox: {
     gap: verticalScale(5),
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     alignSelf: 'center',
     paddingHorizontal: scale(10),
     borderRadius: scale(10),
@@ -461,12 +469,12 @@ const styles = StyleSheet.create({
   subscriptionImage: {
     width: scale(36),
     height: scale(36),
+    marginTop:verticalScale(10)
   },
   subscriptionTier: {
     fontSize: wp('3.5%'),
     color: Color.White,
     fontFamily: Font.medium,
-    paddingLeft: scale(10),
   },
   subscriptionRightView: {gap: verticalScale(10), width: '54%'},
   aiCreditsContainer: {
@@ -484,7 +492,7 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     fontFamily: Font.medium,
     color: Color.White,
-    textTransform:'uppercase'
+    textTransform: 'uppercase',
   },
   tabContainer: {
     flex: 1,
