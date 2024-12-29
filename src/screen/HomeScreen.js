@@ -140,7 +140,7 @@ const HomeScreen = () => {
         </View>
 
         <View style={styles.tabRowSecondary}>
-          <Pressable
+          {/* <Pressable
             style={styles.tabContainer}
             onPress={() => navigation.navigate(ScreenName.community)}>
             <Image
@@ -149,7 +149,7 @@ const HomeScreen = () => {
               tintColor={Color.theme1}
             />
             <Text style={styles.tabText}>{strings.homeTab6}</Text>
-          </Pressable>
+          </Pressable> */}
 
           <Pressable
             style={styles.tabContainer}
