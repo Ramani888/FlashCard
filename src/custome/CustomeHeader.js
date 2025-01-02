@@ -40,8 +40,12 @@ const CustomeHeader = ({
   showVideoAd,
   imageFolder,
   setShowFolder,
-  showFolder
+  showFolder,
+  cancel,
+  cancelIconStyle,
+  onCancel,
 }) => {
+  console.log('onCancel',onCancel)
   const navigation = useNavigation();
   const editRef = useRef(null);
   const threeDotIconRef = useRef(null);
@@ -160,6 +164,18 @@ const CustomeHeader = ({
           />
         </Pressable>
       )}
+      {cancel && (
+        <Pressable
+          style={[styles.adIcon, videoIconStyle]}
+          onPress={() => onCancel()}>
+          <AntDesign
+            name="close"
+            size={scale(20)}
+            color={Color.White}
+            style={[styles.dotsIcon, cancelIconStyle]}
+          />
+        </Pressable>
+      )}
     </LinearGradient>
   );
 };
@@ -242,5 +258,9 @@ const styles = StyleSheet.create({
   check: {position: 'absolute', right: scale(15), top: verticalScale(54)},
   adImageIcon: {width: scale(28), height: scale(28), borderRadius: scale(4)},
   adIcon: {position: 'absolute', right: scale(20), top: verticalScale(45)},
-  imageFolder:{width:scale(48),height:scale(48),marginTop:verticalScale(-3)}
+  imageFolder: {
+    width: scale(48),
+    height: scale(48),
+    marginTop: verticalScale(-3),
+  },
 });

@@ -26,7 +26,9 @@ import {ScreenName} from '../../component/Screen';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
 import CustomeButton from '../../custome/CustomeButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage, {
+  useAsyncStorage,
+} from '@react-native-async-storage/async-storage';
 import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import * as Progress from 'react-native-progress';
@@ -40,7 +42,7 @@ import strings from '../../language/strings';
 const {width, height} = Dimensions.get('window');
 
 const ProfileScreen = () => {
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [username, setUserName] = useState('');
@@ -112,7 +114,8 @@ const ProfileScreen = () => {
       setUserCreditData(response?.userCreditData);
       setUserStorageData(response?.userStorageData);
       setUserSubscriptionData(response?.userSubscriptionData);
-      setSubscribedPlan(response?.userTierData)
+      setSubscribedPlan(response?.userTierData);
+      AsyncStorage.setItem('productId', response?.userTierData?._id);
     } catch (error) {
       console.log('error in get profile api', error);
     } finally {
@@ -315,9 +318,11 @@ const ProfileScreen = () => {
                 <Image
                   source={{uri: subscribedPlan?.icon}}
                   style={styles.subscriptionImage}
-                  resizeMode='contain'
+                  resizeMode="contain"
                 />
-                <Text style={styles.subscriptionTier}>{subscribedPlan?.name}</Text>
+                <Text style={styles.subscriptionTier}>
+                  {subscribedPlan?.name}
+                </Text>
               </Pressable>
             </View>
             <View style={styles.subscriptionRightView}>
@@ -469,7 +474,7 @@ const styles = StyleSheet.create({
   subscriptionImage: {
     width: scale(36),
     height: scale(36),
-    marginTop:verticalScale(10)
+    marginTop: verticalScale(10),
   },
   subscriptionTier: {
     fontSize: wp('3.5%'),
@@ -596,5 +601,5 @@ const styles = StyleSheet.create({
 //     fontSize: 16,
 //     marginVertical: 8,
 //     color:Color.Black
-//   },
-// });
+//   },
+// });
