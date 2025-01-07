@@ -162,6 +162,12 @@ const Color = {
   gradient1: '#00394d',
   gradient2: '#174b5d',
   gradient3: '#104457',
+  grayScale1: '#F5F5F5',
+  grayScale3: '#E0E0E0',
+  grayScale4: '#BDBDBD',
+  grayScale5: '#9E9E9E',
+  grayScale7: '#616161',
+  grayScale8: '#424242',
 };
 
 export default Color;

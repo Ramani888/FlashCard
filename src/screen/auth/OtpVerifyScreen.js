@@ -11,7 +11,7 @@ import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {ScreenName} from '../../component/Screen';
 import Loader from '../../component/Loader';
-import { moderateScale } from 'react-native-size-matters';
+import {moderateScale} from 'react-native-size-matters';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 
@@ -67,7 +67,7 @@ const OtpVerifyScreen = () => {
         '',
         JSON.stringify(rawData),
       );
-      console.log('response9999999999999999',response)
+      // console.log('response9999999999999999',response)
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
         navigation.navigate(ScreenName.signIn);
@@ -143,9 +143,12 @@ const OtpVerifyScreen = () => {
   const renderBody = () => {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={[styles.title,{color: themeColor.textColor}]}>{strings.inputOtp}</Text>
+        <Text style={[styles.title, {color: themeColor.textColor}]}>
+          {strings.inputOtp}
+        </Text>
         <Text style={styles.subtitle}>
-          {strings.emailInfo1} {email} {strings.emailInfo2}
+          {strings.emailInfo1}
+          <Text style={styles.email}> {email}</Text> {strings.emailInfo2}
         </Text>
         <OTPTextInput
           handleTextChange={handleOtpChange}
@@ -163,13 +166,13 @@ const OtpVerifyScreen = () => {
                 fontSize: scale(14),
                 color: themeColor.textColor,
                 fontFamily: Font.regular,
-                paddingBottom: verticalScale(10),
+                paddingBottom: verticalScale(20),
               }}>
               {strings.dontReciveEmail}
             </Text>
 
-            <Text style={[styles.recendOtpText,{color: themeColor.textColor}]}>
-              {strings.resendMessage1} {' '}
+            <Text style={[styles.recendOtpText, {color: themeColor.textColor}]}>
+              {strings.resendMessage1}{' '}
               <Text
                 style={{
                   fontSize: scale(14),
@@ -215,7 +218,7 @@ const OtpVerifyScreen = () => {
     );
   };
   return (
-    <View style={{flex: 1,backgroundColor:themeColor.background}}>
+    <View style={{flex: 1, backgroundColor: themeColor.background}}>
       <Loader visible={visible} />
       {renderBody()}
     </View>
@@ -232,12 +235,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: scale(14),
+    fontSize: scale(13),
     color: Color.mediumGray,
     fontFamily: Font.regular,
     textAlign: 'center',
     marginTop: verticalScale(10),
     width: scale(300),
+    lineHeight:verticalScale(18)
   },
   otpContainer: {
     marginVertical: verticalScale(20),
@@ -246,7 +250,7 @@ const styles = StyleSheet.create({
     width: width * 0.2,
     height: height * 0.1,
     borderWidth: scale(0.3),
-    borderColor: Color.LightGray,
+    borderColor: Color.grayScale5,
     borderBottomWidth: scale(0.3),
     borderRadius: scale(5),
     fontFamily: Font.regular,
@@ -257,4 +261,5 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     color: Color.Black,
   },
+  email: {color: Color.Black},
 });

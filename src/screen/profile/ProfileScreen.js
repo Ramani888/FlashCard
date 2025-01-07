@@ -115,7 +115,10 @@ const ProfileScreen = () => {
       setUserStorageData(response?.userStorageData);
       setUserSubscriptionData(response?.userSubscriptionData);
       setSubscribedPlan(response?.userTierData);
-      AsyncStorage.setItem('productId', response?.userTierData?._id);
+      AsyncStorage.setItem(
+        'selectedSubscription',
+        JSON.stringify(response?.userTierData),
+      );
     } catch (error) {
       console.log('error in get profile api', error);
     } finally {
@@ -312,7 +315,7 @@ const ProfileScreen = () => {
                 style={styles.subscriptionBox}
                 onPress={() =>
                   navigation.navigate(ScreenName.subscription, {
-                    id: userSubscriptionData?._id,
+                    selectedSubscription: userSubscriptionData,
                   })
                 }>
                 <Image
