@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useRef} from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   View,
   Linking,
   ScrollView,
+  Image,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -24,6 +25,9 @@ import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import CustomeModal from '../../custome/CustomeModal';
+import LanguageModalContent from '../../component/auth/LanguageModalContent';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const inputFields = [
   {
@@ -41,10 +45,14 @@ const inputFields = [
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
-  const themeColor = useTheme();
+  const colorTheme = useTheme();
   const [visible, setVisible] = useState(false);
+  const [languageModal, setLanguageModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [selectedLanguage, setSelectedLanguage] = useState({id: 0, name: 'English', flag: require('../../Assets/FlagImage/UsaFlag.png')});
+  const languageRef = useRef();
 
   // ======================================== Api ===================================== //
 
@@ -122,15 +130,26 @@ const SignUpScreen = () => {
     ));
   };
 
+  const openModal = (item, isLastItem) => {
+    languageRef.current.measureInWindow((x, y, width, height) => {
+      setModalPosition({x: x, y: y + verticalScale(55)});
+      setLanguageModal(true);
+    });
+  };
+
+  const closeModal = () => {
+    setLanguageModal(false);
+  };
+
   return (
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        {backgroundColor: themeColor.background},
+        {backgroundColor: colorTheme.background},
       ]}
       showsVerticalScrollIndicator={false}>
       <Loader visible={visible} />
-      <Text style={[styles.title, {color: themeColor.textColor}]}>
+      <Text style={[styles.title, {color: colorTheme.textColor}]}>
         {strings.signUp}
       </Text>
       <Text style={styles.subtitle}>{strings.welcomMessage}</Text>
@@ -153,6 +172,29 @@ const SignUpScreen = () => {
           touched,
         }) => (
           <View style={styles.formContainer}>
+            <Pressable
+              ref={languageRef}
+              style={styles.languageButton}
+              onPress={openModal}>
+              <Image
+                source={selectedLanguage?.flag}
+                style={styles.flagImage}
+              />
+              <Text style={styles.language}>{selectedLanguage?.name}</Text>
+              {languageModal ? (
+                <AntDesign
+                  name="caretup"
+                  size={scale(17)}
+                  color={Color.Black}
+                />
+              ) : (
+                <AntDesign
+                  name="caretdown"
+                  size={scale(17)}
+                  color={Color.Black}
+                />
+              )}
+            </Pressable>
             {renderInputFields(
               handleChange,
               handleBlur,
@@ -211,13 +253,13 @@ const SignUpScreen = () => {
               <Text style={styles.agreementText}>
                 {strings.termConditionMessage1}{' '}
                 <Text
-                  style={[styles.linkText, {color: themeColor.textColor}]}
+                  style={[styles.linkText, {color: colorTheme.textColor}]}
                   onPress={() => openLink('https://example.com/terms')}>
                   {strings.termConditionMessage2}
                 </Text>{' '}
                 {strings.and}{' '}
                 <Text
-                  style={[styles.linkText, {color: themeColor.textColor}]}
+                  style={[styles.linkText, {color: colorTheme.textColor}]}
                   onPress={() => openLink('https://example.com/privacy')}>
                   {strings.privacyPolicy}
                 </Text>
@@ -266,6 +308,30 @@ const SignUpScreen = () => {
           </View>
         )}
       </Formik>
+
+      <CustomeModal
+        visible={languageModal}
+        onClose={closeModal}
+        closeModal={false}
+        mainPadding={scale(5)}
+        backgroundColor={colorTheme.modelBackground}
+        content={
+          <LanguageModalContent
+            setSelectedLanguage={setSelectedLanguage}
+            selectedLanguage={selectedLanguage}
+            closeModal={closeModal}
+          />
+        }
+        width={'90%'}
+        height={'63.5%'}
+        justifyContent="flex-end"
+        borderRadius={20}
+        modalContainerStyle={[
+          styles.modal,
+          {backgroundColor: colorTheme.modelBackgroundView},
+          {top: modalPosition.y, left: modalPosition.x},
+        ]}
+      />
     </ScrollView>
   );
 };
@@ -278,6 +344,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: moderateScale(20),
+    backgroundColor: Color.WhiteDefault,
   },
   title: {
     fontSize: scale(20),
@@ -361,5 +428,32 @@ const styles = StyleSheet.create({
     color: Color.Red,
     fontFamily: Font.regular,
     marginTop: verticalScale(5),
+  },
+  modal: {
+    position: 'absolute',
+    borderRadius: scale(10),
+    elevation: scale(10),
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: scale(0.3),
+    shadowRadius: scale(4),
+  },
+  languageButton: {
+    backgroundColor: Color.White,
+    borderRadius: scale(9),
+    paddingVertical: verticalScale(8),
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: scale(1),
+    borderColor: Color.LightGray,
+  },
+  flagImage: {width: scale(48), height: scale(32), marginLeft: scale(10)},
+  language: {
+    fontSize: scale(15),
+    color: Color.Black,
+    fontFamily: Font.semiBold,
+    textTransform: 'uppercase',
+    paddingLeft: scale(10),
+    width: '73%',
   },
 });
