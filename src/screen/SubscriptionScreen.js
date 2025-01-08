@@ -547,6 +547,7 @@ const styles = StyleSheet.create({
   sheetContainer: {
     flexDirection: 'row',
     marginVertical: verticalScale(15),
+    marginTop:verticalScale(5),
   },
 });
 

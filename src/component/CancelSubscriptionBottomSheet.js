@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     textTransform: 'uppercase',
     textAlign: 'center',
-    marginBottom: verticalScale(10),
+    marginBottom: verticalScale(15),
   },
   subscriptionView: {
     backgroundColor: '#146D8B33',
