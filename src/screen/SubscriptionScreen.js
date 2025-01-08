@@ -83,7 +83,7 @@ const SubscriptionScreen = () => {
       getCurrentPurchases();
       previousProductId();
     }
-  }, [isFocused, changePlan]);
+  }, [isFocused, changePlan, data]);
 
   useEffect(() => {
     if (iapInitialized) {
@@ -242,7 +242,12 @@ const SubscriptionScreen = () => {
       'selectedSubscription',
     );
     setSubscribedId(JSON.parse(selectedSubscription)?._id);
-    setSubscribedData(JSON.parse(selectedSubscription));
+    data?.map((item, index) => {
+      if (item?._id == JSON.parse(selectedSubscription)?._id) {
+        setSubscribedData(item);
+      }
+    });
+    // setSubscribedData(JSON.parse(selectedSubscription));
   };
 
   const closePopup = () => {
