@@ -9,14 +9,13 @@ import {
 } from 'react-native';
 import Color from '../Color';
 import {scale, verticalScale} from '../../custome/Responsive';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const LanguageModalContent = ({
   setSelectedLanguage,
   selectedLanguage,
   closeModal,
 }) => {
-  //   const [selectedLanguage, setSelectedLanguage] = useState("Espanol");
-
   const languages = [
     {
       id: 0,
@@ -69,11 +68,12 @@ const LanguageModalContent = ({
         }}>
         <Image source={item.flag} style={styles.flag} />
         <Text style={styles.languageText}>{item.name}</Text>
-        <View style={styles.radioButton}>
-          {selectedLanguage?.name === item.name && (
-            <View style={styles.radioSelected} />
-          )}
-        </View>
+
+        {selectedLanguage?.name === item.name ? (
+          <AntDesign name="checkcircle" size={21.5} color={Color.Green} />
+        ) : (
+          <View style={styles.radioButton} />
+        )}
       </TouchableOpacity>
     );
   };
@@ -84,6 +84,7 @@ const LanguageModalContent = ({
         data={languages}
         renderItem={renderLanguage}
         keyExtractor={item => item.id.toString()}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -92,7 +93,8 @@ const LanguageModalContent = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: scale(10),
+    // padding: scale(10),
+    paddingHorizontal:scale(10),
     backgroundColor: '#fff',
   },
   languageRow: {
@@ -115,17 +117,17 @@ const styles = StyleSheet.create({
   radioButton: {
     width: scale(20),
     height: scale(20),
-    borderWidth: 1,
+    borderWidth: scale(2),
     borderColor: '#ccc',
     borderRadius: scale(10),
     alignItems: 'center',
     justifyContent: 'center',
   },
   radioSelected: {
-    width: scale(20),
-    height: scale(20),
+    width: scale(16),
+    height: scale(16),
     backgroundColor: 'green',
-    borderRadius: scale(10),
+    borderRadius: scale(8),
   },
 });
 

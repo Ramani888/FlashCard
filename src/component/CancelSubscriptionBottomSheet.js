@@ -11,6 +11,7 @@ const CancelSubscriptionBottomSheet = ({
   item,
   colorTheme,
   closeSubscriptionBottomSheet,
+  cancelSubscription,
 }) => {
   return (
     <View style={styles.container}>
@@ -75,7 +76,10 @@ const CancelSubscriptionBottomSheet = ({
         fontFamily={Font.semiBold}
         marginTop={verticalScale(15)}
         bottom={verticalScale(10)}
-        onPress={() => closeSubscriptionBottomSheet()}
+        onPress={() => {
+          cancelSubscription();
+          closeSubscriptionBottomSheet();
+        }}
       />
     </View>
   );

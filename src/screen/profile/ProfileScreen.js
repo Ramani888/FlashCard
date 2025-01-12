@@ -38,6 +38,7 @@ import {
 } from 'react-native-responsive-screen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import VideoAds from '../ads/VideoAds';
 
 const {width, height} = Dimensions.get('window');
 
@@ -56,6 +57,7 @@ const ProfileScreen = () => {
   const [subscribedPlan, setSubscribedPlan] = useState({});
   const refUserNameRBSheet = useRef();
   const refEmailRBSheet = useRef();
+  const adRef = useRef();
   const colorTheme = useTheme();
 
   useEffect(() => {
@@ -126,6 +128,21 @@ const ProfileScreen = () => {
     }
   };
 
+  const updateCredit = async (credit, type) => {
+    console.log('credit', credit);
+    console.log('type', type);
+    const rawData = {userId: global.user?._id, credit: credit, type: type};
+    try {
+      setVisible(true);
+      const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
+      if (response.success) getProfileData(false);
+    } catch (error) {
+      console.error('Error updating credit:', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
   // =================================== End =================================== //
 
   const openModal = useCallback(ref => {
@@ -153,6 +170,12 @@ const ProfileScreen = () => {
 
   const closeEmailBottomSheet = () => {
     refEmailRBSheet.current.close();
+  };
+
+  const handleShowAd = () => {
+    if (adRef.current) {
+      adRef.current.showAd();
+    }
   };
 
   const handleTabPress = tabname => {
@@ -264,6 +287,7 @@ const ProfileScreen = () => {
       <Loader visible={visible} color={Color.White} />
       <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
         {renderHeader()}
+        <VideoAds ref={adRef} updateCredit={updateCredit} />
 
         <View style={styles.bodyContainer}>
           <View>
@@ -307,8 +331,16 @@ const ProfileScreen = () => {
           <View style={styles.separator} />
 
           <View style={styles.subscriptionContainer}>
-            <View style={styles.subscriptionBoxContainer}>
-              <Text style={styles.subscriptionText}>
+            <Pressable
+              style={styles.subscriptionBoxContainer}
+              onPress={() => handleShowAd()}>
+              <Text style={styles.subscriptionText}>Watch Ad</Text>
+              <Image
+                source={require('../../Assets/Img/adsIcon.jpg')}
+                style={styles.adImageIcon}
+              />
+              <Text style={styles.subscriptionText}>Earn 3 Credits</Text>
+              {/* <Text style={styles.subscriptionText}>
                 {strings.subscription}
               </Text>
               <Pressable
@@ -326,8 +358,8 @@ const ProfileScreen = () => {
                 <Text style={styles.subscriptionTier}>
                   {subscribedPlan?.name}
                 </Text>
-              </Pressable>
-            </View>
+              </Pressable> */}
+            </Pressable>
             <View style={styles.subscriptionRightView}>
               <View style={styles.aiCreditsContainer}>
                 <Text style={styles.aiCreditsText}>{strings.aiCredit}</Text>
@@ -543,6 +575,13 @@ const styles = StyleSheet.create({
   },
   aboutUsTab: {
     marginRight: scale(20),
+  },
+  adImageIcon: {
+    width: scale(60),
+    height: scale(60),
+    borderRadius: scale(4),
+    alignSelf: 'center',
+    marginVertical: verticalScale(10),
   },
 });
 

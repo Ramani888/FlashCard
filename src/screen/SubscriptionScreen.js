@@ -50,11 +50,13 @@ const SubscriptionScreen = () => {
   const [data, setData] = useState([]);
   const [subscribedId, setSubscribedId] = useState();
   const [subscribedData, setSubscribedData] = useState({});
+  // console.log('subscribedData',subscribedData?.sku?.subscriptionOfferDetails[0])
   const [activeSubscription, setActiveSubscription] = useState([]);
   const [changePlan, setChangePlan] = useState(false);
   const colorTheme = useTheme();
   const refRBSheet = useRef(null);
   const {selectedSubscription} = route.params;
+  // console.log('user',global.user?.token)
 
   useEffect(() => {
     initializeIAP();
@@ -151,6 +153,36 @@ const SubscriptionScreen = () => {
       );
       AsyncStorage.setItem('selectedSubscription', item?._id);
       setChangePlan(true);
+      cancelSubscription()
+    } catch (error) {
+      console.log('error in edit Set api', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const cancelSubscription = async () => {
+    const offerToken = isAndroid
+      ? subscribedData?.sku?.subscriptionOfferDetails[0]?.offerToken
+      : null;
+
+    const rawData = {
+      packageName: 'com.flashcard.app',
+      subscriptionId: subscribedData?.productId,
+      purchaseToken: offerToken,
+      userId: global.user?._id,
+    };
+    console.log('rawData',rawData)
+    setVisible(true);
+    try {
+      const response = await apiPut(
+        Api.cancelSubscription,
+        global.user?.token,
+        JSON.stringify(rawData),
+      );
+      // console.log('response', response);
+      // AsyncStorage.setItem('selectedSubscription', item?._id);
+      // setChangePlan(true);
     } catch (error) {
       console.log('error in edit Set api', error);
     } finally {
@@ -382,6 +414,7 @@ const SubscriptionScreen = () => {
             item={subscribedData}
             colorTheme={colorTheme}
             closeSubscriptionBottomSheet={closeSubscriptionBottomSheet}
+            cancelSubscription={cancelSubscription}
           />
         </View>
       </RBSheet>
@@ -547,7 +580,7 @@ const styles = StyleSheet.create({
   sheetContainer: {
     flexDirection: 'row',
     marginVertical: verticalScale(15),
-    marginTop:verticalScale(5),
+    marginTop: verticalScale(5),
   },
 });
 

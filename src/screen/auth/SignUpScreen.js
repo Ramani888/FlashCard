@@ -51,12 +51,17 @@ const SignUpScreen = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
-  const [selectedLanguage, setSelectedLanguage] = useState({id: 0, name: 'English', flag: require('../../Assets/FlagImage/UsaFlag.png')});
+  const [selectedLanguage, setSelectedLanguage] = useState({
+    id: 0,
+    name: 'English',
+    flag: require('../../Assets/FlagImage/UsaFlag.png'),
+  });
   const languageRef = useRef();
 
   // ======================================== Api ===================================== //
 
   const signUp = async value => {
+    console.log('value', value);
     try {
       setVisible(true);
       const response = await apiPost(Api.signUp, '', JSON.stringify(value));
@@ -161,7 +166,10 @@ const SignUpScreen = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={values => {
-          signUp(values);
+          values.isPrivacy = isChecked;
+          if (isChecked) {
+            signUp(values);
+          }
         }}>
         {({
           handleChange,
@@ -176,10 +184,7 @@ const SignUpScreen = () => {
               ref={languageRef}
               style={styles.languageButton}
               onPress={openModal}>
-              <Image
-                source={selectedLanguage?.flag}
-                style={styles.flagImage}
-              />
+              <Image source={selectedLanguage?.flag} style={styles.flagImage} />
               <Text style={styles.language}>{selectedLanguage?.name}</Text>
               {languageModal ? (
                 <AntDesign
@@ -270,14 +275,19 @@ const SignUpScreen = () => {
               title={strings.signUp}
               buttonWidth={'100%'}
               buttonHeight={verticalScale(45)}
-              buttonColor={Color.theme1}
+              buttonColor={isChecked ? Color.theme1 : Color.mediumGray}
               fontSize={scale(15)}
               fontFamily={Font.semiBold}
               fontColor={Color.White}
               borderRadius={scale(10)}
               marginTop={verticalScale(15)}
               textTransform={'uppercase'}
-              onPress={handleSubmit}
+              disabled={!isChecked}
+              onPress={() => {
+                if (isChecked) {
+                  handleSubmit();
+                }
+              }}
             />
 
             <CustomeButton

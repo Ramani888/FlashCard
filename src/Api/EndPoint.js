@@ -37,6 +37,7 @@ const Api = {
   credit: `${Base_url}/credit`,
   getLiveFeedData: `${Base_url}/card/all`,
   updateSubscription: `${Base_url}/subscription`,
+  cancelSubscription: `${Base_url}/cancel/subscription`,
 };
 
 export default Api;
