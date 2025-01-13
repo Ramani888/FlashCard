@@ -1,4 +1,11 @@
-import {AppState, Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  AppState,
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {scale, verticalScale} from '../../custome/Responsive';
 import Font from '../../component/Font';
@@ -14,7 +21,6 @@ import Loader from '../../component/Loader';
 import {moderateScale} from 'react-native-size-matters';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
-import BackgroundFetch from 'react-native-background-fetch';
 
 const {width, height} = Dimensions.get('window');
 
@@ -34,50 +40,71 @@ const OtpVerifyScreen = () => {
   const timerRef = useRef(null);
   const startTimestampRef = useRef(null);
 
-  useEffect(() => {
-    startTimer()
-  },[])
+  const startTimer = () => {
+    if (timerRef.current) return; // Prevent multiple intervals
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', handleAppStateChange);
-    return () => {
-      subscription.remove();
+    setIsCounting(true)
+    startTimestampRef.current = Date.now(); // Save the start time
+    timerRef.current = setInterval(() => {
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - startTimestampRef.current) / 1000);
+      const remainingTime = Math.max(60 - elapsedSeconds, 0);
+
+      setCountdown(remainingTime);
+
+      if (remainingTime <= 0) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+        setIsCounting(false)
+      }
+    }, 1000);
+  };
+
+  // Stop Timer
+  const stopTimer = () => {
+    if (timerRef.current) {
       clearInterval(timerRef.current);
-    };
-  }, []);
+      timerRef.current = null;
+    }
+  };
 
+  // App State Change Handler
   const handleAppStateChange = (nextAppState) => {
     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-      // App came back to the foreground
+      // App returning to the foreground
       const now = Date.now();
-      if (startTimestampRef.current) {
-        const elapsed = Math.floor((now - startTimestampRef.current) / 1000);
-        const remainingTime = Math.max(60 - elapsed, 0);
-        setCountdown(remainingTime);
-        if (remainingTime > 0) {
-          startTimer();
-        } else {
-          setIsCounting(false);
-        }
+      const elapsedSeconds = Math.floor((now - startTimestampRef.current) / 1000);
+      const remainingTime = Math.max(60 - elapsedSeconds, 0);
+
+      setCountdown(remainingTime);
+
+      if (remainingTime > 0) {
+        startTimestampRef.current = Date.now() - elapsedSeconds * 1000; // Adjust the start time
+        startTimer();
+      } else {
+        stopTimer();
+        setCountdown(0);
       }
     }
+
     appState.current = nextAppState;
   };
 
-  const startTimer = () => {
-    setIsCounting(true);
-    startTimestampRef.current = Date.now();
-    timerRef.current = setInterval(() => {
-      setCountdown((prevCountdown) => {
-        if (prevCountdown <= 1) {
-          clearInterval(timerRef.current);
-          setIsCounting(false);
-          return 0;
-        }
-        return prevCountdown - 1;
-      });
-    }, 1000);
-  };
+  // Clear Timer on Unmount
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      subscription.remove();
+      stopTimer(); // Clear any running timer
+    };
+  }, []);
+
+  // Start Timer on Mount
+  useEffect(() => {
+    startTimer();
+    return () => stopTimer(); // Cleanup on unmount
+  }, []);
 
   // useEffect(() => {
   //   let timer;
@@ -164,6 +191,7 @@ const OtpVerifyScreen = () => {
       // console.log('response', response);
       if (response?.success == true) {
         showMessageonTheScreen(response?.message);
+        startTimer()
         setIsCounting(true);
       }
     } catch (error) {
@@ -315,146 +343,3 @@ const styles = StyleSheet.create({
   },
   email: {color: Color.Black},
 });
-
-// import {Dimensions, Pressable, StyleSheet, Text, View, AppState} from 'react-native';
-// import React, {useEffect, useState, useRef} from 'react';
-// import {scale, verticalScale} from '../../custome/Responsive';
-// import Font from '../../component/Font';
-// import Color from '../../component/Color';
-// import OTPTextInput from 'react-native-otp-textinput';
-// import {useNavigation, useRoute} from '@react-navigation/native';
-// import CustomeButton from '../../custome/CustomeButton';
-// import {moderateScale} from 'react-native-size-matters';
-// import useTheme from '../../component/Theme';
-
-// const {width, height} = Dimensions.get('window');
-
-// const OtpVerifyScreen = () => {
-//   const navigation = useNavigation();
-//   const route = useRoute();
-//   const themeColor = useTheme();
-//   const [otp, setOtp] = useState('');
-//   const [isValid, setIsValid] = useState(true);
-//   const [countdown, setCountdown] = useState(60); // Timer countdown
-//   const [isCounting, setIsCounting] = useState(false);
-//   const appState = useRef(AppState.currentState);
-//   const timerRef = useRef(null);
-//   const startTimestampRef = useRef(null);
-
-//   useEffect(() => {
-//     const subscription = AppState.addEventListener('change', handleAppStateChange);
-//     return () => {
-//       subscription.remove();
-//       clearInterval(timerRef.current);
-//     };
-//   }, []);
-
-//   const handleAppStateChange = (nextAppState) => {
-//     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-//       // App came back to the foreground
-//       const now = Date.now();
-//       if (startTimestampRef.current) {
-//         const elapsed = Math.floor((now - startTimestampRef.current) / 1000);
-//         const remainingTime = Math.max(60 - elapsed, 0);
-//         setCountdown(remainingTime);
-//         if (remainingTime > 0) {
-//           startTimer();
-//         } else {
-//           setIsCounting(false);
-//         }
-//       }
-//     }
-//     appState.current = nextAppState;
-//   };
-
-//   const startTimer = () => {
-//     setIsCounting(true);
-//     startTimestampRef.current = Date.now();
-//     timerRef.current = setInterval(() => {
-//       setCountdown((prevCountdown) => {
-//         if (prevCountdown <= 1) {
-//           clearInterval(timerRef.current);
-//           setIsCounting(false);
-//           return 0;
-//         }
-//         return prevCountdown - 1;
-//       });
-//     }, 1000);
-//   };
-
-//   const handleResendOtp = () => {
-//     setCountdown(60); // Reset timer
-//     startTimer();
-//   };
-
-//   const handleOtpChange = (text) => {
-//     setOtp(text);
-//     if (text.length === 4 && /^\d+$/.test(text)) {
-//       setIsValid(true);
-//     } else {
-//       setIsValid(false);
-//     }
-//   };
-
-//   return (
-//     <View style={{flex: 1, backgroundColor: themeColor.background}}>
-//       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//         <Text style={[styles.title, {color: themeColor.textColor}]}>Enter OTP</Text>
-//         <OTPTextInput
-//           handleTextChange={handleOtpChange}
-//           inputCount={4}
-//           containerStyle={styles.otpContainer}
-//           textInputStyle={styles.otpInput}
-//         />
-//         {isCounting ? (
-//           <Text style={styles.timerText}>Resend OTP in {countdown} seconds</Text>
-//         ) : (
-//           <Pressable onPress={handleResendOtp}>
-//             <Text style={styles.resendOtp}>Resend OTP</Text>
-//           </Pressable>
-//         )}
-//         <CustomeButton
-//           title={'VERIFY'}
-//           buttonWidth={'90%'}
-//           buttonHeight={verticalScale(45)}
-//           buttonColor={Color.theme1}
-//           onPress={() => {
-//             // Verify OTP logic
-//           }}
-//         />
-//       </View>
-//     </View>
-//   );
-// };
-
-// export default React.memo(OtpVerifyScreen);
-
-// const styles = StyleSheet.create({
-//   title: {
-//     fontSize: scale(20),
-//     color: Color.Black,
-//     fontFamily: Font.semiBold,
-//     textAlign: 'center',
-//   },
-//   otpContainer: {
-//     marginVertical: verticalScale(20),
-//   },
-//   otpInput: {
-//     width: width * 0.2,
-//     height: height * 0.1,
-//     borderWidth: 1,
-//     borderColor: Color.grayScale5,
-//     borderRadius: scale(5),
-//   },
-//   timerText: {
-//     fontSize: scale(14),
-//     color: Color.Black,
-//     marginTop: verticalScale(10),
-//   },
-//   resendOtp: {
-//     fontSize: scale(14),
-//     color: Color.theme1,
-//     marginTop: verticalScale(10),
-//   },
-// });
-

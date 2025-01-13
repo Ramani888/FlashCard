@@ -180,7 +180,7 @@ const SignUpScreen = () => {
           touched,
         }) => (
           <View style={styles.formContainer}>
-            <Pressable
+            {/* <Pressable
               ref={languageRef}
               style={styles.languageButton}
               onPress={openModal}>
@@ -199,7 +199,7 @@ const SignUpScreen = () => {
                   color={Color.Black}
                 />
               )}
-            </Pressable>
+            </Pressable> */}
             {renderInputFields(
               handleChange,
               handleBlur,
@@ -259,13 +259,13 @@ const SignUpScreen = () => {
                 {strings.termConditionMessage1}{' '}
                 <Text
                   style={[styles.linkText, {color: colorTheme.textColor}]}
-                  onPress={() => openLink('https://example.com/terms')}>
+                  onPress={() => {}}>
                   {strings.termConditionMessage2}
                 </Text>{' '}
                 {strings.and}{' '}
                 <Text
                   style={[styles.linkText, {color: colorTheme.textColor}]}
-                  onPress={() => openLink('https://example.com/privacy')}>
+                  onPress={() => {}}>
                   {strings.privacyPolicy}
                 </Text>
               </Text>
