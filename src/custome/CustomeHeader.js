@@ -45,7 +45,6 @@ const CustomeHeader = ({
   cancelIconStyle,
   onCancel,
 }) => {
-  console.log('onCancel',onCancel)
   const navigation = useNavigation();
   const editRef = useRef(null);
   const threeDotIconRef = useRef(null);
