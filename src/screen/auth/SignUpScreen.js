@@ -180,7 +180,7 @@ const SignUpScreen = () => {
           touched,
         }) => (
           <View style={styles.formContainer}>
-            {/* <Pressable
+            <Pressable
               ref={languageRef}
               style={styles.languageButton}
               onPress={openModal}>
@@ -199,7 +199,7 @@ const SignUpScreen = () => {
                   color={Color.Black}
                 />
               )}
-            </Pressable> */}
+            </Pressable>
             {renderInputFields(
               handleChange,
               handleBlur,

@@ -123,7 +123,7 @@ const AssignFolderScreen = () => {
           style={[
             styles.folderItem,
             {
-              borderColor: selected ? Color.Black : Color.transparent,
+              borderColor: selected ?  colorTheme.textColor : Color.transparent,
               borderWidth: selected ? scale(1.5) : scale(0),
               backgroundColor: item?.isHighlight
                 ? item.color

@@ -73,7 +73,7 @@ const ImagesScreen = () => {
     return (
       <View style={{flex: 1}}>
         <LinearGradient
-          colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
+          colors={colorTheme.gradientTheme}
           style={styles.headerContainer}>
           {renderHeader()}
 
