@@ -10,12 +10,16 @@ import {
 import Color from '../Color';
 import { scale, verticalScale } from '../../custome/Responsive';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import strings from '../../language/strings';
+import useTheme from '../Theme';
 
 const LanguageModalContent = ({
     setSelectedLanguage,
     selectedLanguage,
     closeModal,
+    handleLanguageSaved
 }) => {
+    const colorTheme = useTheme()
     const languages = [
         {
             id: 0,
@@ -58,16 +62,32 @@ const LanguageModalContent = ({
         { id: 10, name: 'Hindi', flag: require('../../Assets/FlagImage/india.png') },
     ];
 
-    const renderLanguage = ({ item }) => {
+    const changeLanguage = (name) => {
+        name === 'English' && strings.setLanguage('en');
+        name === 'Espanol' && strings.setLanguage('es');
+        name === 'Postogues' && strings.setLanguage('pt');
+        name === 'Francais' && strings.setLanguage('fr');
+        name === 'Italiano' && strings.setLanguage('it');
+        name === 'German' && strings.setLanguage('de');
+        name === 'Polish' && strings.setLanguage('pl');
+        name === 'Mandarin' && strings.setLanguage('zh');
+        name === 'Swahili' && strings.setLanguage('sw');
+        name === 'Tagalog' && strings.setLanguage('tl');
+        name === 'Hindi' && strings.setLanguage('hi');
+    };
+
+    const renderLanguage = ({ item, index }) => {
         return (
             <TouchableOpacity
-                style={styles.languageRow}
+                style={[styles.languageRow, { borderBottomWidth: item?.id !== 10 ? scale(0.5) : 0 }]}
                 onPress={() => {
                     setSelectedLanguage(item);
+                    handleLanguageSaved(item)
+                    changeLanguage(item?.name)
                     closeModal();
                 }}>
                 <Image source={item.flag} style={styles.flag} />
-                <Text style={styles.languageText}>{item.name}</Text>
+                <Text style={[styles.languageText, { color: colorTheme.textColor }]}>{item.name}</Text>
 
                 {selectedLanguage?.name === item.name ? (
                     <AntDesign name="checkcircle" size={21.5} color={Color.Green} />
@@ -79,7 +99,7 @@ const LanguageModalContent = ({
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: colorTheme.modelBackgroundView }]}>
             <FlatList
                 data={languages}
                 renderItem={renderLanguage}
@@ -101,7 +121,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: verticalScale(10),
-        borderBottomWidth: scale(0.5),
         borderBottomColor: '#ddd',
     },
     flag: {

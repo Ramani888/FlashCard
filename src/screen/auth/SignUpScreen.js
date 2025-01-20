@@ -17,7 +17,7 @@ import CustomeInputField from '../../custome/CustomeInputField';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomeButton from '../../custome/CustomeButton';
 import { CheckBox } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { ScreenName } from '../../component/Screen';
 import { apiPost } from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
@@ -28,22 +28,10 @@ import strings from '../../language/strings';
 import CustomeModal from '../../custome/CustomeModal';
 import LanguageModalContent from '../../component/auth/LanguageModalContent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
-const inputFields = [
-    {
-        name: 'email',
-        placeholder: strings.enterEmail,
-        iconName: 'email-outline',
-        keyboardType: 'email-address',
-    },
-    {
-        name: 'userName',
-        placeholder: strings.enterUsername,
-        iconName: 'account-outline',
-    },
-];
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpScreen = () => {
+    const isFocused = useIsFocused()
     const navigation = useNavigation();
     const colorTheme = useTheme();
     const [visible, setVisible] = useState(false);
@@ -56,27 +44,33 @@ const SignUpScreen = () => {
         name: 'English',
         flag: require('../../Assets/FlagImage/UsaFlag.png'),
     });
-    console.log('selectedLanguage', selectedLanguage)
 
     const languageRef = useRef();
 
-    useEffect(() => {
-        handleLanguageSaved()
-    }, [selectedLanguage])
-
-    const handleLanguageSaved = () => {
-        selectedLanguage?.name === 'English' && strings.setLanguage('en');
-        selectedLanguage?.name === 'Espanol' && strings.setLanguage('es');
-        selectedLanguage?.name === 'Postogues' && strings.setLanguage('pt');
-        selectedLanguage?.name === 'Francais' && strings.setLanguage('fr');
-        selectedLanguage?.name === 'Italiano' && strings.setLanguage('it');
-        selectedLanguage?.name === 'German' && strings.setLanguage('de');
-        selectedLanguage?.name === 'Polish' && strings.setLanguage('pl');
-        selectedLanguage?.name === 'Mandarin' && strings.setLanguage('zh');
-        selectedLanguage?.name === 'Swahili' && strings.setLanguage('sw');
-        selectedLanguage?.name === 'Tagalog' && strings.setLanguage('tl');
-        selectedLanguage?.name === 'Hindi' && strings.setLanguage('hi');
+    const handleLanguageSaved = async (Language) => {
+        console.log('Language1212121212121212121',Language)
+        await AsyncStorage.setItem('Language', JSON.stringify(Language))
+        Language?.name === 'English' && strings.setLanguage('en');
+        Language?.name === 'Espanol' && strings.setLanguage('es');
+        Language?.name === 'Postogues' && strings.setLanguage('pt');
+        Language?.name === 'Francais' && strings.setLanguage('fr');
+        Language?.name === 'Italiano' && strings.setLanguage('it');
+        Language?.name === 'German' && strings.setLanguage('de');
+        Language?.name === 'Polish' && strings.setLanguage('pl');
+        Language?.name === 'Mandarin' && strings.setLanguage('zh');
+        Language?.name === 'Swahili' && strings.setLanguage('sw');
+        Language?.name === 'Tagalog' && strings.setLanguage('tl');
+        Language?.name === 'Hindi' && strings.setLanguage('hi');
     };
+
+    useEffect(() => {
+        (async () => {
+            const lang = await AsyncStorage.getItem('Language')
+            if (lang) {
+                setSelectedLanguage(JSON.parse(lang))
+            }
+        })()
+    }, [isFocused])
 
     // ======================================== Api ===================================== //
 
@@ -119,41 +113,6 @@ const SignUpScreen = () => {
             .min(8, 'Password must be at least 8 characters')
             .required('Password is required'),
     });
-
-    const renderInputFields = (
-        handleChange,
-        handleBlur,
-        values,
-        errors,
-        touched,
-    ) => {
-        return inputFields.map(field => (
-            <CustomeInputField
-                key={field.name}
-                placeholder={field.placeholder}
-                placeholderTextColor={Color.mediumGray}
-                onChangeText={handleChange(field.name)}
-                onBlur={handleBlur(field.name)}
-                value={values[field.name]}
-                errors={errors[field.name]}
-                touched={touched[field.name]}
-                iconLeft={true}
-                keyboardType={field.keyboardType || 'default'}
-                inputStyles={styles.inputStyles}
-                errorTextStyles={styles.errorText}
-                IconLeftComponent={
-                    <View style={styles.iconWrapper}>
-                        <MaterialCommunityIcons
-                            name={field.iconName}
-                            size={scale(17)}
-                            color={Color.Gray}
-                        />
-                    </View>
-                }
-                inputContainerStyles={styles.inputContainer}
-            />
-        ));
-    };
 
     const openModal = (item, isLastItem) => {
         languageRef.current.measureInWindow((x, y, width, height) => {
@@ -220,13 +179,57 @@ const SignUpScreen = () => {
                                 />
                             )}
                         </Pressable>
-                        {renderInputFields(
-                            handleChange,
-                            handleBlur,
-                            values,
-                            errors,
-                            touched,
-                        )}
+
+
+                        <CustomeInputField
+                            key={'email'}
+                            placeholder={strings.enterEmail}
+                            placeholderTextColor={Color.mediumGray}
+                            onChangeText={handleChange('email')}
+                            onBlur={handleBlur('email')}
+                            value={values?.email}
+                            errors={errors?.email}
+                            touched={touched?.email}
+                            iconLeft={true}
+                            keyboardType={'email-address' || 'default'}
+                            inputStyles={styles.inputStyles}
+                            errorTextStyles={styles.errorText}
+                            IconLeftComponent={
+                                <View style={styles.iconWrapper}>
+                                    <MaterialCommunityIcons
+                                        name={'email-outline'}
+                                        size={scale(17)}
+                                        color={Color.Gray}
+                                    />
+                                </View>
+                            }
+                            inputContainerStyles={styles.inputContainer}
+                        />
+
+                        <CustomeInputField
+                            key={'userName'}
+                            placeholder={strings.enterUsername}
+                            placeholderTextColor={Color.mediumGray}
+                            onChangeText={handleChange('userName')}
+                            onBlur={handleBlur('userName')}
+                            value={values?.userName}
+                            errors={errors?.userName}
+                            touched={touched?.userName}
+                            iconLeft={true}
+                            // keyboardType={'email-address' || 'default'}
+                            inputStyles={styles.inputStyles}
+                            errorTextStyles={styles.errorText}
+                            IconLeftComponent={
+                                <View style={styles.iconWrapper}>
+                                    <MaterialCommunityIcons
+                                        name={'account-outline'}
+                                        size={scale(17)}
+                                        color={Color.Gray}
+                                    />
+                                </View>
+                            }
+                            inputContainerStyles={styles.inputContainer}
+                        />
 
                         <CustomeInputField
                             key={'password'}
@@ -350,6 +353,7 @@ const SignUpScreen = () => {
                         setSelectedLanguage={setSelectedLanguage}
                         selectedLanguage={selectedLanguage}
                         closeModal={closeModal}
+                        handleLanguageSaved={handleLanguageSaved}
                     />
                 }
                 width={'90%'}

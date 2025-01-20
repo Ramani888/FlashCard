@@ -134,5 +134,11 @@ export default {
     logout: 'Logout',
     selectUsername: 'SELECT USERNAME',
     noDataFound: 'No Data Found',
-    noFolder: 'No Folder'
+    noFolder: 'No Folder',
+
+    // new added
+
+    contactNotfound: 'Contact not found',
+    watchAd: 'Watch Ad',
+    earnCredits: 'Earn 3 Credits'
 };
