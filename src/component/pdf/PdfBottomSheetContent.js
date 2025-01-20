@@ -103,7 +103,7 @@ const PdfBottomSheetContent = ({
         <Pressable style={styles.closeButton} onPress={closeBottomSheet}>
           <AntDesign name="close" size={scale(15)} color={Color.Black} />
         </Pressable>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title,{color:colorTheme.textColor}]}>{title}</Text>
         <View style={styles.separator} />
 
         <Pressable
@@ -122,7 +122,7 @@ const PdfBottomSheetContent = ({
         </Pressable>
 
         <CustomeInputField
-          placeholder="Create Name"
+          placeholder={strings.createName}
           placeholderTextColor={Color.mediumGray}
           onChangeText={setName}
           value={name}

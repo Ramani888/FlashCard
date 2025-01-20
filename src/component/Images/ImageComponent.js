@@ -72,6 +72,7 @@ const ImageComponent = ({folderId, showFolder}) => {
     try {
       setVisible(true);
       const response = await apiPost(Api.Images, '', formdata);
+      console.log('response',response)
       if (response?.success == true) {
         getImagesData(true, response?.message);
       }

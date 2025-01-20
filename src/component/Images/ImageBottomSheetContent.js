@@ -76,7 +76,7 @@ const ImageBottomSheetContent = ({
         />
       </Pressable>
       {imageFile?.name && (
-        <Text style={styles.imageName}>{imageFile?.name}</Text>
+        <Text style={[styles.imageName,{color:colorTheme.textColor}]}>{imageFile?.name}</Text>
       )}
       <CustomeButton
         buttonColor={Color.theme1}

@@ -140,5 +140,6 @@ export default {
 
     contactNotfound: 'Contact not found',
     watchAd: 'Watch Ad',
-    earnCredits: 'Earn 3 Credits'
+    earnCredits: 'Earn 3 Credits',
+    attachScreenShot: 'Attach screenshot of issue'
 };
