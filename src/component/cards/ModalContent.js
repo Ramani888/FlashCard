@@ -191,7 +191,7 @@ const ModalContent = ({
                 trackColor={{false: '#E7EAEB', true: Color.theme2}}
               />
               <Text style={[styles.switchLabel, {color: colorTheme.textColor}]}>
-                {value ? 'Private' : 'Public'}
+                {value ? strings.private : strings.public}
               </Text>
             </View>
             <Image source={lockIcon} style={styles.icon} />

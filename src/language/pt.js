@@ -138,5 +138,19 @@ export default {
     watchAd: 'Assistir anúncio',
     earnCredits: 'Ganhe 3 créditos',
     attachScreenShot: 'Anexar captura de tela do problema',
+
+    privacyAndTerms: 'PRIVACIDADE E TERMOS',
+    adNotReady: 'Anúncio não está pronto',
+    adLoadMessage: 'Por favor, aguarde enquanto carregamos o anúncio.',
+    newPassword: 'Nova Senha',
+    confirmNewPassword: 'Confirmar Nova Senha',
+    emailRequired: 'O e-mail é obrigatório',
+    invalidEmail: 'E-mail inválido',
+    passwordError: 'A senha deve ter pelo menos 8 caracteres',
+    passwordRequired: 'A senha é obrigatória',
+    passwordMatch: 'As senhas devem coincidir',
+    confirmPasswordRequired: 'A confirmação da senha é obrigatória',
+    usernameError: 'O nome de usuário deve ter pelo menos 3 caracteres',
+    usernameRequired: 'O nome de usuário é obrigatório',
   };
   

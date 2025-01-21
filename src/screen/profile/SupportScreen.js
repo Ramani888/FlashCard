@@ -22,6 +22,7 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CustomeInputField from '../../custome/CustomeInputField';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import { useIsFocused } from '@react-navigation/native';
 
 const issueData = [
     { issueName: strings.bugReport },
@@ -37,6 +38,7 @@ const options = {
 };
 
 const SupportScreen = () => {
+    const isFocused = useIsFocused()
     const [selectedIssue, setSelectedIssue] = useState('');
     const [visible, setVisible] = useState(false);
     const [imageFile, setImageFile] = useState('');
@@ -157,7 +159,7 @@ const SupportScreen = () => {
                 </View>
             );
         },
-        [selectedIssue, selectedIssueIndex, issueDesc, strings],
+        [selectedIssue, selectedIssueIndex, issueDesc, strings, isFocused],
     );
 
     const renderBody = useCallback(

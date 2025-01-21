@@ -140,4 +140,18 @@ export default {
   watchAd: 'Regarder l\'annonce',
   earnCredits: 'Gagnez 3 crédits',
   attachScreenShot: 'Joindre une capture d\'écran du problème',
+
+  privacyAndTerms: 'CONFIDENTIALITÉ ET CONDITIONS',
+  adNotReady: 'Annonce non prête',
+  adLoadMessage: "Veuillez patienter pendant que nous chargeons l'annonce.",
+  newPassword: 'Nouveau mot de passe',
+  confirmNewPassword: 'Confirmer le nouveau mot de passe',
+  emailRequired: 'Email est requis',
+  invalidEmail: 'Email invalide',
+  passwordError: 'Le mot de passe doit comporter au moins 8 caractères',
+  passwordRequired: 'Le mot de passe est requis',
+  passwordMatch: 'Les mots de passe doivent correspondre',
+  confirmPasswordRequired: 'La confirmation du mot de passe est requise',
+  usernameError: "Le nom d'utilisateur doit comporter au moins 3 caractères",
+  usernameRequired: "Le nom d'utilisateur est requis",
 };

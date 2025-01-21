@@ -138,5 +138,19 @@ export default {
     watchAd: 'Tazama tangazo',
     earnCredits: 'Pata alama 3',
     attachScreenShot: 'Ambatisha picha ya tatizo',
+
+    privacyAndTerms: 'FARAGHA NA MASHARTI',
+    adNotReady: 'Tangazo halijakamilika',
+    adLoadMessage: 'Tafadhali subiri wakati tunapakia tangazo.',
+    newPassword: 'Nenosiri Jipya',
+    confirmNewPassword: 'Thibitisha Nenosiri Jipya',
+    emailRequired: 'Barua pepe inahitajika',
+    invalidEmail: 'Barua pepe si sahihi',
+    passwordError: 'Nenosiri lazima liwe na angalau herufi 8',
+    passwordRequired: 'Nenosiri linahitajika',
+    passwordMatch: 'Manenosiri lazima yalingane',
+    confirmPasswordRequired: 'Uthibitisho wa nenosiri unahitajika',
+    usernameError: 'Jina la mtumiaji lazima liwe na angalau herufi 3',
+    usernameRequired: 'Jina la mtumiaji linahitajika',
   };
   

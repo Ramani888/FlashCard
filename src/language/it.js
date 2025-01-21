@@ -96,12 +96,12 @@ export default {
     aiLimitMessage: 'Hai raggiunto il limite di crediti! Guarda un annuncio video per guadagnare più crediti.',
     aiHeader: 'Ottieni Versetto o Fai Domande',
     aiPlaceholder:
-      'Esempio:\n' +
-      "'Ottieni Giovanni 3:16 kjv'\n" +
-      "'Quali sono i nomi dei 12 apostoli?'\n\n" +
-      'L\'IA può commettere errori. Verifica sempre le informazioni.\n\n' +
-      'Ogni utilizzo della funzione IA consuma 1 credito.\n' +
-      'Abbonati o guarda un annuncio per guadagnare 3 crediti.',
+        'Esempio:\n' +
+        "'Ottieni Giovanni 3:16 kjv'\n" +
+        "'Quali sono i nomi dei 12 apostoli?'\n\n" +
+        'L\'IA può commettere errori. Verifica sempre le informazioni.\n\n' +
+        'Ogni utilizzo della funzione IA consuma 1 credito.\n' +
+        'Abbonati o guarda un annuncio per guadagnare 3 crediti.',
     copy: 'Copia',
     refresh: 'Aggiorna',
     enter: 'INSERISCI',
@@ -138,5 +138,18 @@ export default {
     watchAd: 'Guarda l\'annuncio',
     earnCredits: 'Guadagna 3 crediti',
     attachScreenShot: 'Allegare screenshot del problema',
-  };
-  
+
+    privacyAndTerms: 'PRIVACY E TERMINI',
+    adNotReady: 'Annuncio non pronto',
+    adLoadMessage: 'Attendere mentre carichiamo l’annuncio.',
+    newPassword: 'Nuova Password',
+    confirmNewPassword: 'Conferma Nuova Password',
+    emailRequired: 'L’email è obbligatoria',
+    invalidEmail: 'Email non valida',
+    passwordError: 'La password deve contenere almeno 8 caratteri',
+    passwordRequired: 'La password è obbligatoria',
+    passwordMatch: 'Le password devono coincidere',
+    confirmPasswordRequired: 'La conferma della password è obbligatoria',
+    usernameError: 'Il nome utente deve contenere almeno 3 caratteri',
+    usernameRequired: 'Il nome utente è obbligatorio',
+};

@@ -138,4 +138,18 @@ export default {
     watchAd: 'Ver anuncio',
     earnCredits: 'Gana 3 créditos',
     attachScreenShot: 'Adjuntar captura de pantalla del problema',
+
+    privacyAndTerms: 'PRIVACIDAD Y TÉRMINOS',
+    adNotReady: 'Anuncio no listo',
+    adLoadMessage: 'Por favor espera mientras cargamos el anuncio.',
+    newPassword: 'Nueva Contraseña',
+    confirmNewPassword: 'Confirmar Nueva Contraseña',
+    emailRequired: 'El correo electrónico es obligatorio',
+    invalidEmail: 'Correo electrónico inválido',
+    passwordError: 'La contraseña debe tener al menos 8 caracteres',
+    passwordRequired: 'La contraseña es obligatoria',
+    passwordMatch: 'Las contraseñas deben coincidir',
+    confirmPasswordRequired: 'Se requiere confirmar la contraseña',
+    usernameError: 'El nombre de usuario debe tener al menos 3 caracteres',
+    usernameRequired: 'Se requiere nombre de usuario',
 };

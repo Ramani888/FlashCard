@@ -140,4 +140,18 @@ export default {
   watchAd: 'विज्ञापन देखें',
   earnCredits: '3 क्रेडिट अर्जित करें',
   attachScreenShot: 'समस्या का स्क्रीनशॉट संलग्न करें',
+
+  privacyAndTerms: 'गोपनीयता और शर्तें',
+  adNotReady: 'विज्ञापन तैयार नहीं है',
+  adLoadMessage: 'कृपया प्रतीक्षा करें, जब तक हम विज्ञापन लोड कर रहे हैं।',
+  newPassword: 'नया पासवर्ड',
+  confirmNewPassword: 'नया पासवर्ड पुष्टि करें',
+  emailRequired: 'ईमेल आवश्यक है',
+  invalidEmail: 'अमान्य ईमेल',
+  passwordError: 'पासवर्ड कम से कम 8 अक्षरों का होना चाहिए',
+  passwordRequired: 'पासवर्ड आवश्यक है',
+  passwordMatch: 'पासवर्ड मेल खाना चाहिए',
+  confirmPasswordRequired: 'पासवर्ड पुष्टि आवश्यक है',
+  usernameError: 'यूज़रनेम कम से कम 3 अक्षरों का होना चाहिए',
+  usernameRequired: 'यूज़रनेम आवश्यक है',
 };

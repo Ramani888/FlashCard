@@ -95,10 +95,10 @@ const SignInScreen = () => {
     };
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string().email('Invalid email').required('Email is required'),
+        email: Yup.string().email(strings.invalidEmail).required(strings.emailRequired),
         password: Yup.string()
-            .min(8, 'Password must be at least 8 characters')
-            .required('Password is required'),
+            .min(8, strings.passwordError)
+            .required(strings.passwordRequired),
     });
 
     return (

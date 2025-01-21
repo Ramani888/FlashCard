@@ -48,7 +48,7 @@ const SignUpScreen = () => {
     const languageRef = useRef();
 
     const handleLanguageSaved = async (Language) => {
-        console.log('Language1212121212121212121',Language)
+        console.log('Language1212121212121212121', Language)
         await AsyncStorage.setItem('Language', JSON.stringify(Language))
         Language?.name === 'English' && strings.setLanguage('en');
         Language?.name === 'Espanol' && strings.setLanguage('es');
@@ -105,13 +105,13 @@ const SignUpScreen = () => {
     };
 
     const validationSchema = Yup.object().shape({
-        email: Yup.string().email('Invalid email').required('Email is required'),
+        email: Yup.string().email(strings.invalidEmail).required(strings.emailRequired),
         userName: Yup.string()
-            .min(3, 'Username must be at least 3 characters')
-            .required('Username is required'),
+            .min(3, strings.usernameError)
+            .required(strings.usernameRequired),
         password: Yup.string()
-            .min(8, 'Password must be at least 8 characters')
-            .required('Password is required'),
+            .min(8, strings.passwordError)
+            .required(strings.passwordRequired),
     });
 
     const openModal = (item, isLastItem) => {

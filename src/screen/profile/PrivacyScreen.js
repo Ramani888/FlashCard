@@ -5,6 +5,7 @@ import Color from '../../component/Color';
 import Font from '../../component/Font';
 import CustomeHeader from '../../custome/CustomeHeader';
 import useTheme from '../../component/Theme';
+import strings from '../../language/strings';
 
 const TermsScreen = () => {
   const colorTheme = useTheme();
@@ -14,7 +15,7 @@ const TermsScreen = () => {
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={'PRIVACY & TERMS'}
+        title={strings.privacyAndTerms}
         iconColor={colorTheme.textColor}
         containerStyle={styles.headerStyle}
         titleStyle={[styles.headerTitleStyle, {color: colorTheme.textColor}]}

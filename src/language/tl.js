@@ -138,4 +138,18 @@ export default {
     watchAd: 'Panoorin ang ad',
     earnCredits: 'Kumita ng 3 credits',
     attachScreenShot: 'I-attach ang screenshot ng isyu',
+
+    privacyAndTerms: 'PRIBADO AT MGA TUNTUNIN',
+    adNotReady: 'Hindi pa handa ang ad',
+    adLoadMessage: 'Mangyaring maghintay habang naglo-load kami ng ad.',
+    newPassword: 'Bagong Password',
+    confirmNewPassword: 'Kumpirmahin ang Bagong Password',
+    emailRequired: 'Kinakailangan ang email',
+    invalidEmail: 'Hindi wastong email',
+    passwordError: 'Ang password ay dapat hindi bababa sa 8 na character',
+    passwordRequired: 'Kinakailangan ang password',
+    passwordMatch: 'Ang mga password ay dapat magkatugma',
+    confirmPasswordRequired: 'Kinakailangan ang Kumpirmasyon ng Password',
+    usernameError: 'Ang username ay dapat hindi bababa sa 3 na character',
+    usernameRequired: 'Kinakailangan ang username',
 };

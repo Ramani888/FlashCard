@@ -138,5 +138,19 @@ export default {
     watchAd: 'Oglądaj reklamę',
     earnCredits: 'Zarób 3 kredyty',
     attachScreenShot: 'Załącz zrzut ekranu problemu',
+
+    privacyAndTerms: 'PRYWATNOŚĆ I WARUNKI',
+    adNotReady: 'Reklama nie jest gotowa',
+    adLoadMessage: 'Proszę czekać, ładujemy reklamę.',
+    newPassword: 'Nowe hasło',
+    confirmNewPassword: 'Potwierdź nowe hasło',
+    emailRequired: 'Email jest wymagany',
+    invalidEmail: 'Nieprawidłowy email',
+    passwordError: 'Hasło musi mieć co najmniej 8 znaków',
+    passwordRequired: 'Hasło jest wymagane',
+    passwordMatch: 'Hasła muszą się zgadzać',
+    confirmPasswordRequired: 'Potwierdzenie hasła jest wymagane',
+    usernameError: 'Nazwa użytkownika musi mieć co najmniej 3 znaki',
+    usernameRequired: 'Nazwa użytkownika jest wymagana',
   };
   

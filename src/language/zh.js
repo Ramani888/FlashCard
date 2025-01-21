@@ -1,7 +1,7 @@
 export default {
     myCards: '我的卡片',
     homeTab1: '账户',
-    homeTab2: 'AI',
+    homeTab2: '人工',
     homeTab3: '笔记',
     homeTab4: 'PDF 文件',
     homeTab5: '图片',
@@ -138,5 +138,19 @@ export default {
     watchAd: '看广告',
     earnCredits: '赚取 3 个积分',
     attachScreenShot: '附上问题截图',
+
+    privacyAndTerms: '隐私与条款',
+    adNotReady: '广告未准备好',
+    adLoadMessage: '请稍候，我们正在加载广告。',
+    newPassword: '新密码',
+    confirmNewPassword: '确认新密码',
+    emailRequired: '需要邮箱',
+    invalidEmail: '无效的邮箱',
+    passwordError: '密码必须至少8个字符',
+    passwordRequired: '需要密码',
+    passwordMatch: '密码必须匹配',
+    confirmPasswordRequired: '需要确认密码',
+    usernameError: '用户名必须至少3个字符',
+    usernameRequired: '需要用户名',
   };
   

@@ -138,5 +138,19 @@ export default {
     watchAd: 'Anzeige ansehen',
     earnCredits: 'Verdiene 3 Credits',
     attachScreenShot: 'Screenshot des Problems anhängen',
+
+    privacyAndTerms: 'DATENSCHUTZ & BEDINGUNGEN',
+    adNotReady: 'Anzeige nicht bereit',
+    adLoadMessage: 'Bitte warten Sie, während wir die Anzeige laden.',
+    newPassword: 'Neues Passwort',
+    confirmNewPassword: 'Neues Passwort bestätigen',
+    emailRequired: 'E-Mail ist erforderlich',
+    invalidEmail: 'Ungültige E-Mail',
+    passwordError: 'Das Passwort muss mindestens 8 Zeichen lang sein',
+    passwordRequired: 'Passwort ist erforderlich',
+    passwordMatch: 'Passwörter müssen übereinstimmen',
+    confirmPasswordRequired: 'Passwortbestätigung ist erforderlich',
+    usernameError: 'Der Benutzername muss mindestens 3 Zeichen lang sein',
+    usernameRequired: 'Benutzername ist erforderlich',
   };
   

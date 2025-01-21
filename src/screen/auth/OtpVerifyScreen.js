@@ -216,7 +216,7 @@ const OtpVerifyScreen = () => {
     if (isValid && otp.length === 4) {
       password ? forgotPasswordVerifyOtp() : verifyOtp();
     } else {
-      showMessageonTheScreen('Invalid OTP, please check your input.');
+      showMessageonTheScreen(strings.invalidOtpMessage);
     }
   };
 
@@ -282,7 +282,7 @@ const OtpVerifyScreen = () => {
         )}
 
         <CustomeButton
-          title={'VERIFY'}
+          title={strings.verify}
           buttonWidth={'90%'}
           buttonHeight={verticalScale(45)}
           buttonColor={Color.theme1}

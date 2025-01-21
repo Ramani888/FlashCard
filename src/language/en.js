@@ -141,5 +141,19 @@ export default {
     contactNotfound: 'Contact not found',
     watchAd: 'Watch Ad',
     earnCredits: 'Earn 3 Credits',
-    attachScreenShot: 'Attach screenshot of issue'
+    attachScreenShot: 'Attach screenshot of issue',
+
+    privacyAndTerms: 'PRIVACY & TERMS',
+    adNotReady: 'Ad Not Ready',
+    adLoadMessage: 'Please wait while we load the ad.',
+    newPassword: 'New Password',
+    confirmNewPassword: 'Confirm New Password',
+    emailRequired: 'Email is required',
+    invalidEmail: 'Invalid email',
+    passwordError: 'Password must be at least 8 characters',
+    passwordRequired: 'Password is required',
+    passwordMatch: 'Passwords must match',
+    confirmPasswordRequired: 'Confirm Password is required',
+    usernameError: 'Username must be at least 3 characters',
+    usernameRequired: 'Username is required'
 };
