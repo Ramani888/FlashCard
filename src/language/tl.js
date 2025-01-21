@@ -152,4 +152,16 @@ export default {
     confirmPasswordRequired: 'Kinakailangan ang Kumpirmasyon ng Password',
     usernameError: 'Ang username ay dapat hindi bababa sa 3 na character',
     usernameRequired: 'Kinakailangan ang username',
+
+    english: 'Ingles',
+    espanol: 'Espanyol',
+    postogues: 'Portuges',
+    francais: 'Pranses',
+    italiano: 'Italyano',
+    german: 'Aleman',
+    polish: 'Polako',
+    mandarin: 'Mandarin',
+    swahili: 'Swahili',
+    tagalog: 'Tagalog',
+    hindi: 'Hindi',
 };

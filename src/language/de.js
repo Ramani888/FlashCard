@@ -152,5 +152,17 @@ export default {
     confirmPasswordRequired: 'Passwortbestätigung ist erforderlich',
     usernameError: 'Der Benutzername muss mindestens 3 Zeichen lang sein',
     usernameRequired: 'Benutzername ist erforderlich',
+
+    english: 'Englisch',
+    espanol: 'Spanisch',
+    postogues: 'Portugiesisch',
+    francais: 'Französisch',
+    italiano: 'Italienisch',
+    german: 'Deutsch',
+    polish: 'Polnisch',
+    mandarin: 'Mandarin',
+    swahili: 'Swahili',
+    tagalog: 'Tagalog',
+    hindi: 'Hindi',
   };
   

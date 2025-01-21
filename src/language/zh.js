@@ -152,5 +152,17 @@ export default {
     confirmPasswordRequired: '需要确认密码',
     usernameError: '用户名必须至少3个字符',
     usernameRequired: '需要用户名',
+
+    english: '英语',
+    espanol: '西班牙语',
+    postogues: '葡萄牙语',
+    francais: '法语',
+    italiano: '意大利语',
+    german: '德语',
+    polish: '波兰语',
+    mandarin: '普通话',
+    swahili: '斯瓦希里语',
+    tagalog: '他加禄语',
+    hindi: '印地语',
   };
   

@@ -152,5 +152,17 @@ export default {
     confirmPasswordRequired: 'Uthibitisho wa nenosiri unahitajika',
     usernameError: 'Jina la mtumiaji lazima liwe na angalau herufi 3',
     usernameRequired: 'Jina la mtumiaji linahitajika',
+
+    english: 'Kiingereza',
+    espanol: 'Kihispania',
+    postogues: 'Kireno',
+    francais: 'Kifaransa',
+    italiano: 'Kiitaliano',
+    german: 'Kijerumani',
+    polish: 'Kipolandi',
+    mandarin: 'Kichina',
+    swahili: 'Kiswahili',
+    tagalog: 'Kitagalog',
+    hindi: 'Kihindi',
   };
   

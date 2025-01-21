@@ -155,5 +155,17 @@ export default {
     passwordMatch: 'Passwords must match',
     confirmPasswordRequired: 'Confirm Password is required',
     usernameError: 'Username must be at least 3 characters',
-    usernameRequired: 'Username is required'
+    usernameRequired: 'Username is required',
+
+    english: 'English',
+    espanol: 'Espanol',
+    postogues: 'Postogues',
+    francais: 'Francais',
+    italiano: 'Italiano',
+    german: 'German',
+    polish: 'Polish',
+    mandarin: 'Mandarin',
+    swahili: 'Swahili',
+    tagalog: 'Tagalog',
+    hindi: 'Hindi',
 };

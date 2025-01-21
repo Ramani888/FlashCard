@@ -152,4 +152,16 @@ export default {
     confirmPasswordRequired: 'Se requiere confirmar la contraseña',
     usernameError: 'El nombre de usuario debe tener al menos 3 caracteres',
     usernameRequired: 'Se requiere nombre de usuario',
+
+    english: 'Inglés',
+    espanol: 'Español',
+    postogues: 'Portugués',
+    francais: 'Francés',
+    italiano: 'Italiano',
+    german: 'Alemán',
+    polish: 'Polaco',
+    mandarin: 'Mandarín',
+    swahili: 'Swahili',
+    tagalog: 'Tagalog',
+    hindi: 'Hindi',
 };

@@ -123,6 +123,25 @@ const SignUpScreen = () => {
         setLanguageModal(false);
     };
 
+    
+    const getLanguageString = () => {
+        console.log('selectedLanguage?.name', selectedLanguage?.name)
+        switch (selectedLanguage?.name) {
+            case 'English': return 'English';
+            case 'Espanol': return 'Español';
+            case 'Portugués': return 'Português';
+            case 'Francês': return 'Français';
+            case 'Italien': return 'Italiano';
+            case 'Tedesco': return 'Deutsch';
+            case 'Polnisch': return 'Polski';
+            case 'Mandaryński': return '中文 (Mandarin)';
+            case 'Kiswahili': return 'Kiswahili';
+            case 'Tagalog': return 'Tagalog';
+            case 'Hindi': return 'हिंदी';
+            default: return 'English';
+        }
+    };
+
     return (
         <ScrollView
             contentContainerStyle={[
@@ -162,7 +181,7 @@ const SignUpScreen = () => {
                             style={styles.languageButton}
                             onPress={openModal}>
                             <Image source={selectedLanguage?.flag} style={styles.flagImage} />
-                            <Text style={styles.language}>{selectedLanguage?.name}</Text>
+                            <Text style={styles.language}>{getLanguageString()}</Text>
                             {languageModal ? (
                                 <AntDesign
                                     name="caretup"

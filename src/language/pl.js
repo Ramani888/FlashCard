@@ -152,5 +152,17 @@ export default {
     confirmPasswordRequired: 'Potwierdzenie hasła jest wymagane',
     usernameError: 'Nazwa użytkownika musi mieć co najmniej 3 znaki',
     usernameRequired: 'Nazwa użytkownika jest wymagana',
+
+    english: 'Angielski',
+    espanol: 'Hiszpański',
+    postogues: 'Portugalski',
+    francais: 'Francuski',
+    italiano: 'Włoski',
+    german: 'Niemiecki',
+    polish: 'Polski',
+    mandarin: 'Mandaryński',
+    swahili: 'Suahili',
+    tagalog: 'Tagalog',
+    hindi: 'Hindi',
   };
   
