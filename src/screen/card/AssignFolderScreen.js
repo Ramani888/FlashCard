@@ -103,7 +103,6 @@ const AssignFolderScreen = () => {
       const response = await apiPut(
         `${Api.mediatorUserSet}?folderId=${selectedFolderId}&setId=${setId}&userId=${global?.user?._id}`,
       );
-      console.log('response', response);
       if (response?.success) {
         navigation.goBack();
         getFolderData(true, response?.message);

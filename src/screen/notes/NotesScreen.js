@@ -105,7 +105,6 @@ const NotesScreen = () => {
       note: noteDesc,
       isHighlight: isColorView ? isColorView : colorView,
     };
-    console.log('rawData', rawData);
     try {
       setVisible(true);
       const response = await apiPut(Api.notes, '', JSON.stringify(rawData));

@@ -137,7 +137,6 @@ const ResetPassword = () => {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={values => {
-                    console.log('values', values);
                     forgetPassword(values);
                 }}>
                 {({

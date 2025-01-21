@@ -81,7 +81,6 @@ const CreateCardScreen = () => {
       note: note,
     };
 
-    console.log('rawData', rawData);
     try {
       setVisible(true);
       const response = await apiPost(Api.card, '', JSON.stringify(rawData));

@@ -75,7 +75,6 @@ const PdfComponent = memo(({folderId}) => {
   };
 
   const createPdf = async (pdfId, pdf) => {
-    console.log('pdf', pdf);
     var formdata = new FormData();
     formdata.append('userId', global.user?._id);
     formdata.append('color', pdfColor);
@@ -116,7 +115,6 @@ const PdfComponent = memo(({folderId}) => {
     try {
       setVisible(true);
       const response = await apiDelete(`${Api.pdf}?_id=${pdfId}`);
-      console.log('response', response);
       if (response?.success == true) {
         getPdf(true, response?.message);
       }

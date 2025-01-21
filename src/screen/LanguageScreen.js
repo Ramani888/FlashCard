@@ -30,7 +30,6 @@ const LanguageScreen = () => {
 
   const setInitialLanguage = async () => {
     const language = await AsyncStorage.getItem('language');
-    console.log('language', language);
     setSelectedLanguage(language);
   };
 

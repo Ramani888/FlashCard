@@ -74,7 +74,6 @@ const ContactBottomSheetContent = ({
 
   const handleSubmit = useCallback(
     (values, {resetForm}) => {
-      console.log('Form Values:', values);
       resetForm();
       closeContactBottomSheet();
     },

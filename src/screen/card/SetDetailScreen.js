@@ -117,7 +117,6 @@ const SetDetailScreen = () => {
       const response = await apiPut(
         `${Api.blurAllCard}?setId=${setId}&isBlur=${isBlur}`,
       );
-      console.log('response', response);
       if (response?.success == true) {
         getCardData(false);
       }

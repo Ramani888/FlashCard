@@ -26,7 +26,6 @@ const EmailBottomSheetsContent = ({closeEmailBottomSheet}) => {
 
   const handleSubmit = useCallback(
     (values, {resetForm}) => {
-      console.log('values', values);
       resetForm();
     },
     [closeEmailBottomSheet],

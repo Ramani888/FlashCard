@@ -101,7 +101,6 @@ const PdfFolderComponent = ({onFolderClick}) => {
     };
     closeModal();
     setVisible(true);
-    console.log('rawData', rawData);
     try {
       const response = await apiPut(Api.pdfFolder, '', JSON.stringify(rawData));
       setFolderName('');

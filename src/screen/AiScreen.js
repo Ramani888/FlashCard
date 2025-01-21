@@ -84,8 +84,6 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   };
 
   const updateCredit = async (credit, type) => {
-    console.log('credit',credit)
-    console.log('type',type)
     const rawData = {userId: global.user?._id, credit: credit, type: type};
     try {
       setVisible(true);

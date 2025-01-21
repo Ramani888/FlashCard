@@ -21,7 +21,6 @@ const UserNameBottomSheetsContent = ({closeUserNameBottomSheet}) => {
 
   const handleSubmit = useCallback(
     (values, {resetForm}) => {
-      console.log(values);
       resetForm();
       closeUserNameBottomSheet();
     },

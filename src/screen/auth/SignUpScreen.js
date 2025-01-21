@@ -48,7 +48,6 @@ const SignUpScreen = () => {
     const languageRef = useRef();
 
     const handleLanguageSaved = async (Language) => {
-        console.log('Language1212121212121212121', Language)
         await AsyncStorage.setItem('Language', JSON.stringify(Language))
         Language?.name === 'English' && strings.setLanguage('en');
         Language?.name === 'Espanol' && strings.setLanguage('es');
@@ -75,7 +74,6 @@ const SignUpScreen = () => {
     // ======================================== Api ===================================== //
 
     const signUp = async value => {
-        console.log('value', value);
         try {
             setVisible(true);
             const response = await apiPost(Api.signUp, '', JSON.stringify(value));
