@@ -132,5 +132,10 @@ export default {
     logout: 'Cerrar Sesión',
     selectUsername: 'SELECCIONAR NOMBRE DE USUARIO',
     noDataFound: 'No se encontraron datos',
-    noFolder: 'No se encontró carpeta'
+    noFolder: 'No se encontró carpeta',
+
+    contactNotfound: 'Contacto no encontrado',
+    watchAd: 'Ver anuncio',
+    earnCredits: 'Gana 3 créditos',
+    attachScreenShot: 'Adjuntar captura de pantalla del problema',
 };

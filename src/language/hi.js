@@ -134,5 +134,10 @@ export default {
   logout: 'लॉगआउट',
   selectUsername: 'उपयोगकर्ता नाम चुनें',
   noDataFound: 'कोई डेटा नहीं मिला',
-  noFolder: 'कोई फ़ोल्डर नहीं'
+  noFolder: 'कोई फ़ोल्डर नहीं',
+
+  contactNotfound: 'संपर्क नहीं मिला',
+  watchAd: 'विज्ञापन देखें',
+  earnCredits: '3 क्रेडिट अर्जित करें',
+  attachScreenShot: 'समस्या का स्क्रीनशॉट संलग्न करें',
 };

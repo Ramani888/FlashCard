@@ -25,6 +25,7 @@ import NoDataView from '../NoDataView';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import { moderateScale } from 'react-native-size-matters';
 
 const { height, width } = Dimensions.get('window');
 
@@ -177,13 +178,11 @@ const ImageFolderComponent = ({ onFolderClick }) => {
             //       />
             //     </View>
             //   </RBSheet>
+            <View style={{backgroundColor:'red'}}>
             <ActionSheet
                 ref={refRBSheet}
                 gestureEnabled={true}
-                // indicatorStyle={{
-                //     backgroundColor: colors.dark ? colors.dark3 : colors.grayScale3,
-                //     width: moderateScale(60),
-                // }}
+                indicatorStyle={styles.indicatorStyle}
                 containerStyle={[
                     styles.bottomSheetContainer,
                     { backgroundColor: colorTheme.background },
@@ -205,6 +204,7 @@ const ImageFolderComponent = ({ onFolderClick }) => {
                     />
                 </View>
             </ActionSheet>
+            </View>
         );
     }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
 
@@ -425,8 +425,6 @@ const styles = StyleSheet.create({
         shadowRadius: scale(4),
     },
     bottomSheetContainer: {
-        // flex:2,
-        alignItems: 'center',
         borderTopLeftRadius: scale(30),
         borderTopRightRadius: scale(30),
     },
@@ -435,4 +433,5 @@ const styles = StyleSheet.create({
         gap: scale(50),
         marginVertical: verticalScale(15),
     },
+    indicatorStyle:{marginTop:verticalScale(10),backgroundColor:Color.mediumGray}
 });

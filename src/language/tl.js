@@ -132,5 +132,10 @@ export default {
     logout: 'Mag-Logout',
     selectUsername: 'PUMILI NG USERNAME',
     noDataFound: 'Walang Natagpuang Data',
-    noFolder: 'Walang Natagpuang Folder'
+    noFolder: 'Walang Natagpuang Folder',
+
+    contactNotfound: 'Walang nakitang contact',
+    watchAd: 'Panoorin ang ad',
+    earnCredits: 'Kumita ng 3 credits',
+    attachScreenShot: 'I-attach ang screenshot ng isyu',
 };

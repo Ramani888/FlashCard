@@ -132,6 +132,11 @@ export default {
     logout: 'Ondoka',
     selectUsername: 'CHAGUA JINA LA MTUMIAJI',
     noDataFound: 'Hakuna Data Iliyopatikana',
-    noFolder: 'Hakuna Folda Iliyopatikana'
+    noFolder: 'Hakuna Folda Iliyopatikana',
+
+    contactNotfound: 'Mawasiliano hayapatikani',
+    watchAd: 'Tazama tangazo',
+    earnCredits: 'Pata alama 3',
+    attachScreenShot: 'Ambatisha picha ya tatizo',
   };
   

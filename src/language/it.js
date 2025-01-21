@@ -132,6 +132,11 @@ export default {
     logout: 'Esci',
     selectUsername: 'SELEZIONA NOME UTENTE',
     noDataFound: 'Nessun dato trovato',
-    noFolder: 'Nessuna cartella trovata'
+    noFolder: 'Nessuna cartella trovata',
+
+    contactNotfound: 'Contatto non trovato',
+    watchAd: 'Guarda l\'annuncio',
+    earnCredits: 'Guadagna 3 crediti',
+    attachScreenShot: 'Allegare screenshot del problema',
   };
   

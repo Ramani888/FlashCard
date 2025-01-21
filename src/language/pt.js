@@ -132,6 +132,11 @@ export default {
     logout: 'Sair',
     selectUsername: 'SELECIONAR NOME DE USUÁRIO',
     noDataFound: 'Nenhum dado encontrado',
-    noFolder: 'Nenhuma pasta encontrada'
+    noFolder: 'Nenhuma pasta encontrada',
+
+    contactNotfound: 'Contato não encontrado',
+    watchAd: 'Assistir anúncio',
+    earnCredits: 'Ganhe 3 créditos',
+    attachScreenShot: 'Anexar captura de tela do problema',
   };
   

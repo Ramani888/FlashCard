@@ -132,6 +132,11 @@ export default {
     logout: 'Abmelden',
     selectUsername: 'BENUTZERNAMEN AUSWÄHLEN',
     noDataFound: 'Keine Daten gefunden',
-    noFolder: 'Kein Ordner gefunden'
+    noFolder: 'Kein Ordner gefunden',
+
+    contactNotfound: 'Kontakt nicht gefunden',
+    watchAd: 'Anzeige ansehen',
+    earnCredits: 'Verdiene 3 Credits',
+    attachScreenShot: 'Screenshot des Problems anhängen',
   };
   

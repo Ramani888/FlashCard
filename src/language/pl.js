@@ -132,6 +132,11 @@ export default {
     logout: 'Wyloguj się',
     selectUsername: 'WYBIERZ NAZWĘ UŻYTKOWNIKA',
     noDataFound: 'Nie znaleziono danych',
-    noFolder: 'Nie znaleziono folderu'
+    noFolder: 'Nie znaleziono folderu',
+
+    contactNotfound: 'Kontakt nie znaleziono',
+    watchAd: 'Oglądaj reklamę',
+    earnCredits: 'Zarób 3 kredyty',
+    attachScreenShot: 'Załącz zrzut ekranu problemu',
   };
   

@@ -132,6 +132,11 @@ export default {
     logout: '登出',
     selectUsername: '选择用户名',
     noDataFound: '未找到数据',
-    noFolder: '未找到文件夹'
+    noFolder: '未找到文件夹',
+
+    contactNotfound: '找不到联系人',
+    watchAd: '看广告',
+    earnCredits: '赚取 3 个积分',
+    attachScreenShot: '附上问题截图',
   };
   

@@ -134,5 +134,10 @@ export default {
   logout: 'Déconnexion',
   selectUsername: 'SÉLECTIONNER UN NOM D’UTILISATEUR',
   noDataFound: 'Aucune donnée trouvée',
-   noFolder: 'Aucun dossier'
+  noFolder: 'Aucun dossier',
+
+  contactNotfound: 'Contact introuvable',
+  watchAd: 'Regarder l\'annonce',
+  earnCredits: 'Gagnez 3 crédits',
+  attachScreenShot: 'Joindre une capture d\'écran du problème',
 };
