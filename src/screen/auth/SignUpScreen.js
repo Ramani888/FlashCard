@@ -214,7 +214,6 @@ const SignUpScreen = () => {
                             errors={errors?.userName}
                             touched={touched?.userName}
                             iconLeft={true}
-                            // keyboardType={'email-address' || 'default'}
                             inputStyles={styles.inputStyles}
                             errorTextStyles={styles.errorText}
                             IconLeftComponent={

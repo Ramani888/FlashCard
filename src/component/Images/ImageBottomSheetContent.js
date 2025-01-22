@@ -99,8 +99,6 @@ export default React.memo(ImageBottomSheetContent);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: hp('29%'),
-    // backgroundColor:"red"
   },
   title: {
     fontSize: wp('5%'),

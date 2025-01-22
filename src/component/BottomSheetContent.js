@@ -201,7 +201,6 @@ const BottomSheetContent = ({
         fontColor={Color.White}
         fontFamily={Font.semiBold}
         marginTop={verticalScale(15)}
-        marginBottom={verticalScale(8)}
         onPress={handleSubmit}
       />
     </ScrollView>

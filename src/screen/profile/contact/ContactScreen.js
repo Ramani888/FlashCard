@@ -24,6 +24,7 @@ import Loader from '../../../component/Loader';
 import useTheme from '../../../component/Theme';
 import strings from '../../../language/strings';
 import NoDataView from '../../../component/NoDataView';
+import ActionSheet from 'react-native-actions-sheet';
 
 const { height, width } = Dimensions.get('window');
 
@@ -106,11 +107,11 @@ const ContactScreen = () => {
     const closeModal = useCallback(() => setModalVisible(false), []);
 
     const openContactBottomSheets = () => {
-        refContactRBSheet.current.open();
+        refContactRBSheet.current.show();
     };
 
     const closeContactBottomSheet = () => {
-        refContactRBSheet.current.close();
+        refContactRBSheet.current.hide();
     };
 
     const renderHeader = useMemo(
@@ -131,14 +132,14 @@ const ContactScreen = () => {
 
     const contactBottomSheets = useCallback(() => {
         return (
-            <RBSheet
+            <ActionSheet
                 ref={refContactRBSheet}
-                height={height * 0.4}
-                openDuration={250}
-                draggable={true}
-                customStyles={{
-                    container: [styles.bottomSheetContainer, { backgroundColor: colorTheme.background }],
-                    draggableIcon: styles.dragableIcon,
+                gestureEnabled={true}
+                indicatorStyle={styles.indicatorStyle}
+                containerStyle={{
+                    backgroundColor: colorTheme.background,
+                    borderTopLeftRadius: scale(30),
+                    borderTopRightRadius: scale(30)
                 }}>
                 <View style={styles.sheetContainer}>
                     <ContactBottomSheetContent
@@ -147,7 +148,7 @@ const ContactScreen = () => {
                         colorTheme={colorTheme}
                     />
                 </View>
-            </RBSheet>
+            </ActionSheet>
         );
     }, []);
 
@@ -261,11 +262,7 @@ const styles = StyleSheet.create({
         borderRadius: scale(10),
         padding: scale(10),
     },
-    bottomSheetContainer: {
-        alignItems: 'center',
-        borderTopLeftRadius: scale(30),
-        borderTopRightRadius: scale(30),
-    },
+    indicatorStyle: { marginTop: verticalScale(10), backgroundColor: Color.mediumGray },
     sheetContainer: {
         flexDirection: 'row',
         gap: scale(50),

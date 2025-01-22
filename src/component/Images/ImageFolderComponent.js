@@ -150,43 +150,15 @@ const ImageFolderComponent = ({ onFolderClick }) => {
 
     const BottomSheets = useCallback(() => {
         return (
-            //   <RBSheet
-            //     ref={refRBSheet}
-            //     height={verticalScale(442)}
-            //     openDuration={250}
-            //     draggable={true}
-            //     customStyles={{
-            //       container: [
-            //         styles.bottomSheetContainer,
-            //         {backgroundColor: colorTheme.background},
-            //       ],
-            //     }}>
-            //     <View style={styles.sheetContainer}>
-            //       <BottomSheetContent
-            //         closeBottomSheet={closeBottomSheet}
-            //         title={editBottomSheet ? strings.editFolder : strings.editFolder}
-            //         name={folderName}
-            //         setName={setFolderName}
-            //         status={folderStatus}
-            //         setStatus={setFolderStatus}
-            //         color={folderColor}
-            //         setColor={setFolderColor}
-            //         setColorView={setColorView}
-            //         colorView={colorView}
-            //         create={editBottomSheet ? editImageFolder : createImageFolder}
-            //         initialData={singleFolderItem ? singleFolderItem : ''}
-            //       />
-            //     </View>
-            //   </RBSheet>
-            <View style={{backgroundColor:'red'}}>
             <ActionSheet
                 ref={refRBSheet}
                 gestureEnabled={true}
                 indicatorStyle={styles.indicatorStyle}
-                containerStyle={[
-                    styles.bottomSheetContainer,
-                    { backgroundColor: colorTheme.background },
-                ]}>
+                containerStyle={{
+                    backgroundColor: colorTheme.background,
+                    borderTopLeftRadius: scale(30),
+                    borderTopRightRadius: scale(30)
+                }}>
                 <View style={styles.sheetContainer}>
                     <BottomSheetContent
                         closeBottomSheet={closeBottomSheet}
@@ -204,7 +176,6 @@ const ImageFolderComponent = ({ onFolderClick }) => {
                     />
                 </View>
             </ActionSheet>
-            </View>
         );
     }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
 
@@ -424,14 +395,10 @@ const styles = StyleSheet.create({
         shadowOpacity: scale(0.3),
         shadowRadius: scale(4),
     },
-    bottomSheetContainer: {
-        borderTopLeftRadius: scale(30),
-        borderTopRightRadius: scale(30),
-    },
     sheetContainer: {
         flexDirection: 'row',
         gap: scale(50),
         marginVertical: verticalScale(15),
     },
-    indicatorStyle:{marginTop:verticalScale(10),backgroundColor:Color.mediumGray}
+    indicatorStyle: { marginTop: verticalScale(10), backgroundColor: Color.mediumGray },
 });

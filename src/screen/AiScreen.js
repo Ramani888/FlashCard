@@ -276,8 +276,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {alignItems: 'center'},
   iconText: {
-    fontSize: scale(8),
-    color: Color.Black,
+    fontSize: scale(10),
+    color: Color.theme1,
     fontFamily: Font.medium,
     paddingTop: verticalScale(3),
   },
