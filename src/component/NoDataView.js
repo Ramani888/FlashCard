@@ -10,7 +10,7 @@ const NoDataView = ({content, noDataViewStyle, noDataTextStyle}) => {
   const colorTheme = useTheme()
   return (
     <View style={[styles.noDataView, noDataViewStyle]}>
-      <Text style={[styles.noDataText, noDataTextStyle,{color:colorTheme.textColor2}]}>
+      <Text style={[styles.noDataText, noDataTextStyle,{color:colorTheme.textColor}]}>
         {content ? content : strings.noDataFound}
       </Text>
     </View>

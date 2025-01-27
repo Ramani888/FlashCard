@@ -30,11 +30,11 @@ const TermsScreen = () => {
         <View style={[styles.section,{backgroundColor:colorTheme.listAndBoxColor}]}>
           <View style={styles.contentContainer}>
             <Text style={[styles.title,{color:colorTheme.textColor}]}>
-              Bible Flashcards & AI: Terms of Agreement & Privacy Policy
+              Bible Study Kit: Terms of Agreement & Privacy Policy
             </Text>
             <Text style={[styles.date,{color:colorTheme.textColor}]}>Last updated: October 7th, 2024</Text>
             <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              By signing up for and using Bible Flashcards & AI (the "App"), you
+              By signing up for and using Bible Study Kit (the "App"), you
               ("User") agree to the following Terms of Agreement and Privacy
               Policy. These terms outline the obligations, restrictions, and
               privacy policies associated with the use of this App. Please read
@@ -79,42 +79,14 @@ const TermsScreen = () => {
 
             <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>5. Cloud Storage and Data Loss</Text>
             <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              Your content is saved in the cloud. Bible Flashcards & AI is not
+              Your content is saved in the cloud. Bible Study Kit is not
               responsible for any lost data, whether caused by technical issues,
               user error, or external factors. It is recommended that users back
               up their important data independently.
             </Text>
 
             <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>
-              6. Pricing and Subscription Tiers
-            </Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              The pricing for subscription tiers, including any paid or free
-              versions of the App, can change at any time. Changes will be
-              communicated via email or in-app notifications.
-            </Text>
-
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>
-              7. Content Creation and Storage Limits
-            </Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              We reserve the right to pause or discontinue your content if it
-              consumes an excessive amount of storage. While we offer paid tiers
-              to mitigate these issues, unknown future demands and scalability
-              could result in changes.
-            </Text>
-
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>
-              8. Advertisements for Paid Subscribers
-            </Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              Even if you are a paid subscriber, you acknowledge and agree that
-              advertisements may still be shown, for example, when using our
-              AI-powered tools, due to unpredictable compute and storage usage.
-            </Text>
-
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>
-              9. Account Suspension or Termination
+              6. Account Suspension or Termination
             </Text>
             <Text style={[styles.text,{color:colorTheme.textColor}]}>
               We reserve the right to delete, suspend, or discontinue your
@@ -126,30 +98,23 @@ const TermsScreen = () => {
               offensive, inappropriate, or harmful content.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>10. Data Privacy and Security</Text>
+            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>7. Data Privacy and Security</Text>
             <Text style={[styles.text,{color:colorTheme.textColor}]}>
               While we strive to maintain the security of your data, we cannot
               guarantee complete protection against breaches or privacy issues.
-              Bible Flashcards & AI is not responsible for any data breaches but
+              Bible Study Kit is not responsible for any data breaches but
               will take reasonable measures to keep your information safe and
               secure.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>11. Changes to the Terms</Text>
+            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>8. Changes to the Terms</Text>
             <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              Bible Flashcards & AI reserves the right to modify these terms at
+              Bible Study Kit reserves the right to modify these terms at
               any time. Continued use of the App constitutes acceptance of the
               updated terms.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>12. Refunds</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              As soon as payment goes through when purchasing a subscription,
-              there is no refund. Simply cancel and you will not be charged the
-              following month.
-            </Text>
-
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>13. Governing Law</Text>
+            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>9. Governing Law</Text>
             <Text style={[styles.text,{color:colorTheme.textColor}]}>
               These Terms of Agreement and Privacy Policy will be governed by
               and construed in accordance with the laws of where the app is

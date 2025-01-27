@@ -26,6 +26,7 @@ const OtherUserCardScreen = () => {
   const [singleCardItem, setSinglrCardItem] = useState({});
   const plusButtonRef = useRef(null);
   const {item} = route.params;
+  console.log('item12',item)
 
   useEffect(() => {
     getCardData();
@@ -47,6 +48,7 @@ const OtherUserCardScreen = () => {
       const response = await apiGet(
         `${Api.card}?setId=${item?._id}&folderId=${item?.folderId}&userId=${item?.userId}`,
       );
+      // console.log('response',response)
       setCardData(response);
     } catch (error) {
       console.log('error', error);

@@ -102,7 +102,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   };
 
   const copyToClipboard = () => {
-    Clipboard.setString(answer);
+    Clipboard.setString(JSON.stringify(answer));
     showMessageonTheScreen(strings.copied);
   };
 
@@ -170,11 +170,14 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
                 }
                 style={[
                   styles.textInput,
-                  {height: answer ? inputHeight : verticalScale(190)},
+                  {
+                    height: answer ? inputHeight : verticalScale(190),
+                    color: colorTheme.textColor,
+                  },
                 ]}
               />
-              <ScrollView style={styles.answerView}>
-                <Text style={styles.answer}>{answer}</Text>
+              <ScrollView style={styles.answerView} showsVerticalScrollIndicator={false}>
+                <Text style={[styles.answer,{color:colorTheme.textColor}]}>{answer}</Text>
               </ScrollView>
               <View style={styles.iconRow}>
                 <Pressable onPress={() => answer && copyToClipboard()}>
