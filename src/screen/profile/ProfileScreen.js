@@ -89,6 +89,7 @@ const ProfileScreen = () => {
     const isFocused = useIsFocused();
     const navigation = useNavigation();
     const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [username, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -380,9 +381,10 @@ const ProfileScreen = () => {
         <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
             <StatusBar translucent backgroundColor={Color.transparent} />
             <Loader visible={visible} color={Color.White} />
+            <Loader visible={loading} color={Color.White} />
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                 {renderHeader()}
-                <VideoAds ref={adRef} updateCredit={updateCredit} />
+                <VideoAds ref={adRef} updateCredit={updateCredit} setLoading={setLoading}/>
 
                 <View style={styles.bodyContainer}>
                     <View>

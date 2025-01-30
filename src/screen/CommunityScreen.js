@@ -579,18 +579,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: verticalScale(10),
     padding: scale(5),
-    borderRadius: scale(10),
+    borderRadius: scale(15),
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: scale(5),
+    height:verticalScale(56)
   },
   profileImage: {
     width: scale(40),
     height: scale(40),
     borderRadius: scale(20),
-    marginRight: scale(20),
+    marginHorizontal: scale(10),
+    marginRight:scale(15)
   },
   itemTitle: {
     fontSize: scale(17),

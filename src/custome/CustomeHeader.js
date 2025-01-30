@@ -276,6 +276,6 @@ const styles = StyleSheet.create({
         height: scale(48),
         marginTop: verticalScale(-3),
     },
-    languageFlag: { position: 'absolute', right: scale(50), bottom: verticalScale(7) },
-    flagImage: { width: scale(35), height: scale(35) }
+    languageFlag: { position: 'absolute', right: scale(50), bottom: verticalScale(12) },
+    flagImage: { width: scale(36), height: scale(24) }
 });

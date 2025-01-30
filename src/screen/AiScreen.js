@@ -36,6 +36,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const [inputHeight, setInputHeight] = useState(verticalScale(190));
   const [userCredit, setUserCredit] = useState('');
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const refAiRBSheet = useRef();
   const colorTheme = useTheme();
   const adRef = useRef();
@@ -118,6 +119,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
         headerBackgroundColor={Color.transparent}
         goBack
         showVideoAd={handleShowAd}
+        setLoading={setLoading}
         title={strings.homeTab2}
         iconColor={Color.White}
         containerStyle={styles.headerStyle}
@@ -133,6 +135,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
+        <Loader visible={loading}/>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
         keyboardShouldPersistTaps="handled">
@@ -141,7 +144,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
           style={styles.container}>
           <Loader visible={visible} />
           {renderHeader()}
-          <VideoAds ref={adRef} updateCredit={updateCredit} />
+          <VideoAds ref={adRef} updateCredit={updateCredit} setLoading={setLoading}/>
           <View>
             <View
               style={[
