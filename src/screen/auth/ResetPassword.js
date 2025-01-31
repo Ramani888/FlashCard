@@ -122,7 +122,7 @@ const ResetPassword = () => {
         <ScrollView
             contentContainerStyle={[
                 styles.container,
-                { backgroundColor: themeColor.background },
+                { backgroundColor: themeColor.background1 },
             ]}
             showsVerticalScrollIndicator={false}>
             <Loader visible={visible} />

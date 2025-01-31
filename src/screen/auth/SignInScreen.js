@@ -90,10 +90,6 @@ const SignInScreen = () => {
         navigation.navigate(ScreenName.signUp);
     };
 
-    const openLink = url => {
-        Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
-    };
-
     const validationSchema = Yup.object().shape({
         email: Yup.string().email(strings.invalidEmail).required(strings.emailRequired),
         password: Yup.string()
@@ -102,7 +98,7 @@ const SignInScreen = () => {
     });
 
     return (
-        <View style={[styles.container, { backgroundColor: themeColor.background }]}>
+        <View style={[styles.container, { backgroundColor: themeColor.background1 }]}>
             <Loader visible={visible} />
             <Text style={[styles.title, { color: themeColor.textColor }]}>
                 {strings.signIn}
@@ -212,7 +208,7 @@ const SignInScreen = () => {
                             title={strings.signUp}
                             buttonWidth={'100%'}
                             buttonHeight={verticalScale(45)}
-                            buttonColor={Color.WhiteDefault}
+                            buttonColor={'#9F9F9F33'}
                             fontSize={moderateScale(15)}
                             fontFamily={Font.semiBold}
                             fontColor={Color.theme1}

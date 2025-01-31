@@ -127,7 +127,7 @@ const SignUpScreen = () => {
         <ScrollView
             contentContainerStyle={[
                 styles.container,
-                { backgroundColor: colorTheme.background },
+                { backgroundColor: colorTheme.background1 },
             ]}
             showsVerticalScrollIndicator={false}>
             <Loader visible={visible} />
@@ -314,7 +314,7 @@ const SignUpScreen = () => {
                             title={strings.signIn}
                             buttonWidth={'100%'}
                             buttonHeight={verticalScale(45)}
-                            buttonColor={Color.WhiteDefault}
+                            buttonColor={'#9F9F9F33'}
                             fontSize={scale(15)}
                             fontFamily={Font.semiBold}
                             fontColor={Color.theme1}

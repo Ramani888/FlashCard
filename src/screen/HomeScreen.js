@@ -62,6 +62,11 @@ const HomeScreen = () => {
         const getInitialTheme = async () => {
             const initialTheme = await AsyncStorage.getItem('theme');
             setTheme(initialTheme);
+            if (!initialTheme || initialTheme === 'null') {
+                setTheme('Light');
+            } else {
+                setTheme(initialTheme);
+            }
         };
 
         getInitialTheme();
@@ -225,19 +230,20 @@ const HomeScreen = () => {
                         }}>
                         <Switch
                             value={theme === 'Dark'}
-                            onValueChange={() => {
-                                theme == 'Light' && setTheme('Dark');
-                                theme == 'Dark' && setTheme('Light');
-                            }}
+                            onValueChange={() => setTheme(prevTheme => (prevTheme === 'Light' ? 'Dark' : 'Light'))}
                         />
                     </View>
                     <Text style={styles.headerText}>{strings.myCards}</Text>
                     <Pressable
                         onPress={() => navigation.navigate(ScreenName.setAndFolder)}>
-                        <Image
-                            source={require('../Assets/Img/card.png')}
-                            style={styles.cardImage}
-                        />
+                        {theme == 'Light' ?
+                            <Image
+                                source={require('../Assets/Img/card.png')}
+                                style={styles.cardImage}
+                            /> : <Image
+                                source={require('../Assets/Img/darkCard.png')}
+                                style={styles.cardImage}
+                            />}
                     </Pressable>
                 </LinearGradient>
                 {tabView()}

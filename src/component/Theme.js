@@ -12,7 +12,11 @@ const useTheme = () => {
     useEffect(() => {
         const fetchTheme = async () => {
             const storedTheme = await AsyncStorage.getItem('theme');
-            setInitialTheme(storedTheme);
+            if (!storedTheme || storedTheme === 'null') {
+                setInitialTheme('Light');
+            } else {
+                setInitialTheme(storedTheme);
+            }
         };
         if (isFocused) fetchTheme();
     }, [isFocused]);

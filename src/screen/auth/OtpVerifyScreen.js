@@ -297,7 +297,7 @@ const OtpVerifyScreen = () => {
         );
     };
     return (
-        <View style={{ flex: 1, backgroundColor: colorTheme.background }}>
+        <View style={{ flex: 1, backgroundColor: colorTheme.background1 }}>
             <Loader visible={visible} />
             {renderBody()}
         </View>
