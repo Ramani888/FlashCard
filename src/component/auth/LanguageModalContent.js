@@ -89,7 +89,7 @@ const LanguageModalContent = ({
                 <Image source={item.flag} style={styles.flag} />
                 <Text style={[styles.languageText, { color: colorTheme.textColor }]}>{item.name}</Text>
 
-                {selectedLanguage?.name === item.name ? (
+                {selectedLanguage?.id === item.id ? (
                     <AntDesign name="checkcircle" size={21.5} color={Color.Green} />
                 ) : (
                     <View style={styles.radioButton} />
@@ -97,6 +97,9 @@ const LanguageModalContent = ({
             </TouchableOpacity>
         );
     };
+
+    console.log('selectedLanguage', selectedLanguage)
+    console.log('languages', languages)
 
     return (
         <View style={[styles.container, { backgroundColor: colorTheme.modelBackgroundView }]}>
