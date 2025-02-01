@@ -384,7 +384,7 @@ const ProfileScreen = () => {
             <Loader visible={loading} color={Color.White} />
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                 {renderHeader()}
-                <VideoAds ref={adRef} updateCredit={updateCredit} setLoading={setLoading}/>
+                <VideoAds ref={adRef} updateCredit={updateCredit} setLoading={setLoading} loading={loading}/>
 
                 <View style={styles.bodyContainer}>
                     <View>

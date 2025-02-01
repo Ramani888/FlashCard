@@ -17,10 +17,9 @@ const adUnitId = __DEV__
   ? TestIds.REWARDED
   : 'ca-app-pub-9823475062473479/5214348018';
 
-const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
+const VideoAds = forwardRef(({updateCredit, setLoading, loading}, ref) => {
   const [rewardedAd, setRewardedAd] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  // const [loading, setLoading] = useState(true);
   const [reward, setReward] = useState('');
 
   useEffect(() => {
@@ -30,6 +29,7 @@ const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
   }, [reward]);
 
   useEffect(() => {
+    alert('good') 
     const ad = RewardedAd.createForAdRequest(adUnitId, {
       requestNonPersonalizedAdsOnly: true,
     });
@@ -64,28 +64,28 @@ const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
       unsubscribeEarned();
       unsubscribeError();
     };
-  }, []);
+  }, [loading]);
 
   const showAd = () => {
-    setLoading(true); // Show loader when function is called
+    setLoading(true);
 
     if (rewardedAd && loaded) {
-        rewardedAd.show();
-        setLoading(false); // Hide loader after showing the ad
-        setLoaded(false);  // Reset loaded state
-        rewardedAd.load(); // Load next ad
+      rewardedAd.show();
+      setLoading(false);
+      setLoaded(false);
+      rewardedAd.load();
     } else {
-        const checkAdLoaded = setInterval(() => {
-            if (loaded) {
-                clearInterval(checkAdLoaded); // Stop checking once ad is loaded
-                rewardedAd.show();
-                setLoading(false); // Hide loader when ad starts
-                setLoaded(false);  // Reset loaded state
-                rewardedAd.load(); // Load next ad
-            }
-        }, 500); // Check every 500ms if the ad is ready
+      const checkAdLoaded = setInterval(() => {
+        if (loaded) {
+          clearInterval(checkAdLoaded);
+          rewardedAd.show();
+          setLoading(false);
+          setLoaded(false);
+          rewardedAd.load();
+        }
+      }, 1000);
     }
-};
+  };
 
   useImperativeHandle(ref, () => ({
     showAd,

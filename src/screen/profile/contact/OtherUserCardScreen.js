@@ -26,7 +26,6 @@ const OtherUserCardScreen = () => {
   const [singleCardItem, setSinglrCardItem] = useState({});
   const plusButtonRef = useRef(null);
   const {item} = route.params;
-  console.log('item12',item)
 
   useEffect(() => {
     getCardData();
@@ -48,7 +47,6 @@ const OtherUserCardScreen = () => {
       const response = await apiGet(
         `${Api.card}?setId=${item?._id}&folderId=${item?.folderId}&userId=${item?.userId}`,
       );
-      // console.log('response',response)
       setCardData(response);
     } catch (error) {
       console.log('error', error);
@@ -77,7 +75,7 @@ const OtherUserCardScreen = () => {
         headerBackgroundColor={Color.transparent}
         title={
           <View style={styles.titleContainer}>
-            <Text style={styles.titleLine}>{item?.name}</Text>
+            <Text style={styles.titleLine}>{item?.name ? item?.name : 'CARDS'}</Text>
           </View>
         }
         titleStyle={styles.headerTitle}

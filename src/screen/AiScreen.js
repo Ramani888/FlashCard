@@ -135,7 +135,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
-        <Loader visible={loading}/>
+      <Loader visible={loading} />
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
         keyboardShouldPersistTaps="handled">
@@ -144,7 +144,12 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
           style={styles.container}>
           <Loader visible={visible} />
           {renderHeader()}
-          <VideoAds ref={adRef} updateCredit={updateCredit} setLoading={setLoading}/>
+          <VideoAds
+            ref={adRef}
+            updateCredit={updateCredit}
+            setLoading={setLoading}
+            loading={loading}
+          />
           <View>
             <View
               style={[
@@ -179,8 +184,12 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
                   },
                 ]}
               />
-              <ScrollView style={styles.answerView} showsVerticalScrollIndicator={false}>
-                <Text style={[styles.answer,{color:colorTheme.textColor}]}>{answer}</Text>
+              <ScrollView
+                style={styles.answerView}
+                showsVerticalScrollIndicator={false}>
+                <Text style={[styles.answer, {color: colorTheme.textColor}]}>
+                  {answer}
+                </Text>
               </ScrollView>
               <View style={styles.iconRow}>
                 <Pressable onPress={() => answer && copyToClipboard()}>
