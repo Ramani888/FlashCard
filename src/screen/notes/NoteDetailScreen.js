@@ -1,4 +1,4 @@
-import {BackHandler, Dimensions, StyleSheet, Text, View} from 'react-native';
+import {BackHandler, Dimensions, KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -76,29 +76,36 @@ const NoteDetailScreen = () => {
   };
 
   return (
-    <LinearGradient
-      colors={colorTheme.gradientTheme}
-      style={styles.headerContainer}>
-      {renderHeader()}
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS == 'ios' ? 0 : 20}
+      enabled={Platform.OS === 'ios' ? true : false}
+    >
+      <LinearGradient
+        colors={colorTheme.gradientTheme}
+        style={styles.headerContainer}>
+        {renderHeader()}
 
-      <View style={{marginHorizontal: scale(15)}}>
-        <CustomeInputField
-          placeholder={strings.addNote}
-          height={height - 100}
-          onChangeText={handleNoteDesc}
-          value={notes}
-          textArea={true}
-          placeholderTextColor={Color.Gray}
-          borderRadius={scale(10)}
-          multiline={true}
-          numberOfLines={responsiveNumberOfLines}
-          textAlignVertical="top"
-          backgroundColor={colorTheme.listAndBoxColor}
-          inputContainerStyles={styles.inputContainerStyle}
-          inputStyles={[styles.input, {color: colorTheme.textColor}]}
-        />
-      </View>
-    </LinearGradient>
+        <View style={{marginHorizontal: scale(15), flex: 1}}>
+          <CustomeInputField
+            placeholder={strings.addNote}
+            height={'99%'}
+            onChangeText={handleNoteDesc}
+            value={notes}
+            textArea={true}
+            placeholderTextColor={Color.Gray}
+            borderRadius={scale(10)}
+            multiline={true}
+            numberOfLines={responsiveNumberOfLines}
+            textAlignVertical="top"
+            backgroundColor={colorTheme.listAndBoxColor}
+            inputContainerStyles={styles.inputContainerStyle}
+            inputStyles={[styles.input, {color: colorTheme.textColor}]}
+          />
+        </View>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 };
 
