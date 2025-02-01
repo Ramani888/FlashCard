@@ -28,6 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
 import AdBanner from './ads/BannerAds';
+import ToggleSwitch from 'toggle-switch-react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -225,12 +226,16 @@ const HomeScreen = () => {
                     <View style={{ marginTop: verticalScale(0) }} />
                     <View
                         style={{
-                            marginRight: verticalScale(15),
-                            marginTop: verticalScale(50),
+                            position: 'absolute',
+                            right: moderateScale(20),
+                            top: moderateScale(50),
                         }}>
-                        <Switch
-                            value={theme === 'Dark'}
-                            onValueChange={() => setTheme(prevTheme => (prevTheme === 'Light' ? 'Dark' : 'Light'))}
+                        <ToggleSwitch
+                            isOn={theme === 'Dark'}
+                            onColor="#04041599"
+                            offColor="#FFFFFF99"
+                            size="medium"
+                            onToggle={() => setTheme(prevTheme => (prevTheme === 'Light' ? 'Dark' : 'Light'))}
                         />
                     </View>
                     <Text style={styles.headerText}>{strings.myCards}</Text>
@@ -287,6 +292,7 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flexGrow: 1,
+        position: 'relative'
     },
     headerContainer: {
         height: height * 0.415,
@@ -296,10 +302,10 @@ const styles = StyleSheet.create({
         fontFamily: Font.medium,
         color: Color.White,
         textAlign: 'center',
-        marginTop: verticalScale(5),
+        marginTop: verticalScale(75),
     },
     cardImage: {
-        width: width * 0.85,
+        width: width,
         height: verticalScale(215),
         alignSelf: 'center',
         marginTop: verticalScale(15),
