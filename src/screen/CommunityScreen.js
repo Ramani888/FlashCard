@@ -176,7 +176,7 @@ const GlobalLiveFeedScreen = () => {
         <View
             style={[
                 styles.screenContainer,
-                { backgroundColor: colorTheme.background1 },
+                { backgroundColor: colorTheme.background },
             ]}>
             <Loader visible={visible} />
             {renderBody()}
@@ -247,6 +247,12 @@ const styles = StyleSheet.create({
         paddingTop: verticalScale(10),
     },
     itemContainer: {
+        borderTopWidth: 1,
+        borderRightWidth: 1,
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderStyle: 'solid',
+        borderColor: '#ECECEC',
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: verticalScale(10),
@@ -311,10 +317,16 @@ const styles = StyleSheet.create({
         height: scale(20)
     },
     cardBody: {
+        borderTopWidth: 0.75,
+        borderRightWidth: 1.5,
+        borderBottomWidth: 1.5,
+        borderLeftWidth: 1.5,
+        borderStyle: 'solid',
+        borderColor: '#ECECEC',
         padding: scale(10),
         borderBottomLeftRadius: scale(10),
         borderBottomRightRadius: scale(10),
-    },
+    },    
     cardDesc: {
         fontSize: scale(12),
         fontFamily: Font.regular,
