@@ -29,7 +29,6 @@ const VideoAds = forwardRef(({updateCredit, setLoading, loading}, ref) => {
   }, [reward]);
 
   useEffect(() => {
-    alert('good') 
     const ad = RewardedAd.createForAdRequest(adUnitId, {
       requestNonPersonalizedAdsOnly: true,
     });
