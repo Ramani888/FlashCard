@@ -1,4 +1,5 @@
 import {
+    Dimensions,
     FlatList,
     Image,
     Pressable,
@@ -22,7 +23,9 @@ import CustomeModal from '../custome/CustomeModal';
 import { ScreenName } from '../component/Screen';
 import strings from '../language/strings';
 import useTheme from '../component/Theme';
+import NoDataView from '../component/NoDataView';
 
+const {height} = Dimensions.get('window');
 const GlobalLiveFeedScreen = () => {
     const navigation = useNavigation();
     const [visible, setVisible] = useState(false);
@@ -160,13 +163,25 @@ const GlobalLiveFeedScreen = () => {
                 />
             </LinearGradient>
 
-            <FlatList
-                data={liveFeedData}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => `liveFeed-${index}`}
-                contentContainerStyle={styles.flatListContainer}
-                scrollEnabled={false}
-            />
+            {liveFeedData?.length > 0 ? (
+                <FlatList
+                    data={liveFeedData}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => `liveFeed-${index}`}
+                    contentContainerStyle={styles.flatListContainer}
+                    scrollEnabled={false}
+                />
+            ) : (
+                visible == false && (
+                    <View
+                    style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <NoDataView
+                        content={strings.noDataFound}
+                        noDataTextStyle={{color: Color.White, marginTop: verticalScale(height * 0.2)}}
+                    />
+                    </View>
+                )
+            )}
         </ScrollView>
     );
 
