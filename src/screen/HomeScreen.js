@@ -298,17 +298,17 @@ const styles = StyleSheet.create({
         height: height * 0.415,
     },
     headerText: {
-        fontSize: scale(20),
+        fontSize: scale(24),
         fontFamily: Font.medium,
         color: Color.White,
         textAlign: 'center',
         marginTop: verticalScale(75),
     },
     cardImage: {
-        width: width,
-        height: verticalScale(215),
+        width: scale(350),
+        height: scale(238),
         alignSelf: 'center',
-        marginTop: verticalScale(15),
+        marginTop: verticalScale(20),
     },
     bottomSheetContainer: {
         alignItems: 'center',
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.theme1,
     },
     tabViewContainer: {
-        marginTop: verticalScale(75),
+        marginTop: verticalScale(90),
     },
     tabRow: {
         flexDirection: 'row',
