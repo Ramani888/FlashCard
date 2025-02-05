@@ -18,12 +18,12 @@ const DynamicPopupMenu = ({menuItems, onSelectOption, triggerText}) => {
       <MenuOptions
         customStyles={{
           optionsContainer: {
-            marginTop: 10, 
-            backgroundColor: '#fff', 
+            marginTop: 10,
+            backgroundColor: '#fff',
             padding: 5,
             borderRadius: 5,
-            elevation: 5, 
-            shadowColor: '#000', 
+            elevation: 5,
+            shadowColor: '#000',
             shadowOffset: {width: 0, height: 2},
             shadowOpacity: 0.3,
             shadowRadius: 3,

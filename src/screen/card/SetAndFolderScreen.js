@@ -1,11 +1,10 @@
-import React, {useState, useCallback, useRef, useEffect} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
   KeyboardAvoidingView,
-  ScrollView,
+  Platform,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import {scale, verticalScale} from '../../custome/Responsive';
@@ -18,22 +17,19 @@ import CustomeButton from '../../custome/CustomeButton';
 import Font from '../../component/Font';
 import SetComponent from '../../component/cards/SetComponent';
 import FolderComponent from '../../component/cards/FolderComponent';
-import {useRoute} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 
 const {width, height} = Dimensions.get('window');
 
 const SetAndFolderScreen = () => {
-  const route = useRoute();
   const [search, setSearch] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [tab, setTab] = useState('SET`');
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
-  const colorTheme = useTheme()
+  const colorTheme = useTheme();
 
   useEffect(() => {
     setTab('SET');
@@ -50,7 +46,7 @@ const SetAndFolderScreen = () => {
     setOpenSetSheet(true);
   };
 
-  const renderHeader = () => {
+  const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
@@ -62,54 +58,58 @@ const SetAndFolderScreen = () => {
         search={search}
       />
     );
-  };
+  }, [search]);
 
-  const buttons = () => (
-    <View style={styles.buttonContainer}>
-      <CustomeButton
-        buttonColor={tab == 'SET' ? Color.White : Color.theme1}
-        buttonWidth={scale(150)}
-        buttonHeight={scale(45)}
-        title={strings.set}
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
-        fontColor={tab == 'SET' ? Color.Black : Color.White}
-        fontFamily={Font.medium}
-        marginTop={verticalScale(15)}
-        onPress={() => {
-          setTab('SET');
-          setFolderId('');
-          setSearchValue('');
-        }}
-      />
+  const buttons = useCallback(
+    () => (
+      <View style={styles.buttonContainer}>
+        <CustomeButton
+          buttonColor={tab === 'SET' ? Color.White : Color.theme1}
+          buttonWidth={scale(150)}
+          buttonHeight={scale(45)}
+          title={strings.set}
+          borderRadius={scale(10)}
+          fontSize={scale(15)}
+          fontColor={tab === 'SET' ? Color.Black : Color.White}
+          fontFamily={Font.medium}
+          marginTop={verticalScale(15)}
+          onPress={() => {
+            setTab('SET');
+            setFolderId('');
+            setSearchValue('');
+          }}
+        />
 
-      <CustomeButton
-        buttonColor={tab == 'FOLDERS' ? Color.White : Color.theme1}
-        buttonWidth={scale(150)}
-        buttonHeight={scale(45)}
-        title={strings.folder}
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
-        fontColor={tab == 'FOLDERS' ? Color.Black : Color.White}
-        fontFamily={Font.medium}
-        marginTop={verticalScale(15)}
-        onPress={() => {
-          setTab('FOLDERS');
-          setOpenSetSheet(false);
-          setSearchValue('');
-        }}
-      />
-    </View>
+        <CustomeButton
+          buttonColor={tab === 'FOLDERS' ? Color.White : Color.theme1}
+          buttonWidth={scale(150)}
+          buttonHeight={scale(45)}
+          title={strings.folder}
+          borderRadius={scale(10)}
+          fontSize={scale(15)}
+          fontColor={tab === 'FOLDERS' ? Color.Black : Color.White}
+          fontFamily={Font.medium}
+          marginTop={verticalScale(15)}
+          onPress={() => {
+            setTab('FOLDERS');
+            setOpenSetSheet(false);
+            setSearchValue('');
+          }}
+        />
+      </View>
+    ),
+    [tab],
   );
 
   const renderBody = useCallback(() => {
     return (
       <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS == 'ios' ? 0 : 20}
+        style={styles.bodyContainer}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         enabled={Platform.OS === 'ios' ? true : false}>
-        <View style={{flex: 1,backgroundColor: colorTheme.background1}}>
+        <View
+          style={[styles.mainView, {backgroundColor: colorTheme.background1}]}>
           <LinearGradient
             colors={colorTheme.gradientTheme}
             style={styles.headerContainer}>
@@ -151,7 +151,7 @@ const SetAndFolderScreen = () => {
               style={styles.loadingIndicator}
             />
           )}
-          {tab == 'SET' && (
+          {tab === 'SET' && (
             <SetComponent
               folderId={folderId}
               openSetSheet={openSetSheet}
@@ -160,7 +160,7 @@ const SetAndFolderScreen = () => {
               search={searchValue}
             />
           )}
-          {tab == 'FOLDERS' && (
+          {tab === 'FOLDERS' && (
             <FolderComponent
               onFolderClick={handleFolderClick}
               handleCreateSetClick={handleCreateSetClick}
@@ -172,7 +172,18 @@ const SetAndFolderScreen = () => {
         </View>
       </KeyboardAvoidingView>
     );
-  }, [renderHeader, search, tab, searchValue]);
+  }, [
+    renderHeader,
+    search,
+    tab,
+    searchValue,
+    buttons,
+    colorTheme.background1,
+    colorTheme.gradientTheme,
+    folderId,
+    loading,
+    openSetSheet,
+  ]);
 
   return renderBody();
 };
@@ -189,6 +200,8 @@ const styles = StyleSheet.create({
     height: verticalScale(90),
     alignItems: 'flex-end',
   },
+  bodyContainer: {flex: 1},
+  mainView: {flex: 1},
   inputContainerStyle: {
     marginTop: verticalScale(15),
     borderRadius: scale(10),

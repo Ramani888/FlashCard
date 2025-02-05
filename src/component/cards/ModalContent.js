@@ -99,7 +99,7 @@ const ModalContent = ({
             onPress={() => {
               navigation.navigate(ScreenName.asignFolder, {
                 setId: singleItem?._id,
-                screen: 'SetScreen'
+                screen: 'SetScreen',
               });
               closeModal();
             }}>

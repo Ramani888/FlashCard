@@ -36,7 +36,7 @@ const AppStack = ({user}) => {
     viewPdfScreen,
     otherUser,
     otherUserCard,
-    language
+    language,
   } = ScreenName;
   const {
     SignUpScreen,
@@ -68,7 +68,7 @@ const AppStack = ({user}) => {
     ViewPdfScreen,
     OtherUserScreen,
     OtherUserCardScreen,
-    LanguageScreen
+    LanguageScreen,
   } = ScreenPath;
 
   const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
@@ -248,7 +248,7 @@ const AppStack = ({user}) => {
         component={SubscriptionScreen}
         options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name={language}
         component={LanguageScreen}
         options={{headerShown: false}}

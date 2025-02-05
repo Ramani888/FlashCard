@@ -13,6 +13,7 @@ export default {
   moveIntoSelected: 'DÉPLACER DANS LA SÉLECTION',
   pleaseSelectFolder: 'Veuillez sélectionner un dossier',
   createSet: 'CRÉER UN ENSEMBLE',
+  selectSet: `Sélectionner l'ensemble`,
   setNotFound: 'Ensemble introuvable',
   pleaseSelectTheSet: 'Veuillez sélectionner l’ensemble',
   createCard: 'CRÉER UNE CARTE',
@@ -112,9 +113,12 @@ export default {
   qas: 'Q + R',
   general: 'GÉNÉRAL',
   searchHashTag: 'Rechercher des hashtags',
-  aboutUsParagraph1: `Bible Flashcards & IA a été créé par un chrétien né de nouveau avec une mission : équiper les croyants avec des outils puissants pour étudier la Parole de Dieu n’importe où, n’importe quand. Cette application est conçue pour aider les croyants à renforcer leur mémoire, à progresser dans l’évangélisation et à affiner leurs compétences en apologétique, en veillant à ce que vous soyez toujours prêt à partager l’Évangile dans n’importe quelle situation.`,
-  aboutUsParagraph2: `Nos outils vous permettent de comprendre rapidement les enseignements, les Écritures, l’histoire et bien plus encore, tout en construisant un trésor organisé de contenu facile à accéder et à référencer. Que vous appreniez seul ou avec d’autres, Bible Flashcards & IA vous aide à retenir ce que vous avez étudié et à être toujours prêt, en toute saison, peu importe qui vous rencontrez.`,
-  aboutUsParagraph3: `Sans barrières à l’entrée, cette application garantit que chaque croyant peut être pleinement équipé pour vivre sa foi efficacement. Les fonctionnalités clés incluent une assistance biblique alimentée par l’IA, des cartes flash personnalisables, la prise de notes, l’organisation d’images, et la possibilité de partager et copier facilement du matériel d’étude.`,
+  aboutUsParagraph1:
+    'Bible Flashcards & IA a été créé par un chrétien né de nouveau avec une mission : équiper les croyants avec des outils puissants pour étudier la Parole de Dieu n’importe où, n’importe quand. Cette application est conçue pour aider les croyants à renforcer leur mémoire, à progresser dans l’évangélisation et à affiner leurs compétences en apologétique, en veillant à ce que vous soyez toujours prêt à partager l’Évangile dans n’importe quelle situation.',
+  aboutUsParagraph2:
+    'Nos outils vous permettent de comprendre rapidement les enseignements, les Écritures, l’histoire et bien plus encore, tout en construisant un trésor organisé de contenu facile à accéder et à référencer. Que vous appreniez seul ou avec d’autres, Bible Flashcards & IA vous aide à retenir ce que vous avez étudié et à être toujours prêt, en toute saison, peu importe qui vous rencontrez.',
+  aboutUsParagraph3:
+    'Sans barrières à l’entrée, cette application garantit que chaque croyant peut être pleinement équipé pour vivre sa foi efficacement. Les fonctionnalités clés incluent une assistance biblique alimentée par l’IA, des cartes flash personnalisables, la prise de notes, l’organisation d’images, et la possibilité de partager et copier facilement du matériel d’étude.',
   uploadImages: 'TÉLÉCHARGER DES IMAGES',
   imageNotFound: 'Image introuvable',
   allImages: 'TOUTES LES IMAGES',
@@ -137,9 +141,9 @@ export default {
   noFolder: 'Aucun dossier',
 
   contactNotfound: 'Contact introuvable',
-  watchAd: 'Regarder l\'annonce',
+  watchAd: "Regarder l'annonce",
   earnCredits: 'Gagnez 3 crédits',
-  attachScreenShot: 'Joindre une capture d\'écran du problème',
+  attachScreenShot: "Joindre une capture d'écran du problème",
 
   privacyAndTerms: 'CONFIDENTIALITÉ ET CONDITIONS',
   adNotReady: 'Annonce non prête',

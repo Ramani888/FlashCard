@@ -8,7 +8,7 @@ import {ScreenName} from '../Screen';
 import {useNavigation} from '@react-navigation/native';
 import strings from '../../language/strings';
 
-const AddNoteModalContent = ({item, folderId, setId,themeColor}) => {
+const AddNoteModalContent = ({item, folderId, setId, themeColor}) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -21,7 +21,9 @@ const AddNoteModalContent = ({item, folderId, setId,themeColor}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.noneText,{color:themeColor.textColor}]}>{strings.none}</Text>
+      <Text style={[styles.noneText, {color: themeColor.textColor}]}>
+        {strings.none}
+      </Text>
       <View style={styles.divider} />
       <Pressable onPress={handlePress} style={styles.dotIconView}>
         <Entypo

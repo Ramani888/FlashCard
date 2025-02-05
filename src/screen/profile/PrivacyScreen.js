@@ -21,19 +21,25 @@ const TermsScreen = () => {
         titleStyle={[styles.headerTitleStyle, {color: colorTheme.textColor}]}
       />
     );
-  }, []);
+  }, [colorTheme.textColor]);
 
   return (
     <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
       {renderHeader()}
       <ScrollView style={styles.container}>
-        <View style={[styles.section,{backgroundColor:colorTheme.listAndBoxColor}]}>
+        <View
+          style={[
+            styles.section,
+            {backgroundColor: colorTheme.listAndBoxColor},
+          ]}>
           <View style={styles.contentContainer}>
-            <Text style={[styles.title,{color:colorTheme.textColor}]}>
+            <Text style={[styles.title, {color: colorTheme.textColor}]}>
               Bible Study Kit: Terms of Agreement & Privacy Policy
             </Text>
-            <Text style={[styles.date,{color:colorTheme.textColor}]}>Last updated: October 7th, 2024</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.date, {color: colorTheme.textColor}]}>
+              Last updated: October 7th, 2024
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               By signing up for and using Bible Study Kit (the "App"), you
               ("User") agree to the following Terms of Agreement and Privacy
               Policy. These terms outline the obligations, restrictions, and
@@ -41,25 +47,31 @@ const TermsScreen = () => {
               carefully before creating an account.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>1. User Information and Access</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              1. User Information and Access
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               By creating an account, you agree that any information you input,
               upload, or save in the App can be viewed and used by the Bible
-              Flashcards & AI team as deemed necessary. This includes, but is
-              not limited to, usage for app improvement, analytics, and
+              study kit team as deemed necessary. This includes, but is not
+              limited to, usage for app improvement, analytics, and
               troubleshooting.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>2. Public Content</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              2. Public Content
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               When toggling content to "Public Mode," you agree that such
               content can be viewed, shared, copied, or used by other users. You
               are responsible for ensuring that any public content complies with
               all terms outlined here.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>3. Email Subscription</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              3. Email Subscription
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               By signing up with your email, you are automatically subscribed to
               our email list. We reserve the right to email you regarding
               updates, news, roadmaps, or information about other apps and
@@ -67,8 +79,10 @@ const TermsScreen = () => {
               in the emails.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>4. Appropriate Usage</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              4. Appropriate Usage
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               The App is intended for Bible study and religious content only.
               Users agree not to upload or store content unrelated to these
               purposes, including but not limited to personal pictures,
@@ -77,18 +91,20 @@ const TermsScreen = () => {
               allowed content, then that is allowed.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>5. Cloud Storage and Data Loss</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              5. Cloud Storage and Data Loss
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               Your content is saved in the cloud. Bible Study Kit is not
               responsible for any lost data, whether caused by technical issues,
               user error, or external factors. It is recommended that users back
               up their important data independently.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
               6. Account Suspension or Termination
             </Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               We reserve the right to delete, suspend, or discontinue your
               account at any time if we feel you are misusing the App for
               purposes outside of Bible study, church, or religious content.
@@ -98,24 +114,29 @@ const TermsScreen = () => {
               offensive, inappropriate, or harmful content.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>7. Data Privacy and Security</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              7. Data Privacy and Security
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               While we strive to maintain the security of your data, we cannot
               guarantee complete protection against breaches or privacy issues.
-              Bible Study Kit is not responsible for any data breaches but
-              will take reasonable measures to keep your information safe and
-              secure.
+              Bible Study Kit is not responsible for any data breaches but will
+              take reasonable measures to keep your information safe and secure.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>8. Changes to the Terms</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
-              Bible Study Kit reserves the right to modify these terms at
-              any time. Continued use of the App constitutes acceptance of the
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              8. Changes to the Terms
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
+              Bible Study Kit reserves the right to modify these terms at any
+              time. Continued use of the App constitutes acceptance of the
               updated terms.
             </Text>
 
-            <Text style={[styles.subTitle,{color:colorTheme.textColor}]}>9. Governing Law</Text>
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+              9. Governing Law
+            </Text>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               These Terms of Agreement and Privacy Policy will be governed by
               and construed in accordance with the laws of where the app is
               registered under. Any disputes arising from the use of this App
@@ -123,7 +144,7 @@ const TermsScreen = () => {
               registered under.
             </Text>
 
-            <Text style={[styles.text,{color:colorTheme.textColor}]}>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               By creating an account and using the App, you acknowledge that you
               have read, understood, and agree to abide by these Terms of
               Agreement and Privacy Policy.

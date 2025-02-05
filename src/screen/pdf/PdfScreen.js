@@ -82,7 +82,11 @@ const PdfScreen = () => {
     );
   };
 
-  return <View style={{flex: 1,backgroundColor:colorTheme.background1}}>{renderBody()}</View>;
+  return (
+    <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
+      {renderBody()}
+    </View>
+  );
 };
 
 export default React.memo(PdfScreen);

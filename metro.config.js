@@ -1,4 +1,4 @@
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
 /**
  * Metro configuration
@@ -9,7 +9,7 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const customConfig = {
   maxWorkers: 8,
   resolver: {
-    sourceExts: ['jsx', 'js', 'ts', 'tsx','json'], // Ensure extensions are correct
+    sourceExts: ['jsx', 'js', 'ts', 'tsx', 'json'], // Ensure extensions are correct
   },
 };
 

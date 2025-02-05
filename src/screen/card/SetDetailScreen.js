@@ -67,48 +67,54 @@ const SetDetailScreen = () => {
 
   useEffect(() => {
     getCardData(false, false);
-  }, [isFocused]);
+  }, [isFocused, getCardData]);
 
   // ====================================== Api ===================================== //
 
-  const getCardData = async (update, isBlur, deleteCard, position) => {
-    try {
-      if (!update && !deleteCard) {
-        setVisible(true);
+  const getCardData = useCallback(
+    async (update, isBlur, deleteCard, position) => {
+      try {
+        if (!update && !deleteCard) {
+          setVisible(true);
+        }
+        const response = await apiGet(
+          `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${global.user?._id}`,
+        );
+        setCardData(response);
+      } catch (error) {
+        console.log('error', error);
+      } finally {
+        setVisible(false);
       }
-      const response = await apiGet(
-        `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${global.user?._id}`,
-      );
-      setCardData(response);
-    } catch (error) {
-      console.log('error', error);
-    } finally {
-      setVisible(false);
-    }
-  };
+    },
+    [folderId, setId],
+  );
 
-  const updateCard = async (cardId, top, bottom, note, isBlur, position) => {
-    !position && setVisible(true);
-    const rawData = {
-      _id: cardId,
-      userId: global?.user?._id,
-      folderId: folderId,
-      setId: setId,
-      top: top,
-      bottom: bottom,
-      note: note,
-      isBlur: isBlur,
-      position: position,
-    };
-    try {
-      const response = await apiPut(Api.card, '', JSON.stringify(rawData));
-      if (response) {
-        getCardData(true, isBlur, '', true);
+  const updateCard = useCallback(
+    async (cardId, top, bottom, note, isBlur, position) => {
+      !position && setVisible(true);
+      const rawData = {
+        _id: cardId,
+        userId: global?.user?._id,
+        folderId: folderId,
+        setId: setId,
+        top: top,
+        bottom: bottom,
+        note: note,
+        isBlur: isBlur,
+        position: position,
+      };
+      try {
+        const response = await apiPut(Api.card, '', JSON.stringify(rawData));
+        if (response) {
+          getCardData(true, isBlur, '', true);
+        }
+      } catch (error) {
+        console.log('error in update card', error);
       }
-    } catch (error) {
-      console.log('error in update card', error);
-    }
-  };
+    },
+    [folderId, setId, getCardData],
+  );
 
   const blurAllCard = async isBlur => {
     setIsAllBlur(isBlur);
@@ -117,7 +123,7 @@ const SetDetailScreen = () => {
       const response = await apiPut(
         `${Api.blurAllCard}?setId=${setId}&isBlur=${isBlur}`,
       );
-      if (response?.success == true) {
+      if (response?.success === true) {
         getCardData(false);
       }
     } catch (error) {
@@ -129,7 +135,7 @@ const SetDetailScreen = () => {
     try {
       setVisible(true);
       const response = await apiDelete(`${Api.card}?_id=${cardId}`);
-      if (response?.success == true) {
+      if (response?.success === true) {
         getCardData(false, '', true);
         showMessageonTheScreen(response?.message);
       }
@@ -138,7 +144,7 @@ const SetDetailScreen = () => {
     }
   };
 
-  const updatePosition = () => {
+  const updatePosition = useCallback(() => {
     try {
       setVisible(true);
       cardData?.map((item, index) =>
@@ -154,7 +160,7 @@ const SetDetailScreen = () => {
     } catch (error) {
       console.log('error in update position functionality');
     }
-  };
+  }, [cardData, updateCard]);
 
   // ====================================== End ===================================== //
 
@@ -187,7 +193,7 @@ const SetDetailScreen = () => {
     (ref, cardHeight) => {
       if (ref.current) {
         ref.current.measureInWindow((x, y, width, height) => {
-          layout == 'single'
+          layout === 'single'
             ? setNoteModalPosition({x: x - width * 6, y: y + cardHeight * 0.35})
             : setNoteModalPosition({
                 x: x - width * 6.6,
@@ -205,7 +211,7 @@ const SetDetailScreen = () => {
   const renderHeader = useCallback(() => {
     return (
       <View style={styles.headerStyle}>
-        {changeOrder == false && (
+        {changeOrder === false && (
           <Pressable
             onPress={() => {
               navigation.goBack();
@@ -226,7 +232,7 @@ const SetDetailScreen = () => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleLine}>{setName}</Text>
         </View>
-        {changeOrder == false && (
+        {changeOrder === false && (
           <Pressable
             ref={mainThreeDotRef}
             onPress={() => openModal()}
@@ -251,24 +257,27 @@ const SetDetailScreen = () => {
         )}
       </View>
     );
-  }, [[setName, changeOrder, cardData]]);
+  }, [setName, changeOrder, navigation, openModal, updatePosition]);
 
-  const renderItem = ({item, drag, isActive}) => {
-    return (
-      <SimpleLayout
-        item={item}
-        updateCard={updateCard}
-        threeDotIconRef={threeDotIconRef}
-        setItem={setItem}
-        folderId={folderId}
-        setId={setId}
-        openCardModal={openCardModal}
-        openNoteModal={openNoteModal}
-        onDragStart={drag}
-        onDragEnd={() => {}}
-      />
-    );
-  };
+  const renderItem = useCallback(
+    ({item, drag, isActive}) => {
+      return (
+        <SimpleLayout
+          item={item}
+          updateCard={updateCard}
+          threeDotIconRef={threeDotIconRef}
+          setItem={setItem}
+          folderId={folderId}
+          setId={setId}
+          openCardModal={openCardModal}
+          openNoteModal={openNoteModal}
+          onDragStart={drag}
+          onDragEnd={() => {}}
+        />
+      );
+    },
+    [folderId, openCardModal, openNoteModal, setId, updateCard],
+  );
 
   const handleReorder = reorderedData => {
     setCardData(reorderedData);
@@ -281,12 +290,12 @@ const SetDetailScreen = () => {
   const renderBody = useMemo(
     () => (
       <View style={styles.bodyContainer}>
-        {layout == 'single' ? (
+        {layout === 'single' ? (
           <>
             {cardData?.length > 0 ? (
               changeOrder ? (
                 <DraggableFlatList
-                showsVerticalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
                   data={cardData}
                   keyExtractor={keyExtractor}
                   renderItem={renderItem}
@@ -357,7 +366,17 @@ const SetDetailScreen = () => {
         )}
       </View>
     ),
-    [cardData, layout, changeOrder],
+    [
+      cardData,
+      layout,
+      changeOrder,
+      folderId,
+      openCardModal,
+      openNoteModal,
+      renderItem,
+      setId,
+      updateCard,
+    ],
   );
 
   return (
@@ -583,81 +602,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   gridCardAction: {flexDirection: 'column', paddingVertical: verticalScale(5)},
-  dotsIcon: {
-    backgroundColor: Color.iconBackground,
-    borderRadius: scale(5),
-    padding: scale(10),
-    marginBottom: verticalScale(5),
-  },
-  check: {marginTop:verticalScale(5),marginRight:scale(12)},
+  //   dotsIcon: {
+  //     backgroundColor: Color.iconBackground,
+  //     borderRadius: scale(5),
+  //     padding: scale(10),
+  //     marginBottom: verticalScale(5),
+  //   },
+  check: {marginTop: verticalScale(5), marginRight: scale(12)},
 });
-
-{
-  /* <View
-  style={{
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 100,
-  }}>
-  <Menu>
-    <MenuTrigger>
-      <Text style={styles.triggerText}>Open Menu</Text>
-    </MenuTrigger>
-
-    <MenuOptions
-      customStyles={{
-        optionsContainer: {
-          marginTop: 25, // Add spacing below the trigger
-          marginRight: 50,
-          alignSelf: 'center', // Align the menu to the trigger's center
-          backgroundColor: '#fff', // Optional: Background color
-          padding: 5, // Optional: Padding
-          borderRadius: 5, // Optional: Rounded corners
-          elevation: 3, // Optional: Add shadow on Android
-          shadowColor: '#000', // iOS shadow
-          shadowOffset: {width: 0, height: 2},
-          shadowOpacity: 0.2,
-          shadowRadius: 3,
-        },
-      }}>
-      <MenuOption onSelect={() => alert('Option 1 selected')} text="Option 1" />
-      <MenuOption onSelect={() => alert('Option 2 selected')}>
-        <Text style={{color: 'red'}}>Option 2</Text>
-      </MenuOption>
-      <MenuOption onSelect={() => alert('Option 3 selected')} disabled={true}>
-        <Text style={{color: 'gray'}}>Option 3 (Disabled)</Text>
-      </MenuOption>
-    </MenuOptions>
-  </Menu>
-  <Menu>
-    <MenuTrigger>
-      <Text style={styles.triggerText}>Open Menu</Text>
-    </MenuTrigger>
-
-    <MenuOptions>
-      <MenuOption onSelect={() => alert('Option 1 selected')} text="Option 1" />
-      <MenuOption onSelect={() => alert('Option 2 selected')}>
-        <Text style={{color: 'red'}}>Option 2</Text>
-      </MenuOption>
-      <MenuOption onSelect={() => alert('Option 3 selected')} disabled={true}>
-        <Text style={{color: 'gray'}}>Option 3 (Disabled)</Text>
-      </MenuOption>
-    </MenuOptions>
-  </Menu>
-  <Menu>
-    <MenuTrigger>
-      <Text style={styles.triggerText}>Open Menu</Text>
-    </MenuTrigger>
-
-    <MenuOptions>
-      <MenuOption onSelect={() => alert('Option 1 selected')} text="Option 1" />
-      <MenuOption onSelect={() => alert('Option 2 selected')}>
-        <Text style={{color: 'red'}}>Option 2</Text>
-      </MenuOption>
-      <MenuOption onSelect={() => alert('Option 3 selected')} disabled={true}>
-        <Text style={{color: 'gray'}}>Option 3 (Disabled)</Text>
-      </MenuOption>
-    </MenuOptions>
-  </Menu>
-</View>; */
-}

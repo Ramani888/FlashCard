@@ -43,7 +43,8 @@ const ColorCodePicker = ({setSelectedColor, selectedColor, colorTheme}) => {
           {backgroundColor: item},
           selectedColor === item && styles.selectedColor,
         ]}
-        onPress={() => setSelectedColor(item)}></TouchableOpacity>
+        onPress={() => setSelectedColor(item)}
+      />
     ),
     [selectedColor],
   );

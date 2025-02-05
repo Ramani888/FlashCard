@@ -42,12 +42,16 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const adRef = useRef();
 
   useEffect(() => {
-    if (question) setAnswer('');
+    if (question) {
+      setAnswer('');
+    }
   }, [question]);
 
   useEffect(() => {
     getProfileData(true);
-    if (setOpenAIBottomsheet) setOpenAIBottomsheet(refAiRBSheet);
+    if (setOpenAIBottomsheet) {
+      setOpenAIBottomsheet(refAiRBSheet);
+    }
   }, []);
 
   const getAnswer = async () => {
@@ -72,7 +76,9 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
 
   const getProfileData = async showLoader => {
     try {
-      if (showLoader) setVisible(true);
+      if (showLoader) {
+        setVisible(true);
+      }
       const response = await apiGet(
         `${Api.profile}?userId=${global.user?._id}`,
       );
@@ -89,7 +95,9 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     try {
       setVisible(true);
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
-      if (response.success) getProfileData(false);
+      if (response.success) {
+        getProfileData(false);
+      }
     } catch (error) {
       console.error('Error updating credit:', error);
     } finally {
@@ -98,13 +106,17 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   };
 
   const handleEnterPress = () => {
-    if (userCredit > 0) getAnswer();
-    else showMessageonTheScreen(strings.aiLimitMessage);
+    if (userCredit > 0) {
+      getAnswer();
+    } else {
+      showMessageonTheScreen(strings.aiLimitMessage);
+    }
   };
 
   const copyToClipboard = () => {
+    console.log('answer', answer);
     Clipboard.setString(JSON.stringify(answer));
-    showMessageonTheScreen(strings.copied);
+    showMessageonTheScreen(JSON.stringify(answer));
   };
 
   const handleShowAd = () => {

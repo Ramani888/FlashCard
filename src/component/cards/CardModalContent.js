@@ -10,24 +10,35 @@ import {ScreenName} from '../Screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 
-const PressableItem = ({icon, iconStyle, text, onPress, isLast,colorTheme}) => (
+const PressableItem = ({
+  icon,
+  iconStyle,
+  text,
+  onPress,
+  isLast,
+  colorTheme,
+}) => (
   <Pressable
     style={[styles.container, isLast && styles.lastItem]}
     onPress={onPress}>
     {icon}
-    <Text style={[styles.text,{color:colorTheme.textColor}]}>{text}</Text>
+    <Text style={[styles.text, {color: colorTheme.textColor}]}>{text}</Text>
   </Pressable>
 );
 
 const CardModalContent = ({closeModal, deleteCard, item, folderId, setId}) => {
   const navigation = useNavigation();
-  const colorTheme = useTheme()
+  const colorTheme = useTheme();
 
   return (
     <View>
       <PressableItem
         icon={
-          <MaterialIcons name="edit" size={scale(15)} color={colorTheme.textColor} />
+          <MaterialIcons
+            name="edit"
+            size={scale(15)}
+            color={colorTheme.textColor}
+          />
         }
         text={strings.edit}
         colorTheme={colorTheme}

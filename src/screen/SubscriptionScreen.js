@@ -151,7 +151,7 @@ const SubscriptionScreen = () => {
       );
       AsyncStorage.setItem('selectedSubscription', item?._id);
       setChangePlan(true);
-      cancelSubscription()
+      cancelSubscription();
     } catch (error) {
       console.log('error in edit Set api', error);
     } finally {

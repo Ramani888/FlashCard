@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Color.White,paddingHorizontal:scale(15)
+    backgroundColor: Color.White,
+    paddingHorizontal: scale(15),
   },
   title: {
     fontSize: scale(18),

@@ -248,24 +248,24 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: wp(2), 
-    borderBottomWidth: wp(0.2), 
+    paddingLeft: wp(2),
+    borderBottomWidth: wp(0.2),
     borderBottomColor: Color.mediumGray,
-    height: hp(4.5), 
+    height: hp(4.5),
   },
   lastItem: {
     borderBottomWidth: 0,
-    marginBottom: hp(-0.5), 
+    marginBottom: hp(-0.5),
   },
   text: {
-    fontSize: wp(4), 
+    fontSize: wp(4),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingLeft: wp(2.5), 
-    textTransform:'capitalize'
+    paddingLeft: wp(2.5),
+    textTransform: 'capitalize',
   },
   layoutIcon: {
-    width: wp(5), 
-    height: wp(5), 
+    width: wp(5),
+    height: wp(5),
   },
 });

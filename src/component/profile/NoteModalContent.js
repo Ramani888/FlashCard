@@ -13,7 +13,7 @@ const NoteModalContent = ({
   openBottomSheet,
   setEditBottomSheet,
   deleteData,
-  colorTheme
+  colorTheme,
 }) => {
   const renderBody = () => {
     return (
@@ -25,8 +25,14 @@ const NoteModalContent = ({
             openBottomSheet();
             closeModal();
           }}>
-          <MaterialIcons name="edit" size={scale(15)} color={colorTheme.textColor} />
-          <Text style={[styles.text,{color:colorTheme.textColor}]}>{strings.edit}</Text>
+          <MaterialIcons
+            name="edit"
+            size={scale(15)}
+            color={colorTheme.textColor}
+          />
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.edit}
+          </Text>
         </Pressable>
 
         <Pressable
@@ -43,7 +49,9 @@ const NoteModalContent = ({
             size={scale(15)}
             color={Color.Red}
           />
-          <Text style={[styles.text,{color:colorTheme.textColor}]}>{strings.delete}</Text>
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.delete}
+          </Text>
         </Pressable>
       </View>
     );

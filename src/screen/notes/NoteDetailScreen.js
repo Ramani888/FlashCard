@@ -1,5 +1,12 @@
-import {BackHandler, Dimensions, KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import {
+  BackHandler,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -20,10 +27,12 @@ const NoteDetailScreen = () => {
   const colorTheme = useTheme();
   const {noteName, note, noteId, noteColor, editNote, colorView} = route.params;
 
-  const lineHeight = 10; 
-  const paddingOffset = 80; 
+  const lineHeight = 10;
+  const paddingOffset = 80;
 
-  const responsiveNumberOfLines = Math.floor((height - paddingOffset) / lineHeight);
+  const responsiveNumberOfLines = Math.floor(
+    (height - paddingOffset) / lineHeight,
+  );
 
   useEffect(() => {
     if (note) {
@@ -48,9 +57,9 @@ const NoteDetailScreen = () => {
     );
 
     return () => backHandler.remove();
-  }, []);
+  }, [saveNote]);
 
-  const saveNote = () => {
+  const saveNote = useCallback(() => {
     editNote(
       true,
       noteId,
@@ -60,7 +69,7 @@ const NoteDetailScreen = () => {
       colorView,
     );
     navigation.goBack();
-  };
+  }, [colorView, editNote, navigation, noteColor, noteId, noteName]);
 
   const renderHeader = () => {
     return (
@@ -77,17 +86,16 @@ const NoteDetailScreen = () => {
 
   return (
     <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS == 'ios' ? 0 : 20}
-      enabled={Platform.OS === 'ios' ? true : false}
-    >
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      enabled={Platform.OS === 'ios' ? true : false}>
       <LinearGradient
         colors={colorTheme.gradientTheme}
         style={styles.headerContainer}>
         {renderHeader()}
 
-        <View style={{marginHorizontal: scale(15), flex: 1}}>
+        <View style={styles.view}>
           <CustomeInputField
             placeholder={strings.addNote}
             height={'99%'}
@@ -112,6 +120,7 @@ const NoteDetailScreen = () => {
 export default React.memo(NoteDetailScreen);
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   headerContainer: {
     flex: 1,
     backgroundColor: Color.theme1,
@@ -130,5 +139,6 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(15),
     backgroundColor: Color.White,
   },
-  input: {lineHeight: verticalScale(22),},
+  input: {lineHeight: verticalScale(22)},
+  view: {marginHorizontal: scale(15), flex: 1},
 });

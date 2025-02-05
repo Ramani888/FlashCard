@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.medium,
     textAlign: 'center',
-    textTransform:'uppercase'
+    textTransform: 'uppercase',
   },
   noteEditIcon: {
     position: 'absolute',

@@ -51,7 +51,7 @@ const ContactModalContent = ({
         </Pressable>
       </View>
     ),
-    [closeModal],
+    [closeModal, colorTheme.textColor, deleteContacts, item, navigation],
   );
 
   return <View>{renderBody()}</View>;

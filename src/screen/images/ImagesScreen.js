@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -40,13 +40,13 @@ const ImagesScreen = () => {
   const buttons = () => (
     <View style={styles.buttonContainer}>
       <CustomeButton
-        buttonColor={tab == 'IMAGES' ? Color.White : Color.theme1}
+        buttonColor={tab === 'IMAGES' ? Color.White : Color.theme1}
         buttonWidth={scale(150)}
         buttonHeight={scale(45)}
         title={strings.homeTab5}
         borderRadius={scale(10)}
         fontSize={scale(15)}
-        fontColor={tab == 'IMAGES' ? Color.Black : Color.White}
+        fontColor={tab === 'IMAGES' ? Color.Black : Color.White}
         fontFamily={Font.medium}
         marginTop={verticalScale(15)}
         textTransform={'uppercase'}
@@ -54,13 +54,13 @@ const ImagesScreen = () => {
       />
 
       <CustomeButton
-        buttonColor={tab == 'FOLDERS' ? Color.White : Color.theme1}
+        buttonColor={tab === 'FOLDERS' ? Color.White : Color.theme1}
         buttonWidth={scale(150)}
         buttonHeight={scale(45)}
         title={strings.folder}
         borderRadius={scale(10)}
         fontSize={scale(15)}
-        fontColor={tab == 'FOLDERS' ? Color.Black : Color.White}
+        fontColor={tab === 'FOLDERS' ? Color.Black : Color.White}
         fontFamily={Font.medium}
         marginTop={verticalScale(15)}
         textTransform={'uppercase'}
@@ -71,7 +71,7 @@ const ImagesScreen = () => {
 
   const renderBody = () => {
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.bodyContainer}>
         <LinearGradient
           colors={colorTheme.gradientTheme}
           style={styles.headerContainer}>
@@ -80,8 +80,10 @@ const ImagesScreen = () => {
           {buttons()}
         </LinearGradient>
 
-        {tab == 'IMAGES' && <ImageComponent folderId={folderId} showFolder={showFolder}/>}
-        {tab == 'FOLDERS' && (
+        {tab === 'IMAGES' && (
+          <ImageComponent folderId={folderId} showFolder={showFolder} />
+        )}
+        {tab === 'FOLDERS' && (
           <ImageFolderComponent onFolderClick={handleFolderClick} />
         )}
       </View>
@@ -89,7 +91,7 @@ const ImagesScreen = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
+    <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
       {renderBody()}
     </View>
   );
@@ -98,6 +100,7 @@ const ImagesScreen = () => {
 export default React.memo(ImagesScreen);
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   headerContainer: {
     backgroundColor: Color.theme1,
     paddingBottom: verticalScale(20),
@@ -112,6 +115,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     textTransform: 'uppercase',
   },
+  bodyContainer: {flex: 1},
   buttonContainer: {
     alignSelf: 'center',
     flexDirection: 'row',

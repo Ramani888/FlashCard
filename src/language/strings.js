@@ -12,15 +12,15 @@ import Tagalog_language from './tl';
 import hindi_language from './hi';
 
 export default strings = new LocalizedStrings({
-    en: english_language,
-    es: Español_language,
-    pt: Português_language,
-    fr: Français_language,
-    it: Italiano_language,
-    de: Deutsch_language,
-    pl: Polski_language,
-    zh: Mandarin_language,
-    sw: Swahili_language,
-    tl: Tagalog_language,
-    hi: hindi_language,
+  en: english_language,
+  es: Español_language,
+  pt: Português_language,
+  fr: Français_language,
+  it: Italiano_language,
+  de: Deutsch_language,
+  pl: Polski_language,
+  zh: Mandarin_language,
+  sw: Swahili_language,
+  tl: Tagalog_language,
+  hi: hindi_language,
 });

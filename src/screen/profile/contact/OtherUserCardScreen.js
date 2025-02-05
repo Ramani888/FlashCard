@@ -14,34 +14,27 @@ import NoDataView from '../../../component/NoDataView';
 import CustomeModal from '../../../custome/CustomeModal';
 import {ScreenName} from '../../../component/Screen';
 import strings from '../../../language/strings';
+import useTheme from '../../../component/Theme';
 
 const OtherUserCardScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [cardData, setCardData] = useState([]);
-  const [cardHeight, setCardHeight] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [singleCardItem, setSinglrCardItem] = useState({});
   const plusButtonRef = useRef(null);
   const {item} = route.params;
+  const colorTheme = useTheme();
 
   useEffect(() => {
     getCardData();
-  }, []);
-
-  const onCardLayout = useCallback(
-    event => {
-      const {height} = event.nativeEvent.layout;
-      setCardHeight(height);
-    },
-    [item, cardData],
-  );
+  }, [getCardData]);
 
   // ====================================== Api ===================================== //
 
-  const getCardData = async () => {
+  const getCardData = useCallback(async () => {
     try {
       setVisible(true);
       const response = await apiGet(
@@ -53,7 +46,7 @@ const OtherUserCardScreen = () => {
     } finally {
       setVisible(false);
     }
-  };
+  }, [item?._id, item?.folderId, item?.userId]);
 
   // ====================================== End ===================================== //
 
@@ -75,7 +68,9 @@ const OtherUserCardScreen = () => {
         headerBackgroundColor={Color.transparent}
         title={
           <View style={styles.titleContainer}>
-            <Text style={styles.titleLine}>{item?.name ? item?.name : 'CARDS'}</Text>
+            <Text style={styles.titleLine}>
+              {item?.name ? item?.name : 'CARDS'}
+            </Text>
           </View>
         }
         titleStyle={styles.headerTitle}
@@ -83,14 +78,17 @@ const OtherUserCardScreen = () => {
         iconStyle={styles.iconStyle}
       />
     ),
-    [],
+    [item?.name],
   );
 
   const renderCard = ({item}) => {
     return (
-      <Pressable onLayout={onCardLayout} style={styles.cardContainer}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>{item.top}</Text>
+      <Pressable style={styles.cardContainer}>
+        <View
+          style={[styles.cardHeader, {backgroundColor: colorTheme.cardHeader}]}>
+          <Text style={[styles.cardTitle, {color: colorTheme.textColor}]}>
+            {item.top}
+          </Text>
           <Pressable
             ref={plusButtonRef}
             onPress={() => {
@@ -106,8 +104,14 @@ const OtherUserCardScreen = () => {
             />
           </Pressable>
         </View>
-        <View style={styles.cardBody}>
-          <Text style={styles.cardDesc}>{item?.bottom}</Text>
+        <View
+          style={[
+            styles.cardBody,
+            {backgroundColor: colorTheme.listAndBoxColor},
+          ]}>
+          <Text style={[styles.cardDesc, {color: colorTheme.textColor}]}>
+            {item?.bottom}
+          </Text>
         </View>
       </Pressable>
     );
@@ -117,7 +121,7 @@ const OtherUserCardScreen = () => {
 
   const renderBody = () => {
     return (
-      <View style={{flex: 1, marginHorizontal: scale(15)}}>
+      <View style={styles.bodyContainer}>
         {cardData?.length > 0 ? (
           <FlatList
             data={cardData}
@@ -127,7 +131,7 @@ const OtherUserCardScreen = () => {
             renderItem={renderCard}
           />
         ) : (
-          visible == false && (
+          visible === false && (
             <NoDataView
               content={strings.cardNotFound}
               noDataViewStyle={{marginTop: verticalScale(-70)}}
@@ -140,9 +144,7 @@ const OtherUserCardScreen = () => {
   };
 
   return (
-    <LinearGradient
-      colors={[Color.gradient1, Color.gradient2, Color.gradient3]}
-      style={styles.container}>
+    <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
       <Loader visible={visible} />
       {header}
       {renderBody()}
@@ -205,6 +207,7 @@ const styles = StyleSheet.create({
   iconStyle: {
     bottom: verticalScale(30),
   },
+  bodyContainer: {flex: 1, marginHorizontal: scale(15)},
   cardContainer: {
     marginBottom: verticalScale(10),
   },

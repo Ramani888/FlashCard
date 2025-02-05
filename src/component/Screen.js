@@ -59,7 +59,7 @@ export const ScreenName = {
   subscription: 'Subscription',
   otherUser: 'OtherUser',
   otherUserCard: 'OtherUserCard',
-  language: 'Language'
+  language: 'Language',
 };
 
 export const ScreenPath = {
@@ -92,5 +92,5 @@ export const ScreenPath = {
   ViewPdfScreen,
   OtherUserScreen,
   OtherUserCardScreen,
-  LanguageScreen
+  LanguageScreen,
 };

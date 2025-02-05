@@ -13,10 +13,7 @@ import CustomeModal from '../../../custome/CustomeModal';
 import {ScreenName} from '../../../component/Screen';
 import Loader from '../../../component/Loader';
 import NoDataView from '../../../component/NoDataView';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useTheme from '../../../component/Theme';
 import strings from '../../../language/strings';
 
@@ -34,11 +31,11 @@ const OtherUserScreen = () => {
 
   useEffect(() => {
     getSetData();
-  }, []);
+  }, [getSetData]);
 
   // ==================================== Api ================================== //
 
-  const getSetData = async () => {
+  const getSetData = useCallback(async () => {
     try {
       setVisible(true);
       const response = await apiGet(
@@ -52,7 +49,7 @@ const OtherUserScreen = () => {
     } finally {
       setVisible(false);
     }
-  };
+  }, [item.contactUserId]);
 
   // ==================================== End ================================== //
 
@@ -125,7 +122,7 @@ const OtherUserScreen = () => {
 
   const renderBody = () => {
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.bodyContainer}>
         <LinearGradient
           colors={colorTheme.gradientTheme}
           style={styles.headerContainer}>
@@ -147,7 +144,7 @@ const OtherUserScreen = () => {
             style={styles.flatlist}
           />
         ) : (
-          visible == false && (
+          visible === false && (
             <NoDataView
               content={strings.setNotFound}
               noDataViewStyle={{}}
@@ -159,7 +156,7 @@ const OtherUserScreen = () => {
     );
   };
   return (
-    <View style={{flex: 1, backgroundColor: colorTheme.background}}>
+    <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
       <Loader visible={visible} />
       {renderBody()}
       <CustomeModal
@@ -203,6 +200,7 @@ const OtherUserScreen = () => {
 export default React.memo(OtherUserScreen);
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   headerContainer: {
     backgroundColor: Color.theme1,
     paddingBottom: verticalScale(20),
@@ -217,6 +215,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     textTransform: 'capitalize',
   },
+  bodyContainer: {flex: 1},
   profileImage: {
     height: scale(60),
     width: scale(60),
@@ -239,7 +238,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     elevation: scale(3),
     marginHorizontal: scale(10),
-    marginTop:verticalScale(2)
+    marginTop: verticalScale(2),
   },
   setName: {
     fontSize: scale(16),
@@ -275,8 +274,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // margin: scale(8),
-    marginVertical:verticalScale(8),
-    marginRight:scale(8),
+    marginVertical: verticalScale(8),
+    marginRight: scale(8),
     elevation: scale(5),
   },
   modal: {

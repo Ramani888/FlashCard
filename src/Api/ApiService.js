@@ -1,4 +1,4 @@
-import showMessageonTheScreen from "../component/ShowMessageOnTheScreen";
+import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
 
 const setAuthHeader = (userToken, isFormData = false) => {
   var myHeaders = new Headers();

@@ -1,16 +1,21 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { scale } from '../custome/Responsive';
+import {scale} from '../custome/Responsive';
 import Color from './Color';
 import Font from './Font';
 import useTheme from './Theme';
 import strings from '../language/strings';
 
 const NoDataView = ({content, noDataViewStyle, noDataTextStyle}) => {
-  const colorTheme = useTheme()
+  const colorTheme = useTheme();
   return (
     <View style={[styles.noDataView, noDataViewStyle]}>
-      <Text style={[styles.noDataText, noDataTextStyle,{color:colorTheme.textColor}]}>
+      <Text
+        style={[
+          styles.noDataText,
+          noDataTextStyle,
+          {color: colorTheme.textColor},
+        ]}>
         {content ? content : strings.noDataFound}
       </Text>
     </View>

@@ -61,9 +61,7 @@ const ImageBottomSheetContent = ({
       </Pressable> */}
       <Text style={[styles.title, {color: colorTheme.textColor}]}>{title}</Text>
       <View style={styles.separator} />
-      <Pressable
-        onPress={handleSelectFromGallery}
-        style={styles.imagePress}>
+      <Pressable onPress={handleSelectFromGallery} style={styles.imagePress}>
         <Image
           source={require('../../Assets/Img/imageFram.png')}
           style={[
@@ -76,7 +74,9 @@ const ImageBottomSheetContent = ({
         />
       </Pressable>
       {imageFile?.name && (
-        <Text style={[styles.imageName,{color:colorTheme.textColor}]}>{imageFile?.name}</Text>
+        <Text style={[styles.imageName, {color: colorTheme.textColor}]}>
+          {imageFile?.name}
+        </Text>
       )}
       <CustomeButton
         buttonColor={Color.theme1}
@@ -135,5 +135,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: hp('1%'),
   },
-  imagePress:{ width: wp('20%'), alignSelf: 'center'}
+  imagePress: {width: wp('20%'), alignSelf: 'center'},
 });

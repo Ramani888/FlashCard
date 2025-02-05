@@ -76,11 +76,7 @@
 //   });
 // };
 
-
-
-// =====> use of this function 
-
-
+// =====> use of this function
 
 // // 1. Create a New User
 // await createRecord('users', { name: 'John Doe', email: 'john@example.com' });
@@ -136,6 +132,3 @@
 //       });
 //     }
 //   );
-  
-
-

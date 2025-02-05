@@ -9,7 +9,7 @@ import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import mobileAds from 'react-native-google-mobile-ads';
 import AppNav from './src/navigation/AppNav';
 import {MenuProvider} from 'react-native-popup-menu';
-import { withIAPContext } from 'react-native-iap';
+import {withIAPContext} from 'react-native-iap';
 
 const App = gestureHandlerRootHOC(() => {
   useEffect(() => {
@@ -18,10 +18,10 @@ const App = gestureHandlerRootHOC(() => {
     }, 1500);
 
     mobileAds()
-    .initialize()
-    .then(() => {
-      console.log('AdMob Initialized');
-    });
+      .initialize()
+      .then(() => {
+        console.log('AdMob Initialized');
+      });
   });
 
   return (

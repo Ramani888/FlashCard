@@ -14,7 +14,7 @@ const ProfileModalContent = ({
   openEmailBottomSheets,
   updateProfilePic,
   handleLogout,
-  colorTheme
+  colorTheme,
 }) => {
   const pickImage = async () => {
     try {
@@ -56,8 +56,14 @@ const ProfileModalContent = ({
             pickImage();
             closeModal();
           }}>
-          <FontAwesome name="photo" size={scale(15)} color={colorTheme.textColor} />
-          <Text style={[styles.text,{color:colorTheme.textColor}]}>{strings.picture}</Text>
+          <FontAwesome
+            name="photo"
+            size={scale(15)}
+            color={colorTheme.textColor}
+          />
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.picture}
+          </Text>
         </Pressable>
 
         <Pressable
@@ -74,7 +80,9 @@ const ProfileModalContent = ({
             size={scale(16)}
             color={Color.Red}
           />
-          <Text style={[styles.text, {color: Color.Red}]}>{strings.logout}</Text>
+          <Text style={[styles.text, {color: Color.Red}]}>
+            {strings.logout}
+          </Text>
         </Pressable>
       </View>
     );

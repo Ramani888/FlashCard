@@ -98,7 +98,7 @@ const CustomeButton = ({
             color: fontColor,
             fontFamily: fontFamily,
             fontWeight: fontWeight,
-            textTransform: textTransform
+            textTransform: textTransform,
           },
         ]}>
         {title}

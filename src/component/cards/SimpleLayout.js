@@ -8,7 +8,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {ScreenName} from '../Screen';
 import {useNavigation} from '@react-navigation/native';
 import useTheme from '../Theme';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import strings from '../../language/strings';
 
 const SimpleLayout = ({
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.medium,
     textAlign: 'center',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
   noteEditIcon: {
     position: 'absolute',

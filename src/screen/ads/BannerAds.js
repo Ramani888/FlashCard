@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { BannerAd, BannerAdSize, TestIds, MobileAds } from 'react-native-google-mobile-ads';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Text} from 'react-native';
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+  MobileAds,
+} from 'react-native-google-mobile-ads';
 
 const AdBanner = () => {
   const [adLoadError, setAdLoadError] = useState(false);
-  const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-9823475062473479/1036117247';
+  const adUnitId = __DEV__
+    ? TestIds.BANNER
+    : 'ca-app-pub-9823475062473479/1036117247';
 
   useEffect(() => {
     MobileAds()
@@ -21,7 +28,7 @@ const AdBanner = () => {
       console.log(`Retrying ad load... attempts left: ${retries}`);
       setTimeout(() => {
         setAdLoadError(false);
-      }, 5000); 
+      }, 5000);
     } else {
       console.error('All retries for ad load failed.');
     }
@@ -43,7 +50,7 @@ const AdBanner = () => {
           // onAdFailedToLoad={(error) => {
           //   console.error('Ad failed to load:', error.message);
           //   setAdLoadError(true);
-          //   retryAdLoad(); 
+          //   retryAdLoad();
           // }}
           onAdLoaded={() => {
             console.log('Ad loaded successfully.');
