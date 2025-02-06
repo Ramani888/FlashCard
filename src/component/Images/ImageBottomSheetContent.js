@@ -1,5 +1,4 @@
 import {
-  Dimensions,
   Image,
   Pressable,
   ScrollView,
@@ -12,7 +11,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../Color';
 import Font from '../Font';
 import CustomeButton from '../../custome/CustomeButton';
@@ -35,7 +33,7 @@ const ImageBottomSheetContent = ({
     } else {
       showMessageonTheScreen('Please select the image');
     }
-  }, [closeBottomSheet, imageFile]);
+  }, [closeBottomSheet, imageFile, uploadeImage]);
 
   const options = {
     mediaType: 'photo',

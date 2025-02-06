@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -8,10 +8,7 @@ import Font from '../Font';
 import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import strings from '../../language/strings';
 
 const ImageModalContent = ({
@@ -24,7 +21,6 @@ const ImageModalContent = ({
   colorTheme,
 }) => {
   const navigation = useNavigation();
-  const [value, setValue] = useState(false);
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
@@ -33,7 +29,7 @@ const ImageModalContent = ({
   const renderBody = useMemo(
     () => (
       <View>
-        {type == 'Folder' ? (
+        {type === 'Folder' ? (
           <View>
             <Pressable
               style={styles.container}
@@ -105,7 +101,17 @@ const ImageModalContent = ({
         )}
       </View>
     ),
-    [value, iconSize, userIcon, lockIcon],
+    [
+      iconSize,
+      closeModal,
+      colorTheme,
+      deleteItem,
+      imageId,
+      navigation,
+      openBottomSheet,
+      setEditBottomSheet,
+      type,
+    ],
   );
 
   return <View>{renderBody}</View>;

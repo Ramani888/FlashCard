@@ -8,10 +8,7 @@ import Font from '../Font';
 import {scale, verticalScale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import strings from '../../language/strings';
 
 const PdfModalContent = ({
@@ -24,8 +21,6 @@ const PdfModalContent = ({
   colorTheme,
 }) => {
   const navigation = useNavigation();
-  const [value, setValue] = useState(false);
-
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
   const lockIcon = useMemo(() => require('../../Assets/Img/lock.png'), []);
@@ -33,7 +28,7 @@ const PdfModalContent = ({
   const renderBody = useMemo(
     () => (
       <View>
-        {type == 'Folder' ? (
+        {type === 'Folder' ? (
           <View>
             <Pressable
               style={styles.container}
@@ -119,7 +114,17 @@ const PdfModalContent = ({
         )}
       </View>
     ),
-    [value, iconSize, userIcon, lockIcon],
+    [
+      iconSize,
+      closeModal,
+      colorTheme,
+      deleteItem,
+      navigation,
+      setEditBottomSheet,
+      pdfId,
+      openBottomSheet,
+      type,
+    ],
   );
 
   return <View>{renderBody}</View>;

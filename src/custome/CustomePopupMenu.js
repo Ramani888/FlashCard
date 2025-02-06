@@ -1,14 +1,13 @@
 import React from 'react';
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {
-  MenuProvider,
   Menu,
   MenuTrigger,
   MenuOptions,
   MenuOption,
 } from 'react-native-popup-menu';
 
-const DynamicPopupMenu = ({menuItems, onSelectOption, triggerText}) => {
+export const DynamicPopupMenu = ({menuItems, onSelectOption, triggerText}) => {
   return (
     <Menu>
       <MenuTrigger>
@@ -50,3 +49,5 @@ const DynamicPopupMenu = ({menuItems, onSelectOption, triggerText}) => {
     </Menu>
   );
 };
+
+const styles = StyleSheet.create({});

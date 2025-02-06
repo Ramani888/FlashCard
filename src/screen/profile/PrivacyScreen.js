@@ -24,7 +24,8 @@ const TermsScreen = () => {
   }, [colorTheme.textColor]);
 
   return (
-    <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
+    <View
+      style={[styles.mainContainer, {backgroundColor: colorTheme.background1}]}>
       {renderHeader()}
       <ScrollView style={styles.container}>
         <View
@@ -157,6 +158,7 @@ const TermsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {flex: 1},
   container: {
     flex: 1,
     padding: scale(10),

@@ -51,13 +51,16 @@ const ContactBottomSheetContent = ({
     [],
   );
 
-  const searchUser = useCallback(searchValue => {
-    if (searchValue.trim()) {
-      debouncedSearchUser(searchValue);
-    } else {
-      setUserData([]);
-    }
-  }, []);
+  const searchUser = useCallback(
+    searchValue => {
+      if (searchValue.trim()) {
+        debouncedSearchUser(searchValue);
+      } else {
+        setUserData([]);
+      }
+    },
+    [debouncedSearchUser],
+  );
 
   // ==================== Validation Schema ============================ //
   const validationSchema = useMemo(
@@ -117,7 +120,7 @@ const ContactBottomSheetContent = ({
         </Text>
       </View>
     ),
-    [],
+    [colorTheme],
   );
 
   return (

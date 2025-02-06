@@ -10,7 +10,7 @@ import Font from '../../Font';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import strings from '../../../language/strings';
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const UserNameBottomSheetsContent = ({closeUserNameBottomSheet}) => {
   const validationSchema = Yup.object().shape({

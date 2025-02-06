@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {Switch} from '@rneui/themed';
 import Color from '../Color';
 import Font from '../Font';
-import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
+import {scale} from '../../custome/Responsive';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -31,12 +31,13 @@ const ModalContent = ({
   setId,
   getSetData,
 }) => {
+  console.log('singleItem', singleItem);
   const navigation = useNavigation();
   const [value, setValue] = useState(singleItem?.isPrivate);
   const isFirstRender = useRef(true); // To track the initial render
   const colorTheme = useTheme();
 
-  const handleUpdateSetSecret = async () => {
+  const handleUpdateSetSecret = useCallback(async () => {
     try {
       const response = await apiPut(
         Api.Set,
@@ -47,7 +48,7 @@ const ModalContent = ({
     } catch (error) {
       console.log('error in edit Set api', error);
     }
-  };
+  }, [getSetData, singleItem, value]);
 
   useEffect(() => {
     // Skip the first render
@@ -56,7 +57,7 @@ const ModalContent = ({
     } else {
       handleUpdateSetSecret();
     }
-  }, [value]);
+  }, [value, handleUpdateSetSecret]);
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
@@ -65,7 +66,7 @@ const ModalContent = ({
   const renderBody = useMemo(
     () => (
       <View>
-        {type == 'Set' ? (
+        {type === 'Set' ? (
           <Pressable
             style={styles.container}
             onPress={() => {
@@ -85,7 +86,7 @@ const ModalContent = ({
             style={styles.container}
             onPress={() => {
               closeModal();
-              handleCreateSetClick(singleFolderData?._id);
+              handleCreateSetClick(singleItem?._id);
             }}>
             <Entypo name="plus" size={iconSize} color={colorTheme.textColor} />
             <Text style={[styles.text, {color: colorTheme.textColor}]}>
@@ -93,7 +94,7 @@ const ModalContent = ({
             </Text>
           </Pressable>
         )}
-        {type == 'Set' && (
+        {type === 'Set' && (
           <Pressable
             style={styles.container}
             onPress={() => {
@@ -113,7 +114,7 @@ const ModalContent = ({
             </Text>
           </Pressable>
         )}
-        {type == 'Set' && (
+        {type === 'Set' && (
           <Pressable
             style={styles.container}
             onPress={() => {
@@ -130,7 +131,7 @@ const ModalContent = ({
             </Text>
           </Pressable>
         )}
-        {type == 'Folder' && (
+        {type === 'Folder' && (
           <Pressable
             style={styles.container}
             onPress={() => {
@@ -147,7 +148,7 @@ const ModalContent = ({
             </Text>
           </Pressable>
         )}
-        {type == 'Set' ? (
+        {type === 'Set' ? (
           <Pressable
             style={styles.container}
             onPress={() => {
@@ -165,7 +166,7 @@ const ModalContent = ({
           </Pressable>
         ) : (
           <Pressable
-            style={[styles.container, type == 'Folder' && styles.folderModal]}
+            style={[styles.container, type === 'Folder' && styles.folderModal]}
             onPress={() => {
               deleteData();
               closeModal();
@@ -180,7 +181,7 @@ const ModalContent = ({
             </Text>
           </Pressable>
         )}
-        {type == 'Set' && (
+        {type === 'Set' && (
           <View style={styles.switchContainer}>
             <Image source={userIcon} style={styles.icon} />
             <View style={styles.switchContent}>
@@ -199,7 +200,23 @@ const ModalContent = ({
         )}
       </View>
     ),
-    [value, iconSize, userIcon, lockIcon],
+    [
+      value,
+      iconSize,
+      userIcon,
+      lockIcon,
+      closeModal,
+      colorTheme.textColor,
+      deleteData,
+      folderId,
+      handleCreateSetClick,
+      navigation,
+      openBottomSheet,
+      setEditBottomSheet,
+      setId,
+      singleItem,
+      type,
+    ],
   );
 
   return <View>{renderBody}</View>;

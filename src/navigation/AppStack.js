@@ -1,7 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useMemo} from 'react';
 import {ScreenName, ScreenPath} from '../component/Screen';
-import CloudScreen from '../screen/profile/CloudScreen';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +35,6 @@ const AppStack = ({user}) => {
     viewPdfScreen,
     otherUser,
     otherUserCard,
-    language,
   } = ScreenName;
   const {
     SignUpScreen,
@@ -68,10 +66,12 @@ const AppStack = ({user}) => {
     ViewPdfScreen,
     OtherUserScreen,
     OtherUserCardScreen,
-    LanguageScreen,
   } = ScreenPath;
 
-  const initialRouteName = useMemo(() => (user ? home : signIn), [user]);
+  const initialRouteName = useMemo(
+    () => (user ? home : signIn),
+    [user, home, signIn],
+  );
 
   return (
     <Stack.Navigator initialRouteName={initialRouteName}>
@@ -246,11 +246,6 @@ const AppStack = ({user}) => {
       <Stack.Screen
         name={subscription}
         component={SubscriptionScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name={language}
-        component={LanguageScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

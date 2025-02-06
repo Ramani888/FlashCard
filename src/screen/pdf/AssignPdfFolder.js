@@ -1,16 +1,8 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeButton from '../../custome/CustomeButton';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
@@ -23,8 +15,6 @@ import NoDataView from '../../component/NoDataView';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
-
-const {height, width} = Dimensions.get('window');
 
 const AssignPdfFolder = () => {
   const navigation = useNavigation();
@@ -47,7 +37,7 @@ const AssignPdfFolder = () => {
   // ============================ API Calls ============================ //
 
   const getPdfFolderData = async (message, messageValue) => {
-    message == false && setVisible(true);
+    message === false && setVisible(true);
     try {
       const response = await apiGet(
         `${Api.pdfFolder}?userId=${global?.user?._id}`,
@@ -61,28 +51,31 @@ const AssignPdfFolder = () => {
     }
   };
 
-  const createPdfFolder = async (message, messageValue) => {
-    const rawData = {
-      name: folderName,
-      color: folderColor,
-      userId: global?.user?._id,
-      isHighlight: colorView,
-    };
-    setVisible(true);
-    try {
-      const response = await apiPost(
-        Api.pdfFolder,
-        '',
-        JSON.stringify(rawData),
-      );
-      setFolderName('');
-      setFolderStatus(0);
-      setFolderColor('');
-      getPdfFolderData(true, response?.message);
-    } catch (error) {
-      console.log('error in create pdf folder api', error);
-    }
-  };
+  const createPdfFolder = useCallback(
+    async (message, messageValue) => {
+      const rawData = {
+        name: folderName,
+        color: folderColor,
+        userId: global?.user?._id,
+        isHighlight: colorView,
+      };
+      setVisible(true);
+      try {
+        const response = await apiPost(
+          Api.pdfFolder,
+          '',
+          JSON.stringify(rawData),
+        );
+        setFolderName('');
+        setFolderStatus(0);
+        setFolderColor('');
+        getPdfFolderData(true, response?.message);
+      } catch (error) {
+        console.log('error in create pdf folder api', error);
+      }
+    },
+    [colorView, folderColor, folderName],
+  );
 
   const assignPdfFolder = async () => {
     try {
@@ -109,7 +102,7 @@ const AssignPdfFolder = () => {
           style={[
             styles.folderItem,
             {
-              borderColor: selected ? Color.Black : Color.transparent,
+              borderColor: selected ? colorTheme.textColor : Color.transparent,
               borderWidth: selected ? scale(1.5) : scale(0),
               backgroundColor: item?.isHighlight
                 ? item.color
@@ -132,7 +125,12 @@ const AssignPdfFolder = () => {
         </Pressable>
       );
     },
-    [selectedFolderId],
+    [
+      selectedFolderId,
+      colorTheme.listAndBoxColor,
+      colorTheme.textColor,
+      colorView,
+    ],
   );
 
   const renderHeader = useMemo(
@@ -179,7 +177,14 @@ const AssignPdfFolder = () => {
         </View>
       </ActionSheet>
     ),
-    [folderName, folderStatus, folderColor, colorView],
+    [
+      folderName,
+      folderStatus,
+      folderColor,
+      colorView,
+      colorTheme.background,
+      createPdfFolder,
+    ],
   );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);

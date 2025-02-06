@@ -1,7 +1,5 @@
 import React, {useEffect, useRef, useCallback, useState} from 'react';
 import {
-  Dimensions,
-  Image,
   KeyboardAvoidingView,
   Pressable,
   ScrollView,
@@ -28,8 +26,6 @@ import useTheme from '../component/Theme';
 import strings from '../language/strings';
 import VideoAds from './ads/VideoAds';
 
-const {height} = Dimensions.get('window');
-
 const AiScreen = ({setOpenAIBottomsheet}) => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -52,7 +48,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     if (setOpenAIBottomsheet) {
       setOpenAIBottomsheet(refAiRBSheet);
     }
-  }, []);
+  }, [setOpenAIBottomsheet]);
 
   const getAnswer = async () => {
     const rawData = {message: question};

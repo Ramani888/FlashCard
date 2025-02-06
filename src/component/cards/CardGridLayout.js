@@ -8,6 +8,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenName} from '../Screen';
 
 const CardGridLayout = ({
   item,
@@ -19,6 +21,7 @@ const CardGridLayout = ({
   openCardModal,
   openNoteModal,
 }) => {
+  const navigation = useNavigation();
   const infoIconRef = useRef();
   const cardContainerRef = useRef();
   const [showNote, setShowNote] = useState(false);
@@ -37,7 +40,7 @@ const CardGridLayout = ({
       openNoteModal(infoIconRef, cardHeight);
       setItem(item);
     }
-  }, [item]);
+  }, [item, cardHeight, openNoteModal, setItem]);
 
   const editNote = () => {
     navigation.navigate(ScreenName.createCard, {
@@ -75,7 +78,9 @@ const CardGridLayout = ({
           {/* </Pressable> */}
           <Pressable
             onPress={() => {
-              const isBlurred = item?.isBlur == 0 ? 1 : 0;
+              console.log('item?.isBlur', item?.isBlur);
+              const isBlurred =
+                item?.isBlur === 0 || item?.isBlur === false ? 1 : 0;
               updateCard(
                 item?._id,
                 item.top,

@@ -14,7 +14,7 @@ const NoDataView = ({content, noDataViewStyle, noDataTextStyle}) => {
         style={[
           styles.noDataText,
           noDataTextStyle,
-          {color: colorTheme.textColor},
+          {color: noDataTextStyle ? Color.White : colorTheme.textColor},
         ]}>
         {content ? content : strings.noDataFound}
       </Text>

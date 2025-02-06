@@ -1,11 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useRef, useState, useCallback, useEffect} from 'react';
 import Color from '../Color';
 import Font from '../Font';
@@ -15,21 +8,15 @@ import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
 import CustomeButton from '../../custome/CustomeButton';
 import BottomSheetContent from '../BottomSheetContent';
-import {useNavigation} from '@react-navigation/native';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
-
-const {height, width} = Dimensions.get('window');
 
 const FolderComponent = ({
   onFolderClick,
@@ -38,7 +25,6 @@ const FolderComponent = ({
   search,
   setSearchValue,
 }) => {
-  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -55,40 +41,43 @@ const FolderComponent = ({
 
   useEffect(() => {
     getFolderData(false);
-  }, []);
+  }, [getFolderData]);
 
   useEffect(() => {
     getFolderData(true, '');
-  }, [search]);
+  }, [search, getFolderData]);
 
   useEffect(() => {
     if (singleFolderItem) {
       setFolderName(singleFolderItem?.name);
-      setFolderStatus(singleFolderItem?.isPrivate == true ? 1 : 0);
+      setFolderStatus(singleFolderItem?.isPrivate === true ? 1 : 0);
       setFolderColor(singleFolderItem?.color);
     }
   }, [singleFolderItem]);
 
   // ================================== Api =================================== //
 
-  const getFolderData = async (message, messageValue) => {
-    message == false && setVisible(true);
-    search && setLoading(true);
-    try {
-      const response = await apiGet(
-        `${Api.Folder}?userId=${global?.user?._id}&search=${search}`,
-      );
-      setFolderData(response);
-      messageValue && showMessageonTheScreen(messageValue);
-    } catch (error) {
-      console.log('error in get folder api', error);
-    } finally {
-      setVisible(false);
-      setLoading(false);
-    }
-  };
+  const getFolderData = useCallback(
+    async (message, messageValue) => {
+      message === false && setVisible(true);
+      search && setLoading(true);
+      try {
+        const response = await apiGet(
+          `${Api.Folder}?userId=${global?.user?._id}&search=${search}`,
+        );
+        setFolderData(response);
+        messageValue && showMessageonTheScreen(messageValue);
+      } catch (error) {
+        console.log('error in get folder api', error);
+      } finally {
+        setVisible(false);
+        setLoading(false);
+      }
+    },
+    [search, setLoading],
+  );
 
-  const createFolder = async () => {
+  const createFolder = useCallback(async () => {
     const rawData = {
       name: folderName,
       color: folderColor,
@@ -105,9 +94,9 @@ const FolderComponent = ({
     } catch (error) {
       console.log('error in create folder api', error);
     }
-  };
+  }, [colorView, folderColor, folderName, getFolderData]);
 
-  const editFolder = async () => {
+  const editFolder = useCallback(async () => {
     const rawData = {
       _id: singleFolderItem?._id,
       name: folderName,
@@ -126,7 +115,14 @@ const FolderComponent = ({
     } catch (error) {
       console.log('error in edit folder api', error);
     }
-  };
+  }, [
+    closeModal,
+    colorView,
+    folderColor,
+    folderName,
+    getFolderData,
+    singleFolderItem,
+  ]);
 
   const deleteFolder = async () => {
     try {
@@ -199,7 +195,15 @@ const FolderComponent = ({
         </Pressable>
       );
     },
-    [openModal, colorView],
+    [
+      openModal,
+      colorView,
+      colorTheme.listAndBoxColor,
+      colorTheme.textColor,
+      folderData,
+      onFolderClick,
+      setSearchValue,
+    ],
   );
 
   const openBottomSheet = () => {
@@ -246,13 +250,16 @@ const FolderComponent = ({
     editBottomSheet,
     colorView,
     singleFolderItem,
+    colorTheme.background,
+    createFolder,
+    editFolder,
   ]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   const renderBody = () => {
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.bodyContainer}>
         <Pressable
           style={styles.folderContainer}
           onPress={() => {
@@ -270,7 +277,7 @@ const FolderComponent = ({
             style={styles.flatlist}
           />
         ) : (
-          visible == false && (
+          visible === false && (
             <NoDataView
               content={strings.folderNotFound}
               noDataViewStyle={{marginTop: verticalScale(-70)}}
@@ -344,6 +351,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(15),
     flex: 1,
   },
+  bodyContainer: {flex: 1},
   flatlist: {marginTop: verticalScale(10), marginBottom: verticalScale(55)},
   folderContainer: {
     backgroundColor: Color.White,
@@ -393,16 +401,6 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: 'absolute',
-  },
-  modal: {
-    position: 'absolute',
-    borderRadius: scale(10),
-    backgroundColor: Color.White,
-    elevation: scale(10),
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: scale(0.3),
-    shadowRadius: scale(4),
   },
   indicatorStyle: {
     marginTop: verticalScale(10),

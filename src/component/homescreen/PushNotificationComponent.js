@@ -13,48 +13,35 @@ const PushNotificationComponent = () => {
     return (
       <View style={styles.bodyContainer}>
         <Text style={styles.notificationHeading}>Set Push Notification</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            borderRadius: scale(10),
-            alignSelf: 'center',
-          }}>
+        <View style={styles.view}>
           <CustomeButton
-            buttonColor={time == 'AM' ? Color.theme1 : Color.WhiteDefault}
+            buttonColor={time === 'AM' ? Color.theme1 : Color.WhiteDefault}
             buttonWidth={scale(50)}
             buttonHeight={scale(35)}
             title={'AM'}
             borderTopLeftRadius={scale(10)}
             borderBottomLeftRadius={scale(10)}
             fontSize={scale(12)}
-            fontColor={time == 'AM' ? Color.White : Color.theme1}
+            fontColor={time === 'AM' ? Color.White : Color.theme1}
             fontFamily={Font.medium}
             marginTop={verticalScale(5)}
             onPress={() => setTime('AM')}
           />
           <CustomeButton
-            buttonColor={time == 'PM' ? Color.theme1 : Color.WhiteDefault}
+            buttonColor={time === 'PM' ? Color.theme1 : Color.WhiteDefault}
             buttonWidth={scale(50)}
             buttonHeight={scale(35)}
             title={'PM'}
             borderTopRightRadius={scale(10)}
             borderBottomRightRadius={scale(10)}
             fontSize={scale(12)}
-            fontColor={time == 'PM' ? Color.White : Color.theme1}
+            fontColor={time === 'PM' ? Color.White : Color.theme1}
             fontFamily={Font.medium}
             marginTop={verticalScale(5)}
             onPress={() => setTime('PM')}
           />
         </View>
-        <Text
-          style={{
-            fontSize: scale(55),
-            color: Color.Black,
-            textAlign: 'center',
-            marginVertical: verticalScale(8),
-          }}>
-          07:35
-        </Text>
+        <Text style={styles.time}>07:35</Text>
         <Calender />
 
         <CustomeButton
@@ -84,5 +71,16 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.medium,
     marginBottom: verticalScale(10),
+  },
+  view: {
+    flexDirection: 'row',
+    borderRadius: scale(10),
+    alignSelf: 'center',
+  },
+  time: {
+    fontSize: scale(55),
+    color: Color.Black,
+    textAlign: 'center',
+    marginVertical: verticalScale(8),
   },
 });

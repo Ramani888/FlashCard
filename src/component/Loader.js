@@ -1,11 +1,4 @@
-import {
-  View,
-  Modal,
-  StyleSheet,
-  Dimensions,
-  ActivityIndicator,
-  StatusBar,
-} from 'react-native';
+import {View, Modal, StyleSheet} from 'react-native';
 import React from 'react';
 import {scale} from 'react-native-size-matters';
 import {UIActivityIndicator} from 'react-native-indicators';

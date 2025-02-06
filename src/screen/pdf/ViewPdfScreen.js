@@ -11,7 +11,7 @@ const ViewPdfScreen = () => {
   useEffect(() => {
     setUrl('');
     setUrl(route.params.url);
-  }, [isFocused]);
+  }, [isFocused, route.params.url]);
 
   return (
     <View style={styles.container}>

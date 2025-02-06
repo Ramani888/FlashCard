@@ -1,8 +1,7 @@
-import {View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import AppStack from './AppStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Loader from '../component/Loader';
 import strings from '../language/strings';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../component/Screen';
@@ -11,11 +10,10 @@ const AppNav = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [user, setUser] = useState('');
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
   useEffect(() => {
     (async () => {
@@ -37,7 +35,7 @@ const AppNav = () => {
     })();
   }, [isFocused]);
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const userData = await AsyncStorage.getItem('user');
       if (userData) {
@@ -54,16 +52,18 @@ const AppNav = () => {
       console.error('Failed to load user data:', error);
       global.user = null;
       setUser(null);
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [navigation]);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
       <AppStack user={user} />
     </View>
   );
 };
 
 export default AppNav;
+
+const styles = StyleSheet.create({
+  container: {flex: 1},
+});

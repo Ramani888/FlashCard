@@ -1,12 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Pressable,
-  Dimensions,
-  Image,
-} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Pressable, Image} from 'react-native';
 import React, {useCallback, useRef, useState, useMemo, useEffect} from 'react';
 import CustomeHeader from '../../../custome/CustomeHeader';
 import Color from '../../../component/Color';

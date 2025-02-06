@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {moderateScale, scale, verticalScale} from './Responsive';
 import Color from '../component/Color';
@@ -21,7 +21,7 @@ const CustomeAlert = ({isVisible, title, message, onConfirm, onCancel}) => {
           <Text
             style={[
               styles.title,
-              {color: title == 'Error' ? Color.Red : Color.Black},
+              {color: title === 'Error' ? Color.Red : Color.Black},
             ]}>
             {title}
           </Text>

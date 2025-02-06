@@ -24,12 +24,9 @@ const EmailBottomSheetsContent = ({closeEmailBottomSheet}) => {
       .required('Email is required'),
   });
 
-  const handleSubmit = useCallback(
-    (values, {resetForm}) => {
-      resetForm();
-    },
-    [closeEmailBottomSheet],
-  );
+  const handleSubmit = useCallback((values, {resetForm}) => {
+    resetForm();
+  }, []);
 
   const handlePressClose = useCallback(() => {
     closeEmailBottomSheet();

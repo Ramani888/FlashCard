@@ -41,6 +41,7 @@ const SetAndFolderScreen = () => {
   };
 
   const handleCreateSetClick = folderId => {
+    console.log('folderId', folderId);
     setFolderId(folderId);
     setTab('SET');
     setOpenSetSheet(true);

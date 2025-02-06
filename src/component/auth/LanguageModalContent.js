@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -106,9 +106,6 @@ const LanguageModalContent = ({
       </TouchableOpacity>
     );
   };
-
-  console.log('selectedLanguage', selectedLanguage);
-  console.log('languages', languages);
 
   return (
     <View

@@ -1,12 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useRef, useState, memo, useEffect} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {scale, verticalScale} from '../../custome/Responsive';
@@ -16,7 +8,6 @@ import CustomeModal from '../../custome/CustomeModal';
 import PdfModalContent from './PdfModalContent';
 import CustomeButton from '../../custome/CustomeButton';
 import PdfBottomSheetContent from './PdfBottomSheetContent';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
@@ -29,10 +20,6 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
-
-const {width, height} = Dimensions.get('window');
-
-const pdfData = [{name: 'pdf1'}, {name: 'pdf2'}, {name: 'pdf3'}];
 
 const PdfComponent = memo(({folderId}) => {
   const isFocused = useIsFocused();
@@ -53,70 +40,79 @@ const PdfComponent = memo(({folderId}) => {
 
   useEffect(() => {
     getPdf(false);
-  }, [isFocused]);
+  }, [isFocused, getPdf]);
 
   // ================================= Api =============================== //
 
-  const getPdf = async (message, messageValue) => {
-    try {
-      message == false && setVisible(true);
-      const url = folderId
-        ? `${Api.FolderPdf}?userId=${global?.user?._id}&folderId=${folderId}`
-        : `${Api.pdf}?userId=${global?.user?._id}`;
-      const response = await apiGet(url);
-      if (response) {
-        setPdfData(response);
-        message && showMessageonTheScreen(messageValue);
+  const getPdf = useCallback(
+    async (message, messageValue) => {
+      try {
+        message === false && setVisible(true);
+        const url = folderId
+          ? `${Api.FolderPdf}?userId=${global?.user?._id}&folderId=${folderId}`
+          : `${Api.pdf}?userId=${global?.user?._id}`;
+        const response = await apiGet(url);
+        if (response) {
+          setPdfData(response);
+          message && showMessageonTheScreen(messageValue);
+        }
+      } catch (error) {
+        console.log('error in getpdf api', error);
+      } finally {
+        setVisible(false);
       }
-    } catch (error) {
-      console.log('error in getpdf api', error);
-    } finally {
-      setVisible(false);
-    }
-  };
+    },
+    [folderId],
+  );
 
-  const createPdf = async (pdfId, pdf) => {
-    var formdata = new FormData();
-    formdata.append('userId', global.user?._id);
-    formdata.append('color', pdfColor);
-    formdata.append('name', pdfName);
-    formdata.append('pdf', pdf);
-    formdata.append('isHighlight', colorView);
-    try {
-      setVisible(true);
-      const response = await apiPost(Api.pdf, '', formdata);
-      if (response?.success == true) {
-        getPdf(true, response?.message);
+  const createPdf = useCallback(
+    async (pdfId, pdf) => {
+      var formdata = new FormData();
+      formdata.append('userId', global.user?._id);
+      formdata.append('color', pdfColor);
+      formdata.append('name', pdfName);
+      formdata.append('pdf', pdf);
+      formdata.append('isHighlight', colorView);
+      try {
+        setVisible(true);
+        const response = await apiPost(Api.pdf, '', formdata);
+        if (response?.success === true) {
+          getPdf(true, response?.message);
+        }
+      } catch (error) {
+        console.log('error in upload pdf api', error);
       }
-    } catch (error) {
-      console.log('error in upload pdf api', error);
-    }
-  };
+    },
+    [colorView, getPdf, pdfColor, pdfName],
+  );
 
-  const editPdf = async (pdfId, pdf) => {
-    var formdata = new FormData();
-    formdata.append('_id', pdfId);
-    formdata.append('userId', global.user?._id);
-    formdata.append('color', pdfColor);
-    formdata.append('name', pdfName);
-    formdata.append('pdf', pdf?.name ? pdf : '');
-    formdata.append('isHighlight', colorView);
-    try {
-      setVisible(true);
-      const response = await apiPut(Api.pdf, '', formdata);
-      if (response?.success == true) {
-        getPdf(true, response?.message);
+  const editPdf = useCallback(
+    async (pdfId, pdf) => {
+      var formdata = new FormData();
+      formdata.append('_id', pdfId);
+      formdata.append('userId', global.user?._id);
+      formdata.append('color', pdfColor);
+      formdata.append('name', pdfName);
+      formdata.append('pdf', pdf?.name ? pdf : '');
+      formdata.append('isHighlight', colorView);
+      try {
+        setVisible(true);
+        const response = await apiPut(Api.pdf, '', formdata);
+        if (response?.success === true) {
+          getPdf(true, response?.message);
+        }
+      } catch (error) {
+        console.log('error in upload pdf api', error);
       }
-    } catch (error) {
-      console.log('error in upload pdf api', error);
-    }
-  };
+    },
+    [colorView, getPdf, pdfColor, pdfName],
+  );
 
   const deletePdf = async pdfId => {
     try {
       setVisible(true);
       const response = await apiDelete(`${Api.pdf}?_id=${pdfId}`);
-      if (response?.success == true) {
+      if (response?.success === true) {
         getPdf(true, response?.message);
       }
     } catch (error) {
@@ -126,26 +122,29 @@ const PdfComponent = memo(({folderId}) => {
 
   // ================================= End =============================== //
 
-  const PdfDownload = pdfUrl => {
-    setVisible(true);
-    RNFetchBlob.config({
-      fileCache: true,
-      appendExt: 'pdf',
-      path:
-        RNFetchBlob.fs.dirs.DocumentDir +
-        '/' +
-        `pdf_${moment().format('YYYYMMDD_HHmmss')}.pdf`,
-    })
-      .fetch('GET', pdfUrl)
-      .then(res => {
-        console.log('PDF downloaded at:', res.path());
-        setVisible(false);
-        navigation.navigate(ScreenName.viewPdfScreen, {url: res.path()});
+  const PdfDownload = useCallback(
+    pdfUrl => {
+      setVisible(true);
+      RNFetchBlob.config({
+        fileCache: true,
+        appendExt: 'pdf',
+        path:
+          RNFetchBlob.fs.dirs.DocumentDir +
+          '/' +
+          `pdf_${moment().format('YYYYMMDD_HHmmss')}.pdf`,
       })
-      .catch(error => {
-        console.log('Error downloading PDF:', error);
-      });
-  };
+        .fetch('GET', pdfUrl)
+        .then(res => {
+          console.log('PDF downloaded at:', res.path());
+          setVisible(false);
+          navigation.navigate(ScreenName.viewPdfScreen, {url: res.path()});
+        })
+        .catch(error => {
+          console.log('Error downloading PDF:', error);
+        });
+    },
+    [navigation],
+  );
 
   const openModal = useCallback((item, isLastItem) => {
     threeDotIconRef.current.measureInWindow((x, y, width, height) => {
@@ -220,7 +219,16 @@ const PdfComponent = memo(({folderId}) => {
         </View>
       </ActionSheet>
     );
-  }, [pdfName, pdfColor, editBottomSheet, singlePdfData, colorView]);
+  }, [
+    pdfName,
+    pdfColor,
+    editBottomSheet,
+    singlePdfData,
+    colorView,
+    colorTheme,
+    createPdf,
+    editPdf,
+  ]);
 
   const renderPdf = useCallback(
     ({item, index}) => {
@@ -277,7 +285,7 @@ const PdfComponent = memo(({folderId}) => {
               />
             </Pressable>
           </Pressable>
-          <View style={[styles.folderContainer, {alignSelf: 'flex-start'}]}>
+          <View style={[styles.folderContainer, styles.alignself]}>
             <Image
               source={require('../../Assets/Img/folder.png')}
               style={styles.folderIcon}
@@ -289,7 +297,7 @@ const PdfComponent = memo(({folderId}) => {
         </View>
       );
     },
-    [openModal, pdfData],
+    [openModal, pdfData, PdfDownload, colorTheme, colorView],
   );
 
   const renderBody = () => {
@@ -301,10 +309,10 @@ const PdfComponent = memo(({folderId}) => {
             renderItem={renderPdf}
             keyExtractor={item => item.name}
             showsVerticalScrollIndicator={false}
-            style={{flex: 1, marginBottom: verticalScale(60)}}
+            style={styles.flatlist}
           />
         ) : (
-          visible == false && (
+          visible === false && (
             <NoDataView
               content={strings.pdfNotFound}
               noDataViewStyle={{marginTop: verticalScale(-70)}}
@@ -457,4 +465,6 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     textTransform: 'capitalize',
   },
+  alignSelf: {alignSelf: 'flex-start'},
+  flatlist: {flex: 1, marginBottom: verticalScale(60)},
 });

@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   FlatList,
   View,
@@ -24,7 +24,7 @@ const colors = [
   '#ffd27f',
 ];
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const ColorCodePicker = ({setSelectedColor, selectedColor, colorTheme}) => {
   useEffect(() => {
@@ -33,7 +33,7 @@ const ColorCodePicker = ({setSelectedColor, selectedColor, colorTheme}) => {
         ? colors[1]
         : selectedColor,
     );
-  }, [selectedColor]);
+  }, [selectedColor, setSelectedColor]);
 
   const renderItem = useCallback(
     ({item}) => (
@@ -46,7 +46,7 @@ const ColorCodePicker = ({setSelectedColor, selectedColor, colorTheme}) => {
         onPress={() => setSelectedColor(item)}
       />
     ),
-    [selectedColor],
+    [selectedColor, setSelectedColor],
   );
 
   return (

@@ -7,7 +7,7 @@ import {
   Pressable,
   Text,
 } from 'react-native';
-import {scale, verticalScale} from './Responsive';
+import {scale} from './Responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Color from '../component/Color';
 import Font from '../component/Font';

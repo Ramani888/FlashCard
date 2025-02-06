@@ -1,7 +1,7 @@
-import {View, Text, StyleSheet, Pressable, Dimensions} from 'react-native';
+import {Text, StyleSheet, Pressable, Dimensions} from 'react-native';
 import React from 'react';
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const CustomeButton = ({
   title,

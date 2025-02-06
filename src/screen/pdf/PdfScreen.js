@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
@@ -36,26 +36,26 @@ const PdfScreen = () => {
   const buttons = () => (
     <View style={styles.buttonContainer}>
       <CustomeButton
-        buttonColor={tab == 'PDF' ? Color.White : Color.theme1}
+        buttonColor={tab === 'PDF' ? Color.White : Color.theme1}
         buttonWidth={scale(150)}
         buttonHeight={scale(45)}
         title={strings.homeTab4}
         borderRadius={scale(10)}
         fontSize={scale(15)}
-        fontColor={tab == 'PDF' ? Color.Black : Color.White}
+        fontColor={tab === 'PDF' ? Color.Black : Color.White}
         fontFamily={Font.medium}
         marginTop={verticalScale(15)}
         onPress={() => setTab('PDF')}
       />
 
       <CustomeButton
-        buttonColor={tab == 'FOLDERS' ? Color.White : Color.theme1}
+        buttonColor={tab === 'FOLDERS' ? Color.White : Color.theme1}
         buttonWidth={scale(150)}
         buttonHeight={scale(45)}
         title={strings.folder}
         borderRadius={scale(10)}
         fontSize={scale(15)}
-        fontColor={tab == 'FOLDERS' ? Color.Black : Color.White}
+        fontColor={tab === 'FOLDERS' ? Color.Black : Color.White}
         fontFamily={Font.medium}
         marginTop={verticalScale(15)}
         onPress={() => setTab('FOLDERS')}
@@ -65,7 +65,7 @@ const PdfScreen = () => {
 
   const renderBody = () => {
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.container}>
         <LinearGradient
           colors={colorTheme.gradientTheme}
           style={styles.headerContainer}>
@@ -74,8 +74,8 @@ const PdfScreen = () => {
           {buttons()}
         </LinearGradient>
 
-        {tab == 'PDF' && <PdfComponent folderId={folderId} />}
-        {tab == 'FOLDERS' && (
+        {tab === 'PDF' && <PdfComponent folderId={folderId} />}
+        {tab === 'FOLDERS' && (
           <PdfFolderComponent onFolderClick={handleFolderClick} />
         )}
       </View>
@@ -83,7 +83,7 @@ const PdfScreen = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
+    <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
       {renderBody()}
     </View>
   );
@@ -92,6 +92,7 @@ const PdfScreen = () => {
 export default React.memo(PdfScreen);
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   headerContainer: {
     backgroundColor: Color.theme1,
     paddingBottom: verticalScale(20),
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   title: {fontSize: scale(20), fontFamily: Font.medium},
+
   buttonContainer: {
     alignSelf: 'center',
     flexDirection: 'row',

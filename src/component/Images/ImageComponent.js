@@ -185,7 +185,7 @@ const ImageComponent = ({folderId, showFolder}) => {
               <Text
                 style={[
                   styles.folderText,
-                  {width: item?.folderName?.length > 12 ? wp('20%') : 'auto'},
+                  {width: item?.folderName?.length > 12 ? wp('23%') : 'auto'},
                 ]}>
                 {item?.folderName ? item?.folderName : ''}
               </Text>
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     borderRadius: wp('1.5%'),
     marginRight: wp('1%'),
     alignSelf: 'flex-start',
-    marginLeft: wp('2%'),
+    // marginLeft: wp('2%'),
     marginTop: hp(0.6),
   },
   folderIcon: {
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     // marginRight: wp('1%'),
   },
   folder: {
-    width: wp('29.5%'),
+    width: wp('29%'),
     paddingRight: wp('1%'),
   },
 });

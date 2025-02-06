@@ -170,21 +170,23 @@ const SetDetailModalContent = ({
 
   return (
     <View>
-      <PressableItem
-        icon={
-          <MaterialCommunityIcons
-            name="swap-vertical"
-            size={wp(4)}
-            color={colorTheme.textColor}
-          />
-        }
-        text={strings.changeOrder}
-        colorTheme={colorTheme}
-        onPress={() => {
-          setChangeOrder(true);
-          closeModal();
-        }}
-      />
+      {layout === 'single' && (
+        <PressableItem
+          icon={
+            <MaterialCommunityIcons
+              name="swap-vertical"
+              size={wp(4)}
+              color={colorTheme.textColor}
+            />
+          }
+          text={strings.changeOrder}
+          colorTheme={colorTheme}
+          onPress={() => {
+            setChangeOrder(true);
+            closeModal();
+          }}
+        />
+      )}
       <PressableItem
         icon={
           <MaterialCommunityIcons

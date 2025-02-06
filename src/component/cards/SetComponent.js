@@ -15,7 +15,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../BottomSheetContent';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
@@ -32,7 +31,7 @@ import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 
-const {height, width} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const SetComponent = ({
   folderId,
@@ -60,16 +59,16 @@ const SetComponent = ({
 
   useEffect(() => {
     getSetData(false);
-  }, [isFocused]);
+  }, [isFocused, getSetData]);
 
   useEffect(() => {
     getSetData(true, '');
-  }, [search]);
+  }, [search, getSetData]);
 
   useEffect(() => {
     if (singleSetData) {
       setSetName(singleSetData?.name);
-      setSetStatus(singleSetData?.isPrivate == true ? 1 : 0);
+      setSetStatus(singleSetData?.isPrivate === true ? 1 : 0);
       setSetColor(singleSetData?.color);
     }
   }, [singleSetData]);
@@ -84,25 +83,28 @@ const SetComponent = ({
 
   // ===================================== Api ===================================== //
 
-  const getSetData = async (message, messageValue) => {
-    message == false && setVisible(true);
-    search && setLoading(true);
-    try {
-      const url = folderId
-        ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}&search=${search}`
-        : `${Api.Set}?userId=${global?.user?._id}&search=${search}`;
-      const response = await apiGet(url);
-      setSetData(response);
-      messageValue && showMessageonTheScreen(messageValue);
-    } catch (error) {
-      console.log('error in get folder api', error);
-    } finally {
-      setVisible(false);
-      setLoading(false);
-    }
-  };
+  const getSetData = useCallback(
+    async (message, messageValue) => {
+      message === false && setVisible(true);
+      search && setLoading(true);
+      try {
+        const url = folderId
+          ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}&search=${search}`
+          : `${Api.Set}?userId=${global?.user?._id}&search=${search}`;
+        const response = await apiGet(url);
+        setSetData(response);
+        messageValue && showMessageonTheScreen(messageValue);
+      } catch (error) {
+        console.log('error in get folder api', error);
+      } finally {
+        setVisible(false);
+        setLoading(false);
+      }
+    },
+    [folderId, search, setLoading],
+  );
 
-  const createSet = async () => {
+  const createSet = useCallback(async () => {
     const rawData = {
       name: setName,
       isPrivate: setStatus,
@@ -121,9 +123,9 @@ const SetComponent = ({
     } catch (error) {
       console.log('error in create set api', error);
     }
-  };
+  }, [colorView, folderId, getSetData, setColor, setName, setStatus]);
 
-  const editSet = async () => {
+  const editSet = useCallback(async () => {
     const rawData = {
       _id: singleSetData?._id,
       name: setName,
@@ -143,7 +145,7 @@ const SetComponent = ({
     } catch (error) {
       console.log('error in edit Set api', error);
     }
-  };
+  }, [colorView, getSetData, setColor, setName, setStatus, singleSetData]);
 
   const deleteSet = async () => {
     try {
@@ -173,10 +175,10 @@ const SetComponent = ({
     refRBSheet.current.show();
   };
 
-  const closeBottomSheet = () => {
+  const closeBottomSheet = useCallback(() => {
     refRBSheet.current.hide();
     setOpenSetSheet(false);
-  };
+  }, [setOpenSetSheet]);
 
   const renderSet = useCallback(
     ({item, index}) => {
@@ -246,7 +248,7 @@ const SetComponent = ({
               </Pressable>
             </View>
           </Pressable>
-          <View style={[styles.folderContainer, {alignSelf: 'flex-start'}]}>
+          <View style={[styles.folderContainer, styles.alignSelf]}>
             <Image
               source={require('../../Assets/Img/folder.png')}
               style={styles.folderIcon}
@@ -262,7 +264,7 @@ const SetComponent = ({
         </View>
       );
     },
-    [setData],
+    [setData, colorTheme, colorView, folderId, navigation],
   );
 
   const BottomSheets = useCallback(() => {
@@ -294,7 +296,18 @@ const SetComponent = ({
         </View>
       </ActionSheet>
     );
-  }, [setName, setStatus, setColor, editBottomSheet, colorView, singleSetData]);
+  }, [
+    setName,
+    setStatus,
+    setColor,
+    editBottomSheet,
+    colorView,
+    singleSetData,
+    closeBottomSheet,
+    colorTheme,
+    createSet,
+    editSet,
+  ]);
 
   const renderBody = () => (
     <View style={styles.bodyContainer}>
@@ -307,7 +320,7 @@ const SetComponent = ({
           style={styles.flatlist}
         />
       ) : (
-        visible == false && <NoDataView content={strings.setNotFound} />
+        visible === false && <NoDataView content={strings.setNotFound} />
       )}
       <CustomeButton
         buttonColor={Color.theme1}
@@ -332,7 +345,7 @@ const SetComponent = ({
   );
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
       <Loader visible={visible} />
       {renderBody()}
       <CustomeModal
@@ -371,6 +384,7 @@ const SetComponent = ({
 export default React.memo(SetComponent);
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   bodyContainer: {
     flex: 1,
     marginHorizontal: scale(15),
@@ -470,4 +484,5 @@ const styles = StyleSheet.create({
     marginVertical: height * 0.01,
   },
   flatlist: {flex: 1, paddingTop: verticalScale(15)},
+  alignSelf: {alignSelf: 'flex-start'},
 });

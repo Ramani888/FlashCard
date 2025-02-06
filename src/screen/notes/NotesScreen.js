@@ -14,7 +14,6 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import CustomeModal from '../../custome/CustomeModal';
 import NoteModalContent from '../../component/profile/NoteModalContent';
@@ -29,8 +28,6 @@ import {widthPercentageToDP} from 'react-native-responsive-screen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
-
-const {height, width} = Dimensions.get('window');
 
 const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
 
@@ -71,7 +68,7 @@ const NotesScreen = () => {
     }
   };
 
-  const createNote = async () => {
+  const createNote = useCallback(async () => {
     const rawData = {
       userId: global?.user?._id,
       name: noteName,
@@ -82,46 +79,42 @@ const NotesScreen = () => {
     try {
       setVisible(true);
       const response = await apiPost(Api.notes, '', JSON.stringify(rawData));
-      if (response?.success == true) {
+      if (response?.success === true) {
         getNoteData(false, response?.message);
       }
     } catch (error) {
       console.log('error in create note api', error);
     }
-  };
+  }, [colorView, noteColor, noteName]);
 
-  const editNote = async (
-    editWithNote,
-    noteId,
-    name,
-    color,
-    noteDesc,
-    isColorView,
-  ) => {
-    const rawData = {
-      _id: editWithNote ? noteId : singleNoteData?._id,
-      userId: global?.user?._id,
-      name: editWithNote ? name : noteName,
-      color: editWithNote ? color : noteColor,
-      note: noteDesc,
-      isHighlight: isColorView ? isColorView : colorView,
-    };
-    try {
-      setVisible(true);
-      const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
-      if (response?.success == true) {
-        getNoteData(false, false);
+  const editNote = useCallback(
+    async (editWithNote, noteId, name, color, noteDesc, isColorView) => {
+      const rawData = {
+        _id: editWithNote ? noteId : singleNoteData?._id,
+        userId: global?.user?._id,
+        name: editWithNote ? name : noteName,
+        color: editWithNote ? color : noteColor,
+        note: noteDesc,
+        isHighlight: isColorView ? isColorView : colorView,
+      };
+      try {
+        setVisible(true);
+        const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
+        if (response?.success === true) {
+          getNoteData(false, false);
+        }
+      } catch (error) {
+        console.log('error in update note api', error);
       }
-    } catch (error) {
-      console.log('error in update note api', error);
-    }
-  };
+    },
+    [colorView, noteColor, noteName, singleNoteData],
+  );
 
   const deleteNote = async noteId => {
     try {
       setVisible(true);
       const response = await apiDelete(`${Api.notes}?_id=${noteId}`);
-      if (response?.success == true) {
+      if (response?.success === true) {
         getNoteData(false, response?.message);
       }
     } catch (error) {
@@ -205,6 +198,10 @@ const NotesScreen = () => {
       editBottomSheet,
       colorView,
       singleNoteData,
+      closeBottomSheet,
+      colorTheme.background,
+      createNote,
+      editNote,
     ],
   );
 
@@ -234,7 +231,7 @@ const NotesScreen = () => {
             });
             global.note = item?.note;
           }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.colorView}>
             {!colorView && (
               <Text style={[styles.color, {backgroundColor: item?.color}]} />
             )}
@@ -269,7 +266,15 @@ const NotesScreen = () => {
         </Pressable>
       );
     },
-    [openModal, noteData, singleNoteData],
+    [
+      openModal,
+      colorTheme.listAndBoxColor,
+      colorTheme.textColor,
+      colorTheme.threeDotIcon,
+      colorView,
+      editNote,
+      navigation,
+    ],
   );
 
   const renderBody = useCallback(
@@ -280,7 +285,7 @@ const NotesScreen = () => {
             data={noteData}
             renderItem={renderNotes}
             keyExtractor={(item, index) => index.toString()}
-            style={{flex: 1, marginBottom: verticalScale(60)}}
+            style={styles.flatlist}
           />
         ) : (
           visible === false && (
@@ -293,7 +298,7 @@ const NotesScreen = () => {
         {BottomSheets()}
       </View>
     ),
-    [renderNotes, BottomSheets, visible],
+    [renderNotes, BottomSheets, visible, noteData],
   );
 
   return (
@@ -422,4 +427,6 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     marginLeft: scale(3),
   },
+  colorView: {flexDirection: 'row', alignItems: 'center'},
+  flatlist: {flex: 1, marginBottom: verticalScale(60)},
 });

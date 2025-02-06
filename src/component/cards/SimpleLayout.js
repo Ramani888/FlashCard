@@ -1,4 +1,4 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useCallback, memo, useRef} from 'react';
 import Color from '../Color';
 import {scale, verticalScale} from '../../custome/Responsive';
@@ -42,10 +42,10 @@ const SimpleLayout = ({
       openNoteModal(infoIconRef, cardHeight);
       setItem(item);
     }
-  }, [item, cardHeight]);
+  }, [item, cardHeight, openNoteModal, setItem]);
 
   const toggleBlur = useCallback(() => {
-    const isBlurred = item?.isBlur == 0 ? 1 : 0;
+    const isBlurred = item?.isBlur === 0 || item?.isBlur === false ? 1 : 0;
     updateCard(item?._id, item.top, item.bottom, item?.note, isBlurred);
   }, [item, updateCard]);
 

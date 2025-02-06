@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View, Pressable, Image} from 'react-native';
+import React, {useRef} from 'react';
+import {StyleSheet, Text, Pressable, Image} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {scale, verticalScale} from './Responsive';
 import Color from '../component/Color';
 import Font from '../component/Font';
@@ -10,10 +10,6 @@ import {Avatar} from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import useTheme from '../component/Theme';
-import CustomeModal from './CustomeModal';
-import LanguageModalContent from '../component/auth/LanguageModalContent';
-import strings from '../language/strings';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CustomeHeader = ({
   goBack,
@@ -52,7 +48,6 @@ const CustomeHeader = ({
   openLanguageModal,
   selectedLanguage,
 }) => {
-  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const editRef = useRef(null);
   const threeDotIconRef = useRef(null);
@@ -146,7 +141,7 @@ const CustomeHeader = ({
           <Entypo name="plus" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
-      {title == 'AI' && (
+      {title === 'AI' && (
         <Pressable
           style={[styles.adIcon, videoIconStyle]}
           onPress={() => showVideoAd()}>

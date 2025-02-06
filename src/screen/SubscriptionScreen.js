@@ -11,7 +11,7 @@ import {
 import React, {useCallback, memo, useEffect, useState, useRef} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../component/Color';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import CustomeHeader from '../custome/CustomeHeader';
 import {scale, verticalScale} from '../custome/Responsive';
 import Font from '../component/Font';
@@ -42,7 +42,6 @@ const SubscriptionScreen = () => {
   const [visible, setVisible] = useState(false);
   const [subscriptionData, setSubscriptionData] = useState([]);
   const [iapInitialized, setIapInitialized] = useState(false);
-  const [error, setError] = useState(null);
   const [subscriptions, setSubscriptions] = useState([]);
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [popupTitle, setPopupTitle] = useState('');
@@ -73,7 +72,6 @@ const SubscriptionScreen = () => {
       }
     } catch (err) {
       console.error('Error initializing IAP:', err);
-      setError(err);
     }
   };
 
@@ -83,13 +81,13 @@ const SubscriptionScreen = () => {
       getCurrentPurchases();
       previousProductId();
     }
-  }, [isFocused, changePlan, data]);
+  }, [isFocused, changePlan, data, previousProductId]);
 
   useEffect(() => {
     if (iapInitialized) {
       getSubscriptionData();
     }
-  }, [iapInitialized]);
+  }, [iapInitialized, getSubscriptionData]);
 
   useEffect(() => {
     const updatedArray = subscriptionData.map((item, index) => {
@@ -110,7 +108,7 @@ const SubscriptionScreen = () => {
 
   // ================================= Api =============================== //
 
-  const getSubscriptionData = async (message, messageValue) => {
+  const getSubscriptionData = useCallback(async (message, messageValue) => {
     try {
       setVisible(true);
       const url = `${Api.subscription}`;
@@ -125,41 +123,38 @@ const SubscriptionScreen = () => {
     } finally {
       setVisible(false);
     }
-  };
+  }, []);
 
-  const updateSubscription = async (
-    startDate,
-    endDate,
-    productId,
-    tierId,
-    item,
-  ) => {
-    const rawData = {
-      _id: selectedSubscription?._id,
-      productId: productId,
-      userId: global?.user?._id,
-      tierId: tierId,
-      startDate: startDate,
-      endDate: endDate,
-    };
-    setVisible(true);
-    try {
-      const response = await apiPut(
-        Api.updateSubscription,
-        '',
-        JSON.stringify(rawData),
-      );
-      AsyncStorage.setItem('selectedSubscription', item?._id);
-      setChangePlan(true);
-      cancelSubscription();
-    } catch (error) {
-      console.log('error in edit Set api', error);
-    } finally {
-      setVisible(false);
-    }
-  };
+  const updateSubscription = useCallback(
+    async (startDate, endDate, productId, tierId, item) => {
+      const rawData = {
+        _id: selectedSubscription?._id,
+        productId: productId,
+        userId: global?.user?._id,
+        tierId: tierId,
+        startDate: startDate,
+        endDate: endDate,
+      };
+      setVisible(true);
+      try {
+        const response = await apiPut(
+          Api.updateSubscription,
+          '',
+          JSON.stringify(rawData),
+        );
+        AsyncStorage.setItem('selectedSubscription', item?._id);
+        setChangePlan(true);
+        cancelSubscription();
+      } catch (error) {
+        console.log('error in edit Set api', error);
+      } finally {
+        setVisible(false);
+      }
+    },
+    [cancelSubscription, selectedSubscription],
+  );
 
-  const cancelSubscription = async () => {
+  const cancelSubscription = useCallback(async () => {
     const offerToken = isAndroid
       ? subscribedData?.sku?.subscriptionOfferDetails[0]?.offerToken
       : null;
@@ -182,7 +177,7 @@ const SubscriptionScreen = () => {
     } finally {
       setVisible(false);
     }
-  };
+  }, [subscribedData]);
 
   // ====================== react native in-app-purchase function ====================== //
 
@@ -209,48 +204,54 @@ const SubscriptionScreen = () => {
       setSubscriptions(subscriptionData);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
-      setError(error);
     }
   };
 
-  const onUpgradeSubscription = async (currentSku, newSku, tierId, item) => {
-    try {
-      const isUpgrade = !!currentSku;
+  const onUpgradeSubscription = useCallback(
+    async (currentSku, newSku, tierId, item) => {
+      try {
+        const isUpgrade = !!currentSku;
 
-      const offerToken = isAndroid
-        ? newSku?.subscriptionOfferDetails[0]?.offerToken
-        : null;
+        const offerToken = isAndroid
+          ? newSku?.subscriptionOfferDetails[0]?.offerToken
+          : null;
 
-      const purchaseData = await requestSubscription({
-        sku: newSku?.productId,
-        ...(isAndroid &&
-          isUpgrade && {
-            replaceSkusProration: {
-              skusToReplace: [currentSku],
-            },
+        const purchaseData = await requestSubscription({
+          sku: newSku?.productId,
+          ...(isAndroid &&
+            isUpgrade && {
+              replaceSkusProration: {
+                skusToReplace: [currentSku],
+              },
+            }),
+          ...(offerToken && {
+            subscriptionOffers: [{sku: newSku?.productId, offerToken}],
           }),
-        ...(offerToken && {
-          subscriptionOffers: [{sku: newSku?.productId, offerToken}],
-        }),
-      });
+        });
 
-      const currentDate = new Date();
-      const startDate = moment(currentDate).format('YYYY-MM-DD');
-      const endDate = moment(currentDate).add(1, 'month').format('YYYY-MM-DD');
-      const productId = purchaseData[0]?.productId;
+        const currentDate = new Date();
+        const startDate = moment(currentDate).format('YYYY-MM-DD');
+        const endDate = moment(currentDate)
+          .add(1, 'month')
+          .format('YYYY-MM-DD');
+        const productId = purchaseData[0]?.productId;
 
-      updateSubscription(startDate, endDate, productId, tierId, item);
+        updateSubscription(startDate, endDate, productId, tierId, item);
 
-      setPopupTitle('Success');
-      setPopupMessage(`Upgrade Successful! You upgraded to ${newSku?.title}.`);
-      setPopupVisible(true);
-    } catch (error) {
-      console.error('Upgrade Subscription Error:', error);
-      setPopupTitle('Error');
-      setPopupMessage('Upgrade Cancelled');
-      setPopupVisible(true);
-    }
-  };
+        setPopupTitle('Success');
+        setPopupMessage(
+          `Upgrade Successful! You upgraded to ${newSku?.title}.`,
+        );
+        setPopupVisible(true);
+      } catch (error) {
+        console.error('Upgrade Subscription Error:', error);
+        setPopupTitle('Error');
+        setPopupMessage('Upgrade Cancelled');
+        setPopupVisible(true);
+      }
+    },
+    [updateSubscription],
+  );
 
   const getCurrentPurchases = async () => {
     try {
@@ -263,18 +264,18 @@ const SubscriptionScreen = () => {
 
   // ======================================== End ======================================= //
 
-  const previousProductId = async () => {
+  const previousProductId = useCallback(async () => {
     const selectedSubscription = await AsyncStorage.getItem(
       'selectedSubscription',
     );
     setSubscribedId(JSON.parse(selectedSubscription)?._id);
     data?.map((item, index) => {
-      if (item?._id == JSON.parse(selectedSubscription)?._id) {
+      if (item?._id === JSON.parse(selectedSubscription)?._id) {
         setSubscribedData(item);
       }
     });
     // setSubscribedData(JSON.parse(selectedSubscription));
-  };
+  }, [data]);
 
   const closePopup = () => {
     setPopupVisible(false);
@@ -284,9 +285,9 @@ const SubscriptionScreen = () => {
     refRBSheet.current.open();
   };
 
-  const closeSubscriptionBottomSheet = () => {
+  const closeSubscriptionBottomSheet = useCallback(() => {
     refRBSheet.current.close();
-  };
+  }, []);
 
   const openPopupForCancelSubscription = () => {
     Linking.openURL(
@@ -308,86 +309,92 @@ const SubscriptionScreen = () => {
     );
   }, []);
 
-  const SubscriptionItem = memo(({item, colorTheme}) => {
-    const selectedPlan = item?._id === subscribedId;
+  const SubscriptionItem = useCallback(
+    ({item, colorTheme}) => {
+      const selectedPlan = item?._id === subscribedId;
 
-    return (
-      <Pressable
-        style={[
-          styles.subscriptionView,
-          // {backgroundColor: colorTheme.subscriptionView},
-        ]}
-        onPress={() => {
-          if (item?.name !== 'FREE') {
-            if (activeSubscription?.length > 0) {
-              onUpgradeSubscription(
-                activeSubscription[0]?.productId,
-                item?.sku,
-                item?._id,
-                item,
-              );
-            } else {
-              onUpgradeSubscription('', item?.sku, item?._id, item);
+      return (
+        <Pressable
+          style={[
+            styles.subscriptionView,
+            // {backgroundColor: colorTheme.subscriptionView},
+          ]}
+          onPress={() => {
+            if (item?.name !== 'FREE') {
+              if (activeSubscription?.length > 0) {
+                onUpgradeSubscription(
+                  activeSubscription[0]?.productId,
+                  item?.sku,
+                  item?._id,
+                  item,
+                );
+              } else {
+                onUpgradeSubscription('', item?.sku, item?._id, item);
+              }
             }
-          }
-        }}>
-        <View style={styles.subscriptionContainer}>
-          <View style={styles.subscriptionInfo}>
-            <Image
-              source={{uri: item?.icon}}
-              style={styles.subscriptionImage}
-              resizeMode="contain"
-            />
-            <Text
-              style={[styles.subscriptionName, {color: colorTheme.textColor}]}>
-              {item?.name}
-            </Text>
-          </View>
-          <View style={styles.subscriptionPriceContainer}>
-            <Text style={styles.subscriptionPrice}>{item?.price}</Text>
-          </View>
-        </View>
-        <View style={styles.bottomView}>
-          {item?.points && item?.points[0] && (
-            <View style={styles.creditView}>
-              <Entypo
-                name="dot-single"
-                size={scale(20)}
-                color={colorTheme.textColor}
+          }}>
+          <View style={styles.subscriptionContainer}>
+            <View style={styles.subscriptionInfo}>
+              <Image
+                source={{uri: item?.icon}}
+                style={styles.subscriptionImage}
+                resizeMode="contain"
               />
-              <Text style={[styles.credit, {color: colorTheme.textColor}]}>
-                {item?.points[0]}
+              <Text
+                style={[
+                  styles.subscriptionName,
+                  {color: colorTheme.textColor},
+                ]}>
+                {item?.name}
               </Text>
             </View>
-          )}
-          {item?.points && item?.points[1] && (
-            <View style={styles.creditView}>
-              <Entypo
-                name="dot-single"
-                size={scale(20)}
-                color={colorTheme.textColor}
-              />
-              <Text style={[styles.credit, {color: colorTheme.textColor}]}>
-                {item?.points[1]}
-              </Text>
+            <View style={styles.subscriptionPriceContainer}>
+              <Text style={styles.subscriptionPrice}>{item?.price}</Text>
             </View>
-          )}
-          {selectedPlan && (
-            <Image
-              source={require('../Assets/Img/selected.jpg')}
-              style={styles.selectedPlan}
-            />
-          )}
-        </View>
-      </Pressable>
-    );
-  });
+          </View>
+          <View style={styles.bottomView}>
+            {item?.points && item?.points[0] && (
+              <View style={styles.creditView}>
+                <Entypo
+                  name="dot-single"
+                  size={scale(20)}
+                  color={colorTheme.textColor}
+                />
+                <Text style={[styles.credit, {color: colorTheme.textColor}]}>
+                  {item?.points[0]}
+                </Text>
+              </View>
+            )}
+            {item?.points && item?.points[1] && (
+              <View style={styles.creditView}>
+                <Entypo
+                  name="dot-single"
+                  size={scale(20)}
+                  color={colorTheme.textColor}
+                />
+                <Text style={[styles.credit, {color: colorTheme.textColor}]}>
+                  {item?.points[1]}
+                </Text>
+              </View>
+            )}
+            {selectedPlan && (
+              <Image
+                source={require('../Assets/Img/selected.jpg')}
+                style={styles.selectedPlan}
+              />
+            )}
+          </View>
+        </Pressable>
+      );
+    },
+    [activeSubscription, onUpgradeSubscription, subscribedId],
+  );
 
   const renderSubscription = useCallback(
     ({item}) => {
       return <SubscriptionItem item={item} colorTheme={colorTheme} />;
     },
-    [data],
+    [colorTheme],
   );
 
   const BottomSheets = useCallback(() => {
@@ -413,7 +420,12 @@ const SubscriptionScreen = () => {
         </View>
       </RBSheet>
     );
-  }, [subscribedData, colorTheme, closeSubscriptionBottomSheet]);
+  }, [
+    subscribedData,
+    colorTheme,
+    closeSubscriptionBottomSheet,
+    cancelSubscription,
+  ]);
 
   return (
     <View style={[styles.container, {backgroundColor: colorTheme.background}]}>

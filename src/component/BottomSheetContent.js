@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useCallback, useEffect} from 'react';
+import React, {useMemo, useCallback, useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -20,21 +20,6 @@ import useTheme from './Theme';
 import strings from '../language/strings';
 
 const {width, height} = Dimensions.get('window');
-
-const colors = [
-  '#FFFFFF',
-  '#a378ff',
-  '#ea80fc',
-  '#ff8a80',
-  '#1de9b6',
-  '#25c6da',
-  '#81dbfe',
-  '#438afe',
-  '#81b0fd',
-  '#bdbdbd',
-  '#ff9f7f',
-  '#ffd27f',
-];
 
 const BottomSheetContent = ({
   closeBottomSheet,
@@ -58,13 +43,16 @@ const BottomSheetContent = ({
       setColor(initialData?.color);
       initialData?.isHighlight ? setColorView(true) : setColorView(false);
     }
-  }, [initialData]);
+  }, [initialData, setColor, setColorView, setName]);
 
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../Assets/Img/userIcon.png'), []);
   const lockIcon = useMemo(() => require('../Assets/Img/lock.png'), []);
 
-  const toggleSwitch = () => setStatus(status => (status === 0 ? 1 : 0));
+  const toggleSwitch = useCallback(
+    () => setStatus(status => (status === 0 ? 1 : 0)),
+    [setStatus],
+  );
 
   const handleSubmit = () => {
     if (name && status !== null && color) {
@@ -179,13 +167,16 @@ const BottomSheetContent = ({
     [
       name,
       color,
-      setStatus,
       title,
       userIcon,
       lockIcon,
       toggleSwitch,
       setColorView,
       colorView,
+      colorTheme,
+      setColor,
+      setName,
+      status,
     ],
   );
 

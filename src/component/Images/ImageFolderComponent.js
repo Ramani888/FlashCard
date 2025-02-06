@@ -16,8 +16,6 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import CustomeModal from '../../custome/CustomeModal';
 import BottomSheetContent from '../BottomSheetContent';
-import {useNavigation} from '@react-navigation/native';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loader from '../Loader';
 import ImageModalContent from './ImageModalContent';
@@ -25,12 +23,10 @@ import NoDataView from '../NoDataView';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
-import {moderateScale} from 'react-native-size-matters';
 
-const {height, width} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const ImageFolderComponent = ({onFolderClick}) => {
-  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -52,7 +48,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
   // ================================== Api =================================== //
 
   const getImageFolderData = async (message, messageValue) => {
-    message == false && setVisible(true);
+    message === false && setVisible(true);
     try {
       const response = await apiGet(
         `${Api.imageFolder}?userId=${global?.user?._id}`,
@@ -66,7 +62,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
     }
   };
 
-  const createImageFolder = async () => {
+  const createImageFolder = useCallback(async () => {
     const rawData = {
       name: folderName,
       color: folderColor,
@@ -87,9 +83,9 @@ const ImageFolderComponent = ({onFolderClick}) => {
     } catch (error) {
       console.log('error in create pdf folder api', error);
     }
-  };
+  }, [colorView, folderColor, folderName]);
 
-  const editImageFolder = async () => {
+  const editImageFolder = useCallback(async () => {
     const rawData = {
       _id: singleFolderItem?._id,
       name: folderName,
@@ -112,7 +108,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
     } catch (error) {
       console.log('error in edit pdf folder api', error);
     }
-  };
+  }, [closeModal, colorView, folderColor, folderName, singleFolderItem]);
 
   const deletePdfFolder = async () => {
     try {
@@ -162,7 +158,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
         <View style={styles.sheetContainer}>
           <BottomSheetContent
             closeBottomSheet={closeBottomSheet}
-            title={editBottomSheet ? strings.editFolder : strings.editFolder}
+            title={editBottomSheet ? strings.editFolder : strings.createFolder}
             name={folderName}
             setName={setFolderName}
             status={folderStatus}
@@ -177,7 +173,17 @@ const ImageFolderComponent = ({onFolderClick}) => {
         </View>
       </ActionSheet>
     );
-  }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
+  }, [
+    folderName,
+    folderStatus,
+    folderColor,
+    editBottomSheet,
+    colorView,
+    colorTheme,
+    createImageFolder,
+    editImageFolder,
+    singleFolderItem,
+  ]);
 
   const renderFolder = useCallback(
     ({item, index}) => {
@@ -231,7 +237,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
         </Pressable>
       );
     },
-    [openModal],
+    [openModal, colorTheme, colorView, onFolderClick, pdfFolderdata],
   );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
@@ -254,7 +260,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          visible == false && (
+          visible === false && (
             <NoDataView
               content={strings.folderNotFound}
               noDataViewStyle={{marginTop: verticalScale(-70)}}
@@ -286,7 +292,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.mainContainer}>
       <Loader visible={visible} />
       {renderBody()}
       <CustomeModal
@@ -325,6 +331,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
 export default ImageFolderComponent;
 
 const styles = StyleSheet.create({
+  mainContainer: {flex: 1},
   container: {
     marginHorizontal: scale(15),
     marginTop: verticalScale(15),
@@ -384,16 +391,6 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: 'absolute',
-  },
-  modal: {
-    position: 'absolute',
-    borderRadius: scale(10),
-    backgroundColor: Color.White,
-    elevation: scale(10),
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: scale(0.3),
-    shadowRadius: scale(4),
   },
   sheetContainer: {
     flexDirection: 'row',

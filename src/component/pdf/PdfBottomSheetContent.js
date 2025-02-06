@@ -51,7 +51,7 @@ const PdfBottomSheetContent = ({
       setColor(initialData?.color);
       initialData?.isHighlight ? setColorView(true) : setColorView(false);
     }
-  }, [initialData, setName, setColor]);
+  }, [initialData, setName, setColor, setColorView]);
 
   const handleDocumentPick = useCallback(async () => {
     try {
@@ -95,6 +95,7 @@ const PdfBottomSheetContent = ({
     setName,
     setColor,
     file,
+    setColorView,
   ]);
 
   const renderBody = useMemo(
@@ -190,6 +191,8 @@ const PdfBottomSheetContent = ({
       setColor,
       handleDocumentPick,
       colorView,
+      colorTheme,
+      setColorView,
     ],
   );
 

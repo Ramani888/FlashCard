@@ -24,10 +24,10 @@ const AboutUsScreen = () => {
         titleStyle={[styles.headerTitleStyle, {color: colorTheme.textColor}]}
       />
     );
-  }, []);
+  }, [colorTheme.textColor]);
 
   return (
-    <View style={{flex: 1, backgroundColor: colorTheme.background1}}>
+    <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
       {renderHeader()}
       <ScrollView style={styles.container}>
         <View

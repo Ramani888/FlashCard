@@ -63,7 +63,7 @@ const SetDetailScreen = () => {
   const threeDotIconRef = useRef();
   const mainThreeDotRef = useRef();
   const {setId, folderId} = route.params;
-  const themeColor = useTheme();
+  const colorTheme = useTheme();
 
   useEffect(() => {
     getCardData(false, false);
@@ -168,7 +168,7 @@ const SetDetailScreen = () => {
     mainThreeDotRef.current.measureInWindow((x, y, width, height) => {
       const responsiveX = wp((x / wp(100)) * 100);
       const responsiveY = hp((y / hp(100)) * 100);
-      const modalX = responsiveX - wp(35);
+      const modalX = responsiveX - wp(38.5);
       const modalY = responsiveY + hp(5);
 
       setModalPosition({x: modalX, y: modalY});
@@ -380,7 +380,7 @@ const SetDetailScreen = () => {
   );
 
   return (
-    <LinearGradient colors={themeColor.gradientTheme} style={styles.container}>
+    <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
       <Loader visible={visible} />
       {renderHeader()}
       {renderBody}
@@ -394,7 +394,7 @@ const SetDetailScreen = () => {
         onClose={closeModal}
         closeModal={false}
         mainPadding={scale(5)}
-        backgroundColor={themeColor.modelBackground}
+        backgroundColor={colorTheme.modelBackground}
         content={
           <SetDetailModalContent
             closeModal={closeModal}
@@ -415,7 +415,7 @@ const SetDetailScreen = () => {
           {
             top: modalPosition.y,
             left: modalPosition.x,
-            backgroundColor: themeColor.modelBackgroundView,
+            backgroundColor: colorTheme.modelBackgroundView,
           },
         ]}
       />
@@ -425,7 +425,7 @@ const SetDetailScreen = () => {
         onClose={closeCardModal}
         closeModal={false}
         mainPadding={scale(5)}
-        backgroundColor={themeColor.modelBackground}
+        backgroundColor={colorTheme.modelBackground}
         content={
           <CardModalContent
             closeModal={closeCardModal}
@@ -443,7 +443,7 @@ const SetDetailScreen = () => {
           {
             top: cardModalPosition.y,
             left: cardModalPosition.x,
-            backgroundColor: themeColor.modelBackgroundView,
+            backgroundColor: colorTheme.modelBackgroundView,
           },
         ]}
       />
@@ -453,13 +453,13 @@ const SetDetailScreen = () => {
         onClose={closeNoteModal}
         closeModal={false}
         mainPadding={scale(5)}
-        backgroundColor={themeColor.modelBackground}
+        backgroundColor={colorTheme.modelBackground}
         content={
           <AddNoteModalContent
             item={item}
             folderId={folderId}
             setId={setId}
-            themeColor={themeColor}
+            colorTheme={colorTheme}
           />
         }
         width={scale(140)}
@@ -470,7 +470,7 @@ const SetDetailScreen = () => {
           {
             top: noteModalPosition.y,
             left: noteModalPosition.x,
-            backgroundColor: themeColor.modelBackgroundView,
+            backgroundColor: colorTheme.modelBackgroundView,
           },
         ]}
       />

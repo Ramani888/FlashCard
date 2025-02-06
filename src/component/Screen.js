@@ -26,7 +26,6 @@ import ViewFullImage from '../screen/images/ViewFullImage';
 import ViewPdfScreen from '../screen/pdf/ViewPdfScreen';
 import OtherUserScreen from '../screen/profile/contact/OtherUserScreen';
 import OtherUserCardScreen from '../screen/profile/contact/OtherUserCardScreen';
-import LanguageScreen from '../screen/LanguageScreen';
 import CommunityScreen from '../screen/CommunityScreen';
 
 export const ScreenName = {
@@ -92,5 +91,4 @@ export const ScreenPath = {
   ViewPdfScreen,
   OtherUserScreen,
   OtherUserCardScreen,
-  LanguageScreen,
 };

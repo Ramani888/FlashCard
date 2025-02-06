@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState, memo, useEffect} from 'react';
+import React, {useCallback, useRef, useState, useEffect} from 'react';
 import {
   Image,
   Pressable,
@@ -8,21 +8,19 @@ import {
   View,
   Dimensions,
   ScrollView,
-  ToastAndroid,
   BackHandler,
 } from 'react-native';
 import Color from '../component/Color';
 import {scale, verticalScale, moderateScale} from '../custome/Responsive';
 import Font from '../component/Font';
 import LinearGradient from 'react-native-linear-gradient';
-import {Switch} from '@rneui/themed';
 import {
   useFocusEffect,
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
 import {ScreenName} from '../component/Screen';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {setState} from '../redux/StateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from '../component/Theme';
@@ -30,34 +28,31 @@ import strings from '../language/strings';
 import AdBanner from './ads/BannerAds';
 import ToggleSwitch from 'toggle-switch-react-native';
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
-const IconButton = memo(({name, iconComponent, selected, onPress}) => {
-  const Icon = iconComponent;
+// const IconButton = memo(({name, iconComponent, selected, onPress}) => {
+//   const Icon = iconComponent;
 
-  return (
-    <Pressable
-      style={[styles.iconBtn, selected && styles.iconBtnSelected]}
-      onPress={onPress}>
-      <Icon
-        name={name}
-        size={moderateScale(15)}
-        color={selected ? Color.White : Color.theme1}
-        style={[styles.icon, selected && styles.iconSelected]}
-      />
-    </Pressable>
-  );
-});
+//   return (
+//     <Pressable
+//       style={[styles.iconBtn, selected && styles.iconBtnSelected]}
+//       onPress={onPress}>
+//       <Icon
+//         name={name}
+//         size={moderateScale(15)}
+//         color={selected ? Color.White : Color.theme1}
+//         style={[styles.icon, selected && styles.iconSelected]}
+//       />
+//     </Pressable>
+//   );
+// });
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  const refRBSheet = useRef();
   const isFocused = useIsFocused();
   const themeColor = useTheme();
   const navigation = useNavigation();
-  const [cardTypeData, setCardTypeData] = useState([]);
   const [theme, setTheme] = useState('Light');
-  const colorTheme = useTheme();
 
   useEffect(() => {
     const getInitialTheme = async () => {
@@ -76,10 +71,10 @@ const HomeScreen = () => {
   useEffect(() => {
     (async () => {
       const language = await AsyncStorage.getItem('language');
-      language == 'en' && strings.setLanguage('en');
-      language == 'gu' && strings.setLanguage('gu');
-      language == 'hi' && strings.setLanguage('hi');
-      language == 'fr' && strings.setLanguage('fr');
+      language === 'en' && strings.setLanguage('en');
+      language === 'gu' && strings.setLanguage('gu');
+      language === 'hi' && strings.setLanguage('hi');
+      language === 'fr' && strings.setLanguage('fr');
     })();
   }, [isFocused]);
 
@@ -93,7 +88,7 @@ const HomeScreen = () => {
 
       dispatch(setState({theme}));
     }
-  }, [theme]);
+  }, [theme, dispatch]);
 
   useFocusEffect(
     useCallback(() => {
@@ -109,7 +104,7 @@ const HomeScreen = () => {
     }, []),
   );
 
-  const tabView = () => {
+  const tabView = useCallback(() => {
     return (
       <View style={styles.tabViewContainer}>
         <View style={styles.tabRow}>
@@ -181,7 +176,7 @@ const HomeScreen = () => {
         </View>
       </View>
     );
-  };
+  }, [navigation]);
 
   // const BottomSheets = useCallback(() => {
   //   return (
@@ -218,18 +213,13 @@ const HomeScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <LinearGradient
           colors={
-            theme == 'Light'
+            theme === 'Light'
               ? ['#00394d', '#00394d', '#00394d']
               : ['#00394d', '#001f2b', '#001f2b', '#00394d']
           }
           style={styles.headerContainer}>
           <View style={{marginTop: verticalScale(0)}} />
-          <View
-            style={{
-              position: 'absolute',
-              right: moderateScale(20),
-              top: moderateScale(50),
-            }}>
+          <View style={styles.toggleBtnView}>
             <ToggleSwitch
               isOn={theme === 'Dark'}
               onColor="#04041599"
@@ -245,7 +235,7 @@ const HomeScreen = () => {
           <Text style={styles.headerText}>{strings.myCards}</Text>
           <Pressable
             onPress={() => navigation.navigate(ScreenName.setAndFolder)}>
-            {theme == 'Light' ? (
+            {theme === 'Light' ? (
               <Image
                 source={require('../Assets/Img/card.png')}
                 style={styles.cardImage}
@@ -263,7 +253,7 @@ const HomeScreen = () => {
         <AdBanner />
       </ScrollView>
     ),
-    [cardTypeData, theme],
+    [theme, navigation, tabView],
   );
 
   return (
@@ -383,5 +373,10 @@ const styles = StyleSheet.create({
     paddingTop: verticalScale(5),
     width: scale(100),
     textAlign: 'center',
+  },
+  toggleBtnView: {
+    position: 'absolute',
+    right: moderateScale(20),
+    top: moderateScale(50),
   },
 });

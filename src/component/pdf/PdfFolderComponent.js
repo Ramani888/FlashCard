@@ -1,11 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import CustomeButton from '../../custome/CustomeButton';
 import Color from '../Color';
@@ -17,22 +10,15 @@ import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import CustomeModal from '../../custome/CustomeModal';
 import PdfModalContent from './PdfModalContent';
 import BottomSheetContent from '../BottomSheetContent';
-import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loader from '../Loader';
 import NoDataView from '../NoDataView';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 
-const {height, width} = Dimensions.get('window');
-
 const PdfFolderComponent = ({onFolderClick}) => {
-  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -54,7 +40,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
   // ================================== Api =================================== //
 
   const getPdfFolderData = async (message, messageValue) => {
-    message == false && setVisible(true);
+    message === false && setVisible(true);
     try {
       const response = await apiGet(
         `${Api.pdfFolder}?userId=${global?.user?._id}`,
@@ -68,49 +54,59 @@ const PdfFolderComponent = ({onFolderClick}) => {
     }
   };
 
-  const createPdfFolder = async (message, messageValue) => {
-    const rawData = {
-      name: folderName,
-      color: folderColor,
-      userId: global?.user?._id,
-      isHighlight: colorView,
-    };
-    setVisible(true);
-    try {
-      const response = await apiPost(
-        Api.pdfFolder,
-        '',
-        JSON.stringify(rawData),
-      );
-      setFolderName('');
-      setFolderStatus(0);
-      setFolderColor('');
-      getPdfFolderData(true, response?.message);
-    } catch (error) {
-      console.log('error in create pdf folder api', error);
-    }
-  };
+  const createPdfFolder = useCallback(
+    async (message, messageValue) => {
+      const rawData = {
+        name: folderName,
+        color: folderColor,
+        userId: global?.user?._id,
+        isHighlight: colorView,
+      };
+      setVisible(true);
+      try {
+        const response = await apiPost(
+          Api.pdfFolder,
+          '',
+          JSON.stringify(rawData),
+        );
+        setFolderName('');
+        setFolderStatus(0);
+        setFolderColor('');
+        getPdfFolderData(true, response?.message);
+      } catch (error) {
+        console.log('error in create pdf folder api', error);
+      }
+    },
+    [colorView, folderColor, folderName],
+  );
 
-  const editPdfFolder = async (message, messageValue) => {
-    const rawData = {
-      _id: singleFolderItem?._id,
-      name: folderName,
-      color: folderColor,
-      userId: global?.user?._id,
-      isHighlight: colorView,
-    };
-    closeModal();
-    setVisible(true);
-    try {
-      const response = await apiPut(Api.pdfFolder, '', JSON.stringify(rawData));
-      setFolderName('');
-      setFolderStatus(0);
-      setFolderColor('');
-      getPdfFolderData(true, response?.message);
-    } catch (error) {
-      console.log('error in edit pdf folder api', error);
-    }
-  };
+  const editPdfFolder = useCallback(
+    async (message, messageValue) => {
+      const rawData = {
+        _id: singleFolderItem?._id,
+        name: folderName,
+        color: folderColor,
+        userId: global?.user?._id,
+        isHighlight: colorView,
+      };
+      closeModal();
+      setVisible(true);
+      try {
+        const response = await apiPut(
+          Api.pdfFolder,
+          '',
+          JSON.stringify(rawData),
+        );
+        setFolderName('');
+        setFolderStatus(0);
+        setFolderColor('');
+        getPdfFolderData(true, response?.message);
+      } catch (error) {
+        console.log('error in edit pdf folder api', error);
+      }
+    },
+    [closeModal, colorView, folderColor, folderName, singleFolderItem],
+  );
 
   const deletePdfFolder = async () => {
     try {
@@ -175,7 +171,17 @@ const PdfFolderComponent = ({onFolderClick}) => {
         </View>
       </ActionSheet>
     );
-  }, [folderName, folderStatus, folderColor, editBottomSheet, colorView]);
+  }, [
+    folderName,
+    folderStatus,
+    folderColor,
+    editBottomSheet,
+    colorView,
+    colorTheme,
+    createPdfFolder,
+    editPdfFolder,
+    singleFolderItem,
+  ]);
 
   const renderFolder = useCallback(
     ({item, index}) => {
@@ -229,7 +235,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
         </Pressable>
       );
     },
-    [openModal],
+    [openModal, colorTheme, colorView, onFolderClick, pdfFolderdata],
   );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
@@ -250,7 +256,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
             style={styles.flatlist}
           />
         ) : (
-          visible == false && (
+          visible === false && (
             <NoDataView
               content={strings.folderNotFound}
               noDataViewStyle={{marginTop: verticalScale(-70)}}
@@ -282,7 +288,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.mainContainer}>
       <Loader visible={visible} />
       {renderBody()}
       <CustomeModal
@@ -321,6 +327,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
 export default PdfFolderComponent;
 
 const styles = StyleSheet.create({
+  mainContainer: {flex: 1},
   container: {
     marginHorizontal: scale(15),
     marginTop: verticalScale(15),
@@ -379,16 +386,6 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: 'absolute',
-  },
-  modal: {
-    position: 'absolute',
-    borderRadius: scale(10),
-    backgroundColor: Color.White,
-    elevation: scale(10),
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: scale(0.3),
-    shadowRadius: scale(4),
   },
   indicatorStyle: {
     marginTop: verticalScale(10),
