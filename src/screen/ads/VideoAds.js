@@ -5,7 +5,7 @@ import React, {
   forwardRef,
   useCallback,
 } from 'react';
-import {View, StatusBar, StyleSheet} from 'react-native';
+import {View, Alert, StatusBar, StyleSheet} from 'react-native';
 import {
   RewardedAd,
   RewardedAdEventType,
@@ -14,7 +14,11 @@ import {
 } from 'react-native-google-mobile-ads';
 import Color from '../../component/Color';
 
-const adUnitId = _DEV_
+// const adUnitId = _DEV_
+//   ? TestIds.REWARDED
+//   : 'ca-app-pub-9823475062473479/5214348018';
+
+const adUnitId = __DEV__
   ? TestIds.REWARDED
   : 'ca-app-pub-9823475062473479/5214348018';
 
