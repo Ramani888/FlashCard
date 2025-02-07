@@ -10,6 +10,7 @@ import {Avatar} from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import useTheme from '../component/Theme';
+import strings from '../language/strings';
 
 const CustomeHeader = ({
   goBack,
@@ -141,7 +142,7 @@ const CustomeHeader = ({
           <Entypo name="plus" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
-      {title === 'AI' && (
+      {title === strings.homeTab2 && (
         <Pressable
           style={[styles.adIcon, videoIconStyle]}
           onPress={() => showVideoAd()}>
