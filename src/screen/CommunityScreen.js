@@ -176,6 +176,7 @@ const GlobalLiveFeedScreen = () => {
             <NoDataView
               content={strings.noDataFound}
               noDataTextStyle={styles.noDataText}
+              isCommunityScreen={true}
             />
           </View>
         )
