@@ -12,7 +12,7 @@ import {MenuProvider} from 'react-native-popup-menu';
 import {withIAPContext} from 'react-native-iap';
 import CheckNetwork from './src/screen/CheckNetwork';
 import CustomeModal from './src/custome/CustomeModal';
-import { moderateScale, scale, verticalScale } from './src/custome/Responsive';
+import {moderateScale, scale, verticalScale} from './src/custome/Responsive';
 import CustomeButton from './src/custome/CustomeButton';
 import Font from './src/component/Font';
 import firestore from '@react-native-firebase/firestore';
@@ -67,7 +67,10 @@ const App = gestureHandlerRootHOC(() => {
               content={
                 <View style={styles.modalContainer}>
                   <View style={styles.imageView}>
-                    <Image source={require('./src/Assets/Img/update.png')} style={styles.image}/>
+                    <Image
+                      source={require('./src/Assets/Img/update.png')}
+                      style={styles.image}
+                    />
                   </View>
                   <Text style={styles.text1}>App Update Required!</Text>
                   <Text style={styles.text2}>
@@ -105,19 +108,19 @@ export default withIAPContext(App);
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-  modalContainer:{alignItems:'center'},
+  modalContainer: {alignItems: 'center'},
   text1: {
     fontSize: scale(20),
     color: Color.White,
     fontFamily: 'Montserrat-SemiBold',
     textAlign: 'center',
   },
-  text2:{
+  text2: {
     fontSize: scale(13),
     color: Color.White,
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
   },
-  imageView:{marginTop:verticalScale(-90),marginBottom:verticalScale(-25)},
-  image:{width:scale(150),height:scale(150)}
+  imageView: {marginTop: verticalScale(-90), marginBottom: verticalScale(-25)},
+  image: {width: scale(150), height: scale(150)},
 });
