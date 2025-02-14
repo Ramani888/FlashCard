@@ -17,9 +17,14 @@ const AdBanner = () => {
     MobileAds()
       .initialize()
       .then(() => {
-        MobileAds().setRequestConfiguration({
+        // Set AdMob configuration to comply with Families Policy
+        const requestConfig = {
           testDeviceIdentifiers: ['EMULATOR', 'YOUR_DEVICE_ID'], // Add your test device ID
-        });
+          tagForChildDirectedTreatment: true, // Ensures compliance with COPPA
+          tagForUnderAgeOfConsent: true, // Ensures compliance with GDPR
+          maxAdContentRating: 'G', // Limits ads to family-friendly content
+        };
+        MobileAds().setRequestConfiguration(requestConfig);
       });
   }, []);
 
