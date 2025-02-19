@@ -57,7 +57,7 @@ const AppNav = () => {
 
   return (
     <View style={styles.container}>
-      <AppStack user={user} />
+      <AppStack />
     </View>
   );
 };

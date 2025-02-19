@@ -4,8 +4,9 @@ import {ScreenName, ScreenPath} from '../component/Screen';
 
 const Stack = createStackNavigator();
 
-const AppStack = ({user}) => {
+const AppStack = () => {
   const {
+    splash,
     signIn,
     signUp,
     otpVerify,
@@ -37,6 +38,7 @@ const AppStack = ({user}) => {
     otherUserCard,
   } = ScreenName;
   const {
+    SplashScreen,
     SignUpScreen,
     OtpVerifyScreen,
     SignInScreen,
@@ -68,13 +70,14 @@ const AppStack = ({user}) => {
     OtherUserCardScreen,
   } = ScreenPath;
 
-  const initialRouteName = useMemo(
-    () => (user ? home : signIn),
-    [user, home, signIn],
-  );
-
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
+    <Stack.Navigator initialRouteName={splash}>
+      <Stack.Screen
+        name={splash}
+        component={SplashScreen}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name={signUp}
         component={SignUpScreen}

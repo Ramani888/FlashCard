@@ -55,7 +55,6 @@ const SignInScreen = () => {
       const parseUserData = JSON.parse(userData);
       global.user = parseUserData;
       global.token = parseUserData?.token;
-      // navigation.dispatch(StackActions.replace(ScreenName.home));
       navigation.reset({
         index: 0,
         routes: [

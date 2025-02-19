@@ -1,7 +1,6 @@
 import {Image, Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import LottieSplashScreen from 'react-native-lottie-splash-screen';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
 import Color from './src/component/Color';
@@ -32,10 +31,6 @@ const App = gestureHandlerRootHOC(() => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      LottieSplashScreen.hide();
-    }, 1500);
-
     mobileAds()
       .initialize()
       .then(() => {

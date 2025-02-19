@@ -27,8 +27,10 @@ import ViewPdfScreen from '../screen/pdf/ViewPdfScreen';
 import OtherUserScreen from '../screen/profile/contact/OtherUserScreen';
 import OtherUserCardScreen from '../screen/profile/contact/OtherUserCardScreen';
 import CommunityScreen from '../screen/CommunityScreen';
+import SplashScreen from '../screen/auth/SplashScreen';
 
 export const ScreenName = {
+  splash: 'SplashScreen',
   signUp: 'SignUp',
   otpVerify: 'OtpVerify',
   signIn: 'SignIn',
@@ -62,6 +64,7 @@ export const ScreenName = {
 };
 
 export const ScreenPath = {
+  SplashScreen,
   SignUpScreen,
   OtpVerifyScreen,
   SignInScreen,

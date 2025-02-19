@@ -285,7 +285,10 @@ const ProfileScreen = () => {
       const user = await AsyncStorage.removeItem('user');
       showMessageonTheScreen(strings.userLogoutSuccess);
       global.user = user;
-      navigation.navigate(ScreenName.signIn);
+      navigation.reset({
+        index: 0,
+        routes: [{name: ScreenName.signIn}],
+      });
     } catch (error) {
       console.log('error in logout', error);
     } finally {
