@@ -555,7 +555,7 @@ const ProfileScreen = () => {
           />
         }
         width={'80%'}
-        height={'68.6%'}
+        // height={'68.6%'}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[
