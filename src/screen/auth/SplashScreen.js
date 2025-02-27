@@ -26,7 +26,7 @@ const SplashScreen = () => {
           index: 0,
           routes: [{name: ScreenName.home}],
         });
-      }, 3000);
+      }, 500);
     } else {
       setTimeout(() => {
         LottieSplashScreen.hide();
@@ -34,7 +34,7 @@ const SplashScreen = () => {
           index: 0,
           routes: [{name: ScreenName.signIn}],
         });
-      }, 3000);
+      }, 500);
     }
   }, [navigation]);
 

@@ -1,5 +1,5 @@
 import React, {useState, memo} from 'react';
-import {Pressable, StyleSheet, Text, View, Dimensions} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
