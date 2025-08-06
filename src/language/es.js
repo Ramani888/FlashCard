@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notas',
   homeTab4: "PDF's",
   homeTab5: 'Imágenes',
-  homeTab6: 'Comunidad',
+  homeTab6: 'Kaardid',
   selectFolder: 'SELECCIONAR CARPETA',
   createFolder: 'CREAR CARPETA',
   editFolder: 'EDITAR CARPETA',

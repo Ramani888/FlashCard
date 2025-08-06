@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notes',
   homeTab4: 'PDFs',
   homeTab5: 'Images',
-  homeTab6: 'Communauté',
+  homeTab6: 'Cartes',
   selectFolder: 'SÉLECTIONNER UN DOSSIER',
   createFolder: 'CRÉER UN DOSSIER',
   editFolder: 'MODIFIER UN DOSSIER',

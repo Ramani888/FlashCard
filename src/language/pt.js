@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notas',
   homeTab4: "PDF's",
   homeTab5: 'Imagens',
-  homeTab6: 'Comunidade',
+  homeTab6: 'Cartões',
   selectFolder: 'SELECIONAR PASTA',
   createFolder: 'CRIAR PASTA',
   editFolder: 'EDITAR PASTA',

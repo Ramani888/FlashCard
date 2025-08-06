@@ -39,6 +39,7 @@ const SetComponent = ({
   setOpenSetSheet,
   setLoading,
   search,
+  showFolder
 }) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -248,23 +249,25 @@ const SetComponent = ({
               </Pressable>
             </View>
           </Pressable>
-          <View style={[styles.folderContainer, styles.alignSelf]}>
-            <Image
-              source={require('../../Assets/Img/folder.png')}
-              style={styles.folderIcon}
-            />
-            <Text
-              style={[
-                styles.folderText,
-                {marginLeft: item?.folderName ? scale(5) : 0},
-              ]}>
-              {item?.folderName ? item?.folderName : ''}
-            </Text>
-          </View>
+          {showFolder && (
+            <View style={[styles.folderContainer, styles.alignSelf]}>
+              <Image
+                source={require('../../Assets/Img/folder.png')}
+                style={styles.folderIcon}
+              />
+              <Text
+                style={[
+                  styles.folderText,
+                  {marginLeft: item?.folderName ? scale(5) : 0},
+                ]}>
+                {item?.folderName ? item?.folderName : ''}
+              </Text>
+            </View>
+          )}
         </View>
       );
     },
-    [setData, colorTheme, colorView, folderId, navigation],
+    [setData, colorTheme, colorView, folderId, navigation, showFolder],
   );
 
   const BottomSheets = useCallback(() => {

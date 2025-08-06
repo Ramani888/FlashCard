@@ -121,6 +121,16 @@ const CustomeHeader = ({
           <AntDesign name="search1" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
+      {imageFolder && (
+        <Pressable
+          style={[styles.adIcon, videoIconStyle, searchIcon ? { top: verticalScale(50), right: scale(60) } : { right: scale(15) }]}
+          onPress={() => setShowFolder(!showFolder)}>
+          <Image
+            source={require('../Assets/Img/imageFolder.png')}
+            style={styles.imageFolder}
+          />
+        </Pressable>
+      )}
       {edit && (
         <Pressable
           ref={editRef}
@@ -162,17 +172,6 @@ const CustomeHeader = ({
             size={scale(13)}
             color={Color.White}
             style={styles.dotsIcon}
-          />
-        </Pressable>
-      )}
-
-      {imageFolder && (
-        <Pressable
-          style={[styles.adIcon, videoIconStyle]}
-          onPress={() => setShowFolder(!showFolder)}>
-          <Image
-            source={require('../Assets/Img/imageFolder.png')}
-            style={styles.imageFolder}
           />
         </Pressable>
       )}

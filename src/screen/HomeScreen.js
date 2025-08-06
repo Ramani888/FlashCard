@@ -143,9 +143,9 @@ const HomeScreen = () => {
         <View style={styles.tabRowSecondary}>
           <Pressable
             style={styles.tabContainer}
-            onPress={() => navigation.navigate(ScreenName.community)}>
+            onPress={() => navigation.navigate(ScreenName.setAndFolder)}>
             <Image
-              source={require('../Assets/Img/earthBigIcon.png')}
+              source={require('../Assets/Img/cardIcon.png')}
               style={styles.tabIcon}
               tintColor={Color.theme1}
             />
@@ -232,7 +232,8 @@ const HomeScreen = () => {
               }
             />
           </View>
-          <Text style={styles.headerText}>{strings.myCards}</Text>
+          <Text style={styles.headerText}></Text>
+          {/* <Text style={styles.headerText}>{strings.myCards}</Text> */}
           <Pressable
             onPress={() => navigation.navigate(ScreenName.setAndFolder)}>
             {theme === 'Light' ? (

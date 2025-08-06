@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notes',
   homeTab4: "PDF's",
   homeTab5: 'Images',
-  homeTab6: 'Community',
+  homeTab6: 'Cards',
   selectFolder: 'SELECT FOLDER',
   createFolder: 'CREATE FOLDER',
   editFolder: 'EDIT FOLDER',

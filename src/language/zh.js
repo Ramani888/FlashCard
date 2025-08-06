@@ -5,7 +5,7 @@ export default {
   homeTab3: '笔记',
   homeTab4: 'PDF 文件',
   homeTab5: '图片',
-  homeTab6: '社区',
+  homeTab6: '卡片',
   selectFolder: '选择文件夹',
   createFolder: '创建文件夹',
   editFolder: '编辑文件夹',

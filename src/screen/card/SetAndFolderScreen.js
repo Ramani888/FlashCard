@@ -25,6 +25,7 @@ const {width, height} = Dimensions.get('window');
 const SetAndFolderScreen = () => {
   const [search, setSearch] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showFolder, setShowFolder] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [tab, setTab] = useState('SET`');
   const [folderId, setFolderId] = useState('');
@@ -47,19 +48,24 @@ const SetAndFolderScreen = () => {
     setOpenSetSheet(true);
   };
 
+  const isImageFolder = tab === 'SET' ? true : false;
+
   const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={strings.myCards}
+        imageFolder={isImageFolder}
+        setShowFolder={setShowFolder}
+        showFolder={showFolder}
+        // title={strings.myCards}
         containerStyle={styles.headerStyle}
         searchIcon={true}
         setSearch={setSearch}
         search={search}
       />
     );
-  }, [search]);
+  }, [search, tab, showFolder]);
 
   const buttons = useCallback(
     () => (
@@ -159,6 +165,7 @@ const SetAndFolderScreen = () => {
               setOpenSetSheet={setOpenSetSheet}
               setLoading={setLoading}
               search={searchValue}
+              showFolder={showFolder}
             />
           )}
           {tab === 'FOLDERS' && (

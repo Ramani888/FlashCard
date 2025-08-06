@@ -5,7 +5,7 @@ export default {
   homeTab3: 'नोट्स',
   homeTab4: 'पीडीएफ्स',
   homeTab5: 'चित्र',
-  homeTab6: 'समुदाय',
+  homeTab6: 'कार्ड्स',
   selectFolder: 'फ़ोल्डर चुनें',
   createFolder: 'फ़ोल्डर बनाएं',
   editFolder: 'फ़ोल्डर संपादित करें',

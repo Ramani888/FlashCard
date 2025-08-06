@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notizen',
   homeTab4: 'PDFs',
   homeTab5: 'Bilder',
-  homeTab6: 'Gemeinschaft',
+  homeTab6: 'Karten',
   selectFolder: 'ORDNER AUSWÄHLEN',
   createFolder: 'ORDNER ERSTELLEN',
   editFolder: 'ORDNER BEARBEITEN',

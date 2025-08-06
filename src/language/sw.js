@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Vidokezo',
   homeTab4: 'PDF',
   homeTab5: 'Picha',
-  homeTab6: 'Jumuiya',
+  homeTab6: 'Kadi',
   selectFolder: 'CHAGUA FOLDA',
   createFolder: 'UNDA FOLDA',
   editFolder: 'HARIRI FOLDA',

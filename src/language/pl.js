@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Notatki',
   homeTab4: 'PDF-y',
   homeTab5: 'Obrazy',
-  homeTab6: 'Społeczność',
+  homeTab6: 'Karty',
   selectFolder: 'WYBIERZ FOLDER',
   createFolder: 'UTWÓRZ FOLDER',
   editFolder: 'EDYTUJ FOLDER',

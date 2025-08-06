@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Note',
   homeTab4: 'PDF',
   homeTab5: 'Immagini',
-  homeTab6: 'Comunità',
+  homeTab6: 'Carte',
   selectFolder: 'SELEZIONA CARTELLA',
   createFolder: 'CREA CARTELLA',
   editFolder: 'MODIFICA CARTELLA',

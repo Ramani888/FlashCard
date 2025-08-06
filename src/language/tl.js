@@ -5,7 +5,7 @@ export default {
   homeTab3: 'Mga Tala',
   homeTab4: 'PDF',
   homeTab5: 'Mga Larawan',
-  homeTab6: 'Komunidad',
+  homeTab6: 'Mga Kard',
   selectFolder: 'PUMILI NG FOLDER',
   createFolder: 'GUMAWA NG FOLDER',
   editFolder: 'I-EDIT ANG FOLDER',
