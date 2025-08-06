@@ -143,7 +143,7 @@ export default {
 
   contactNotfound: 'Mawasiliano hayapatikani',
   watchAd: 'Tazama tangazo',
-  earnCredits: 'Pata alama 3',
+  earnCredits: 'Pata alama 2',
   attachScreenShot: 'Ambatisha picha ya tatizo',
 
   privacyAndTerms: 'FARAGHA NA MASHARTI',

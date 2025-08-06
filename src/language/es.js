@@ -144,7 +144,7 @@ export default {
 
   contactNotfound: 'Contacto no encontrado',
   watchAd: 'Ver anuncio',
-  earnCredits: 'Gana 3 créditos',
+  earnCredits: 'Gana 2 créditos',
   attachScreenShot: 'Adjuntar captura de pantalla del problema',
 
   privacyAndTerms: 'PRIVACIDAD Y TÉRMINOS',

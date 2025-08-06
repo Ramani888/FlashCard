@@ -141,7 +141,7 @@ export default {
 
   contactNotfound: '找不到联系人',
   watchAd: '看广告',
-  earnCredits: '赚取 3 个积分',
+  earnCredits: '赚取 2 个积分',
   attachScreenShot: '附上问题截图',
 
   privacyAndTerms: '隐私与条款',

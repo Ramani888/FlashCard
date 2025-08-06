@@ -30,7 +30,7 @@ const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
 
   useEffect(() => {
     if (reward) {
-      updateCredit(3, 'credited');
+      updateCredit(2, 'credited');
       setReward(null);
     }
   }, [reward, updateCredit]);

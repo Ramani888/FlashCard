@@ -143,7 +143,7 @@ export default {
 
   contactNotfound: 'Contact introuvable',
   watchAd: "Regarder l'annonce",
-  earnCredits: 'Gagnez 3 crédits',
+  earnCredits: 'Gagnez 2 crédits',
   attachScreenShot: "Joindre une capture d'écran du problème",
 
   privacyAndTerms: 'CONFIDENTIALITÉ ET CONDITIONS',

@@ -143,7 +143,7 @@ export default {
 
   contactNotfound: 'Walang nakitang contact',
   watchAd: 'Panoorin ang ad',
-  earnCredits: 'Kumita ng 3 credits',
+  earnCredits: 'Kumita ng 2 credits',
   attachScreenShot: 'I-attach ang screenshot ng isyu',
 
   privacyAndTerms: 'PRIBADO AT MGA TUNTUNIN',
