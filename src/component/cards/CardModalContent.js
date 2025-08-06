@@ -9,6 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
+import Clipboard from '@react-native-clipboard/clipboard'; // Add this import
 
 const PressableItem = ({
   icon,
@@ -29,6 +30,8 @@ const PressableItem = ({
 const CardModalContent = ({closeModal, deleteCard, item, folderId, setId}) => {
   const navigation = useNavigation();
   const colorTheme = useTheme();
+
+  console.log('CardModalContent item:', item);
 
   return (
     <View>
@@ -64,6 +67,22 @@ const CardModalContent = ({closeModal, deleteCard, item, folderId, setId}) => {
         colorTheme={colorTheme}
         onPress={() => {
           deleteCard(item?._id);
+          closeModal();
+        }}
+      />
+      <PressableItem
+        icon={
+          <MaterialIcons
+            name="content-copy"
+            size={scale(15)}
+            color={colorTheme.textColor}
+          />
+        }
+        text={strings.copy}
+        colorTheme={colorTheme}
+        onPress={() => {
+          const copyText = `${item?.top ?? ''}\n${item?.bottom ?? ''}`;
+          Clipboard.setString(copyText);
           closeModal();
         }}
       />

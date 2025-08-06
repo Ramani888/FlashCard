@@ -28,6 +28,7 @@ export default {
   none: 'Nenhum',
   edit: 'Editar',
   delete: 'Excluir',
+  copy: 'Copiar',
   move: 'Mover',
   allSet: 'TODOS OS CONJUNTOS',
   assignFolder: 'Atribuir Pasta',

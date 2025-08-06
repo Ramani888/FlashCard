@@ -28,6 +28,7 @@ export default {
   none: 'कोई नहीं',
   edit: 'संपादित करें',
   delete: 'हटाएं',
+  copy: 'कॉपी करें',
   move: 'स्थानांतरित करें',
   allSet: 'सभी सेट्स',
   assignFolder: 'फ़ोल्डर सौंपें',

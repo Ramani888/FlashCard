@@ -28,6 +28,7 @@ export default {
   none: '无',
   edit: '编辑',
   delete: '删除',
+  copy: '复制',
   move: '移动',
   allSet: '所有集合',
   assignFolder: '分配文件夹',

@@ -28,6 +28,7 @@ export default {
   none: 'Aucun',
   edit: 'Modifier',
   delete: 'Supprimer',
+  copy: 'Copier',
   move: 'Déplacer',
   allSet: 'TOUS LES ENSEMBLES',
   assignFolder: 'Attribuer un dossier',

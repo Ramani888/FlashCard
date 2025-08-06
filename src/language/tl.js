@@ -28,6 +28,7 @@ export default {
   none: 'Wala',
   edit: 'I-edit',
   delete: 'Tanggalin',
+  copy: 'Kopyahin',
   move: 'Ilipat',
   allSet: 'LAHAT NG MGA SET',
   assignFolder: 'Italaga ang Folder',

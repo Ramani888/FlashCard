@@ -28,6 +28,7 @@ export default {
   none: 'Ninguno',
   edit: 'Editar',
   delete: 'Eliminar',
+  copy: 'Copiar',
   move: 'Mover',
   allSet: 'TODOS LOS CONJUNTOS',
   assignFolder: 'Asignar Carpeta',

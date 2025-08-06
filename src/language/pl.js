@@ -28,6 +28,7 @@ export default {
   none: 'Brak',
   edit: 'Edytuj',
   delete: 'Usuń',
+  copy: 'Kopiuj',
   move: 'Przenieś',
   allSet: 'WSZYSTKIE ZESTAWY',
   assignFolder: 'Przypisz folder',

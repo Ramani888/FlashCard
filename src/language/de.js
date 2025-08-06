@@ -28,6 +28,7 @@ export default {
   none: 'Keine',
   edit: 'Bearbeiten',
   delete: 'Löschen',
+  copy: 'Kopieren',
   move: 'Verschieben',
   allSet: 'ALLE SETS',
   assignFolder: 'Ordner zuweisen',

@@ -28,6 +28,7 @@ export default {
   none: 'Hakuna',
   edit: 'Hariri',
   delete: 'Futa',
+  copy: 'Nakili',
   move: 'Hamisha',
   allSet: 'SETI ZOTE',
   assignFolder: 'Weka Folda',

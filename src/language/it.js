@@ -28,6 +28,7 @@ export default {
   none: 'Nessuno',
   edit: 'Modifica',
   delete: 'Elimina',
+  copy: 'Copia',
   move: 'Sposta',
   allSet: 'TUTTI I SET',
   assignFolder: 'Assegna Cartella',
