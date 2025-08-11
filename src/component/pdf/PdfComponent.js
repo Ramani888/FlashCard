@@ -324,6 +324,21 @@ const PdfComponent = memo(({folderId}) => {
     );
   };
 
+  const updateCredit = async (credit, type) => {
+    const rawData = {userId: global.user?._id, credit: credit, type: type};
+    try {
+      setVisible(true);
+      const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
+      if (response.success) {
+        getProfileData(false);
+      }
+    } catch (error) {
+      console.error('Error updating credit:', error);
+    } finally {
+      setVisible(false);
+    }
+  };
+
   const downloadPdf = async (pdfUrl, fileName = 'downloaded.pdf', onSuccess, onError) => {
     try {
       setVisible(true);
@@ -343,6 +358,8 @@ const PdfComponent = memo(({folderId}) => {
 
       setVisible(false);
       showMessageonTheScreen('PDF downloaded successfully');
+      // Call updateCredit here after successful download
+      updateCredit(1, 'debited');
       if (onSuccess) onSuccess(res.path());
     } catch (error) {
       setVisible(false);
