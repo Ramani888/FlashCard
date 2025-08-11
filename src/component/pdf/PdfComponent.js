@@ -122,7 +122,7 @@ const PdfComponent = memo(({folderId}) => {
 
   // ================================= End =============================== //
 
-  const PdfDownload = useCallback(
+  const PdfView = useCallback(
     pdfUrl => {
       setVisible(true);
       RNFetchBlob.config({
@@ -244,7 +244,7 @@ const PdfComponent = memo(({folderId}) => {
                   : colorTheme.listAndBoxColor,
               },
             ]}
-            onPress={() => PdfDownload(item?.url)}>
+            onPress={() => PdfView(item?.url)}>
             <View style={styles.folderInfo}>
               {!colorView && (
                 <View
@@ -297,7 +297,7 @@ const PdfComponent = memo(({folderId}) => {
         </View>
       );
     },
-    [openModal, pdfData, PdfDownload, colorTheme, colorView],
+    [openModal, pdfData, PdfView, colorTheme, colorView],
   );
 
   const renderBody = () => {
@@ -322,6 +322,34 @@ const PdfComponent = memo(({folderId}) => {
         {BottomSheets()}
       </View>
     );
+  };
+
+  const downloadPdf = async (pdfUrl, fileName = 'downloaded.pdf', onSuccess, onError) => {
+    try {
+      setVisible(true);
+      const { fs } = RNFetchBlob;
+      const downloadPath = fs.dirs.DownloadDir + '/' + fileName;
+      const res = await RNFetchBlob.config({
+        fileCache: true,
+        appendExt: 'pdf',
+        path: downloadPath,
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          notification: true,
+          path: downloadPath,
+          description: 'PDF',
+        },
+      }).fetch('GET', pdfUrl);
+
+      setVisible(false);
+      showMessageonTheScreen('PDF downloaded successfully');
+      if (onSuccess) onSuccess(res.path());
+    } catch (error) {
+      setVisible(false);
+      showMessageonTheScreen('Failed to download PDF');
+      if (onError) onError(error);
+      console.log('Error downloading PDF:', error);
+    }
   };
 
   return (
@@ -362,6 +390,8 @@ const PdfComponent = memo(({folderId}) => {
             deleteItem={deletePdf}
             pdfId={pdfId}
             colorTheme={colorTheme}
+            downloadPdf={downloadPdf} // <-- Add this line
+            singlePdfData={singlePdfData} // <-- Add this line to access S3 link
           />
         }
         width={'43%'}

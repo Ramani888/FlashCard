@@ -31,6 +31,7 @@ export default {
   copy: 'Kopyahin',
   move: 'Ilipat',
   allSet: 'LAHAT NG MGA SET',
+  downloadPdf: 'I-download ang PDF',
   assignFolder: 'Italaga ang Folder',
   editSet: 'I-edit ang Set',
   deleteSet: 'Tanggalin ang Set',

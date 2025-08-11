@@ -31,6 +31,7 @@ export default {
   copy: 'Kopiuj',
   move: 'Przenieś',
   allSet: 'WSZYSTKIE ZESTAWY',
+  downloadPdf: 'Pobierz PDF',
   assignFolder: 'Przypisz folder',
   editSet: 'Edytuj zestaw',
   deleteSet: 'Usuń zestaw',

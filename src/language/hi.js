@@ -31,6 +31,7 @@ export default {
   copy: 'कॉपी करें',
   move: 'स्थानांतरित करें',
   allSet: 'सभी सेट्स',
+  downloadPdf: 'पीडीएफ डाउनलोड करें',
   assignFolder: 'फ़ोल्डर सौंपें',
   editSet: 'सेट संपादित करें',
   deleteSet: 'सेट हटाएं',

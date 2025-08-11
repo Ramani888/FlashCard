@@ -31,6 +31,7 @@ export default {
   copy: '复制',
   move: '移动',
   allSet: '所有集合',
+  downloadPdf: '下载 PDF',
   assignFolder: '分配文件夹',
   editSet: '编辑集合',
   deleteSet: '删除集合',

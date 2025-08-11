@@ -31,6 +31,7 @@ export default {
   copy: 'Copiar',
   move: 'Mover',
   allSet: 'TODOS OS CONJUNTOS',
+  downloadPdf: 'BAIXAR PDF',
   assignFolder: 'Atribuir Pasta',
   editSet: 'Editar Conjunto',
   deleteSet: 'Excluir Conjunto',

@@ -31,6 +31,7 @@ export default {
   copy: 'Copy',
   move: 'Move',
   allSet: 'ALL SETS',
+  downloadPdf: 'Download PDF',
   assignFolder: 'Assign Folder',
   editSet: 'Edit Set',
   deleteSet: 'Delete Set',

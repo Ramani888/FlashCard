@@ -31,6 +31,7 @@ export default {
   copy: 'Copier',
   move: 'Déplacer',
   allSet: 'TOUS LES ENSEMBLES',
+  downloadPdf: 'TÉLÉCHARGER PDF',
   assignFolder: 'Attribuer un dossier',
   editSet: 'Modifier l’ensemble',
   deleteSet: 'Supprimer l’ensemble',

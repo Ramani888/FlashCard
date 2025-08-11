@@ -31,6 +31,7 @@ export default {
   copy: 'Copiar',
   move: 'Mover',
   allSet: 'TODOS LOS CONJUNTOS',
+  downloadPdf: 'DESCARGAR PDF',
   assignFolder: 'Asignar Carpeta',
   editSet: 'Editar Conjunto',
   deleteSet: 'Eliminar Conjunto',

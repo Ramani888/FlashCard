@@ -19,6 +19,8 @@ const PdfModalContent = ({
   deleteItem,
   pdfId,
   colorTheme,
+  downloadPdf,
+  singlePdfData,
 }) => {
   const navigation = useNavigation();
   const iconSize = useMemo(() => scale(20), []);
@@ -96,6 +98,28 @@ const PdfModalContent = ({
               </Text>
             </Pressable>
             <Pressable
+              style={[styles.container]}
+              onPress={() => {
+                if (downloadPdf && singlePdfData?.url) {
+                  downloadPdf(
+                    singlePdfData.url,
+                    singlePdfData.name
+                      ? `${singlePdfData.name}.pdf`
+                      : 'downloaded.pdf',
+                  );
+                }
+                closeModal();
+              }}>
+              <Feather
+                name="download"
+                size={scale(15)}
+                color={colorTheme.textColor}
+              />
+              <Text style={[styles.text, {color: colorTheme.textColor}]}>
+                {strings.downloadPdf}
+              </Text>
+            </Pressable>
+            <Pressable
               style={[styles.container, styles.lastItem]}
               onPress={() => {
                 navigation.navigate(ScreenName.assignPdfFolder, {pdfId: pdfId});
@@ -119,10 +143,12 @@ const PdfModalContent = ({
       closeModal,
       colorTheme,
       deleteItem,
+      downloadPdf,
       navigation,
       setEditBottomSheet,
       pdfId,
       openBottomSheet,
+      singlePdfData,
       type,
     ],
   );

@@ -31,6 +31,7 @@ export default {
   copy: 'Nakili',
   move: 'Hamisha',
   allSet: 'SETI ZOTE',
+  downloadPdf: 'Pakia PDF',
   assignFolder: 'Weka Folda',
   editSet: 'Hariri Seti',
   deleteSet: 'Futa Seti',

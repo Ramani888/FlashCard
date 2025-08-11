@@ -31,6 +31,7 @@ export default {
   copy: 'Copia',
   move: 'Sposta',
   allSet: 'TUTTI I SET',
+  downloadPdf: 'SCARICA PDF',
   assignFolder: 'Assegna Cartella',
   editSet: 'Modifica Set',
   deleteSet: 'Elimina Set',

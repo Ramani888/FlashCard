@@ -31,6 +31,7 @@ export default {
   copy: 'Kopieren',
   move: 'Verschieben',
   allSet: 'ALLE SETS',
+  downloadPdf: 'PDF HERUNTERLADEN',
   assignFolder: 'Ordner zuweisen',
   editSet: 'Set bearbeiten',
   deleteSet: 'Set löschen',
