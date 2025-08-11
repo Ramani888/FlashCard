@@ -30,8 +30,8 @@ const ModalContent = ({
   folderId,
   setId,
   getSetData,
+  handleRemoveFolder
 }) => {
-  console.log('singleItem', singleItem);
   const navigation = useNavigation();
   const [value, setValue] = useState(singleItem?.isPrivate);
   const isFirstRender = useRef(true); // To track the initial render
@@ -100,6 +100,7 @@ const ModalContent = ({
             onPress={() => {
               navigation.navigate(ScreenName.asignFolder, {
                 setId: singleItem?._id,
+                folderId: singleItem?.folderId,
                 screen: 'SetScreen',
               });
               closeModal();
@@ -178,6 +179,26 @@ const ModalContent = ({
             />
             <Text style={[styles.text, {color: colorTheme.textColor}]}>
               {strings.deleteFolder}
+            </Text>
+          </Pressable>
+        )}
+        {type === 'Set' && (
+          <Pressable
+            style={styles.container}
+            onPress={() => {
+              // Call your remove folder handler here
+              if (typeof handleRemoveFolder === 'function') {
+                handleRemoveFolder(singleItem?._id);
+              }
+              closeModal();
+            }}>
+            <MaterialCommunityIcons
+              name="folder-remove"
+              size={iconSize}
+              color={Color.Red}
+            />
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
+              {strings.removeFolder || 'Remove Folder'}
             </Text>
           </Pressable>
         )}

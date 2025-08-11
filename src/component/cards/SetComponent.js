@@ -148,6 +148,26 @@ const SetComponent = ({
     }
   }, [colorView, getSetData, setColor, setName, setStatus, singleSetData]);
 
+  const handleRemoveFolder = async () => {
+    const rawData = {
+      ...singleSetData,
+      folderId: ''
+    }
+    setVisible(true);
+    try {
+      const response = await apiPut(
+        Api.Set,
+        '',
+        JSON.stringify(rawData),
+      );
+      getSetData(true, response?.message);
+    } catch (error) {
+      console.log('error in remove folder api', error);
+    } finally {
+      setVisible(false);
+    }
+  }
+
   const deleteSet = async () => {
     try {
       setVisible(true);
@@ -368,10 +388,11 @@ const SetComponent = ({
             setId={setId}
             singleItem={singleSetData}
             getSetData={getSetData}
+            handleRemoveFolder={handleRemoveFolder}
           />
         }
         width={wp('43%')}
-        height={hp('28.5%')}
+        height={hp('32.5%')}
         justifyContent="flex-end"
         borderRadius={20}
         modalContainerStyle={[

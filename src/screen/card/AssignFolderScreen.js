@@ -29,11 +29,17 @@ const AssignFolderScreen = () => {
   const [selectedFolderId, setSelectedFolderId] = useState('');
   const [noFolderClick, setNofolderClick] = useState(false);
   const colorTheme = useTheme();
-  const {setId, screen} = route.params;
+  const {setId, folderId, screen} = route.params;
 
   useEffect(() => {
     getFolderData();
   }, []);
+
+  useEffect(() => {
+    if (folderId) {
+      setSelectedFolderId(folderId);
+    }
+  }, [folderId]);
 
   // ============================ API Calls ============================ //
 
