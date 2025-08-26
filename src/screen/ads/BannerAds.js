@@ -22,7 +22,7 @@ const AdBanner = () => {
           testDeviceIdentifiers: ['EMULATOR', 'YOUR_DEVICE_ID'], // Add your test device ID
           tagForChildDirectedTreatment: true, // Ensures compliance with COPPA
           tagForUnderAgeOfConsent: true, // Ensures compliance with GDPR
-          maxAdContentRating: 'G', // Limits ads to family-friendly content
+          maxAdContentRating: 'G', // Strictest rating - only family-friendly content
         };
         MobileAds().setRequestConfiguration(requestConfig);
       });

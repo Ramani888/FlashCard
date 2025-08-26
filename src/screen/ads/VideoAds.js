@@ -42,7 +42,10 @@ const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
 
       const ad = RewardedAd.createForAdRequest(adUnitId, {
         requestNonPersonalizedAdsOnly: true,
-        keywords: ['education', 'kids', 'learning']
+        keywords: ['education', 'flashcards', 'learning', 'family-friendly'],
+        tagForChildDirectedTreatment: true,
+        tagForUnderAgeOfConsent: true,
+        maxAdContentRating: 'G'
       });
 
       const unsubscribeLoaded = ad.addAdEventListener(
