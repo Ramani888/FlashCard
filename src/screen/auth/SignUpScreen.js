@@ -49,7 +49,6 @@ const SignUpScreen = () => {
   const languageRef = useRef();
 
   const handleLanguageSaved = async Language => {
-    console.log('Selected Language', Language);
     await AsyncStorage.setItem('Language', JSON.stringify(Language));
     Language?.name === 'English' && strings.setLanguage('en');
     Language?.name === 'Español' && strings.setLanguage('es');
@@ -122,8 +121,6 @@ const SignUpScreen = () => {
   const closeModal = () => {
     setLanguageModal(false);
   };
-
-  console.log('Selected Language', selectedLanguage);
 
   return (
     <ScrollView

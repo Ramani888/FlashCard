@@ -126,7 +126,6 @@ const ProfileScreen = () => {
   }, [isFocused]);
 
   const handleLanguageSaved = async Language => {
-    console.log('Selected language:', Language);
     await AsyncStorage.setItem('Language', JSON.stringify(Language));
     Language?.name === 'English' && strings.setLanguage('en');
     Language?.name === 'Español' && strings.setLanguage('es');
