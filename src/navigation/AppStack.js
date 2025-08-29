@@ -1,6 +1,8 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useMemo} from 'react';
 import {ScreenName, ScreenPath} from '../component/Screen';
+import AdInspector from '../screen/ads/AdInspector';
+import BannerAdTester from '../screen/ads/BannerAdTester';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +38,8 @@ const AppStack = () => {
     viewPdfScreen,
     otherUser,
     otherUserCard,
+    adInspector,
+    bannerAdTester,
   } = ScreenName;
   const {
     SplashScreen,
@@ -249,6 +253,18 @@ const AppStack = () => {
       <Stack.Screen
         name={subscription}
         component={SubscriptionScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={adInspector}
+        component={AdInspector}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name={bannerAdTester}
+        component={BannerAdTester}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
