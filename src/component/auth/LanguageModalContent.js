@@ -25,45 +25,53 @@ const LanguageModalContent = ({
       id: 0,
       name: 'English',
       flag: require('../../Assets/FlagImage/UsaFlag.png'),
+      code: 'en',
     },
-    {id: 1, name: 'Español', flag: require('../../Assets/FlagImage/spain.png')},
+    {id: 1, name: 'Español', flag: require('../../Assets/FlagImage/spain.png'), code: 'es'},
     {
       id: 2,
       name: 'Português',
       flag: require('../../Assets/FlagImage/portugal.png'),
+      code: 'pt',
     },
     {
       id: 3,
       name: 'Français',
       flag: require('../../Assets/FlagImage/france.png'),
+      code: 'fr',
     },
     {
       id: 4,
       name: 'Italiano',
       flag: require('../../Assets/FlagImage/italy.png'),
+      code: 'it',
     },
     {
       id: 5,
       name: 'Deutsch',
       flag: require('../../Assets/FlagImage/germany.png'),
+      code: 'de',
     },
-    {id: 6, name: 'Polski', flag: require('../../Assets/FlagImage/poland.png')},
+    {id: 6, name: 'Polski', flag: require('../../Assets/FlagImage/poland.png'), code: 'pl'},
     {
       id: 7,
       name: '普通话',
       flag: require('../../Assets/FlagImage/china.png'),
+      code: 'zh',
     },
     {
       id: 8,
       name: 'Kiswahili',
       flag: require('../../Assets/FlagImage/kenya.png'),
+      code: 'sw',
     },
     {
       id: 9,
       name: 'Tagalog',
       flag: require('../../Assets/FlagImage/philippines.png'),
+      code: 'tl',
     },
-    {id: 10, name: 'हिंदी', flag: require('../../Assets/FlagImage/india.png')},
+    {id: 10, name: 'हिंदी', flag: require('../../Assets/FlagImage/india.png'), code: 'hi'},
   ];
 
   const changeLanguage = name => {

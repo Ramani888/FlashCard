@@ -42,41 +42,48 @@ const languages = [
     id: 0,
     name: 'English',
     flag: require('../../Assets/FlagImage/UsaFlag.png'),
+    code: 'en',
   },
-  {id: 1, name: 'Espanol', flag: require('../../Assets/FlagImage/spain.png')},
+  {id: 1, name: 'Espanol', flag: require('../../Assets/FlagImage/spain.png'), code: 'es'},
   {
     id: 2,
     name: 'Postogues',
     flag: require('../../Assets/FlagImage/portugal.png'),
+    code: 'pt',
   },
   {
     id: 3,
     name: 'Francais',
     flag: require('../../Assets/FlagImage/france.png'),
+    code: 'fr',
   },
   {
     id: 4,
     name: 'Italiano',
     flag: require('../../Assets/FlagImage/italy.png'),
+    code: 'it',
   },
   {
     id: 5,
     name: 'German',
     flag: require('../../Assets/FlagImage/germany.png'),
+    code: 'de',
   },
-  {id: 6, name: 'Polish', flag: require('../../Assets/FlagImage/poland.png')},
+  {id: 6, name: 'Polish', flag: require('../../Assets/FlagImage/poland.png'), code: 'pl'},
   {
     id: 7,
     name: 'Mandarin',
     flag: require('../../Assets/FlagImage/china.png'),
+    code: 'zh',
   },
-  {id: 8, name: 'Swahili', flag: require('../../Assets/FlagImage/kenya.png')},
+  {id: 8, name: 'Swahili', flag: require('../../Assets/FlagImage/kenya.png'), code: 'sw'},
   {
     id: 9,
     name: 'Tagalog',
     flag: require('../../Assets/FlagImage/philippines.png'),
+    code: 'tl',
   },
-  {id: 10, name: 'Hindi', flag: require('../../Assets/FlagImage/india.png')},
+  {id: 10, name: 'Hindi', flag: require('../../Assets/FlagImage/india.png'), code: 'hi'},
 ];
 
 const ProfileScreen = () => {
@@ -119,6 +126,7 @@ const ProfileScreen = () => {
   }, [isFocused]);
 
   const handleLanguageSaved = async Language => {
+    console.log('Selected language:', Language);
     await AsyncStorage.setItem('Language', JSON.stringify(Language));
     Language?.name === 'English' && strings.setLanguage('en');
     Language?.name === 'Español' && strings.setLanguage('es');
