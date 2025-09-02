@@ -164,10 +164,10 @@ const ProfileScreen = () => {
       tabname: strings.profileTab4,
       image: require('../../Assets/Img/privacy.png'),
     },
-    {
-      tabname: 'Ad Inspector',
-      image: require('../../Assets/Img/privacy.png'),
-    },
+    // {
+    //   tabname: 'Ad Inspector',
+    //   image: require('../../Assets/Img/privacy.png'),
+    // },
   ];
 
   // =================================== Api =================================== //
