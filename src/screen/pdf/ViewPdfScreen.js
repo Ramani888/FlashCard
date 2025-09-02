@@ -16,6 +16,7 @@ const ViewPdfScreen = () => {
   return (
     <View style={styles.container}>
       <Pdf
+        horizontal={true}
         source={{uri: url, cache: true}}
         onLoadComplete={(numberOfPages, filePath) => {
           console.log(`number of pages: ${numberOfPages}`);
@@ -39,11 +40,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 25,
+    // marginTop: 25,
+    height: '100%',
+    width: '100%',
   },
   pdf: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: '100%',
+    height: '100%',
   },
 });
