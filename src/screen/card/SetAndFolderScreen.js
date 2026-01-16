@@ -27,7 +27,7 @@ const SetAndFolderScreen = () => {
   const [loading, setLoading] = useState(false);
   const [showFolder, setShowFolder] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [tab, setTab] = useState('SET`');
+  const [tab, setTab] = useState('SET');
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
   const colorTheme = useTheme();
@@ -36,14 +36,14 @@ const SetAndFolderScreen = () => {
     setTab('SET');
   }, []);
 
-  const handleFolderClick = folderId => {
-    setFolderId(folderId);
+  const handleFolderClick = folderIdParam => {
+    setFolderId(folderIdParam);
     setTab('SET');
   };
 
-  const handleCreateSetClick = folderId => {
-    console.log('folderId', folderId);
-    setFolderId(folderId);
+  const handleCreateSetClick = folderIdParam => {
+    console.log('folderId', folderIdParam);
+    setFolderId(folderIdParam);
     setTab('SET');
     setOpenSetSheet(true);
   };
@@ -65,7 +65,7 @@ const SetAndFolderScreen = () => {
         search={search}
       />
     );
-  }, [search, tab, showFolder]);
+  }, [search, showFolder, isImageFolder]);
 
   const buttons = useCallback(
     () => (
@@ -191,6 +191,7 @@ const SetAndFolderScreen = () => {
     folderId,
     loading,
     openSetSheet,
+    showFolder,
   ]);
 
   return renderBody();

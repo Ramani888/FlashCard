@@ -27,7 +27,12 @@ const LanguageModalContent = ({
       flag: require('../../Assets/FlagImage/UsaFlag.png'),
       code: 'en',
     },
-    {id: 1, name: 'Español', flag: require('../../Assets/FlagImage/spain.png'), code: 'es'},
+    {
+      id: 1,
+      name: 'Español',
+      flag: require('../../Assets/FlagImage/spain.png'),
+      code: 'es',
+    },
     {
       id: 2,
       name: 'Português',
@@ -52,7 +57,12 @@ const LanguageModalContent = ({
       flag: require('../../Assets/FlagImage/germany.png'),
       code: 'de',
     },
-    {id: 6, name: 'Polski', flag: require('../../Assets/FlagImage/poland.png'), code: 'pl'},
+    {
+      id: 6,
+      name: 'Polski',
+      flag: require('../../Assets/FlagImage/poland.png'),
+      code: 'pl',
+    },
     {
       id: 7,
       name: '普通话',
@@ -71,7 +81,12 @@ const LanguageModalContent = ({
       flag: require('../../Assets/FlagImage/philippines.png'),
       code: 'tl',
     },
-    {id: 10, name: 'हिंदी', flag: require('../../Assets/FlagImage/india.png'), code: 'hi'},
+    {
+      id: 10,
+      name: 'हिंदी',
+      flag: require('../../Assets/FlagImage/india.png'),
+      code: 'hi',
+    },
   ];
 
   const changeLanguage = name => {

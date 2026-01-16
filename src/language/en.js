@@ -106,7 +106,6 @@ export default {
     "'What Are the names of the 12 apostles?'\n\n" +
     'AI can make mistakes. Always check information.\n\n' +
     'Each use requires 1 credit. Watching Ad earns 3 credits.',
-  copy: 'Copy',
   refresh: 'Refresh',
   enter: 'ENTER',
   globalLiveFees: 'GLOBAL LIVE FEED',

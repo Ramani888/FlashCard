@@ -30,7 +30,7 @@ const ModalContent = ({
   folderId,
   setId,
   getSetData,
-  handleRemoveFolder
+  handleRemoveFolder,
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(singleItem?.isPrivate);

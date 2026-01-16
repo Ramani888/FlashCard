@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import store from './src/redux/store';
 import Color from './src/component/Color';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
-import { initializeAds } from './src/screen/ads/AdConfig';
+import {initializeAds} from './src/screen/ads/AdConfig';
 import AppNav from './src/navigation/AppNav';
 import {MenuProvider} from 'react-native-popup-menu';
 import {withIAPContext} from 'react-native-iap';
@@ -38,11 +38,11 @@ const App = gestureHandlerRootHOC(() => {
         .then(() => {
           console.log('AdMob Initialized with Family Policy settings');
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Failed to initialize AdMob:', error);
         });
     }, 1000);
-    
+
     return () => clearTimeout(timer);
   }, []);
 

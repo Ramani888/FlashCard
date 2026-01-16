@@ -108,7 +108,6 @@ export default {
     'KI kann Fehler machen. Überprüfen Sie die Informationen immer.\n\n' +
     '1 Credit wird jedes Mal verwendet, wenn die KI-Funktion verwendet wird.\n' +
     'Abonnieren Sie oder sehen Sie sich eine Anzeige an, um 3 Credits zu verdienen.',
-  copy: 'Kopieren',
   refresh: 'Aktualisieren',
   enter: 'EINGEBEN',
   globalLiveFees: 'LIVE-FEED GLOBAL',

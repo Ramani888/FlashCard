@@ -1,11 +1,7 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, Platform, Dimensions} from 'react-native';
-import {
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-} from 'react-native-google-mobile-ads';
-import { initializeAds, familyFriendlyAdOptions } from './AdConfig';
+import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
+import {initializeAds, familyFriendlyAdOptions} from './AdConfig';
 
 const AdBanner = () => {
   const adUnitId = __DEV__
@@ -17,7 +13,7 @@ const AdBanner = () => {
     initializeAds().catch(error => {
       console.error('Error initializing ads:', error);
     });
-    
+
     console.log('Banner Ad Unit ID:', adUnitId);
     console.log('Running on:', Platform.OS, Platform.Version);
   }, [adUnitId]);
@@ -31,7 +27,7 @@ const AdBanner = () => {
           ...familyFriendlyAdOptions,
           httpTimeoutMillis: 15000, // Increase timeout for slower connections
         }}
-        onAdFailedToLoad={(error) => {
+        onAdFailedToLoad={error => {
           // Just log the error but don't show any UI feedback
           console.error('Banner ad failed to load:', error);
         }}
@@ -51,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
-  }
+  },
 });
 
 export default AdBanner;

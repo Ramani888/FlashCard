@@ -107,7 +107,6 @@ export default {
     'AI inaweza kufanya makosa. Daima thibitisha taarifa.\n\n' +
     'Mikopo 1 hutumika kila wakati AI inatumiwa.\n' +
     'Jisajili au tazama tangazo kupata mikopo 3.',
-  copy: 'Nakili',
   refresh: 'Sasisha',
   enter: 'INGIZA',
   globalLiveFees: 'MATUKIO YA MOJA KWA MOJA DUNIANI',

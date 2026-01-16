@@ -339,10 +339,15 @@ const PdfComponent = memo(({folderId}) => {
     }
   };
 
-  const downloadPdf = async (pdfUrl, fileName = 'downloaded.pdf', onSuccess, onError) => {
+  const downloadPdf = async (
+    pdfUrl,
+    fileName = 'downloaded.pdf',
+    onSuccess,
+    onError,
+  ) => {
     try {
       setVisible(true);
-      const { fs } = RNFetchBlob;
+      const {fs} = RNFetchBlob;
       const downloadPath = fs.dirs.DownloadDir + '/' + fileName;
       const res = await RNFetchBlob.config({
         fileCache: true,

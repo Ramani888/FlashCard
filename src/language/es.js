@@ -108,7 +108,6 @@ export default {
     'La IA puede cometer errores. Siempre verifique la información.\n\n' +
     'Se usa 1 crédito cada vez que se utiliza la función de IA.\n' +
     'Suscríbase o vea un anuncio para ganar 3 créditos.',
-  copy: 'Copiar',
   refresh: 'Actualizar',
   enter: 'ENTRAR',
   globalLiveFees: 'TRANSMISIÓN GLOBAL EN VIVO',

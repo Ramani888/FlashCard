@@ -123,7 +123,13 @@ const CustomeHeader = ({
       )}
       {imageFolder && (
         <Pressable
-          style={[styles.adIcon, videoIconStyle, searchIcon ? { top: verticalScale(50), right: scale(60) } : { right: scale(15) }]}
+          style={[
+            styles.adIcon,
+            videoIconStyle,
+            searchIcon
+              ? {top: verticalScale(50), right: scale(60)}
+              : {right: scale(15)},
+          ]}
           onPress={() => setShowFolder(!showFolder)}>
           <Image
             source={require('../Assets/Img/imageFolder.png')}

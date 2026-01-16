@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
   Platform,
   SafeAreaView,
-  Button
+  Button,
 } from 'react-native';
 import {
   BannerAd,
@@ -14,7 +14,7 @@ import {
   TestIds,
   MobileAds,
 } from 'react-native-google-mobile-ads';
-import { initializeAds, familyFriendlyAdOptions } from './AdConfig';
+import {initializeAds, familyFriendlyAdOptions} from './AdConfig';
 
 /**
  * Debug component for testing banner ads on real devices
@@ -24,17 +24,17 @@ const BannerAdTester = () => {
   const [adLoadError, setAdLoadError] = useState(null);
   const [adLoaded, setAdLoaded] = useState(false);
   const [debugInfo, setDebugInfo] = useState({});
-  
+
   // Your real banner ad ID
   const realAdUnitId = 'ca-app-pub-9823475062473479/1036117247';
-  
+
   // Test ad ID
   const testAdUnitId = TestIds.BANNER;
-  
+
   // The ad ID we're currently using
   const [adUnitId, setAdUnitId] = useState(realAdUnitId);
   const [adSize, setAdSize] = useState(BannerAdSize.BANNER);
-  
+
   useEffect(() => {
     const getDeviceInfo = async () => {
       try {
@@ -45,7 +45,7 @@ const BannerAdTester = () => {
           adUnitId: adUnitId,
           adSize: adSize,
         });
-        
+
         // Initialize AdMob
         await initializeAds();
         setInitialized(true);
@@ -53,32 +53,30 @@ const BannerAdTester = () => {
         console.error('Error in initialization:', error);
         setDebugInfo(prev => ({
           ...prev,
-          initError: error.message
+          initError: error.message,
         }));
       }
     };
-    
+
     getDeviceInfo();
   }, [adUnitId, adSize]);
-  
+
   const toggleAdId = () => {
-    setAdUnitId(prev => 
-      prev === realAdUnitId ? testAdUnitId : realAdUnitId
-    );
+    setAdUnitId(prev => (prev === realAdUnitId ? testAdUnitId : realAdUnitId));
     setAdLoaded(false);
     setAdLoadError(null);
   };
-  
+
   const toggleAdSize = () => {
-    setAdSize(prev => 
-      prev === BannerAdSize.BANNER ? 
-      BannerAdSize.LARGE_BANNER : 
-      BannerAdSize.BANNER
+    setAdSize(prev =>
+      prev === BannerAdSize.BANNER
+        ? BannerAdSize.LARGE_BANNER
+        : BannerAdSize.BANNER,
     );
     setAdLoaded(false);
     setAdLoadError(null);
   };
-  
+
   const reinitialize = async () => {
     try {
       setInitialized(false);
@@ -90,12 +88,12 @@ const BannerAdTester = () => {
       console.error('Error in reinitialization:', error);
     }
   };
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.title}>Banner Ad Tester</Text>
-        
+
         {/* Debug Information */}
         <View style={styles.infoContainer}>
           <Text style={styles.sectionTitle}>Debug Info:</Text>
@@ -111,30 +109,29 @@ const BannerAdTester = () => {
             Ad Loaded: {adLoaded ? 'Yes' : 'No'}
           </Text>
         </View>
-        
+
         {/* Controls */}
         <View style={styles.controlsContainer}>
           <Text style={styles.sectionTitle}>Controls:</Text>
           <View style={styles.buttonRow}>
-            <Button 
-              title={`Use ${adUnitId === realAdUnitId ? 'Test' : 'Real'} Ad ID`} 
-              onPress={toggleAdId} 
+            <Button
+              title={`Use ${adUnitId === realAdUnitId ? 'Test' : 'Real'} Ad ID`}
+              onPress={toggleAdId}
             />
           </View>
           <View style={styles.buttonRow}>
-            <Button 
-              title={`Use ${adSize === BannerAdSize.BANNER ? 'Large' : 'Standard'} Size`} 
-              onPress={toggleAdSize} 
+            <Button
+              title={`Use ${
+                adSize === BannerAdSize.BANNER ? 'Large' : 'Standard'
+              } Size`}
+              onPress={toggleAdSize}
             />
           </View>
           <View style={styles.buttonRow}>
-            <Button 
-              title="Reinitialize AdMob" 
-              onPress={reinitialize} 
-            />
+            <Button title="Reinitialize AdMob" onPress={reinitialize} />
           </View>
         </View>
-        
+
         {/* Error Display */}
         {adLoadError && (
           <View style={styles.errorContainer}>
@@ -142,7 +139,7 @@ const BannerAdTester = () => {
             <Text style={styles.errorText}>{adLoadError}</Text>
           </View>
         )}
-        
+
         {/* Ad Container */}
         <View style={styles.adContainer}>
           <Text style={styles.sectionTitle}>Banner Ad:</Text>
@@ -159,7 +156,7 @@ const BannerAdTester = () => {
                 setAdLoaded(true);
                 setAdLoadError(null);
               }}
-              onAdFailedToLoad={(error) => {
+              onAdFailedToLoad={error => {
                 console.error('Banner ad failed to load:', error);
                 setAdLoaded(false);
                 setAdLoadError(error.message || 'Unknown error');

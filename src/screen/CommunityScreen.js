@@ -91,7 +91,13 @@ const GlobalLiveFeedScreen = () => {
           ]}>
           <Pressable
             onPress={() =>
-              navigation.navigate(ScreenName.otherUser, {item: {contactUserId: item?.userId, userName: item?.userData?.userName, picture: item?.userData?.picture}})
+              navigation.navigate(ScreenName.otherUser, {
+                item: {
+                  contactUserId: item?.userId,
+                  userName: item?.userData?.userName,
+                  picture: item?.userData?.picture,
+                },
+              })
             }>
             <Image
               source={{uri: item?.userData?.picture}}

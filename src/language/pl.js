@@ -107,7 +107,6 @@ export default {
     'SI może popełniać błędy. Zawsze sprawdzaj informacje.\n\n' +
     'Za każdym razem, gdy używana jest funkcja SI, zużywany jest 1 kredyt.\n' +
     'Subskrybuj lub obejrzyj reklamę, aby zdobyć 3 kredyty.',
-  copy: 'Kopiuj',
   refresh: 'Odśwież',
   enter: 'WPROWADŹ',
   globalLiveFees: 'GLOBALNY FEED NA ŻYWO',

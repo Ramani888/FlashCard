@@ -5,29 +5,34 @@ This document provides guidance for troubleshooting the issue where banner ads w
 ## Common Issues and Solutions
 
 ### 1. Network Issues
+
 - **Problem**: Banner ads require a stable internet connection. Real devices might have network issues.
 - **Solution**: Ensure the device has a strong and stable internet connection. Try both Wi-Fi and mobile data.
 
 ### 2. Ad Unit ID Configuration
+
 - **Problem**: Incorrect ad unit ID or format issues.
-- **Solution**: 
+- **Solution**:
   - Verify the ad unit ID is correct: `ca-app-pub-9823475062473479/1036117247`
   - Make sure the ID is being used correctly in non-debug builds
   - Check that the ad unit is properly set up in the AdMob console
 
 ### 3. Ad Format Issues
+
 - **Problem**: The banner ad size might not be supported on some devices.
-- **Solution**: 
+- **Solution**:
   - Try using standard banner sizes like `BannerAdSize.BANNER` instead of adaptive banners
   - We've provided a BannerAdTester tool that lets you switch between sizes
 
 ### 4. AdMob Initialization Timing
+
 - **Problem**: AdMob initialization might be occurring too early or too late.
-- **Solution**: 
+- **Solution**:
   - We've updated the app to delay AdMob initialization slightly
   - The BannerAdTester provides a button to manually reinitialize AdMob
 
 ### 5. Policy Compliance Issues
+
 - **Problem**: Your ads might be rejected due to policy violations.
 - **Solution**:
   - We've configured your ads to be fully compliant with Families Policy
@@ -57,10 +62,12 @@ If ads still don't show on real devices:
 ## Specific Device Solutions
 
 ### For Android 10+ Devices
+
 - Check "Background data usage" permissions for the app
 - Ensure "Restrict background data" is not enabled for the app
 
 ### For Android 12+ Devices
+
 - Check if Ad ID permissions are properly configured
 - Test with the new Ad ID format (AAID)
 

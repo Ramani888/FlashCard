@@ -6,7 +6,12 @@ import Font from './Font';
 import useTheme from './Theme';
 import strings from '../language/strings';
 
-const NoDataView = ({content, noDataViewStyle, noDataTextStyle, isCommunityScreen}) => {
+const NoDataView = ({
+  content,
+  noDataViewStyle,
+  noDataTextStyle,
+  isCommunityScreen,
+}) => {
   const colorTheme = useTheme();
   return (
     <View style={[styles.noDataView, noDataViewStyle]}>
@@ -14,7 +19,13 @@ const NoDataView = ({content, noDataViewStyle, noDataTextStyle, isCommunityScree
         style={[
           styles.noDataText,
           noDataTextStyle,
-          {color: noDataTextStyle ? isCommunityScreen ? colorTheme.textColor : Color.White : colorTheme.textColor},
+          {
+            color: noDataTextStyle
+              ? isCommunityScreen
+                ? colorTheme.textColor
+                : Color.White
+              : colorTheme.textColor,
+          },
         ]}>
         {content ? content : strings.noDataFound}
       </Text>

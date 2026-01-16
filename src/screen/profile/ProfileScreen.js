@@ -44,7 +44,12 @@ const languages = [
     flag: require('../../Assets/FlagImage/UsaFlag.png'),
     code: 'en',
   },
-  {id: 1, name: 'Espanol', flag: require('../../Assets/FlagImage/spain.png'), code: 'es'},
+  {
+    id: 1,
+    name: 'Espanol',
+    flag: require('../../Assets/FlagImage/spain.png'),
+    code: 'es',
+  },
   {
     id: 2,
     name: 'Postogues',
@@ -69,21 +74,36 @@ const languages = [
     flag: require('../../Assets/FlagImage/germany.png'),
     code: 'de',
   },
-  {id: 6, name: 'Polish', flag: require('../../Assets/FlagImage/poland.png'), code: 'pl'},
+  {
+    id: 6,
+    name: 'Polish',
+    flag: require('../../Assets/FlagImage/poland.png'),
+    code: 'pl',
+  },
   {
     id: 7,
     name: 'Mandarin',
     flag: require('../../Assets/FlagImage/china.png'),
     code: 'zh',
   },
-  {id: 8, name: 'Swahili', flag: require('../../Assets/FlagImage/kenya.png'), code: 'sw'},
+  {
+    id: 8,
+    name: 'Swahili',
+    flag: require('../../Assets/FlagImage/kenya.png'),
+    code: 'sw',
+  },
   {
     id: 9,
     name: 'Tagalog',
     flag: require('../../Assets/FlagImage/philippines.png'),
     code: 'tl',
   },
-  {id: 10, name: 'Hindi', flag: require('../../Assets/FlagImage/india.png'), code: 'hi'},
+  {
+    id: 10,
+    name: 'Hindi',
+    flag: require('../../Assets/FlagImage/india.png'),
+    code: 'hi',
+  },
 ];
 
 const ProfileScreen = () => {
@@ -286,8 +306,7 @@ const ProfileScreen = () => {
         navigation.navigate(ScreenName.aboutUs);
       tabname === strings.profileTab4 &&
         navigation.navigate(ScreenName.privacy);
-      tabname === 'Ad Inspector' &&
-        navigation.navigate(ScreenName.adInspector);
+      tabname === 'Ad Inspector' && navigation.navigate(ScreenName.adInspector);
     },
     [navigation],
   );

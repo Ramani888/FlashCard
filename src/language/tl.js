@@ -107,7 +107,6 @@ export default {
     'Maaaring magkamali ang AI. Laging i-verify ang impormasyon.\n\n' +
     '1 kredito ang nagagamit tuwing ginagamit ang tampok na AI.\n' +
     'Mag-subscribe o manood ng ad upang makakuha ng 3 kredito.',
-  copy: 'Kopyahin',
   refresh: 'I-refresh',
   enter: 'ILAGAY',
   globalLiveFees: 'PANDAIGDIGANG LIVE FEED',

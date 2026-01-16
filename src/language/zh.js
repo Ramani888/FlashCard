@@ -105,7 +105,6 @@ export default {
     'AI 可能会出错。请始终核实信息。\n\n' +
     '每次使用 AI 功能会消耗 1 积分。\n' +
     '订阅或观看广告可获得 3 积分。',
-  copy: '复制',
   refresh: '刷新',
   enter: '进入',
   globalLiveFees: '全球直播动态',

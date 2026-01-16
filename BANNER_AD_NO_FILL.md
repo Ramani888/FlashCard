@@ -3,6 +3,7 @@
 ## Understanding "No Fill" Errors
 
 The error message:
+
 ```
 [googleMobileAds/error-code-no-fill] The ad request was successful, but no ad was returned due to lack of ad inventory
 ```
@@ -25,15 +26,18 @@ Ad fill rates are never 100% and can vary based on multiple factors:
 We've implemented several best practices to handle "No Fill" errors gracefully:
 
 1. **Smart retry logic**:
+
    - Exponential backoff (5s, 10s, 30s) between retries
    - Maximum retry limit to conserve resources
    - Different ad sizes on each retry attempt
 
 2. **Fallback strategies**:
+
    - Hide ad container after maximum retries
    - Friendly user messaging
 
 3. **Multiple ad formats**:
+
    - Started with standard BANNER
    - Fallback to MEDIUM_RECTANGLE (often has better fill rates)
    - Final attempt with LARGE_BANNER
@@ -46,14 +50,17 @@ We've implemented several best practices to handle "No Fill" errors gracefully:
 If you continue to experience low fill rates:
 
 1. **Implement AdMob Mediation**:
+
    - Connect multiple ad networks through AdMob
    - Examples: Meta Audience Network, Unity Ads, AppLovin
 
 2. **Review your AdMob account**:
+
    - Check for policy violations
    - Verify account status is in good standing
 
 3. **Consider testing different ad units**:
+
    - Create new ad units and compare performance
    - Try different ad formats like interstitial or rewarded ads
 

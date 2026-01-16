@@ -155,14 +155,14 @@ const OtpVerifyScreen = () => {
       const langData = await AsyncStorage.getItem('Language');
       const selectedLanguage = langData ? JSON.parse(langData) : null;
       const languageCode = selectedLanguage?.code || 'en'; // Default to English if not set
-      
+
       const rawData = {
         email: email,
         otp: otp,
         isPrivacy: true,
         language: languageCode, // Add selected language to the request
       };
-      
+
       setVisible(true);
       const response = await apiPost(
         Api.verifyOtp,
@@ -188,14 +188,14 @@ const OtpVerifyScreen = () => {
       const langData = await AsyncStorage.getItem('Language');
       const selectedLanguage = langData ? JSON.parse(langData) : null;
       const languageCode = selectedLanguage?.code || 'en'; // Default to English if not set
-      
+
       const rawData = {
         email: email,
         password: password,
         otp: otp,
         language: languageCode, // Add selected language to the request
       };
-      
+
       setVisible(true);
       const response = await apiPut(
         Api.forgotPasswordVerifyOtp,
@@ -220,9 +220,11 @@ const OtpVerifyScreen = () => {
       const langData = await AsyncStorage.getItem('Language');
       const selectedLanguage = langData ? JSON.parse(langData) : null;
       const languageCode = selectedLanguage?.code || 'en'; // Default to English if not set
-      
+
       setVisible(true);
-      const response = await apiPut(`${Api.resendOtp}?email=${email}&language=${languageCode}`);
+      const response = await apiPut(
+        `${Api.resendOtp}?email=${email}&language=${languageCode}`,
+      );
       // console.log('response', response);
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);

@@ -39,7 +39,7 @@ const SetComponent = ({
   setOpenSetSheet,
   setLoading,
   search,
-  showFolder
+  showFolder,
 }) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -151,22 +151,18 @@ const SetComponent = ({
   const handleRemoveFolder = async () => {
     const rawData = {
       ...singleSetData,
-      folderId: ''
-    }
+      folderId: '',
+    };
     setVisible(true);
     try {
-      const response = await apiPut(
-        Api.Set,
-        '',
-        JSON.stringify(rawData),
-      );
+      const response = await apiPut(Api.Set, '', JSON.stringify(rawData));
       getSetData(true, response?.message);
     } catch (error) {
       console.log('error in remove folder api', error);
     } finally {
       setVisible(false);
     }
-  }
+  };
 
   const deleteSet = async () => {
     try {

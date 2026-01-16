@@ -12,9 +12,9 @@ import {
   AdsConsentStatus,
   AdsConsentDebugGeography,
 } from 'react-native-google-mobile-ads';
-import { initializeAds, familyFriendlyAdOptions } from './AdConfig';
-import { useNavigation } from '@react-navigation/native';
-import { ScreenName } from '../../component/Screen';
+import {initializeAds, familyFriendlyAdOptions} from './AdConfig';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenName} from '../../component/Screen';
 
 /**
  * Ad Inspector Tool - Use to test your ads for API 35 compliance
@@ -35,14 +35,14 @@ const AdInspector = () => {
     try {
       // Check the current consent status
       const consentInfo = await AdsConsent.requestInfoUpdate({
-        debugGeography: __DEV__ 
-          ? AdsConsentDebugGeography.EEA 
+        debugGeography: __DEV__
+          ? AdsConsentDebugGeography.EEA
           : AdsConsentDebugGeography.DISABLED,
         testDeviceIdentifiers: ['EMULATOR'],
       });
 
       console.log('Consent Status:', consentInfo.status);
-      
+
       if (consentInfo.status === AdsConsentStatus.REQUIRED) {
         // Show the consent form if required
         const formResult = await AdsConsent.showForm({
@@ -51,7 +51,7 @@ const AdInspector = () => {
           withNonPersonalizedAds: true,
           withAdFree: false,
         });
-        
+
         console.log('Consent Form Result:', formResult.status);
       }
     } catch (error) {
@@ -71,7 +71,7 @@ const AdInspector = () => {
       <Text style={styles.subtitle}>
         Use this tool to verify your ads comply with Family Policy for API 35
       </Text>
-      
+
       <View style={styles.buttonContainer}>
         <Button
           title="Open Ad Inspector"
@@ -79,7 +79,7 @@ const AdInspector = () => {
           color="#4285F4"
         />
       </View>
-      
+
       <View style={styles.buttonContainer}>
         <Button
           title="Banner Ad Troubleshooter"
@@ -87,7 +87,7 @@ const AdInspector = () => {
           color="#EA4335"
         />
       </View>
-      
+
       <Text style={styles.sectionTitle}>Sample Banner Ad</Text>
       <View style={styles.adContainer}>
         <BannerAd
@@ -96,38 +96,54 @@ const AdInspector = () => {
           requestOptions={familyFriendlyAdOptions}
         />
       </View>
-      
+
       <Text style={styles.sectionTitle}>Testing Checklist</Text>
       <View style={styles.checklistContainer}>
-        <Text style={styles.checkItem}>✓ Verify all ads are closeable after 5 seconds</Text>
-        <Text style={styles.checkItem}>✓ Check that banner ads display correctly</Text>
-        <Text style={styles.checkItem}>✓ Ensure rewarded video ads show skip button after 5s</Text>
-        <Text style={styles.checkItem}>✓ Confirm all ad content is family-friendly (G rating)</Text>
-        <Text style={styles.checkItem}>✓ Test ads on both emulator and real devices</Text>
+        <Text style={styles.checkItem}>
+          ✓ Verify all ads are closeable after 5 seconds
+        </Text>
+        <Text style={styles.checkItem}>
+          ✓ Check that banner ads display correctly
+        </Text>
+        <Text style={styles.checkItem}>
+          ✓ Ensure rewarded video ads show skip button after 5s
+        </Text>
+        <Text style={styles.checkItem}>
+          ✓ Confirm all ad content is family-friendly (G rating)
+        </Text>
+        <Text style={styles.checkItem}>
+          ✓ Test ads on both emulator and real devices
+        </Text>
       </View>
-      
+
       <Text style={styles.note}>
-        Note: For Google Play's Families Policy compliance, all interactive ads must
-        be closeable after 5 seconds. Use this tool to verify compliance before submitting 
-        your app update.
+        Note: For Google Play's Families Policy compliance, all interactive ads
+        must be closeable after 5 seconds. Use this tool to verify compliance
+        before submitting your app update.
       </Text>
       <View style={styles.checklistContainer}>
-        <Text style={styles.checkItem}>✓ Using certified ad SDK (Google AdMob)</Text>
+        <Text style={styles.checkItem}>
+          ✓ Using certified ad SDK (Google AdMob)
+        </Text>
         <Text style={styles.checkItem}>✓ AdMob SDK is up to date</Text>
-        <Text style={styles.checkItem}>✓ Ads are closable within 5 seconds</Text>
+        <Text style={styles.checkItem}>
+          ✓ Ads are closable within 5 seconds
+        </Text>
         <Text style={styles.checkItem}>✓ Family-safe ads configured</Text>
         <Text style={styles.checkItem}>✓ Age-appropriate ad content</Text>
       </View>
-      
+
       <Text style={styles.sectionTitle}>Common Ad Issues</Text>
       <View style={styles.checklistContainer}>
         <Text style={styles.noteItem}>
-          <Text style={styles.boldText}>No Fill Errors:</Text> "No Fill" errors are normal and occur when AdMob 
-          doesn't have ads to serve. This is not a bug and doesn't affect policy compliance.
+          <Text style={styles.boldText}>No Fill Errors:</Text> "No Fill" errors
+          are normal and occur when AdMob doesn't have ads to serve. This is not
+          a bug and doesn't affect policy compliance.
         </Text>
         <Text style={styles.noteItem}>
-          <Text style={styles.boldText}>Test Ads vs Real Ads:</Text> Test ads always have 100% fill rate, 
-          but real ads may not appear every time due to inventory availability.
+          <Text style={styles.boldText}>Test Ads vs Real Ads:</Text> Test ads
+          always have 100% fill rate, but real ads may not appear every time due
+          to inventory availability.
         </Text>
       </View>
     </SafeAreaView>

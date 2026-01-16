@@ -107,7 +107,6 @@ export default {
     "L'IA può commettere errori. Verifica sempre le informazioni.\n\n" +
     'Ogni utilizzo della funzione IA consuma 1 credito.\n' +
     'Abbonati o guarda un annuncio per guadagnare 3 crediti.',
-  copy: 'Copia',
   refresh: 'Aggiorna',
   enter: 'INSERISCI',
   globalLiveFees: 'FEED LIVE GLOBALE',

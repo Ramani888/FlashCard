@@ -5,11 +5,13 @@ This document outlines the changes made to ensure our app complies with Google P
 ## Changes Implemented
 
 1. **Updated AdMob SDK to Compatible Version**
+
    - Using `react-native-google-mobile-ads@14.7.1`
    - Note: The latest version (15.x) has compatibility issues with our app setup
    - The 14.7.1 version includes sufficient compliance features for API 35
 
 2. **Configured Family-Safe Ads**
+
    - Created centralized ad configuration in `src/screen/ads/AdConfig.js`
    - Implemented proper content rating limits (G rating)
    - Set up proper COPPA compliance flags
@@ -17,6 +19,7 @@ This document outlines the changes made to ensure our app complies with Google P
    - Set ad targeting for family-friendly content only
 
 3. **Made Ads Closable Within 5 Seconds**
+
    - Set `immersiveMode: false` for rewarded ads
    - Ensured all ad formats can be dismissed easily
 
@@ -45,6 +48,7 @@ If you encounter build issues related to the AdMob SDK:
 1. **SDK Version Compatibility**: The app is configured to use `react-native-google-mobile-ads@14.7.1`. Using newer versions (15.x+) may cause build failures due to Kotlin version incompatibilities.
 
 2. **Installation Errors**: If you see `INSTALL_FAILED_UPDATE_INCOMPATIBLE` errors, this means the previous app installation was signed with a different key. Uninstall the app from the emulator/device first:
+
    ```
    cd android
    .\gradlew uninstallDebug

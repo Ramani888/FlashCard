@@ -13,7 +13,7 @@ import {
   TestIds,
 } from 'react-native-google-mobile-ads';
 import Color from '../../component/Color';
-import { familyFriendlyAdOptions } from './AdConfig';
+import {familyFriendlyAdOptions} from './AdConfig';
 
 // const adUnitId = _DEV_
 //   ? TestIds.REWARDED
@@ -41,7 +41,10 @@ const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
       setLoading(true);
       setAdError(null);
 
-      const ad = RewardedAd.createForAdRequest(adUnitId, familyFriendlyAdOptions);
+      const ad = RewardedAd.createForAdRequest(
+        adUnitId,
+        familyFriendlyAdOptions,
+      );
 
       const unsubscribeLoaded = ad.addAdEventListener(
         RewardedAdEventType.LOADED,
@@ -99,14 +102,16 @@ const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
     // loadAd(false);
     if (rewardedAd && loaded) {
       rewardedAd.show();
-      
+
       // Force enable the skip button after 5 seconds for policy compliance
       setTimeout(() => {
-        console.log("Ensuring ad is closeable after 5 seconds (Families Policy compliance)");
+        console.log(
+          'Ensuring ad is closeable after 5 seconds (Families Policy compliance)',
+        );
         // This is a workaround to ensure the ad is closeable after 5 seconds
         // The actual implementation is handled by the familyFriendlyAdOptions
       }, 5000);
-      
+
       setLoaded(false);
     } else {
       loadAd(false);
