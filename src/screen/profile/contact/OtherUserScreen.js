@@ -1,5 +1,5 @@
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Color from '../../../component/Color';
@@ -9,7 +9,7 @@ import Font from '../../../component/Font';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {apiGet} from '../../../Api/ApiService';
 import Api from '../../../Api/EndPoint';
-import CustomeModal from '../../../custome/CustomeModal';
+import {Menu, MenuTrigger, MenuOptions, MenuOption, MenuProvider} from 'react-native-popup-menu';
 import {ScreenName} from '../../../component/Screen';
 import Loader from '../../../component/Loader';
 import NoDataView from '../../../component/NoDataView';
@@ -22,11 +22,7 @@ const OtherUserScreen = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [setData, setSetData] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
-  const [singleSet, setSingleSet] = useState({});
   const {item} = route.params;
-  const plusButtonRef = useRef(null);
   const colorTheme = useTheme();
 
   useEffect(() => {
@@ -52,15 +48,6 @@ const OtherUserScreen = () => {
   }, [item.contactUserId]);
 
   // ==================================== End ================================== //
-
-  const openModal = (item, isLastItem) => {
-    plusButtonRef.current.measureInWindow((x, y, width, height) => {
-      setModalPosition({x: x - scale(115), y: y + (height + 15)});
-      setModalVisible(true);
-    });
-  };
-
-  const closeModal = useCallback(() => setModalVisible(false), []);
 
   const renderHeader = () => {
     return (
@@ -106,15 +93,30 @@ const OtherUserScreen = () => {
               tintColor={colorTheme.textColor}
             />
           </View>
-          <Pressable
-            ref={plusButtonRef}
-            style={styles.plusButton}
-            onPress={() => {
-              openModal();
-              setSingleSet(item);
-            }}>
-            <Entypo name="plus" size={scale(20)} color={Color.White} />
-          </Pressable>
+          <Menu>
+            <MenuTrigger>
+              <View style={styles.plusButton}>
+                <Entypo name="plus" size={scale(20)} color={Color.White} />
+              </View>
+            </MenuTrigger>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+              <MenuOption
+                onSelect={() =>
+                  navigation.navigate(ScreenName.asignFolder, {
+                    setId: item?._id,
+                    screen: 'OtherUserScreen',
+                  })
+                }>
+                <View style={styles.modalContentView}>
+                  <Entypo name="plus" size={scale(20)} color={colorTheme.textColor} />
+                  <Text
+                    style={[styles.modalContentText, {color: colorTheme.textColor}]}>
+                    {strings.addEntireSet}
+                  </Text>
+                </View>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
         </View>
       </Pressable>
     );
@@ -156,44 +158,12 @@ const OtherUserScreen = () => {
     );
   };
   return (
-    <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
-      <Loader visible={visible} />
-      {renderBody()}
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(8)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <Pressable
-            style={styles.modalContentView}
-            onPress={() =>
-              navigation.navigate(ScreenName.asignFolder, {
-                setId: singleSet?._id,
-                screen: 'OtherUserScreen',
-              })
-            }>
-            <Entypo name="plus" size={scale(20)} color={colorTheme.textColor} />
-            <Text
-              style={[styles.modalContentText, {color: colorTheme.textColor}]}>
-              {strings.addEntireSet}
-            </Text>
-          </Pressable>
-        }
-        width={wp('41%')}
-        justifyContent="flex-end"
-        borderRadius={10}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-      />
-    </View>
+    <MenuProvider>
+      <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
+        <Loader visible={visible} />
+        {renderBody()}
+      </View>
+    </MenuProvider>
   );
 };
 
@@ -273,22 +243,11 @@ const styles = StyleSheet.create({
     borderRadius: scale(5),
     alignItems: 'center',
     justifyContent: 'center',
-    // margin: scale(8),
     marginVertical: verticalScale(8),
     marginRight: scale(8),
     elevation: scale(5),
   },
-  modal: {
-    position: 'absolute',
-    borderRadius: scale(10),
-    backgroundColor: Color.White,
-    elevation: scale(10),
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: scale(0.3),
-    shadowRadius: scale(4),
-  },
-  modalContentView: {flexDirection: 'row', gap: scale(5), alignItems: 'center'},
+  modalContentView: {flexDirection: 'row', gap: scale(5), alignItems: 'center', padding: scale(8)},
   modalContentText: {
     fontSize: wp('4%'),
     color: Color.Black,
