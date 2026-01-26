@@ -123,7 +123,8 @@
 // });
 
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {MenuOption} from 'react-native-popup-menu';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -136,27 +137,12 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
+import { scale, verticalScale } from '../../custome/Responsive';
+import { Divider } from '@rneui/themed/dist/Divider';
 
-const PressableItem = ({
-  icon,
-  text,
-  onPress,
-  customTextStyle,
-  isLast,
-  colorTheme,
-}) => (
-  <Pressable
-    style={[styles.container, isLast && styles.lastItem]}
-    onPress={onPress}>
-    {icon}
-    <Text style={[styles.text, customTextStyle, {color: colorTheme.textColor}]}>
-      {text}
-    </Text>
-  </Pressable>
-);
+// Each option uses MenuOption so the popup closes automatically on selection.
 
 const SetDetailModalContent = ({
-  closeModal,
   folderId,
   setId,
   setLayout,
@@ -169,55 +155,68 @@ const SetDetailModalContent = ({
   const colorTheme = useTheme();
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       {layout === 'single' && (
-        <PressableItem
-          icon={
-            <MaterialCommunityIcons
-              name="swap-vertical"
-              size={wp(4)}
-              color={colorTheme.textColor}
-            />
-          }
-          text={strings.changeOrder}
-          colorTheme={colorTheme}
-          onPress={() => {
-            setChangeOrder(true);
-            closeModal();
-          }}
-        />
+        <>
+          <MenuOption
+            onSelect={() => {
+              setChangeOrder(true);
+            }}
+          >
+            <View style={styles.container}>
+              <MaterialCommunityIcons
+                name="swap-vertical"
+                size={scale(16)}
+                color={colorTheme.textColor}
+              />
+              <Text style={[styles.text, {color: colorTheme.textColor}]}> 
+                {strings.changeOrder}
+              </Text>
+            </View>
+          </MenuOption>
+          <Divider />
+        </>
       )}
-      <PressableItem
-        icon={
+      <MenuOption
+        onSelect={() => {
+          isBlur ? blurAllCard(false) : blurAllCard(true);
+        }}
+      >
+        <View style={styles.container}>
           <MaterialCommunityIcons
             name="blur"
-            size={wp(4)}
+            size={scale(16)}
             color={colorTheme.textColor}
           />
-        }
-        text={strings.blur}
-        colorTheme={colorTheme}
-        onPress={() => {
-          isBlur ? blurAllCard(false) : blurAllCard(true);
-          closeModal();
-        }}
-      />
-      <PressableItem
-        icon={<Entypo name="plus" size={wp(5)} color={colorTheme.textColor} />}
-        text={strings.createCard}
-        colorTheme={colorTheme}
-        onPress={() => {
+          <Text style={[styles.text, {color: colorTheme.textColor}]}> 
+            {strings.blur}
+          </Text>
+        </View>
+      </MenuOption>
+      <Divider />
+      <MenuOption
+        onSelect={() => {
           navigation.navigate(ScreenName.createCard, {
             folderId: folderId,
             setId: setId,
           });
-          closeModal();
         }}
-        customTextStyle={{marginLeft: wp(-1)}}
-      />
-      <PressableItem
-        icon={
-          layout === 'single' ? (
+      >
+        <View style={styles.container}>
+          <Entypo name="plus" size={scale(20)} color={colorTheme.textColor} />
+          <Text style={[styles.text, {color: colorTheme.textColor}]}> 
+            {strings.createCard}
+          </Text>
+        </View>
+      </MenuOption>
+      <Divider />
+      <MenuOption
+        onSelect={() => {
+          layout === 'single' ? setLayout('grid') : setLayout('single');
+        }}
+      >
+        <View style={[styles.container, styles.lastItem]}>
+          {layout === 'single' ? (
             <Image
               source={require('../../Assets/Img/gridLayout.png')}
               style={styles.layoutIcon}
@@ -229,17 +228,12 @@ const SetDetailModalContent = ({
               style={styles.layoutIcon}
               tintColor={colorTheme.textColor}
             />
-          )
-        }
-        text={strings.layout}
-        colorTheme={colorTheme}
-        onPress={() => {
-          layout === 'single' ? setLayout('grid') : setLayout('single');
-          closeModal();
-        }}
-        customTextStyle={{marginLeft: wp(-1)}}
-        isLast
-      />
+          )}
+          <Text style={[styles.text, {color: colorTheme.textColor, marginLeft: scale(3)}]}> 
+            {strings.layout}
+          </Text>
+        </View>
+      </MenuOption>
     </View>
   );
 };
@@ -247,27 +241,29 @@ const SetDetailModalContent = ({
 export default React.memo(SetDetailModalContent);
 
 const styles = StyleSheet.create({
+  wrapper: {
+    padding: scale(12),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: verticalScale(4),
+  },
   container: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: wp(2),
-    borderBottomWidth: wp(0.2),
-    borderBottomColor: Color.mediumGray,
-    height: hp(4.5),
+    gap: scale(6),
   },
   lastItem: {
     borderBottomWidth: 0,
-    marginBottom: hp(-0.5),
   },
   text: {
-    fontSize: wp(4),
+    fontSize: scale(16),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingLeft: wp(2.5),
     textTransform: 'capitalize',
   },
   layoutIcon: {
-    width: wp(5),
-    height: wp(5),
+    width: scale(15),
+    height: scale(15),
   },
 });

@@ -26,15 +26,13 @@ import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
 import NoDataView from '../../component/NoDataView';
 import MasonryFlatlist from 'react-native-masonry-grid';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+// removed wp/hp usage after migrating to popup menu for header
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {MenuProvider, Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
 
 if (
   Platform.OS === 'android' &&
@@ -48,8 +46,7 @@ const SetDetailScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  // header popup replaces custom modal
   const [cardModalVisible, setCardModalVisible] = useState(false);
   const [noteModalVisible, setNoteModalVisible] = useState(false);
   const [cardModalPosition, setCardModalPosition] = useState({x: 0, y: 0});
@@ -61,7 +58,6 @@ const SetDetailScreen = () => {
   const [isAllBlur, setIsAllBlur] = useState(false);
   const {setName} = route.params;
   const threeDotIconRef = useRef();
-  const mainThreeDotRef = useRef();
   const {setId, folderId} = route.params;
   const colorTheme = useTheme();
 
@@ -164,19 +160,7 @@ const SetDetailScreen = () => {
 
   // ====================================== End ===================================== //
 
-  const openModal = useCallback(() => {
-    mainThreeDotRef.current.measureInWindow((x, y, width, height) => {
-      const responsiveX = wp((x / wp(100)) * 100);
-      const responsiveY = hp((y / hp(100)) * 100);
-      const modalX = responsiveX - wp(38.5);
-      const modalY = responsiveY + hp(5);
-
-      setModalPosition({x: modalX, y: modalY});
-      setModalVisible(true);
-    });
-  }, []);
-
-  const closeModal = useCallback(() => setModalVisible(false), []);
+  // header popup handled by Menu; remove open/close modal handlers
 
   const openCardModal = useCallback(() => {
     if (threeDotIconRef.current) {
@@ -233,17 +217,27 @@ const SetDetailScreen = () => {
           <Text style={styles.titleLine}>{setName}</Text>
         </View>
         {changeOrder === false && (
-          <Pressable
-            ref={mainThreeDotRef}
-            onPress={() => openModal()}
-            style={styles.dotIconView}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(13)}
-              color={Color.White}
-              style={styles.dotsIcon}
-            />
-          </Pressable>
+          <Menu>
+            <MenuTrigger>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(13)}
+                color={Color.White}
+                style={styles.dotsIcon}
+              />
+            </MenuTrigger>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
+              <SetDetailModalContent
+                folderId={folderId}
+                setId={setId}
+                setLayout={setLayout}
+                layout={layout}
+                blurAllCard={blurAllCard}
+                isBlur={isAllBlur}
+                setChangeOrder={setChangeOrder}
+              />
+            </MenuOptions>
+          </Menu>
         )}
         {changeOrder && (
           <Pressable
@@ -257,7 +251,7 @@ const SetDetailScreen = () => {
         )}
       </View>
     );
-  }, [setName, changeOrder, navigation, openModal, updatePosition]);
+  }, [setName, changeOrder, navigation, updatePosition]);
 
   const renderItem = useCallback(
     ({item, drag, isActive}) => {
@@ -279,12 +273,12 @@ const SetDetailScreen = () => {
     [folderId, openCardModal, openNoteModal, setId, updateCard],
   );
 
-  const handleReorder = reorderedData => {
+  const handleReorder = useCallback((reorderedData) => {
     setCardData(reorderedData);
-  };
+  }, []);
 
   const keyExtractor = (item, index) => {
-    return item._id ? item._id.toString() : index.toString();
+    return item?._id ? item._id.toString() : index.toString();
   };
 
   const renderBody = useMemo(
@@ -381,46 +375,14 @@ const SetDetailScreen = () => {
 
   return (
     <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
-      <Loader visible={visible} />
-      {renderHeader()}
-      {renderBody}
+      <MenuProvider>
+        <Loader visible={visible} />
+        {renderHeader()}
+        {renderBody}
 
-      {modalVisible && (
-        <Pressable style={styles.overlay} onPress={closeModal} />
-      )}
-      {cardModalVisible && <View style={styles.overlay} />}
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <SetDetailModalContent
-            closeModal={closeModal}
-            folderId={folderId}
-            setId={setId}
-            setLayout={setLayout}
-            layout={layout}
-            blurAllCard={blurAllCard}
-            isBlur={isAllBlur}
-            setChangeOrder={setChangeOrder}
-          />
-        }
-        width={scale(165)}
-        justifyContent="flex-end"
-        borderRadius={scale(10)}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-      />
+        {cardModalVisible && <View style={styles.overlay} />}
 
-      <CustomeModal
+        <CustomeModal
         visible={cardModalVisible}
         onClose={closeCardModal}
         closeModal={false}
@@ -446,9 +408,9 @@ const SetDetailScreen = () => {
             backgroundColor: colorTheme.modelBackgroundView,
           },
         ]}
-      />
+        />
 
-      <CustomeModal
+        <CustomeModal
         visible={noteModalVisible}
         onClose={closeNoteModal}
         closeModal={false}
@@ -473,7 +435,8 @@ const SetDetailScreen = () => {
             backgroundColor: colorTheme.modelBackgroundView,
           },
         ]}
-      />
+        />
+      </MenuProvider>
     </LinearGradient>
   );
 };
