@@ -5,18 +5,18 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  TouchableOpacity,
 } from 'react-native';
 import Color from '../Color';
 import {scale, verticalScale} from '../../custome/Responsive';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import strings from '../../language/strings';
 import useTheme from '../Theme';
+import {MenuOption} from 'react-native-popup-menu';
+import { Divider } from '@rneui/themed/dist/Divider';
 
 const LanguageModalContent = ({
   setSelectedLanguage,
   selectedLanguage,
-  closeModal,
   handleLanguageSaved,
 }) => {
   const colorTheme = useTheme();
@@ -90,28 +90,31 @@ const LanguageModalContent = ({
 
   const renderLanguage = ({item, index}) => {
     return (
-      <TouchableOpacity
-        style={[
-          styles.languageRow,
-          {borderBottomWidth: item?.id !== 10 ? scale(0.5) : 0},
-        ]}
-        onPress={() => {
-          setSelectedLanguage(item);
-          handleLanguageSaved(item);
-          changeLanguage(item?.name);
-          closeModal();
-        }}>
-        <Image source={item.flag} style={styles.flag} />
-        <Text style={[styles.languageText, {color: colorTheme.textColor}]}>
-          {item.name}
-        </Text>
+      <>
+        <MenuOption
+          onSelect={() => {
+            setSelectedLanguage(item);
+            handleLanguageSaved(item);
+            changeLanguage(item?.name);
+          }}>
+          <View
+            style={[
+              styles.languageRow
+            ]}>
+            <Image source={item.flag} style={styles.flag} />
+            <Text style={[styles.languageText, {color: colorTheme.textColor}]}>
+              {item.name}
+            </Text>
 
-        {selectedLanguage?.id === item.id ? (
-          <AntDesign name="checkcircle" size={21.5} color={Color.Green} />
-        ) : (
-          <View style={styles.radioButton} />
-        )}
-      </TouchableOpacity>
+            {selectedLanguage?.id === item.id ? (
+              <AntDesign name="checkcircle" size={21.5} color={Color.Green} />
+            ) : (
+              <View style={styles.radioButton} />
+            )}
+          </View>
+        </MenuOption>
+        <Divider />
+      </>
     );
   };
 
@@ -133,16 +136,17 @@ const LanguageModalContent = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // padding: scale(10),
-    paddingHorizontal: scale(10),
-    backgroundColor: '#fff',
+    padding: scale(12),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: verticalScale(4),
+    borderRadius: scale(10),
   },
   languageRow: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: verticalScale(10),
-    borderBottomColor: '#ddd',
+    paddingVertical: verticalScale(5),
   },
   flag: {
     width: scale(30),

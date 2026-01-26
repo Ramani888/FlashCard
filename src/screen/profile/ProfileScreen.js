@@ -16,7 +16,7 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import Font from '../../component/Font';
 import CustomeInputField from '../../custome/CustomeInputField';
-import CustomeModal from '../../custome/CustomeModal';
+import {Menu, MenuTrigger, MenuOptions, MenuProvider} from 'react-native-popup-menu';
 import ProfileModalContent from '../../component/profile/profile/ProfileModalContent';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
@@ -93,14 +93,11 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(false);
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [profileUpdate, setProfileUpdate] = useState(false);
   const [userCreditData, setUserCreditData] = useState({});
   const [userStorageData, setUserStorageData] = useState({});
   //   const [userSubscriptionData, setUserSubscriptionData] = useState({});
   //   const [subscribedPlan, setSubscribedPlan] = useState({});
-  const [languageModal, setLanguageModal] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState({
     id: 0,
     name: 'English',
@@ -229,30 +226,6 @@ const ProfileScreen = () => {
 
   // =================================== End =================================== //
 
-  const openModal = useCallback(ref => {
-    if (ref.current) {
-      ref.current.measureInWindow((x, y, width, height) => {
-        setModalPosition({x: x - width * 5, y: y + height + 10});
-        setModalVisible(true);
-      });
-    }
-  }, []);
-
-  const closeModal = useCallback(() => setModalVisible(false), []);
-
-  const openLanguageModal = useCallback(ref => {
-    if (ref.current) {
-      ref.current.measureInWindow((x, y) => {
-        setModalPosition({x: x - scale(260), y: y + verticalScale(35)});
-        setLanguageModal(true);
-      });
-    }
-  }, []);
-
-  const closeLanguageModal = () => {
-    setLanguageModal(false);
-  };
-
   const openUserNameBottomSheets = () => {
     refUserNameRBSheet.current.open();
   };
@@ -319,12 +292,16 @@ const ProfileScreen = () => {
         edit={true}
         language={true}
         containerStyle={styles.headerStyle}
-        openEditModal={openModal}
-        openLanguageModal={openLanguageModal}
         selectedLanguage={selectedLanguage}
+        setSelectedLanguage={setSelectedLanguage}
+        updateProfilePic={updateProfilePic}
+        handleLogout={handleLogout}
+        openUserNameBottomSheets={openUserNameBottomSheets}
+        openEmailBottomSheets={openEmailBottomSheets}
+        handleLanguageSaved={handleLanguageSaved}
       />
     );
-  }, [selectedLanguage, openLanguageModal, openModal]);
+  }, [selectedLanguage]);
 
   const renderTab = useCallback(
     ({item}) => {
@@ -397,22 +374,23 @@ const ProfileScreen = () => {
   const progress = totalStorage ? currentStorage / totalStorage : 0;
 
   return (
-    <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
-      <StatusBar translucent backgroundColor={Color.transparent} />
-      <Loader visible={visible} color={Color.White} />
-      <Loader visible={loading} color={Color.White} />
-      <ScrollView
-        style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}>
-        {renderHeader()}
-        <VideoAds
-          ref={adRef}
-          updateCredit={updateCredit}
-          setLoading={setLoading}
-          loading={loading}
-        />
+    <MenuProvider>
+      <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
+        <StatusBar translucent backgroundColor={Color.transparent} />
+        <Loader visible={visible} color={Color.White} />
+        <Loader visible={loading} color={Color.White} />
+        <ScrollView
+          style={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}>
+          {renderHeader()}
+          <VideoAds
+            ref={adRef}
+            updateCredit={updateCredit}
+            setLoading={setLoading}
+            loading={loading}
+          />
 
-        <View style={styles.bodyContainer}>
+          <View style={styles.bodyContainer}>
           <View>
             <Text style={styles.label}>{strings.userName}</Text>
             <CustomeInputField
@@ -522,62 +500,9 @@ const ProfileScreen = () => {
 
         {userNameBottomSheets()}
         {emailBottomSheets()}
-
-        <CustomeModal
-          visible={modalVisible}
-          onClose={closeModal}
-          closeModal={false}
-          mainPadding={scale(5)}
-          backgroundColor={colorTheme.modelBackground}
-          content={
-            <ProfileModalContent
-              closeModal={closeModal}
-              openUserNameBottomSheets={openUserNameBottomSheets}
-              openEmailBottomSheets={openEmailBottomSheets}
-              updateProfilePic={updateProfilePic}
-              handleLogout={handleLogout}
-              colorTheme={colorTheme}
-            />
-          }
-          width={scale(120)}
-          justifyContent="flex-end"
-          borderRadius={scale(10)}
-          modalContainerStyle={[
-            styles.modal,
-            {
-              top: modalPosition.y,
-              left: modalPosition.x,
-              backgroundColor: colorTheme.modelBackgroundView,
-            },
-          ]}
-        />
       </ScrollView>
-
-      <CustomeModal
-        visible={languageModal}
-        onClose={closeLanguageModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <LanguageModalContent
-            setSelectedLanguage={setSelectedLanguage}
-            selectedLanguage={selectedLanguage}
-            closeModal={closeLanguageModal}
-            handleLanguageSaved={handleLanguageSaved}
-          />
-        }
-        width={'80%'}
-        // height={'68.6%'}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.languageModal,
-          {backgroundColor: colorTheme.modelBackgroundView},
-          {top: modalPosition.y, left: modalPosition.x},
-        ]}
-      />
     </LinearGradient>
+    </MenuProvider>
   );
 };
 

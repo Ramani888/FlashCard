@@ -1,5 +1,7 @@
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {MenuOption} from 'react-native-popup-menu';
+import {Divider} from '@rneui/themed/dist/Divider';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {scale, verticalScale} from '../../../custome/Responsive';
@@ -9,7 +11,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import strings from '../../../language/strings';
 
 const ProfileModalContent = ({
-  closeModal,
   openUserNameBottomSheets,
   openEmailBottomSheets,
   updateProfilePic,
@@ -49,41 +50,38 @@ const ProfileModalContent = ({
 
   const renderBody = () => {
     return (
-      <View>
-        <Pressable
-          style={styles.container}
-          onPress={() => {
+      <View style={styles.wrapper}>
+        <MenuOption
+          onSelect={() => {
             pickImage();
-            closeModal();
           }}>
-          <FontAwesome
-            name="photo"
-            size={scale(15)}
-            color={colorTheme.textColor}
-          />
-          <Text style={[styles.text, {color: colorTheme.textColor}]}>
-            {strings.picture}
-          </Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.container,
-            {borderBottomWidth: scale(0), marginBottom: verticalScale(-2)},
-          ]}
-          onPress={() => {
+          <View style={styles.container}>
+            <FontAwesome
+              name="photo"
+              size={scale(15)}
+              color={colorTheme.textColor}
+            />
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
+              {strings.picture}
+            </Text>
+          </View>
+        </MenuOption>
+        <Divider />
+        <MenuOption
+          onSelect={() => {
             handleLogout();
-            closeModal();
           }}>
-          <MaterialCommunityIcons
-            name="logout"
-            size={scale(16)}
-            color={Color.Red}
-          />
-          <Text style={[styles.text, {color: Color.Red}]}>
-            {strings.logout}
-          </Text>
-        </Pressable>
+          <View style={[styles.container, styles.lastItem]}>
+            <MaterialCommunityIcons
+              name="logout"
+              size={scale(16)}
+              color={Color.Red}
+            />
+            <Text style={[styles.text, {color: Color.Red}]}>
+              {strings.logout}
+            </Text>
+          </View>
+        </MenuOption>
       </View>
     );
   };
@@ -93,18 +91,23 @@ const ProfileModalContent = ({
 export default ProfileModalContent;
 
 const styles = StyleSheet.create({
+  wrapper: {
+    padding: scale(12),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: verticalScale(4),
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: scale(5),
-    borderBottomWidth: scale(0.7),
-    borderBottomColor: Color.mediumGray,
-    height: verticalScale(33),
+    gap: scale(6),
   },
   text: {
     fontSize: scale(15),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingLeft: scale(10),
+  },
+  lastItem: {
+    borderBottomWidth: 0,
   },
 });

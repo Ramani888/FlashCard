@@ -11,6 +11,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
+import {Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
+import LanguageModalContent from '../component/auth/LanguageModalContent';
+import ProfileModalContent from '../component/profile/profile/ProfileModalContent';
 
 const CustomeHeader = ({
   goBack,
@@ -29,7 +32,6 @@ const CustomeHeader = ({
   searchIcon,
   setSearch,
   search,
-  openEditModal,
   plusButton,
   plusIconAction,
   threeDotIcon,
@@ -46,8 +48,13 @@ const CustomeHeader = ({
   cancel,
   cancelIconStyle,
   onCancel,
-  openLanguageModal,
   selectedLanguage,
+  setSelectedLanguage,
+  updateProfilePic,
+  handleLogout,
+  openUserNameBottomSheets,
+  openEmailBottomSheets,
+  handleLanguageSaved,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -132,20 +139,34 @@ const CustomeHeader = ({
         </Pressable>
       )}
       {edit && (
-        <Pressable
-          ref={editRef}
-          style={styles.editIcon}
-          onPress={() => openEditModal(editRef)}>
-          <AntDesign name="edit" size={scale(20)} color={Color.White} />
-        </Pressable>
+        <Menu style={styles.editIcon}>
+          <MenuTrigger>
+            <AntDesign name="edit" size={scale(20)} color={Color.White} />
+          </MenuTrigger>
+          <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+            <ProfileModalContent
+              openUserNameBottomSheets={openUserNameBottomSheets}
+              openEmailBottomSheets={openEmailBottomSheets}
+              updateProfilePic={updateProfilePic}
+              handleLogout={handleLogout}
+              colorTheme={colorTheme}
+            />
+          </MenuOptions>
+        </Menu>
       )}
       {language && (
-        <Pressable
-          ref={languageRef}
-          style={styles.languageFlag}
-          onPress={() => openLanguageModal(languageRef)}>
-          <Image source={selectedLanguage?.flag} style={styles.flagImage} />
-        </Pressable>
+        <Menu style={styles.languageFlag}>
+          <MenuTrigger>
+            <Image source={selectedLanguage?.flag} style={styles.flagImage} />
+          </MenuTrigger>
+          <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+            <LanguageModalContent
+              setSelectedLanguage={setSelectedLanguage}
+              selectedLanguage={selectedLanguage}
+              handleLanguageSaved={handleLanguageSaved}
+            />
+          </MenuOptions>
+        </Menu>
       )}
       {plusButton && (
         <Pressable style={styles.plusButton} onPress={plusIconAction}>
@@ -242,7 +263,7 @@ const styles = StyleSheet.create({
   editIcon: {
     position: 'absolute',
     right: scale(15),
-    paddingBottom: verticalScale(15),
+    bottom: verticalScale(12),
   },
   plusButton: {
     backgroundColor: Color.theme1,
