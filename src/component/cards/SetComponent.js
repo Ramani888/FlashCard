@@ -248,7 +248,7 @@ const SetComponent = ({
                 </MenuTrigger>
                 <MenuOptions
                   customStyles={{
-                    optionsContainer: styles.menuOptionsContainer,
+                    optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
                   }}>
                   <ModalContent
                     type={'Set'}

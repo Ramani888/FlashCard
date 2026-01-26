@@ -226,7 +226,7 @@ const SetDetailScreen = () => {
                 style={styles.dotsIcon}
               />
             </MenuTrigger>
-            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground}}}>
               <SetDetailModalContent
                 folderId={folderId}
                 setId={setId}

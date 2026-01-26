@@ -8,6 +8,8 @@ import Font from '../Font';
 import strings from '../../language/strings';
 import {MenuOption} from 'react-native-popup-menu';
 import { Divider } from '@rneui/themed/dist/Divider';
+import { color } from '@rneui/themed/dist/config';
+import useTheme from '../Theme';
 
 const NoteModalContent = ({
   item,
@@ -15,6 +17,7 @@ const NoteModalContent = ({
   setEditBottomSheet,
   deleteData,
 }) => {
+  const colorTheme = useTheme();
   const renderBody = () => {
     return (
       <View style={styles.wrapper}>
@@ -28,9 +31,9 @@ const NoteModalContent = ({
             <MaterialIcons
               name="edit"
               size={scale(18)}
-              color={Color.Black}
+              color={colorTheme.textColor}
             />
-            <Text style={styles.text}>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               {strings.edit}
             </Text>
           </View>
@@ -49,7 +52,7 @@ const NoteModalContent = ({
               size={scale(18)}
               color={Color.Red}
             />
-            <Text style={styles.text}>
+            <Text style={[styles.text, {color: colorTheme.textColor}]}>
               {strings.delete}
             </Text>
           </View>
@@ -77,7 +80,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: scale(16),
-    color: Color.Black,
     fontFamily: Font.regular,
   },
 });

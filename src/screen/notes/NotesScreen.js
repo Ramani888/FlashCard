@@ -239,7 +239,7 @@ const NotesScreen = () => {
                 ]}
               />
             </MenuTrigger>
-            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground}}}>
               <NoteModalContent
                 item={singleNoteData}
                 openBottomSheet={openBottomSheet}

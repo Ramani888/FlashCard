@@ -42,6 +42,7 @@ const useTheme = () => {
     cardHeader1: isLightTheme ? '#ececec' : '#040415',
     modelBackgroundView: isLightTheme ? Color.White : '#040415',
     modelBackground: isLightTheme ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.3)',
+    modelNewBackground: isLightTheme ? '#ffffff' : '#000000',
     subscriptionView: isLightTheme ? '#146D8B33' : '#0F576F',
     threeDotIcon: isLightTheme ? Color.WhiteDefault : '#9F9F9F66',
   };

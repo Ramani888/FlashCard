@@ -186,7 +186,7 @@ const FolderComponent = ({
             </MenuTrigger>
             <MenuOptions
               customStyles={{
-                optionsContainer: styles.menuOptionsContainer,
+                optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}],
               }}>
               <ModalContent
                 type={'Folder'}
@@ -371,7 +371,6 @@ const styles = StyleSheet.create({
     padding: scale(10),
   },
   menuOptionsContainer: {
-    backgroundColor: Color.White,
     borderRadius: scale(10),
     elevation: 5,
     shadowColor: '#000',

@@ -127,10 +127,6 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import {MenuOption} from 'react-native-popup-menu';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import Color from '../Color';
 import Font from '../Font';
 import {useNavigation} from '@react-navigation/native';
