@@ -10,37 +10,28 @@ import useTheme from '../Theme';
 import strings from '../../language/strings';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
+import {Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
+import CardModalContent from './CardModalContent';
 
 const CardGridLayout = ({
   item,
   updateCard,
-  threeDotIconRef,
-  setItem,
   folderId,
   setId,
-  openCardModal,
-  openNoteModal,
+  deleteCard,
 }) => {
   const navigation = useNavigation();
-  const infoIconRef = useRef();
   const cardContainerRef = useRef();
   const [showNote, setShowNote] = useState(false);
-  const [cardHeight, setCardHeight] = useState(0);
   const themeColor = useTheme();
 
   const onCardLayout = useCallback(event => {
     const {height} = event.nativeEvent.layout;
-    setCardHeight(height);
   }, []);
 
   const toggleNote = useCallback(() => {
-    if (item?.note) {
-      setShowNote(prev => !prev);
-    } else {
-      openNoteModal(infoIconRef, cardHeight);
-      setItem(item);
-    }
-  }, [item, cardHeight, openNoteModal, setItem]);
+    setShowNote(prev => !prev);
+  }, [item]);
 
   const editNote = () => {
     navigation.navigate(ScreenName.createCard, {
@@ -66,19 +57,37 @@ const CardGridLayout = ({
         </Text>
 
         <View style={[styles.cardActions, styles.gridCardAction]}>
-          <Pressable ref={infoIconRef} onPress={toggleNote}>
-            <AntDesign
-              name={'infocirlce'}
-              size={scale(11)}
-              color={Color.Grey}
-              style={styles.dotsIcon}
-            />
-          </Pressable>
+          {item?.note ? (
+            <Pressable onPress={toggleNote}>
+              <AntDesign
+                name={'infocirlce'}
+                size={scale(11)}
+                color={Color.Grey}
+                style={styles.dotsIcon}
+              />
+            </Pressable>
+          ) : (
+            <Menu>
+              <MenuTrigger>
+                <AntDesign
+                  name={'infocirlce'}
+                  size={scale(11)}
+                  color={Color.Grey}
+                  style={styles.dotsIcon}
+                />
+              </MenuTrigger>
+              <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
+                <AddNoteModalContent
+                  item={item}
+                  folderId={folderId}
+                  setId={setId}
+                />
+              </MenuOptions>
+            </Menu>
+          )}
 
-          {/* </Pressable> */}
           <Pressable
             onPress={() => {
-              console.log('item?.isBlur', item?.isBlur);
               const isBlurred =
                 item?.isBlur === 0 || item?.isBlur === false ? 1 : 0;
               updateCard(
@@ -105,20 +114,24 @@ const CardGridLayout = ({
               />
             )}
           </Pressable>
-          <Pressable
-            ref={threeDotIconRef}
-            onPress={() => {
-              setItem(item);
-              openCardModal();
-            }}
-            style={styles.dotIconView}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(11)}
-              color={Color.Grey}
-              style={styles.dotsIcon}
-            />
-          </Pressable>
+          <Menu>
+            <MenuTrigger>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(11)}
+                color={Color.Grey}
+                style={styles.dotsIcon}
+              />
+            </MenuTrigger>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
+              <CardModalContent
+                deleteCard={deleteCard}
+                item={item}
+                folderId={folderId}
+                setId={setId}
+              />
+            </MenuOptions>
+          </Menu>
         </View>
       </View>
       <View

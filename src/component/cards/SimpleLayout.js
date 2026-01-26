@@ -10,49 +10,36 @@ import {useNavigation} from '@react-navigation/native';
 import useTheme from '../Theme';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import strings from '../../language/strings';
+import {Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
+import CardModalContent from './CardModalContent';
+import AddNoteModalContent from './AddNoteModalContent';
 
 const SimpleLayout = ({
   item,
   updateCard,
-  threeDotIconRef,
-  setItem,
   folderId,
   setId,
-  openCardModal,
-  openNoteModal,
   onDragStart,
   onDragEnd,
+  deleteCard,
 }) => {
   const navigation = useNavigation();
-  const infoIconRef = useRef();
   const cardContainerRef = useRef();
   const [showNote, setShowNote] = useState(false);
-  const [cardHeight, setCardHeight] = useState(0);
   const themeColor = useTheme();
 
   const onCardLayout = useCallback(event => {
     const {height} = event.nativeEvent.layout;
-    setCardHeight(height);
   }, []);
 
   const toggleNote = useCallback(() => {
-    if (item?.note) {
-      setShowNote(prev => !prev);
-    } else {
-      openNoteModal(infoIconRef, cardHeight);
-      setItem(item);
-    }
-  }, [item, cardHeight, openNoteModal, setItem]);
+    setShowNote(prev => !prev);
+  }, [item]);
 
   const toggleBlur = useCallback(() => {
     const isBlurred = item?.isBlur === 0 || item?.isBlur === false ? 1 : 0;
     updateCard(item?._id, item.top, item.bottom, item?.note, isBlurred);
   }, [item, updateCard]);
-
-  const openModal = useCallback(() => {
-    setItem(item);
-    openCardModal();
-  }, [item, setItem, openCardModal]);
 
   const editNote = () => {
     navigation.navigate(ScreenName.createCard, {
@@ -76,14 +63,34 @@ const SimpleLayout = ({
           {item.top}
         </Text>
         <View style={styles.cardActions}>
-          <Pressable ref={infoIconRef} onPress={toggleNote}>
-            <AntDesign
-              name={'infocirlce'}
-              size={scale(11)}
-              color={Color.Grey}
-              style={styles.dotsIcon}
-            />
-          </Pressable>
+          {item?.note ? (
+            <Pressable onPress={toggleNote}>
+              <AntDesign
+                name={'infocirlce'}
+                size={scale(11)}
+                color={Color.Grey}
+                style={styles.dotsIcon}
+              />
+            </Pressable>
+          ) : (
+            <Menu>
+              <MenuTrigger>
+                <AntDesign
+                  name={'infocirlce'}
+                  size={scale(11)}
+                  color={Color.Grey}
+                  style={styles.dotsIcon}
+                />
+              </MenuTrigger>
+              <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: themeColor.modelNewBackground}}}>
+                <AddNoteModalContent
+                  item={item}
+                  folderId={folderId}
+                  setId={setId}
+                />
+              </MenuOptions>
+            </Menu>
+          )}
           <Pressable onPress={toggleBlur}>
             <Entypo
               name={item?.isBlur ? 'eye-with-line' : 'eye'}
@@ -92,17 +99,24 @@ const SimpleLayout = ({
               style={styles.dotsIcon}
             />
           </Pressable>
-          <Pressable
-            ref={threeDotIconRef}
-            onPress={openModal}
-            style={styles.dotIconView}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(11)}
-              color={Color.Grey}
-              style={styles.dotsIcon}
-            />
-          </Pressable>
+          <Menu>
+            <MenuTrigger>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(11)}
+                color={Color.Grey}
+                style={styles.dotsIcon}
+              />
+            </MenuTrigger>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: themeColor.modelNewBackground}}}>
+              <CardModalContent
+                deleteCard={deleteCard}
+                item={item}
+                folderId={folderId}
+                setId={setId}
+              />
+            </MenuOptions>
+          </Menu>
         </View>
       </View>
       <View

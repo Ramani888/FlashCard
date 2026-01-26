@@ -13,20 +13,16 @@ import {scale, verticalScale} from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import CustomeModal from '../../custome/CustomeModal';
 import SetDetailModalContent from '../../component/cards/SetDetailModalContent';
-import CardModalContent from '../../component/cards/CardModalContent';
 import {apiDelete, apiGet, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CardGridLayout from '../../component/cards/CardGridLayout';
 import SimpleLayout from '../../component/cards/SimpleLayout';
-import AddNoteModalContent from '../../component/cards/AddNoteModalContent';
 import NoDataView from '../../component/NoDataView';
 import MasonryFlatlist from 'react-native-masonry-grid';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-// removed wp/hp usage after migrating to popup menu for header
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -46,18 +42,11 @@ const SetDetailScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  // header popup replaces custom modal
-  const [cardModalVisible, setCardModalVisible] = useState(false);
-  const [noteModalVisible, setNoteModalVisible] = useState(false);
-  const [cardModalPosition, setCardModalPosition] = useState({x: 0, y: 0});
-  const [noteModalPosition, setNoteModalPosition] = useState({x: 0, y: 0});
   const [cardData, setCardData] = useState([]);
-  const [item, setItem] = useState({});
   const [layout, setLayout] = useState('single');
   const [changeOrder, setChangeOrder] = useState(false);
   const [isAllBlur, setIsAllBlur] = useState(false);
   const {setName} = route.params;
-  const threeDotIconRef = useRef();
   const {setId, folderId} = route.params;
   const colorTheme = useTheme();
 
@@ -160,38 +149,6 @@ const SetDetailScreen = () => {
 
   // ====================================== End ===================================== //
 
-  // header popup handled by Menu; remove open/close modal handlers
-
-  const openCardModal = useCallback(() => {
-    if (threeDotIconRef.current) {
-      threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-        setCardModalPosition({x: x - width * 3.9, y: y + height + 10});
-        setCardModalVisible(true);
-      });
-    }
-  }, []);
-
-  const closeCardModal = useCallback(() => setCardModalVisible(false), []);
-
-  const openNoteModal = useCallback(
-    (ref, cardHeight) => {
-      if (ref.current) {
-        ref.current.measureInWindow((x, y, width, height) => {
-          layout === 'single'
-            ? setNoteModalPosition({x: x - width * 6, y: y + cardHeight * 0.35})
-            : setNoteModalPosition({
-                x: x - width * 6.6,
-                y: y + cardHeight * 0.2,
-              });
-          setNoteModalVisible(true);
-        });
-      }
-    },
-    [layout],
-  );
-
-  const closeNoteModal = useCallback(() => setNoteModalVisible(false), []);
-
   const renderHeader = useCallback(() => {
     return (
       <View style={styles.headerStyle}>
@@ -259,18 +216,15 @@ const SetDetailScreen = () => {
         <SimpleLayout
           item={item}
           updateCard={updateCard}
-          threeDotIconRef={threeDotIconRef}
-          setItem={setItem}
           folderId={folderId}
           setId={setId}
-          openCardModal={openCardModal}
-          openNoteModal={openNoteModal}
           onDragStart={drag}
           onDragEnd={() => {}}
+          deleteCard={deleteCard}
         />
       );
     },
-    [folderId, openCardModal, openNoteModal, setId, updateCard],
+    [folderId, setId, updateCard, deleteCard],
   );
 
   const handleReorder = useCallback((reorderedData) => {
@@ -306,12 +260,9 @@ const SetDetailScreen = () => {
                       <SimpleLayout
                         item={item?.item}
                         updateCard={updateCard}
-                        threeDotIconRef={threeDotIconRef}
-                        setItem={setItem}
                         folderId={folderId}
                         setId={setId}
-                        openCardModal={openCardModal}
-                        openNoteModal={openNoteModal}
+                        deleteCard={deleteCard}
                       />
                     );
                   }}
@@ -339,12 +290,9 @@ const SetDetailScreen = () => {
                     <CardGridLayout
                       item={item}
                       updateCard={updateCard}
-                      threeDotIconRef={threeDotIconRef}
-                      setItem={setItem}
                       folderId={folderId}
                       setId={setId}
-                      openCardModal={openCardModal}
-                      openNoteModal={openNoteModal}
+                      deleteCard={deleteCard}
                     />
                   );
                 }}
@@ -365,11 +313,10 @@ const SetDetailScreen = () => {
       layout,
       changeOrder,
       folderId,
-      openCardModal,
-      openNoteModal,
       renderItem,
       setId,
       updateCard,
+      deleteCard,
     ],
   );
 
@@ -379,63 +326,6 @@ const SetDetailScreen = () => {
         <Loader visible={visible} />
         {renderHeader()}
         {renderBody}
-
-        {cardModalVisible && <View style={styles.overlay} />}
-
-        <CustomeModal
-        visible={cardModalVisible}
-        onClose={closeCardModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <CardModalContent
-            closeModal={closeCardModal}
-            deleteCard={deleteCard}
-            item={item}
-            folderId={folderId}
-            setId={setId}
-          />
-        }
-        width={scale(100)}
-        justifyContent="flex-end"
-        borderRadius={scale(10)}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: cardModalPosition.y,
-            left: cardModalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-        />
-
-        <CustomeModal
-        visible={noteModalVisible}
-        onClose={closeNoteModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <AddNoteModalContent
-            item={item}
-            folderId={folderId}
-            setId={setId}
-            colorTheme={colorTheme}
-          />
-        }
-        width={scale(140)}
-        justifyContent="flex-end"
-        borderRadius={scale(10)}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: noteModalPosition.y,
-            left: noteModalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-        />
       </MenuProvider>
     </LinearGradient>
   );

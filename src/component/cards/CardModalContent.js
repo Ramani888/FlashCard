@@ -1,5 +1,6 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {MenuOption} from 'react-native-popup-menu';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {scale, verticalScale} from '../../custome/Responsive';
@@ -9,103 +10,91 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
-import Clipboard from '@react-native-clipboard/clipboard'; // Add this import
+import Clipboard from '@react-native-clipboard/clipboard';
+import {Divider} from '@rneui/themed/dist/Divider';
 
-const PressableItem = ({
-  icon,
-  iconStyle,
-  text,
-  onPress,
-  isLast,
-  colorTheme,
-}) => (
-  <Pressable
-    style={[styles.container, isLast && styles.lastItem]}
-    onPress={onPress}>
-    {icon}
-    <Text style={[styles.text, {color: colorTheme.textColor}]}>{text}</Text>
-  </Pressable>
-);
-
-const CardModalContent = ({closeModal, deleteCard, item, folderId, setId}) => {
+const CardModalContent = ({deleteCard, item, folderId, setId}) => {
   const navigation = useNavigation();
   const colorTheme = useTheme();
 
-  console.log('CardModalContent item:', item);
-
   return (
-    <View>
-      <PressableItem
-        icon={
-          <MaterialIcons
-            name="edit"
-            size={scale(15)}
-            color={colorTheme.textColor}
-          />
-        }
-        text={strings.edit}
-        colorTheme={colorTheme}
-        onPress={() => {
+    <View style={styles.wrapper}>
+      <MenuOption
+        onSelect={() => {
           navigation.navigate(ScreenName.createCard, {
             editNote: true,
             initialData: item,
             folderId: folderId,
             setId: setId,
           });
-          closeModal();
-        }}
-      />
-      <PressableItem
-        icon={
+        }}>
+        <View style={styles.container}>
+          <MaterialIcons
+            name="edit"
+            size={scale(15)}
+            color={colorTheme.textColor}
+          />
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.edit}
+          </Text>
+        </View>
+      </MenuOption>
+      <Divider />
+
+      <MenuOption
+        onSelect={() => {
+          deleteCard(item?._id);
+        }}>
+        <View style={styles.container}>
           <MaterialCommunityIcons
             name="delete"
             size={scale(15)}
             color={Color.Red}
           />
-        }
-        text={strings.delete}
-        colorTheme={colorTheme}
-        onPress={() => {
-          deleteCard(item?._id);
-          closeModal();
-        }}
-      />
-      <PressableItem
-        icon={
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.delete}
+          </Text>
+        </View>
+      </MenuOption>
+      <Divider />
+
+      <MenuOption
+        onSelect={() => {
+          const copyText = `${item?.top ?? ''}\n${item?.bottom ?? ''}`;
+          Clipboard.setString(copyText);
+        }}>
+        <View style={styles.container}>
           <MaterialIcons
             name="content-copy"
             size={scale(15)}
             color={colorTheme.textColor}
           />
-        }
-        text={strings.copy}
-        colorTheme={colorTheme}
-        onPress={() => {
-          const copyText = `${item?.top ?? ''}\n${item?.bottom ?? ''}`;
-          Clipboard.setString(copyText);
-          closeModal();
-        }}
-      />
-      <PressableItem
-        icon={
-          <Image
-            source={require('../../Assets/Img/moveFolder.png')}
-            style={styles.iconImage}
-            tintColor={colorTheme.textColor}
-          />
-        }
-        text={strings.move}
-        colorTheme={colorTheme}
-        onPress={() => {
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.copy}
+          </Text>
+        </View>
+      </MenuOption>
+      <Divider />
+
+      <MenuOption
+        onSelect={() => {
           navigation.navigate(ScreenName.assignSet, {
             folderId: folderId,
             setId: setId,
             cardId: item?._id,
           });
-          closeModal();
-        }}
-        isLast={true}
-      />
+        }}>
+        <View style={[styles.container, styles.lastItem]}>
+          <Image
+            source={require('../../Assets/Img/moveFolder.png')}
+            style={styles.iconImage}
+            tintColor={colorTheme.textColor}
+          />
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.move}
+          </Text>
+        </View>
+      </MenuOption>
     </View>
   );
 };
@@ -113,23 +102,26 @@ const CardModalContent = ({closeModal, deleteCard, item, folderId, setId}) => {
 export default React.memo(CardModalContent);
 
 const styles = StyleSheet.create({
+  wrapper: {
+    padding: scale(12),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: verticalScale(4),
+  },
   container: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: scale(5),
-    borderBottomWidth: scale(0.7),
-    borderBottomColor: Color.mediumGray,
-    height: verticalScale(33),
+    gap: scale(6),
   },
   lastItem: {
     borderBottomWidth: 0,
-    marginBottom: verticalScale(-5),
   },
   text: {
-    fontSize: scale(15),
+    fontSize: scale(16),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingLeft: scale(10),
+    textTransform: 'capitalize',
   },
   iconImage: {
     width: scale(16),
