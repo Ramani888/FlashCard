@@ -4,7 +4,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
 import Font from '../Font';
-import CustomeModal from '../../custome/CustomeModal';
+import {Menu, MenuTrigger, MenuOptions, MenuProvider} from 'react-native-popup-menu';
 import PdfModalContent from './PdfModalContent';
 import CustomeButton from '../../custome/CustomeButton';
 import PdfBottomSheetContent from './PdfBottomSheetContent';
@@ -26,15 +26,12 @@ const PdfComponent = memo(({folderId}) => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const [editBottomSheet, setEditBottomSheet] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [pdfName, setPdfName] = useState('');
   const [pdfColor, setPdfColor] = useState('');
   const [pdfId, setPdfId] = useState('');
   const [singlePdfData, setSinglePdfData] = useState({});
   const [colorView, setColorView] = useState(false);
-  const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
   const colorTheme = useTheme();
 
@@ -146,18 +143,6 @@ const PdfComponent = memo(({folderId}) => {
     [navigation],
   );
 
-  const openModal = useCallback((item, isLastItem) => {
-    threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-      // const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - width * 3.7, y: y + height + 15});
-      setModalVisible(true);
-    });
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setModalVisible(false);
-  }, []);
-
   const openBottomSheet = () => {
     refRBSheet.current.show();
   };
@@ -263,27 +248,39 @@ const PdfComponent = memo(({folderId}) => {
                 {item.name}
               </Text>
             </View>
-            <Pressable
-              ref={threeDotIconRef}
-              onPress={() => {
-                setSinglePdfData(item);
-                setPdfId(item?._id);
-                openModal(item, isLastItem);
-              }}>
-              <Entypo
-                name="dots-three-vertical"
-                size={scale(13)}
-                color={Color.Black}
-                style={[
-                  styles.dotsIcon,
-                  {
-                    backgroundColor: item?.isHighlight
-                      ? Color.White
-                      : colorTheme.threeDotIcon,
-                  },
-                ]}
-              />
-            </Pressable>
+            <Menu>
+              <MenuTrigger
+                onPress={() => {
+                  setSinglePdfData(item);
+                  setPdfId(item?._id);
+                }}>
+                <Entypo
+                  name="dots-three-vertical"
+                  size={scale(13)}
+                  color={Color.Black}
+                  style={[
+                    styles.dotsIcon,
+                    {
+                      backgroundColor: item?.isHighlight
+                        ? Color.White
+                        : colorTheme.threeDotIcon,
+                    },
+                  ]}
+                />
+              </MenuTrigger>
+              <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+                <PdfModalContent
+                  type={'Pdf'}
+                  openBottomSheet={openBottomSheet}
+                  setEditBottomSheet={setEditBottomSheet}
+                  deleteItem={deletePdf}
+                  pdfId={item?._id}
+                  colorTheme={colorTheme}
+                  downloadPdf={downloadPdf}
+                  singlePdfData={item}
+                />
+              </MenuOptions>
+            </Menu>
           </Pressable>
           <View style={[styles.folderContainer, styles.alignself]}>
             <Image
@@ -297,7 +294,7 @@ const PdfComponent = memo(({folderId}) => {
         </View>
       );
     },
-    [openModal, pdfData, PdfView, colorTheme, colorView],
+    [pdfData, PdfView, colorTheme, colorView, openBottomSheet, deletePdf, downloadPdf],
   );
 
   const renderBody = () => {
@@ -370,60 +367,31 @@ const PdfComponent = memo(({folderId}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Loader visible={visible} />
-      {renderBody()}
-      <CustomeButton
-        buttonColor={Color.theme1}
-        buttonWidth="90%"
-        buttonHeight={scale(45)}
-        title={strings.uploadPdf}
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
-        fontColor={Color.White}
-        fontFamily={Font.semiBold}
-        marginTop={verticalScale(15)}
-        position="absolute"
-        alignSelf="center"
-        bottom={verticalScale(10)}
-        onPress={() => {
-          setEditBottomSheet(false);
-          setSinglePdfData({});
-          openBottomSheet();
-        }}
-      />
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <PdfModalContent
-            closeModal={closeModal}
-            type={'Pdf'}
-            openBottomSheet={openBottomSheet}
-            setEditBottomSheet={setEditBottomSheet}
-            deleteItem={deletePdf}
-            pdfId={pdfId}
-            colorTheme={colorTheme}
-            downloadPdf={downloadPdf} // <-- Add this line
-            singlePdfData={singlePdfData} // <-- Add this line to access S3 link
-          />
-        }
-        width={'43%'}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-      />
-    </View>
+    <MenuProvider>
+      <View style={styles.container}>
+        <Loader visible={visible} />
+        {renderBody()}
+        <CustomeButton
+          buttonColor={Color.theme1}
+          buttonWidth="90%"
+          buttonHeight={scale(45)}
+          title={strings.uploadPdf}
+          borderRadius={scale(10)}
+          fontSize={scale(15)}
+          fontColor={Color.White}
+          fontFamily={Font.semiBold}
+          marginTop={verticalScale(15)}
+          position="absolute"
+          alignSelf="center"
+          bottom={verticalScale(10)}
+          onPress={() => {
+            setEditBottomSheet(false);
+            setSinglePdfData({});
+            openBottomSheet();
+          }}
+        />
+      </View>
+    </MenuProvider>
   );
 });
 

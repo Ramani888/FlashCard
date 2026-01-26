@@ -10,7 +10,6 @@ import Font from '../Font';
 import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import strings from '../../language/strings';
 
 const ImageModalContent = ({

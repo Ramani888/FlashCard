@@ -1,5 +1,7 @@
 import React, {useMemo, useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import {MenuOption} from 'react-native-popup-menu';
+import {Divider} from '@rneui/themed/dist/Divider';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,7 +14,6 @@ import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import strings from '../../language/strings';
 
 const PdfModalContent = ({
-  closeModal,
   type,
   openBottomSheet,
   setEditBottomSheet,
@@ -24,82 +25,82 @@ const PdfModalContent = ({
 }) => {
   const navigation = useNavigation();
   const iconSize = useMemo(() => scale(20), []);
-  const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
-  const lockIcon = useMemo(() => require('../../Assets/Img/lock.png'), []);
 
   const renderBody = useMemo(
     () => (
-      <View>
+      <View style={styles.wrapper}>
         {type === 'Folder' ? (
           <View>
-            <Pressable
-              style={styles.container}
-              onPress={() => {
+            <MenuOption
+              onSelect={() => {
                 setEditBottomSheet(true);
                 openBottomSheet();
-                closeModal();
               }}>
-              <MaterialIcons
-                name="edit"
-                size={iconSize}
-                color={colorTheme.textColor}
-              />
-              <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                {strings.edit}
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[styles.container, styles.lastItem]}
-              onPress={() => {
+              <View style={styles.container}>
+                <MaterialIcons
+                  name="edit"
+                  size={iconSize}
+                  color={colorTheme.textColor}
+                />
+                <Text style={[styles.text, {color: colorTheme.textColor}]}>
+                  {strings.edit}
+                </Text>
+              </View>
+            </MenuOption>
+            <Divider />
+            <MenuOption
+              onSelect={() => {
                 deleteItem(pdfId);
-                closeModal();
               }}>
-              <MaterialCommunityIcons
-                name="delete"
-                size={iconSize}
-                color={Color.Red}
-              />
-              <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                {strings.deleteFolder}
-              </Text>
-            </Pressable>
+              <View style={[styles.container, styles.lastItem]}>
+                <MaterialCommunityIcons
+                  name="delete"
+                  size={iconSize}
+                  color={Color.Red}
+                />
+                <Text style={[styles.text, {color: colorTheme.textColor}]}>
+                  {strings.deleteFolder}
+                </Text>
+              </View>
+            </MenuOption>
           </View>
         ) : (
           <View>
-            <Pressable
-              style={styles.container}
-              onPress={() => {
+            <MenuOption
+              onSelect={() => {
                 setEditBottomSheet(true);
                 openBottomSheet();
-                closeModal();
               }}>
-              <MaterialIcons
-                name="edit"
-                size={iconSize}
-                color={colorTheme.textColor}
-              />
-              <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                {strings.edit}
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[styles.container]}
-              onPress={() => {
+              <View style={styles.container}>
+                <MaterialIcons
+                  name="edit"
+                  size={iconSize}
+                  color={colorTheme.textColor}
+                />
+                <Text style={[styles.text, {color: colorTheme.textColor}]}>
+                  {strings.edit}
+                </Text>
+              </View>
+            </MenuOption>
+            <Divider />
+            <MenuOption
+              onSelect={() => {
                 deleteItem(pdfId);
-                closeModal();
               }}>
-              <MaterialCommunityIcons
-                name="delete"
-                size={iconSize}
-                color={Color.Red}
-              />
-              <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                {strings.delete}
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[styles.container]}
-              onPress={() => {
+              <View style={styles.container}>
+                <MaterialCommunityIcons
+                  name="delete"
+                  size={iconSize}
+                  color={Color.Red}
+                />
+                <Text style={[styles.text, {color: colorTheme.textColor}]}>
+                  {strings.delete}
+                </Text>
+              </View>
+            </MenuOption>
+            <Divider />
+            <MenuOption
+              onSelect={() => {
                 if (downloadPdf && singlePdfData?.url) {
                   downloadPdf(
                     singlePdfData.url,
@@ -108,39 +109,40 @@ const PdfModalContent = ({
                       : 'downloaded.pdf',
                   );
                 }
-                closeModal();
               }}>
-              <Feather
-                name="download"
-                size={scale(15)}
-                color={colorTheme.textColor}
-              />
-              <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                {strings.downloadPdf}
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[styles.container, styles.lastItem]}
-              onPress={() => {
+              <View style={styles.container}>
+                <Feather
+                  name="download"
+                  size={scale(15)}
+                  color={colorTheme.textColor}
+                />
+                <Text style={[styles.text, {color: colorTheme.textColor}]}>
+                  {strings.downloadPdf}
+                </Text>
+              </View>
+            </MenuOption>
+            <Divider />
+            <MenuOption
+              onSelect={() => {
                 navigation.navigate(ScreenName.assignPdfFolder, {pdfId: pdfId});
-                closeModal();
               }}>
-              <Feather
-                name="folder-plus"
-                size={scale(15)}
-                color={colorTheme.textColor}
-              />
-              <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                {strings.assignFolder}
-              </Text>
-            </Pressable>
+              <View style={[styles.container, styles.lastItem]}>
+                <Feather
+                  name="folder-plus"
+                  size={scale(15)}
+                  color={colorTheme.textColor}
+                />
+                <Text style={[styles.text, {color: colorTheme.textColor}]}>
+                  {strings.assignFolder}
+                </Text>
+              </View>
+            </MenuOption>
           </View>
         )}
       </View>
     ),
     [
       iconSize,
-      closeModal,
       colorTheme,
       deleteItem,
       downloadPdf,
@@ -159,19 +161,22 @@ const PdfModalContent = ({
 export default React.memo(PdfModalContent);
 
 const styles = StyleSheet.create({
+  wrapper: {
+    padding: scale(12),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: verticalScale(4),
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: scale(5),
-    borderBottomWidth: scale(0.7),
-    borderBottomColor: Color.mediumGray,
-    height: verticalScale(33),
+    gap: scale(6),
   },
   text: {
-    fontSize: wp('3.8%'),
+    fontSize: scale(16),
     color: Color.Black,
     fontFamily: Font.regular,
-    paddingLeft: scale(10),
+    textTransform: 'capitalize',
   },
   switchContainer: {
     flexDirection: 'row',
@@ -192,7 +197,5 @@ const styles = StyleSheet.create({
     height: scale(20),
   },
   lastItem: {
-    borderBottomWidth: 0,
-    marginBottom: verticalScale(-5),
   },
 });
