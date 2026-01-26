@@ -1,11 +1,11 @@
-import {StyleSheet, Text, View, FlatList, Pressable, Image} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
 import React, {useCallback, useRef, useState, useMemo, useEffect} from 'react';
 import CustomeHeader from '../../../custome/CustomeHeader';
 import Color from '../../../component/Color';
 import {scale, verticalScale} from '../../../custome/Responsive';
 import Font from '../../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
-import CustomeModal from '../../../custome/CustomeModal';
+import {Menu, MenuTrigger, MenuOptions, MenuProvider} from 'react-native-popup-menu';
 import ContactModalContent from '../../../component/profile/contact/ContactModalContent';
 import ContactBottomSheetContent from '../../../component/profile/contact/ContactBottomSheetContent';
 import {apiDelete, apiGet, apiPost} from '../../../Api/ApiService';
@@ -19,11 +19,7 @@ import ActionSheet from 'react-native-actions-sheet';
 
 const ContactScreen = () => {
   const [visible, setVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [contactData, setContactData] = useState([]);
-  const [singleContactItem, setSingleContactItem] = useState({});
-  const threeDotIconRef = useRef(null);
   const refContactRBSheet = useRef();
   const colorTheme = useTheme();
 
@@ -80,24 +76,6 @@ const ContactScreen = () => {
 
   // ==================================== End ================================== //
 
-  const openModal = useCallback(
-    (item, isLastItem) => {
-      threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-        const offsetY =
-          contactData.length > 7
-            ? isLastItem
-              ? -height - 15
-              : height + 15
-            : height + 15;
-        setModalPosition({x: x - scale(130), y: y + offsetY});
-        setModalVisible(true);
-      });
-    },
-    [contactData.length],
-  );
-
-  const closeModal = useCallback(() => setModalVisible(false), []);
-
   const openContactBottomSheets = () => {
     refContactRBSheet.current.show();
   };
@@ -149,8 +127,6 @@ const ContactScreen = () => {
 
   const renderContacts = useCallback(
     ({item, index}) => {
-      const isLastItem = index === contactData.length - 1;
-
       return (
         <View
           style={[
@@ -163,84 +139,63 @@ const ContactScreen = () => {
               {item?.userName}
             </Text>
           </View>
-          <Pressable
-            ref={threeDotIconRef}
-            onPress={() => {
-              setSingleContactItem(item);
-              openModal(item, isLastItem);
-            }}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(13)}
-              color={Color.Black}
-              style={[
-                styles.dotsIcon,
-                {
-                  backgroundColor: colorTheme.threeDotIcon,
-                },
-              ]}
-            />
-          </Pressable>
+          <Menu>
+            <MenuTrigger>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(13)}
+                color={Color.Black}
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: colorTheme.threeDotIcon,
+                  },
+                ]}
+              />
+            </MenuTrigger>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+              <ContactModalContent
+                item={item}
+                deleteContacts={deleteContacts}
+                colorTheme={colorTheme}
+              />
+            </MenuOptions>
+          </Menu>
         </View>
       );
     },
     [
-      openModal,
       colorTheme.listAndBoxColor,
       colorTheme.textColor,
       colorTheme.threeDotIcon,
-      contactData.length,
+      deleteContacts,
     ],
   );
 
   return (
-    <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
-      <Loader visible={visible} />
-      {renderHeader}
-      <View style={styles.bodyContainer}>
-        {contactData?.length > 0 ? (
-          <FlatList
-            data={contactData}
-            renderItem={renderContacts}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.flatListStyle}
-          />
-        ) : (
-          <NoDataView
-            content={strings.contactNotfound}
-            noDataViewStyle={{marginTop: verticalScale(-70)}}
-            noDataTextStyle={{color: colorTheme.textColor}}
-          />
-        )}
+    <MenuProvider>
+      <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
+        <Loader visible={visible} />
+        {renderHeader}
+        <View style={styles.bodyContainer}>
+          {contactData?.length > 0 ? (
+            <FlatList
+              data={contactData}
+              renderItem={renderContacts}
+              keyExtractor={(item, index) => index.toString()}
+              style={styles.flatListStyle}
+            />
+          ) : (
+            <NoDataView
+              content={strings.contactNotfound}
+              noDataViewStyle={{marginTop: verticalScale(-70)}}
+              noDataTextStyle={{color: colorTheme.textColor}}
+            />
+          )}
+        </View>
+        {contactBottomSheets()}
       </View>
-      {contactBottomSheets()}
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <ContactModalContent
-            closeModal={closeModal}
-            item={singleContactItem}
-            deleteContacts={deleteContacts}
-            colorTheme={colorTheme}
-          />
-        }
-        width={'44%'}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-      />
-    </View>
+    </MenuProvider>
   );
 };
 
@@ -301,16 +256,6 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     marginTop: verticalScale(15),
-  },
-  modal: {
-    position: 'absolute',
-    borderRadius: scale(10),
-    backgroundColor: Color.White,
-    elevation: scale(10),
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: scale(0.3),
-    shadowRadius: scale(4),
   },
   userDetails: {
     flexDirection: 'row',
