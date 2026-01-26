@@ -7,6 +7,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import {MenuProvider} from 'react-native-popup-menu';
 import {scale, verticalScale} from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -110,16 +111,17 @@ const SetAndFolderScreen = () => {
 
   const renderBody = useCallback(() => {
     return (
-      <KeyboardAvoidingView
-        style={styles.bodyContainer}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-        enabled={Platform.OS === 'ios' ? true : false}>
-        <View
-          style={[styles.mainView, {backgroundColor: colorTheme.background1}]}>
-          <LinearGradient
-            colors={colorTheme.gradientTheme}
-            style={styles.headerContainer}>
+      <MenuProvider>
+        <KeyboardAvoidingView
+          style={styles.bodyContainer}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+          enabled={Platform.OS === 'ios' ? true : false}>
+          <View
+            style={[styles.mainView, {backgroundColor: colorTheme.background1}]}>
+            <LinearGradient
+              colors={colorTheme.gradientTheme}
+              style={styles.headerContainer}>
             {renderHeader()}
             {search && (
               <View>
@@ -179,6 +181,7 @@ const SetAndFolderScreen = () => {
           )}
         </View>
       </KeyboardAvoidingView>
+      </MenuProvider>
     );
   }, [
     renderHeader,

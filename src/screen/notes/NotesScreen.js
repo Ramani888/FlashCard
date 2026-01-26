@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  Dimensions,
   FlatList,
   Pressable,
   StatusBar,
@@ -15,7 +14,6 @@ import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 import BottomSheetContent from '../../component/BottomSheetContent';
-import CustomeModal from '../../custome/CustomeModal';
 import NoteModalContent from '../../component/profile/NoteModalContent';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
@@ -28,14 +26,13 @@ import {widthPercentageToDP} from 'react-native-responsive-screen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger} from 'react-native-popup-menu';
 
 const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
 
 const NotesScreen = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
   const [noteData, setNoteData] = useState([]);
@@ -43,7 +40,6 @@ const NotesScreen = () => {
   const [noteStatus, setNoteStatus] = useState(0);
   const [noteColor, setNoteColor] = useState('');
   const [colorView, setColorView] = useState(false);
-  const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
 
@@ -124,23 +120,6 @@ const NotesScreen = () => {
 
   // ====================================== End ===================================== //
 
-  const openModal = useCallback((item, isLastItem) => {
-    threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-      const offsetY =
-        notesData?.length > 7
-          ? isLastItem
-            ? -height - 15
-            : height + 15
-          : height + 15;
-      setModalPosition({x: x - scale(120), y: y + offsetY});
-      setModalVisible(true);
-    });
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setModalVisible(false);
-  }, []);
-
   const openBottomSheet = useCallback(() => {
     refRBSheet.current.show();
   }, []);
@@ -207,8 +186,6 @@ const NotesScreen = () => {
 
   const renderNotes = useCallback(
     ({item, index}) => {
-      const isLastItem = index === notesData.length - 1;
-
       return (
         <Pressable
           style={[
@@ -243,37 +220,47 @@ const NotesScreen = () => {
               {item?.name}
             </Text>
           </View>
-          <Pressable
-            ref={threeDotIconRef}
-            onPress={() => {
-              setSingleNoteData(item);
-              openModal(item, isLastItem);
-            }}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(13)}
-              color={Color.Black}
-              style={[
-                styles.dotsIcon,
-                {
-                  backgroundColor: item?.isHighlight
-                    ? Color.White
-                    : colorTheme.threeDotIcon,
-                },
-              ]}
-            />
-          </Pressable>
+          <Menu>
+            <MenuTrigger
+              onPress={() => {
+                setSingleNoteData(item);
+              }}>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(13)}
+                color={Color.Black}
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: item?.isHighlight
+                      ? Color.White
+                      : colorTheme.threeDotIcon,
+                  },
+                ]}
+              />
+            </MenuTrigger>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
+              <NoteModalContent
+                item={singleNoteData}
+                openBottomSheet={openBottomSheet}
+                setEditBottomSheet={setEditBottomSheet}
+                deleteData={deleteNote}
+              />
+            </MenuOptions>
+          </Menu>
         </Pressable>
       );
     },
     [
-      openModal,
       colorTheme.listAndBoxColor,
       colorTheme.textColor,
       colorTheme.threeDotIcon,
       colorView,
       editNote,
       navigation,
+      singleNoteData,
+      openBottomSheet,
+      deleteNote,
     ],
   );
 
@@ -302,60 +289,33 @@ const NotesScreen = () => {
   );
 
   return (
-    <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
-      <StatusBar translucent backgroundColor="transparent" />
-      <Loader visible={visible} />
-      {renderHeader()}
-      {renderBody()}
-      <CustomeButton
-        buttonColor={Color.theme1}
-        buttonWidth="90%"
-        buttonHeight={scale(45)}
-        title={strings.createNote}
-        borderRadius={scale(10)}
-        fontSize={scale(15)}
-        fontColor={Color.White}
-        fontFamily={Font.semiBold}
-        marginTop={verticalScale(15)}
-        position="absolute"
-        alignSelf="center"
-        bottom={verticalScale(10)}
-        onPress={() => {
-          setEditBottomSheet(false);
-          setSingleNoteData({});
-          openBottomSheet();
-        }}
-      />
-
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <NoteModalContent
-            item={singleNoteData}
-            closeModal={closeModal}
-            openBottomSheet={openBottomSheet}
-            setEditBottomSheet={setEditBottomSheet}
-            deleteData={deleteNote}
-            colorTheme={colorTheme}
-          />
-        }
-        width={'42%'}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-      />
-    </View>
+    <MenuProvider>
+      <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
+        <StatusBar translucent backgroundColor="transparent" />
+        <Loader visible={visible} />
+        {renderHeader()}
+        {renderBody()}
+        <CustomeButton
+          buttonColor={Color.theme1}
+          buttonWidth="90%"
+          buttonHeight={scale(45)}
+          title={strings.createNote}
+          borderRadius={scale(10)}
+          fontSize={scale(15)}
+          fontColor={Color.White}
+          fontFamily={Font.semiBold}
+          marginTop={verticalScale(15)}
+          position="absolute"
+          alignSelf="center"
+          bottom={verticalScale(10)}
+          onPress={() => {
+            setEditBottomSheet(false);
+            setSingleNoteData({});
+            openBottomSheet();
+          }}
+        />
+      </View>
+    </MenuProvider>
   );
 };
 

@@ -1,10 +1,14 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useRef, useState, useCallback, useEffect} from 'react';
+import {
+  Menu,
+  MenuTrigger,
+  MenuOptions,
+} from 'react-native-popup-menu';
 import Color from '../Color';
 import Font from '../Font';
 import {scale, verticalScale} from '../../custome/Responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
-import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
 import CustomeButton from '../../custome/CustomeButton';
 import BottomSheetContent from '../BottomSheetContent';
@@ -13,7 +17,6 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
@@ -25,8 +28,6 @@ const FolderComponent = ({
   search,
   setSearchValue,
 }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [visible, setVisible] = useState(false);
   const [folderData, setFolderData] = useState([]);
@@ -35,7 +36,6 @@ const FolderComponent = ({
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
-  const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
 
@@ -104,7 +104,6 @@ const FolderComponent = ({
       userId: global?.user?._id,
       isHighlight: colorView,
     };
-    closeModal();
     setVisible(true);
     try {
       const response = await apiPut(Api.Folder, '', JSON.stringify(rawData));
@@ -116,7 +115,6 @@ const FolderComponent = ({
       console.log('error in edit folder api', error);
     }
   }, [
-    closeModal,
     colorView,
     folderColor,
     folderName,
@@ -138,21 +136,16 @@ const FolderComponent = ({
 
   // ================================== End =================================== //
 
-  const openModal = useCallback((item, isLastItem) => {
-    threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-      const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - width * 3.2, y: y + offsetY});
-      setModalVisible(true);
-    });
-  }, []);
+  const openBottomSheet = () => {
+    refRBSheet.current.show();
+  };
 
-  const closeModal = useCallback(() => {
-    setModalVisible(false);
+  const closeBottomSheet = useCallback(() => {
+    refRBSheet.current.hide();
   }, []);
 
   const renderFolder = useCallback(
-    ({item, index}) => {
-      const isLastItem = index === folderData.length - 1;
+    ({item}) => {
       return (
         <Pressable
           style={[
@@ -179,24 +172,36 @@ const FolderComponent = ({
               {item.name}
             </Text>
           </View>
-          <Pressable
-            ref={threeDotIconRef}
-            onPress={() => {
-              setSingleFolderItem(item);
-              openModal(item, isLastItem);
-            }}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(13)}
-              color={Color.Black}
-              style={styles.dotsIcon}
-            />
-          </Pressable>
+          <Menu>
+            <MenuTrigger
+              onPress={() => {
+                setSingleFolderItem(item);
+              }}>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(13)}
+                color={Color.Black}
+                style={styles.dotsIcon}
+              />
+            </MenuTrigger>
+            <MenuOptions
+              customStyles={{
+                optionsContainer: styles.menuOptionsContainer,
+              }}>
+              <ModalContent
+                type={'Folder'}
+                openBottomSheet={openBottomSheet}
+                setEditBottomSheet={setEditBottomSheet}
+                deleteData={deleteFolder}
+                handleCreateSetClick={handleCreateSetClick}
+                singleItem={item}
+              />
+            </MenuOptions>
+          </Menu>
         </Pressable>
       );
     },
     [
-      openModal,
       colorView,
       colorTheme.listAndBoxColor,
       colorTheme.textColor,
@@ -205,14 +210,6 @@ const FolderComponent = ({
       setSearchValue,
     ],
   );
-
-  const openBottomSheet = () => {
-    refRBSheet.current.show();
-  };
-
-  const closeBottomSheet = () => {
-    refRBSheet.current.hide();
-  };
 
   const BottomSheets = useCallback(() => {
     return (
@@ -313,32 +310,6 @@ const FolderComponent = ({
     <View style={styles.container}>
       <Loader visible={visible} />
       {renderBody()}
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <ModalContent
-            closeModal={closeModal}
-            type={'Folder'}
-            openBottomSheet={openBottomSheet}
-            setEditBottomSheet={setEditBottomSheet}
-            deleteData={deleteFolder}
-            handleCreateSetClick={handleCreateSetClick}
-            singleItem={singleFolderItem}
-          />
-        }
-        width={wp('40%')}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.modal,
-          {backgroundColor: colorTheme.modelBackgroundView},
-          {top: modalPosition.y, left: modalPosition.x},
-        ]}
-      />
     </View>
   );
 };
@@ -399,8 +370,14 @@ const styles = StyleSheet.create({
     borderRadius: scale(5),
     padding: scale(10),
   },
-  modal: {
-    position: 'absolute',
+  menuOptionsContainer: {
+    backgroundColor: Color.White,
+    borderRadius: scale(10),
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   indicatorStyle: {
     marginTop: verticalScale(10),

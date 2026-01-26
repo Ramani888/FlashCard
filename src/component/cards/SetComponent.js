@@ -8,12 +8,16 @@ import {
   Text,
   View,
 } from 'react-native';
+import {
+  Menu,
+  MenuTrigger,
+  MenuOptions,
+} from 'react-native-popup-menu';
 import Color from '../Color';
 import Font from '../Font';
 import {scale, verticalScale} from '../../custome/Responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
-import CustomeModal from '../../custome/CustomeModal';
 import ModalContent from './ModalContent';
 import BottomSheetContent from '../BottomSheetContent';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -23,10 +27,6 @@ import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
@@ -43,8 +43,6 @@ const SetComponent = ({
 }) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleSetData, setSingleSetData] = useState({});
   const [visible, setVisible] = useState(false);
@@ -53,8 +51,6 @@ const SetComponent = ({
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
   const [colorView, setColorView] = useState(false);
-  const [setId, setSetId] = useState('');
-  const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
 
@@ -135,7 +131,6 @@ const SetComponent = ({
       userId: global?.user?._id,
       isHighlight: colorView,
     };
-    closeModal();
     setVisible(true);
     try {
       const response = await apiPut(Api.Set, '', JSON.stringify(rawData));
@@ -180,18 +175,6 @@ const SetComponent = ({
 
   // ===================================== Api ===================================== //
 
-  const openModal = (item, isLastItem) => {
-    threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-      const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - scale(122), y: y + offsetY});
-      setModalVisible(true);
-    });
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
   const openBottomSheet = () => {
     refRBSheet.current.show();
   };
@@ -202,9 +185,7 @@ const SetComponent = ({
   }, [setOpenSetSheet]);
 
   const renderSet = useCallback(
-    ({item, index}) => {
-      const isLastItem = index === setData.length - 1;
-
+    ({item}) => {
       return (
         <View style={styles.itemContainer}>
           <Pressable
@@ -253,20 +234,34 @@ const SetComponent = ({
                   tintColor={colorTheme.textColor1}
                 />
               </View>
-              <Pressable
-                ref={threeDotIconRef}
-                onPress={() => {
-                  setSingleSetData(item);
-                  setSetId(item?._id);
-                  openModal(item, isLastItem);
-                }}>
-                <Entypo
-                  name="dots-three-vertical"
-                  size={scale(13)}
-                  color={Color.Black}
-                  style={styles.dotsIcon}
-                />
-              </Pressable>
+              <Menu>
+                <MenuTrigger
+                  onPress={() => {
+                    setSingleSetData(item);
+                  }}>
+                  <Entypo
+                    name="dots-three-vertical"
+                    size={scale(13)}
+                    color={Color.Black}
+                    style={styles.dotsIcon}
+                  />
+                </MenuTrigger>
+                <MenuOptions
+                  customStyles={{
+                    optionsContainer: styles.menuOptionsContainer,
+                  }}>
+                  <ModalContent
+                    type={'Set'}
+                    openBottomSheet={openBottomSheet}
+                    setEditBottomSheet={setEditBottomSheet}
+                    deleteData={deleteSet}
+                    folderId={folderId}
+                    singleItem={item}
+                    getSetData={getSetData}
+                    handleRemoveFolder={handleRemoveFolder}
+                  />
+                </MenuOptions>
+              </Menu>
             </View>
           </Pressable>
           {showFolder && (
@@ -371,36 +366,6 @@ const SetComponent = ({
     <View style={styles.container}>
       <Loader visible={visible} />
       {renderBody()}
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <ModalContent
-            closeModal={closeModal}
-            type={'Set'}
-            openBottomSheet={openBottomSheet}
-            setEditBottomSheet={setEditBottomSheet}
-            deleteData={deleteSet}
-            folderId={folderId}
-            setId={setId}
-            singleItem={singleSetData}
-            getSetData={getSetData}
-            handleRemoveFolder={handleRemoveFolder}
-          />
-        }
-        width={wp('43%')}
-        height={hp('32.5%')}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.modal,
-          {backgroundColor: colorTheme.modelBackgroundView},
-          {top: modalPosition.y, left: modalPosition.x},
-        ]}
-      />
     </View>
   );
 };
@@ -429,10 +394,6 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  bibleIcon: {
-    width: scale(13),
-    height: scale(40),
   },
   colorBox: {
     width: scale(13),
@@ -469,6 +430,15 @@ const styles = StyleSheet.create({
     borderRadius: scale(5),
     padding: scale(10),
   },
+  menuOptionsContainer: {
+    backgroundColor: Color.White,
+    borderRadius: scale(10),
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
   folderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -488,15 +458,6 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     textTransform: 'capitalize',
-  },
-  modal: {
-    position: 'absolute',
-    borderRadius: scale(10),
-    elevation: scale(10),
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: scale(0.3),
-    shadowRadius: scale(4),
   },
   indicatorStyle: {
     marginTop: verticalScale(10),
