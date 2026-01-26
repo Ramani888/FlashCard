@@ -14,9 +14,9 @@ import Font from '../Font';
 import Api from '../../Api/EndPoint';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import showMessageonTheScreen from '../ShowMessageOnTheScreen';
-import CustomeModal from '../../custome/CustomeModal';
 import BottomSheetContent from '../BottomSheetContent';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {Menu, MenuTrigger, MenuOptions, MenuProvider} from 'react-native-popup-menu';
 import Loader from '../Loader';
 import ImageModalContent from './ImageModalContent';
 import NoDataView from '../NoDataView';
@@ -27,8 +27,6 @@ import ActionSheet from 'react-native-actions-sheet';
 const {height} = Dimensions.get('window');
 
 const ImageFolderComponent = ({onFolderClick}) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [visible, setVisible] = useState(false);
   const [pdfFolderdata, setPdfFolderData] = useState([]);
@@ -37,7 +35,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
-  const threeDotIconRef = useRef(null);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
 
@@ -93,7 +90,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
       userId: global?.user?._id,
       isHighlight: colorView,
     };
-    closeModal();
     setVisible(true);
     try {
       const response = await apiPut(
@@ -108,7 +104,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
     } catch (error) {
       console.log('error in edit pdf folder api', error);
     }
-  }, [closeModal, colorView, folderColor, folderName, singleFolderItem]);
+  }, [colorView, folderColor, folderName, singleFolderItem]);
 
   const deletePdfFolder = async () => {
     try {
@@ -123,18 +119,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
   };
 
   // ================================== Api =================================== //
-
-  const openModal = useCallback((item, isLastItem) => {
-    threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-      const offsetY = isLastItem ? -height - 15 : height + 15;
-      setModalPosition({x: x - scale(117), y: y + offsetY});
-      setModalVisible(true);
-    });
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setModalVisible(false);
-  }, []);
 
   const openBottomSheet = () => {
     refRBSheet.current.show();
@@ -214,30 +198,40 @@ const ImageFolderComponent = ({onFolderClick}) => {
               {item.name}
             </Text>
           </View>
-          <Pressable
-            ref={threeDotIconRef}
-            onPress={() => {
-              setSingleFolderItem(item);
-              openModal(item, isLastItem);
-            }}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(13)}
-              color={Color.Black}
-              style={[
-                styles.dotsIcon,
-                {
-                  backgroundColor: item?.isHighlight
-                    ? Color.White
-                    : colorTheme.threeDotIcon,
-                },
-              ]}
-            />
-          </Pressable>
+          <Menu>
+            <MenuTrigger
+              onPress={() => {
+                setSingleFolderItem(item);
+              }}>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(13)}
+                color={Color.Black}
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: item?.isHighlight
+                      ? Color.White
+                      : colorTheme.threeDotIcon,
+                  },
+                ]}
+              />
+            </MenuTrigger>
+            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+              <ImageModalContent
+                type={'Folder'}
+                openBottomSheet={openBottomSheet}
+                setEditBottomSheet={setEditBottomSheet}
+                deleteItem={deletePdfFolder}
+                imageId={item._id}
+                colorTheme={colorTheme}
+              />
+            </MenuOptions>
+          </Menu>
         </Pressable>
       );
     },
-    [openModal, colorTheme, colorView, onFolderClick, pdfFolderdata],
+    [colorTheme, colorView, onFolderClick, pdfFolderdata, openBottomSheet, deletePdfFolder],
   );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
@@ -292,39 +286,12 @@ const ImageFolderComponent = ({onFolderClick}) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <Loader visible={visible} />
-      {renderBody()}
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <ImageModalContent
-            closeModal={closeModal}
-            type={'Folder'}
-            openBottomSheet={openBottomSheet}
-            setEditBottomSheet={setEditBottomSheet}
-            deleteItem={deletePdfFolder}
-            singleItem={singleFolderItem}
-            colorTheme={colorTheme}
-          />
-        }
-        width={scale(155)}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-      />
-    </View>
+    <MenuProvider>
+      <View style={styles.mainContainer}>
+        <Loader visible={visible} />
+        {renderBody()}
+      </View>
+    </MenuProvider>
   );
 };
 

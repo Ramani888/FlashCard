@@ -8,7 +8,7 @@ import Color from '../Color';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 import Font from '../Font';
-import CustomeModal from '../../custome/CustomeModal';
+import {Menu, MenuTrigger, MenuOptions, MenuProvider} from 'react-native-popup-menu';
 import ImageModalContent from './ImageModalContent';
 import ImageBottomSheetContent from './ImageBottomSheetContent';
 import {apiDelete, apiGet, apiPost} from '../../Api/ApiService';
@@ -21,15 +21,13 @@ import {ScreenName} from '../Screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import { scale } from 'react-native-size-matters';
 
 const ImageComponent = ({folderId, showFolder}) => {
   const navigation = useNavigation();
-  const threeDotIconRef = useRef(null);
   const refRBSheet = useRef(null);
   const isFocused = useIsFocused();
   const [visible, setVisible] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
   const [imageData, setImageData] = useState([]);
   const [imageId, setImageId] = useState('');
   const [editImageBottomsheet, setEditImageBottomsheet] = useState(false);
@@ -91,22 +89,6 @@ const ImageComponent = ({folderId, showFolder}) => {
     }
   };
 
-  const openModal = useCallback((isLastItem, index) => {
-    const xOffset = index % 3 === 0;
-
-    threeDotIconRef.current.measureInWindow((x, y, width, height) => {
-      setModalPosition({
-        x: x - (xOffset ? wp('22%') : wp('32%')),
-        y: y + hp('4%'),
-      });
-      setModalVisible(true);
-    });
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setModalVisible(false);
-  }, []);
-
   const openBottomSheet = () => {
     refRBSheet.current.show();
   };
@@ -157,20 +139,31 @@ const ImageComponent = ({folderId, showFolder}) => {
                 resizeMode="cover"
               />
             </Pressable>
-            <Pressable
-              ref={threeDotIconRef}
-              onPress={() => {
-                setImageId(item?._id);
-                openModal(isLastItem, index);
-              }}
-              style={styles.pressableIcon}>
-              <Entypo
-                name="dots-three-vertical"
-                size={wp('3%')}
-                color={Color.Black}
-                style={styles.dotsIcon}
-              />
-            </Pressable>
+            <View style={styles.menuTriggerWrapper}>
+              <Menu>
+                <MenuTrigger
+                  onPress={() => {
+                    setImageId(item?._id);
+                  }}>
+                  <Entypo
+                    name="dots-three-vertical"
+                    size={wp('3%')}
+                    color={Color.Black}
+                    style={styles.dotsIcon}
+                  />
+                </MenuTrigger>
+                <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+                  <ImageModalContent
+                    type={'Image'}
+                    openBottomSheet={openBottomSheet}
+                    setEditBottomSheet={setEditImageBottomsheet}
+                    deleteItem={deleteImage}
+                    imageId={item?._id}
+                    colorTheme={colorTheme}
+                  />
+                </MenuOptions>
+              </Menu>
+            </View>
           </View>
           {showFolder && (
             <View
@@ -194,7 +187,7 @@ const ImageComponent = ({folderId, showFolder}) => {
         </View>
       );
     },
-    [imageData, showFolder, navigation, openModal],
+    [imageData, showFolder, navigation, openBottomSheet, deleteImage, colorTheme],
   );
 
   const renderBody = () => {
@@ -218,56 +211,29 @@ const ImageComponent = ({folderId, showFolder}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Loader visible={visible} />
-      {renderBody()}
-      <CustomeButton
-        buttonColor={Color.theme1}
-        buttonWidth="90%"
-        buttonHeight={hp('6%')}
-        title={strings.uploadImages}
-        borderRadius={wp('3%')}
-        fontSize={wp('4%')}
-        fontColor={Color.White}
-        fontFamily={Font.semiBold}
-        marginTop={hp('2%')}
-        position="absolute"
-        alignSelf="center"
-        bottom={hp('1.5%')}
-        onPress={() => {
-          openBottomSheet();
-        }}
-      />
-      <CustomeModal
-        visible={modalVisible}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={wp('1.5%')}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <ImageModalContent
-            closeModal={closeModal}
-            type={'Image'}
-            openBottomSheet={openBottomSheet}
-            setEditBottomSheet={setEditImageBottomsheet}
-            deleteItem={deleteImage}
-            imageId={imageId}
-            colorTheme={colorTheme}
-          />
-        }
-        width={wp('40%')}
-        justifyContent="flex-end"
-        borderRadius={wp('5%')}
-        modalContainerStyle={[
-          styles.modal,
-          {
-            top: modalPosition.y,
-            left: modalPosition.x,
-            backgroundColor: colorTheme.modelBackgroundView,
-          },
-        ]}
-      />
-    </View>
+    <MenuProvider>
+      <View style={styles.container}>
+        <Loader visible={visible} />
+        {renderBody()}
+        <CustomeButton
+          buttonColor={Color.theme1}
+          buttonWidth="90%"
+          buttonHeight={hp('6%')}
+          title={strings.uploadImages}
+          borderRadius={wp('3%')}
+          fontSize={wp('4%')}
+          fontColor={Color.White}
+          fontFamily={Font.semiBold}
+          marginTop={hp('2%')}
+          position="absolute"
+          alignSelf="center"
+          bottom={hp('1.5%')}
+          onPress={() => {
+            openBottomSheet();
+          }}
+        />
+      </View>
+    </MenuProvider>
   );
 };
 
@@ -292,7 +258,7 @@ const styles = StyleSheet.create({
     height: wp('28%'),
     borderRadius: wp('2%'),
   },
-  pressableIcon: {
+  menuTriggerWrapper: {
     position: 'absolute',
     right: wp('1.5%'),
     top: hp('1%'),
