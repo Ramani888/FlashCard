@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   Platform,
+  Dimensions,
 } from 'react-native';
 import {scale, verticalScale, moderateScale} from '../custome/Responsive';
 import Color from '../component/Color';
@@ -25,6 +26,8 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
 import VideoAds from './ads/VideoAds';
+
+const {width, height} = Dimensions.get('window');
 
 const AiScreen = ({setOpenAIBottomsheet}) => {
   const [question, setQuestion] = useState('');
@@ -140,17 +143,14 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <Loader visible={loading} />
-      <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled">
-        <LinearGradient
-          colors={colorTheme.gradientTheme}
-          style={styles.container}>
-          <Loader visible={visible} />
+    <LinearGradient
+      colors={colorTheme.gradientTheme}
+      style={styles.Wrapper}
+    >
+      <View style={[styles.Container]}>
+        <Loader visible={visible} />
+        <Loader visible={loading} />
+        <View style={styles.Header}>
           {renderHeader()}
           <VideoAds
             ref={adRef}
@@ -158,21 +158,15 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
             setLoading={setLoading}
             loading={loading}
           />
-          <View>
-            <View
-              style={[
-                styles.headerView,
-                {backgroundColor: colorTheme.background1},
-              ]}>
+        </View>
+        <View style={styles.Body}>
+          <View style={[styles.CardContainer, {backgroundColor: colorTheme.listAndBoxColor}]}>
+            <View style={styles.CardHeader}>
               <Text style={[styles.headerText, {color: colorTheme.textColor}]}>
                 {strings.aiHeader}
               </Text>
             </View>
-            <View
-              style={[
-                styles.innerContainer,
-                {backgroundColor: colorTheme.listAndBoxColor},
-              ]}>
+            <ScrollView style={styles.CardBodyScroll} contentContainerStyle={styles.CardBody} showsVerticalScrollIndicator={true}>
               <TextInput
                 placeholder={strings.aiPlaceholder}
                 value={question}
@@ -192,31 +186,29 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
                   },
                 ]}
               />
-              <ScrollView
-                style={styles.answerView}
-                showsVerticalScrollIndicator={false}>
-                <Text style={[styles.answer, {color: colorTheme.textColor}]}>
-                  {answer}
-                </Text>
-              </ScrollView>
-              <View style={styles.iconRow}>
-                <Pressable onPress={() => answer && copyToClipboard()}>
-                  <IconWithLabel
-                    IconComponent={Feather}
-                    name="copy"
-                    label={strings.copy}
-                  />
-                </Pressable>
-                <Pressable onPress={() => setAnswer('') || setQuestion('')}>
-                  <IconWithLabel
-                    IconComponent={MaterialIcons}
-                    name="refresh"
-                    label={strings.refresh}
-                  />
-                </Pressable>
-              </View>
+              <Text style={[styles.answer, {color: colorTheme.textColor}]}>
+                {answer}
+              </Text>
+            </ScrollView>
+            <View style={styles.CardFooter}>
+              <Pressable onPress={() => answer && copyToClipboard()}>
+                <IconWithLabel
+                  IconComponent={Feather}
+                  name="copy"
+                  label={strings.copy}
+                />
+              </Pressable>
+              <Pressable onPress={() => setAnswer('') || setQuestion('')}>
+                <IconWithLabel
+                  IconComponent={MaterialIcons}
+                  name="refresh"
+                  label={strings.refresh}
+                />
+              </Pressable>
             </View>
           </View>
+        </View>
+        <View style={styles.Footer}>
           <CustomeButton
             buttonColor={Color.theme1}
             buttonWidth="90%"
@@ -226,13 +218,11 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
             fontColor={Color.White}
             fontFamily={Font.semiBold}
             alignSelf="center"
-            marginTop={verticalScale(15)}
-            marginBottom={verticalScale(10)}
             onPress={handleEnterPress}
           />
-        </LinearGradient>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </View>
+      </View>
+    </LinearGradient>
   );
 };
 
@@ -266,7 +256,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: scale(15),
     fontFamily: Font.medium,
-    padding: scale(10),
+    // padding: scale(10),
   },
   innerContainer: {
     marginHorizontal: scale(17),
@@ -304,4 +294,56 @@ const styles = StyleSheet.create({
     fontFamily: Font.medium,
     paddingTop: verticalScale(3),
   },
+
+  Wrapper: {
+    flex: 1,
+  },
+  Container: {
+    flex: 1,
+    height: height
+  },
+  Header: {
+    height: verticalScale(90),
+    width: width,
+  },
+  Body: {
+    flex: 1,
+    width: width,
+    height: height - verticalScale(180),
+    paddingLeft: scale(20),
+    paddingRight: scale(20),
+  },
+  Footer: {
+    height: verticalScale(90),
+    width: width,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  CardContainer: {
+    height: '100%',
+    borderTopLeftRadius: scale(15),
+    borderTopRightRadius: scale(15),
+    borderBottomLeftRadius: scale(15),
+    borderBottomRightRadius: scale(15),
+  },
+  CardHeader: {
+    height: '7%',
+    borderBottomWidth: 1,
+    paddingLeft: scale(10),
+    justifyContent: 'center'
+  },
+  CardBodyScroll: {
+    flex: 1,
+  },
+  CardBody: {
+  },
+  CardFooter: {
+    height: '10%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: scale(15),
+    paddingRight: scale(10),
+  }
 });
