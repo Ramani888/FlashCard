@@ -144,11 +144,15 @@ const ProfileScreen = () => {
   }, [isFocused]);
 
   const tabData = [
-    {
-      tabname: strings.profileTab1,
-      image: require('../../Assets/Img/userIcon.png'),
-    },
+    // {
+    //   tabname: strings.profileTab1,
+    //   image: require('../../Assets/Img/userIcon.png'),
+    // },
     // {tabname: 'Cloud', image: require('../../Assets/Img/cloud.png')},
+    {
+      tabname: strings.profileTab4,
+      image: require('../../Assets/Img/privacy.png'),
+    },
     {
       tabname: strings.profileTab2,
       image: require('../../Assets/Img/support.png'),
@@ -157,10 +161,6 @@ const ProfileScreen = () => {
     //   tabname: strings.profileTab3,
     //   image: require('../../Assets/Img/notes.png'),
     // },
-    {
-      tabname: strings.profileTab4,
-      image: require('../../Assets/Img/privacy.png'),
-    },
     // {
     //   tabname: 'Ad Inspector',
     //   image: require('../../Assets/Img/privacy.png'),
@@ -287,7 +287,7 @@ const ProfileScreen = () => {
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        profileImage={true}
+        profileImage={false}
         profileUrl={global.user?.picture}
         edit={true}
         language={true}
@@ -432,7 +432,7 @@ const ProfileScreen = () => {
           <View style={styles.separator} />
 
           <View style={styles.subscriptionContainer}>
-            <Pressable
+            {/* <Pressable
               style={styles.subscriptionBoxContainer}
               onPress={() => handleShowAd()}>
               <Text style={styles.subscriptionText}>{strings.watchAd}</Text>
@@ -441,7 +441,7 @@ const ProfileScreen = () => {
                 style={styles.adImageIcon}
               />
               <Text style={styles.subscriptionText}>{strings.earnCredits}</Text>
-              {/* <Text style={styles.subscriptionText}>
+              <Text style={styles.subscriptionText}>
                 {strings.subscription}
               </Text>
               <Pressable
@@ -459,15 +459,15 @@ const ProfileScreen = () => {
                 <Text style={styles.subscriptionTier}>
                   {subscribedPlan?.name}
                 </Text>
-              </Pressable> */}
-            </Pressable>
+              </Pressable>
+            </Pressable> */}
             <View style={styles.subscriptionRightView}>
-              <View style={styles.aiCreditsContainer}>
+              {/* <View style={styles.aiCreditsContainer}>
                 <Text style={styles.aiCreditsText}>{strings.aiCredit}</Text>
                 <Text style={styles.aiCreditsText}>
                   {userCreditData?.credit}
                 </Text>
-              </View>
+              </View> */}
               <View style={styles.aiCreditsContainer}>
                 <Text style={styles.aiCreditsText}>
                   {strings.Storage} ({currentStorage}/{totalStorage}{' '}
@@ -487,7 +487,7 @@ const ProfileScreen = () => {
           <View style={styles.separator} />
         </View>
 
-        <FlatList
+        {/* <FlatList
           data={tabData}
           renderItem={renderTab}
           numColumns={3}
@@ -496,7 +496,27 @@ const ProfileScreen = () => {
             paddingHorizontal: scale(15),
             marginTop: verticalScale(20),
           }}
-        />
+        /> */}
+
+        <View style={styles.tabWrapper}>
+          {tabData.map(item => {
+            return (
+              <Pressable
+                style={[
+                  styles.tabContainer
+                ]}
+                onPress={() => handleTabPress(item?.tabname)}>
+                <Image
+                  source={item?.image}
+                  style={styles.tabIcon}
+                  tintColor={Color.White}
+                  resizeMode="contain"
+                />
+                <Text style={styles.tabText}>{item?.tabname}</Text>
+              </Pressable>
+            )
+          })}
+        </View>
 
         {userNameBottomSheets()}
         {emailBottomSheets()}
@@ -590,7 +610,7 @@ const styles = StyleSheet.create({
     color: Color.White,
     fontFamily: Font.medium,
   },
-  subscriptionRightView: {gap: verticalScale(10), width: '54%'},
+  subscriptionRightView: {gap: verticalScale(10), width: '92%'},
   aiCreditsContainer: {
     width: '100%',
     alignItems: 'center',
@@ -609,7 +629,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   tabContainer: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     marginVertical: verticalScale(15),
   },
@@ -645,10 +665,10 @@ const styles = StyleSheet.create({
   },
   dragableIcon: {marginTop: verticalScale(20)},
   privacyTab: {
-    marginLeft: scale(-15),
+    // marginLeft: scale(-15),
   },
   aboutUsTab: {
-    marginRight: scale(20),
+    // marginRight: scale(20),
   },
   adImageIcon: {
     width: scale(60),
@@ -666,4 +686,12 @@ const styles = StyleSheet.create({
     shadowOpacity: scale(0.3),
     shadowRadius: scale(4),
   },
+  tabWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: scale(32),
+    marginVertical: verticalScale(20),
+  }
 });

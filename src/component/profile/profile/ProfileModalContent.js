@@ -51,7 +51,7 @@ const ProfileModalContent = ({
   const renderBody = () => {
     return (
       <View style={styles.wrapper}>
-        <MenuOption
+        {/* <MenuOption
           onSelect={() => {
             pickImage();
           }}>
@@ -66,7 +66,7 @@ const ProfileModalContent = ({
             </Text>
           </View>
         </MenuOption>
-        <Divider />
+        <Divider /> */}
         <MenuOption
           onSelect={() => {
             handleLogout();
