@@ -259,8 +259,6 @@ const ProfileScreen = () => {
         navigation.navigate(ScreenName.aboutUs);
       tabname === strings.profileTab4 &&
         navigation.navigate(ScreenName.privacy);
-      tabname === 'Ad Inspector' &&
-        navigation.navigate(ScreenName.adInspector);
     },
     [navigation],
   );

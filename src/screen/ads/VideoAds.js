@@ -4,8 +4,9 @@ import React, {
   useImperativeHandle,
   forwardRef,
   useCallback,
+  useRef,
 } from 'react';
-import {View, Alert, StatusBar, StyleSheet} from 'react-native';
+import {View, StatusBar, StyleSheet} from 'react-native';
 import {
   RewardedAd,
   RewardedAdEventType,
@@ -13,108 +14,114 @@ import {
   TestIds,
 } from 'react-native-google-mobile-ads';
 import Color from '../../component/Color';
-import { familyFriendlyAdOptions } from './AdConfig';
-
-// const adUnitId = _DEV_
-//   ? TestIds.REWARDED
-//   : 'ca-app-pub-9823475062473479/5214348018';
 
 const adUnitId = __DEV__
   ? TestIds.REWARDED
   : 'ca-app-pub-9823475062473479/5214348018';
 
-const VideoAds = forwardRef(({updateCredit, setLoading}, ref) => {
-  const [rewardedAd, setRewardedAd] = useState(null);
-  const [loaded, setLoaded] = useState(false);
-  const [reward, setReward] = useState(null);
-  const [adError, setAdError] = useState(null);
+const VideoAds = forwardRef(({updateCredit, onAdStatusChange}, ref) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoadingAd, setIsLoadingAd] = useState(true);
+  const rewardedAdRef = useRef(null);
+  const listenersRef = useRef([]);
 
+  // Notify parent about ad status changes
   useEffect(() => {
-    if (reward) {
-      updateCredit(2, 'credited');
-      setReward(null);
+    if (onAdStatusChange) {
+      onAdStatusChange(isLoaded, isLoadingAd);
     }
-  }, [reward, updateCredit]);
+  }, [isLoaded, isLoadingAd, onAdStatusChange]);
 
-  const loadAd = useCallback(
-    initial => {
-      setLoading(true);
-      setAdError(null);
+  // Load a new ad
+  const loadAd = useCallback(() => {
+    // Clean up previous listeners
+    listenersRef.current.forEach(unsubscribe => unsubscribe());
+    listenersRef.current = [];
 
-      const ad = RewardedAd.createForAdRequest(adUnitId, familyFriendlyAdOptions);
+    setIsLoadingAd(true);
+    setIsLoaded(false);
 
-      const unsubscribeLoaded = ad.addAdEventListener(
-        RewardedAdEventType.LOADED,
-        () => {
-          console.log('Ad Loaded');
-          setLoaded(true);
-          setRewardedAd(ad);
+    const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+      requestNonPersonalizedAdsOnly: true,
+    });
 
-          setLoading(false);
+    // Listen for ad loaded
+    const unsubscribeLoaded = rewarded.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        console.log('Rewarded ad loaded');
+        setIsLoaded(true);
+        setIsLoadingAd(false);
+        rewardedAdRef.current = rewarded;
+      },
+    );
 
-          if (initial === false) {
-            setLoaded(prevLoaded => {
-              if (prevLoaded) {
-                ad.show();
-              }
-              return prevLoaded;
-            });
-          }
-        },
-      );
+    // Listen for reward earned
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        console.log('User earned reward:', reward);
+        updateCredit(2, 'credited');
+      },
+    );
 
-      const unsubscribeEarned = ad.addAdEventListener(
-        RewardedAdEventType.EARNED_REWARD,
-        reward => {
-          setReward(reward);
-        },
-      );
+    // Listen for ad closed - preload next ad silently
+    const unsubscribeClosed = rewarded.addAdEventListener(
+      AdEventType.CLOSED,
+      () => {
+        console.log('Rewarded ad closed, preloading next ad...');
+        // Preload next ad silently in background
+        loadAd();
+      },
+    );
 
-      const unsubscribeError = ad.addAdEventListener(
-        AdEventType.ERROR,
-        error => {
-          console.error('Ad Error:', error);
-          setLoaded(false);
-          setLoading(false);
-          setAdError(error);
-        },
-      );
+    // Listen for errors - retry silently
+    const unsubscribeError = rewarded.addAdEventListener(
+      AdEventType.ERROR,
+      error => {
+        console.log('Rewarded ad error:', error.message);
+        setIsLoaded(false);
+        setIsLoadingAd(false);
+        // Retry loading after 5 seconds silently
+        setTimeout(() => loadAd(), 5000);
+      },
+    );
 
-      ad.load();
+    listenersRef.current = [
+      unsubscribeLoaded,
+      unsubscribeEarned,
+      unsubscribeClosed,
+      unsubscribeError,
+    ];
 
-      return () => {
-        unsubscribeLoaded();
-        unsubscribeEarned();
-        unsubscribeError();
-      };
-    },
-    [setLoading],
-  );
+    rewarded.load();
+  }, [updateCredit]);
 
+  // Initial load when component mounts
   useEffect(() => {
-    loadAd(true);
+    loadAd();
+
+    return () => {
+      listenersRef.current.forEach(unsubscribe => unsubscribe());
+    };
   }, [loadAd]);
 
+  // Show ad function - only shows if loaded
   const showAd = useCallback(() => {
-    // loadAd(false);
-    if (rewardedAd && loaded) {
-      rewardedAd.show();
-      
-      // Force enable the skip button after 5 seconds for policy compliance
-      setTimeout(() => {
-        console.log("Ensuring ad is closeable after 5 seconds (Families Policy compliance)");
-        // This is a workaround to ensure the ad is closeable after 5 seconds
-        // The actual implementation is handled by the familyFriendlyAdOptions
-      }, 5000);
-      
-      setLoaded(false);
-    } else {
-      loadAd(false);
+    if (isLoaded && rewardedAdRef.current) {
+      rewardedAdRef.current.show();
+      setIsLoaded(false);
+      setIsLoadingAd(true);
+      return true;
     }
-  }, [rewardedAd, loaded, loadAd]);
+    return false;
+  }, [isLoaded]);
 
+  // Expose methods to parent
   useImperativeHandle(ref, () => ({
     showAd,
+    isLoaded: () => isLoaded,
+    isLoadingAd: () => isLoadingAd,
   }));
 
   return (

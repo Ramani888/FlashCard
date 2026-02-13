@@ -28,8 +28,6 @@ import OtherUserScreen from '../screen/profile/contact/OtherUserScreen';
 import OtherUserCardScreen from '../screen/profile/contact/OtherUserCardScreen';
 import CommunityScreen from '../screen/CommunityScreen';
 import SplashScreen from '../screen/auth/SplashScreen';
-import AdInspector from '../screen/ads/AdInspector';
-import BannerAdTester from '../screen/ads/BannerAdTester';
 
 export const ScreenName = {
   splash: 'SplashScreen',
@@ -50,8 +48,6 @@ export const ScreenName = {
   community: 'Community',
   setDetail: 'SetDetail',
   pdf: 'Pdf',
-  adInspector: 'AdInspector',
-  bannerAdTester: 'BannerAdTester',
   assignPdfFolder: 'AssignPdfFolder',
   viewPdfScreen: 'ViewPdfScreen',
   image: 'Image',
@@ -98,6 +94,4 @@ export const ScreenPath = {
   ViewPdfScreen,
   OtherUserScreen,
   OtherUserCardScreen,
-  AdInspector,
-  BannerAdTester,
 };

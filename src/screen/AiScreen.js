@@ -35,7 +35,6 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const [inputHeight, setInputHeight] = useState(verticalScale(190));
   const [userCredit, setUserCredit] = useState('');
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
   const refAiRBSheet = useRef();
   const colorTheme = useTheme();
   const adRef = useRef();
@@ -118,10 +117,19 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     showMessageonTheScreen(JSON.stringify(answer));
   };
 
+  const [adReady, setAdReady] = useState(false);
+  const [adLoading, setAdLoading] = useState(true);
+
+  const handleAdStatusChange = useCallback((isLoaded, isLoadingAd) => {
+    setAdReady(isLoaded);
+    setAdLoading(isLoadingAd);
+  }, []);
+
   const handleShowAd = () => {
-    if (adRef.current) {
+    if (adRef.current && adRef.current.isLoaded()) {
       adRef.current.showAd();
     }
+    // Button is disabled when ad not ready, so no message needed
   };
 
   const renderHeader = useCallback(
@@ -130,16 +138,17 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
         headerBackgroundColor={Color.transparent}
         goBack
         showVideoAd={handleShowAd}
-        setLoading={setLoading}
         title={strings.homeTab2}
         iconColor={Color.White}
         containerStyle={styles.headerStyle}
         titleStyle={styles.headerTitleStyle}
         iconStyle={{bottom: verticalScale(5)}}
         videoIconStyle={{top: verticalScale(47)}}
+        adReady={adReady}
+        adLoading={adLoading}
       />
     ),
-    [],
+    [adReady, adLoading],
   );
 
   return (
@@ -149,14 +158,12 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     >
       <View style={[styles.Container]}>
         <Loader visible={visible} />
-        <Loader visible={loading} />
         <View style={styles.Header}>
           {renderHeader()}
           <VideoAds
             ref={adRef}
             updateCredit={updateCredit}
-            setLoading={setLoading}
-            loading={loading}
+            onAdStatusChange={handleAdStatusChange}
           />
         </View>
         <View style={styles.Body}>

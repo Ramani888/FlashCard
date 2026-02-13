@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {StyleSheet, Text, Pressable, Image} from 'react-native';
+import {StyleSheet, Text, Pressable, Image, ActivityIndicator, View} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {useNavigation} from '@react-navigation/native';
@@ -55,6 +55,8 @@ const CustomeHeader = ({
   openUserNameBottomSheets,
   openEmailBottomSheets,
   handleLanguageSaved,
+  adReady,
+  adLoading,
 }) => {
   const navigation = useNavigation();
   const editRef = useRef(null);
@@ -175,12 +177,26 @@ const CustomeHeader = ({
       )}
       {title === strings.homeTab2 && (
         <Pressable
-          style={[styles.adIcon, videoIconStyle]}
-          onPress={() => showVideoAd()}>
-          <Image
-            source={require('../Assets/Img/adsIcon.jpg')}
-            style={styles.adImageIcon}
-          />
+          style={[
+            styles.adIcon, 
+            videoIconStyle,
+            !adReady && styles.adIconDisabled
+          ]}
+          onPress={() => adReady && showVideoAd()}
+          disabled={!adReady}>
+          {adLoading ? (
+            <View style={styles.adLoadingContainer}>
+              <ActivityIndicator size="small" color={Color.White} />
+            </View>
+          ) : (
+            <Image
+              source={require('../Assets/Img/adsIcon.jpg')}
+              style={[
+                styles.adImageIcon,
+                !adReady && styles.adImageIconDisabled
+              ]}
+            />
+          )}
         </Pressable>
       )}
       {threeDotIcon && (
@@ -289,7 +305,17 @@ const styles = StyleSheet.create({
   },
   check: {position: 'absolute', right: scale(15), top: verticalScale(54)},
   adImageIcon: {width: scale(28), height: scale(28), borderRadius: scale(4)},
+  adImageIconDisabled: {opacity: 0.5},
   adIcon: {position: 'absolute', right: scale(20), top: verticalScale(45)},
+  adIconDisabled: {opacity: 0.7},
+  adLoadingContainer: {
+    width: scale(28),
+    height: scale(28),
+    borderRadius: scale(4),
+    backgroundColor: Color.iconBackground,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   imageFolder: {
     width: scale(48),
     height: scale(48),

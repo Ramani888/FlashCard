@@ -18,15 +18,11 @@
         android:allowBackup="false"
         android:theme="@style/AppTheme">
 
-        <!-- <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/APPLICATION_ID"
-            tools:replace="android:value"/> -->
-
+        <!-- AdMob Application ID - PRODUCTION -->
         <meta-data
-        android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-3940256099942544~3347511713"
-        tools:replace="android:value"/>
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9823475062473479~5043844703"
+            tools:replace="android:value"/>
         
 
         <activity
