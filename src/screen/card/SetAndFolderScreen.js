@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -28,47 +28,52 @@ const SetAndFolderScreen = () => {
   const [loading, setLoading] = useState(false);
   const [showFolder, setShowFolder] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [tab, setTab] = useState('SET`');
+  const [tab, setTab] = useState('SET');
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
   const colorTheme = useTheme();
 
-  useEffect(() => {
+  // Memoize whether to show image folder icon
+  const isImageFolder = useMemo(() => tab === 'SET', [tab]);
+
+  const handleFolderClick = useCallback((folderId) => {
+    setFolderId(folderId);
     setTab('SET');
   }, []);
 
-  const handleFolderClick = folderId => {
-    setFolderId(folderId);
-    setTab('SET');
-  };
-
-  const handleCreateSetClick = folderId => {
-    console.log('folderId', folderId);
+  const handleCreateSetClick = useCallback((folderId) => {
     setFolderId(folderId);
     setTab('SET');
     setOpenSetSheet(true);
-  };
+  }, []);
 
-  const isImageFolder = tab === 'SET' ? true : false;
+  // Handler for tab changes - clear search on tab change
+  const handleSetTabClick = useCallback(() => {
+    setTab('SET');
+    setFolderId('');
+    setSearchValue('');
+  }, []);
 
-  const renderHeader = useCallback(() => {
-    return (
-      <CustomeHeader
-        headerBackgroundColor={Color.transparent}
-        imageFolder={isImageFolder}
-        setShowFolder={setShowFolder}
-        showFolder={showFolder}
-        containerStyle={styles.headerStyle}
-        setSearch={setSearch}
-        search={search}
-        themeSwitch={true}
-        profile={true}
-        isSetAndFolder={true}
-      />
-    );
-  }, [search, tab, showFolder]);
+  const handleFoldersTabClick = useCallback(() => {
+    setTab('FOLDERS');
+    setOpenSetSheet(false);
+    setSearchValue('');
+  }, []);
 
-  const buttons = useCallback(
+  const renderHeader = useCallback(() => (
+    <CustomeHeader
+      headerBackgroundColor={Color.transparent}
+      imageFolder={isImageFolder}
+      setShowFolder={setShowFolder}
+      showFolder={showFolder}
+      containerStyle={styles.headerStyle}
+      setSearch={setSearch}
+      search={search}
+      isSetAndFolder={true}
+    />
+  ), [search, isImageFolder, showFolder]);
+
+  const renderButtons = useCallback(
     () => (
       <View style={styles.buttonContainer}>
         <CustomeButton
@@ -81,11 +86,7 @@ const SetAndFolderScreen = () => {
           fontColor={tab === 'SET' ? Color.Black : Color.White}
           fontFamily={Font.medium}
           marginTop={verticalScale(15)}
-          onPress={() => {
-            setTab('SET');
-            setFolderId('');
-            setSearchValue('');
-          }}
+          onPress={handleSetTabClick}
         />
 
         <CustomeButton
@@ -98,15 +99,11 @@ const SetAndFolderScreen = () => {
           fontColor={tab === 'FOLDERS' ? Color.Black : Color.White}
           fontFamily={Font.medium}
           marginTop={verticalScale(15)}
-          onPress={() => {
-            setTab('FOLDERS');
-            setOpenSetSheet(false);
-            setSearchValue('');
-          }}
+          onPress={handleFoldersTabClick}
         />
       </View>
     ),
-    [tab],
+    [tab, handleSetTabClick, handleFoldersTabClick],
   );
 
   const renderBody = useCallback(() => {
@@ -150,7 +147,7 @@ const SetAndFolderScreen = () => {
                 />
               </View>
             )}
-            {buttons()}
+            {renderButtons()}
           </LinearGradient>
           {loading && (
             <ActivityIndicator
@@ -188,12 +185,15 @@ const SetAndFolderScreen = () => {
     search,
     tab,
     searchValue,
-    buttons,
+    renderButtons,
     colorTheme.background1,
     colorTheme.gradientTheme,
     folderId,
     loading,
     openSetSheet,
+    showFolder,
+    handleFolderClick,
+    handleCreateSetClick,
   ]);
 
   return renderBody();

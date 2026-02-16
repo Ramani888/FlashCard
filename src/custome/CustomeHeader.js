@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useMemo, useCallback} from 'react';
 import {StyleSheet, Text, Pressable, Image, ActivityIndicator, View} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -16,11 +16,9 @@ import strings from '../language/strings';
 import {Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
 import LanguageModalContent from '../component/auth/LanguageModalContent';
 import ProfileModalContent from '../component/profile/profile/ProfileModalContent';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ToggleSwitch from 'toggle-switch-react-native';
-import { useDispatch } from 'react-redux';
-import { setState } from '../redux/StateSlice';
-import { ScreenName } from '../component/Screen';
+import {ScreenName} from '../component/Screen';
+import useThemeToggle from '../hooks/useThemeToggle';
 
 const CustomeHeader = ({
   goBack,
@@ -66,39 +64,30 @@ const CustomeHeader = ({
   adLoading,
   isSetAndFolder
 }) => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const editRef = useRef(null);
   const threeDotIconRef = useRef(null);
   const colorTheme = useTheme();
-  const languageRef = useRef();
-  const [theme, setTheme] = useState('Light');
+  const {isDarkMode, toggleTheme} = useThemeToggle();
 
-  useEffect(() => {
-    const getInitialTheme = async () => {
-      const initialTheme = await AsyncStorage.getItem('theme');
-      setTheme(initialTheme);
-      if (!initialTheme || initialTheme === 'null') {
-        setTheme('Light');
-      } else {
-        setTheme(initialTheme);
-      }
-    };
-
-    getInitialTheme();
-  }, []);
-
-  useEffect(() => {
-    if (theme) {
-      const saveTheme = async () => {
-        await AsyncStorage.setItem('theme', theme);
-      };
-
-      saveTheme();
-
-      dispatch(setState({theme}));
+  // Memoize menu options style
+  const menuOptionsStyle = useMemo(() => ({
+    optionsContainer: {
+      borderRadius: scale(10), 
+      backgroundColor: colorTheme.modelNewBackground
     }
-  }, [theme, dispatch]);
+  }), [colorTheme.modelNewBackground]);
+
+  // Memoize hitSlop for pressables
+  const hitSlop = useMemo(() => ({top: 10, bottom: 10, left: 10, right: 10}), []);
+
+  // Handle back press
+  const handleBackPress = useCallback(() => {
+    if (saveNote) {
+      saveNote();
+    } else {
+      navigation.goBack();
+    }
+  }, [saveNote, navigation]);
 
   return (
     <LinearGradient
@@ -114,15 +103,9 @@ const CustomeHeader = ({
       style={[styles.headerContainer, containerStyle]}>
       {goBack && (
         <Pressable
-          onPress={() => {
-            if (saveNote) {
-              saveNote();
-            } else {
-              navigation.goBack();
-            }
-          }}
-          style={[styles.iconContainer, iconStyle]}
-          hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+          onPress={handleBackPress}
+          style={[styles.backIconContainer, iconStyle]}
+          hitSlop={hitSlop}>
           <AntDesign name="arrowleft" size={iconSize} color={iconColor} />
         </Pressable>
       )}
@@ -130,8 +113,8 @@ const CustomeHeader = ({
       {changeOrder && (
         <Pressable
           onPress={() => setChangeOrder(false)}
-          style={[styles.iconContainer, iconStyle]}
-          hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+          style={[styles.backIconContainer, iconStyle]}
+          hitSlop={hitSlop}>
           <AntDesign name="close" size={iconSize} color={iconColor} />
         </Pressable>
       )}
@@ -181,7 +164,7 @@ const CustomeHeader = ({
           <MenuTrigger>
             <AntDesign name="edit" size={scale(20)} color={Color.White} />
           </MenuTrigger>
-          <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+          <MenuOptions customStyles={menuOptionsStyle}>
             <ProfileModalContent
               openUserNameBottomSheets={openUserNameBottomSheets}
               openEmailBottomSheets={openEmailBottomSheets}
@@ -197,7 +180,7 @@ const CustomeHeader = ({
           <MenuTrigger>
             <Image source={selectedLanguage?.flag} style={styles.flagImage} />
           </MenuTrigger>
-          <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(10), backgroundColor: colorTheme.modelNewBackground}}}>
+          <MenuOptions customStyles={menuOptionsStyle}>
             <LanguageModalContent
               setSelectedLanguage={setSelectedLanguage}
               selectedLanguage={selectedLanguage}
@@ -263,26 +246,22 @@ const CustomeHeader = ({
       {isSetAndFolder && (
         <View style={styles.iconWrapper}>
           <ToggleSwitch
-            isOn={theme === 'Dark'}
+            isOn={isDarkMode}
             onColor="#04041599"
             offColor="#FFFFFF99"
             size="medium"
-            onToggle={() =>
-              setTheme(prevTheme =>
-                prevTheme === 'Light' ? 'Dark' : 'Light',
-              )
-            }
+            onToggle={toggleTheme}
           />
 
           <Pressable
-            style={[styles.iconContainer]}
+            style={styles.headerActionIcon}
             onPress={() => navigation.navigate(ScreenName.profile)}
           >
             <AntDesign name="user" size={scale(20)} color={Color.White} />
           </Pressable>
 
           <Pressable
-            style={[styles.iconContainer]}
+            style={styles.headerActionIcon}
             onPress={() => navigation.navigate(ScreenName.notes)}
           >
             <Ionicons name="reader-outline" size={scale(20)} color={Color.White} />
@@ -290,14 +269,14 @@ const CustomeHeader = ({
 
           {imageFolder && (
             <Pressable
-              style={[styles.iconContainer]}
+              style={styles.headerActionIcon}
               onPress={() => setShowFolder(!showFolder)}>
               <Feather name="folder-minus" size={scale(20)} color={Color.White} />
             </Pressable>
           )}
           
           <Pressable
-            style={[styles.iconContainer]}
+            style={styles.headerActionIcon}
             onPress={() => setSearch(!search)}>
             <AntDesign name="search1" size={scale(20)} color={Color.White} />
           </Pressable>
@@ -318,7 +297,7 @@ const styles = StyleSheet.create({
     paddingVertical: scale(5),
     backgroundColor: Color.White,
   },
-  iconContainer: {
+  backIconContainer: {
     padding: scale(5),
     position: 'absolute',
     left: scale(10),
@@ -345,7 +324,6 @@ const styles = StyleSheet.create({
     elevation: scale(5),
   },
   iconWrapper: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -353,7 +331,7 @@ const styles = StyleSheet.create({
     paddingRight: scale(20),
     width: '100%',
   },
-  iconContainer: {
+  headerActionIcon: {
     backgroundColor: Color.iconBackground,
     borderRadius: scale(12),
     padding: scale(10),

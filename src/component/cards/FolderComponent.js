@@ -1,5 +1,5 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useRef, useState, useCallback, useEffect} from 'react';
+import React, {useRef, useState, useCallback, useMemo} from 'react';
 import {
   Menu,
   MenuTrigger,
@@ -12,14 +12,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import ModalContent from './ModalContent';
 import CustomeButton from '../../custome/CustomeButton';
 import BottomSheetContent from '../BottomSheetContent';
-import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
-import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
-import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import useFolderApi from '../../hooks/useFolderApi';
+
+const ITEM_HEIGHT = verticalScale(55); // Approximate height for getItemLayout
 
 const FolderComponent = ({
   onFolderClick,
@@ -29,120 +29,45 @@ const FolderComponent = ({
   setSearchValue,
 }) => {
   const [editBottomSheet, setEditBottomSheet] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [folderData, setFolderData] = useState([]);
-  const [singleFolderItem, setSingleFolderItem] = useState({});
-  const [folderName, setFolderName] = useState('');
-  const [folderStatus, setFolderStatus] = useState(0);
-  const [folderColor, setFolderColor] = useState('');
-  const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
 
-  useEffect(() => {
-    getFolderData(false);
-  }, [getFolderData]);
-
-  useEffect(() => {
-    getFolderData(true, '');
-  }, [search, getFolderData]);
-
-  useEffect(() => {
-    if (singleFolderItem) {
-      setFolderName(singleFolderItem?.name);
-      setFolderStatus(singleFolderItem?.isPrivate === true ? 1 : 0);
-      setFolderColor(singleFolderItem?.color);
-    }
-  }, [singleFolderItem]);
-
-  // ================================== Api =================================== //
-
-  const getFolderData = useCallback(
-    async (message, messageValue) => {
-      message === false && setVisible(true);
-      search && setLoading(true);
-      try {
-        const response = await apiGet(
-          `${Api.Folder}?userId=${global?.user?._id}&search=${search}`,
-        );
-        setFolderData(response);
-        messageValue && showMessageonTheScreen(messageValue);
-      } catch (error) {
-        console.log('error in get folder api', error);
-      } finally {
-        setVisible(false);
-        setLoading(false);
-      }
-    },
-    [search, setLoading],
-  );
-
-  const createFolder = useCallback(async () => {
-    const rawData = {
-      name: folderName,
-      color: folderColor,
-      userId: global?.user?._id,
-      isHighlight: colorView,
-    };
-    setVisible(true);
-    try {
-      const response = await apiPost(Api.Folder, '', JSON.stringify(rawData));
-      setFolderName('');
-      setFolderStatus(0);
-      setFolderColor('');
-      getFolderData(true, response?.message);
-    } catch (error) {
-      console.log('error in create folder api', error);
-    }
-  }, [colorView, folderColor, folderName, getFolderData]);
-
-  const editFolder = useCallback(async () => {
-    const rawData = {
-      _id: singleFolderItem?._id,
-      name: folderName,
-      color: folderColor,
-      userId: global?.user?._id,
-      isHighlight: colorView,
-    };
-    setVisible(true);
-    try {
-      const response = await apiPut(Api.Folder, '', JSON.stringify(rawData));
-      setFolderName('');
-      setFolderStatus(0);
-      setFolderColor('');
-      getFolderData(true, response?.message);
-    } catch (error) {
-      console.log('error in edit folder api', error);
-    }
-  }, [
-    colorView,
-    folderColor,
-    folderName,
-    getFolderData,
+  // Use custom hook for API operations
+  const {
+    folderData,
     singleFolderItem,
-  ]);
+    loading,
+    folderName,
+    setFolderName,
+    folderStatus,
+    setFolderStatus,
+    folderColor,
+    setFolderColor,
+    colorView,
+    setColorView,
+    createFolder,
+    editFolder,
+    deleteFolder,
+    prepareForEdit,
+    prepareForCreate,
+    setSingleFolderItem,
+  } = useFolderApi({search, setExternalLoading: setLoading});
 
-  const deleteFolder = async () => {
-    try {
-      setVisible(true);
-      const response = await apiDelete(
-        `${Api.Folder}?_id=${singleFolderItem?._id}`,
-      );
-      getFolderData(true, response?.message);
-    } catch (error) {
-      console.log('error in delete folder api', error);
-    }
-  };
+  // Memoize menu options style
+  const menuOptionsStyle = useMemo(() => ({
+    optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
+  }), [colorTheme.modelNewBackground]);
 
-  // ================================== End =================================== //
-
-  const openBottomSheet = () => {
-    refRBSheet.current.show();
-  };
+  const openBottomSheet = useCallback(() => {
+    refRBSheet.current?.show();
+  }, []);
 
   const closeBottomSheet = useCallback(() => {
-    refRBSheet.current.hide();
+    refRBSheet.current?.hide();
   }, []);
+
+  // Memoized keyExtractor for FlatList
+  const keyExtractor = useCallback((item, index) => item?._id || index.toString(), []);
 
   const renderFolder = useCallback(
     ({item}) => {
@@ -184,10 +109,7 @@ const FolderComponent = ({
                 style={styles.dotsIcon}
               />
             </MenuTrigger>
-            <MenuOptions
-              customStyles={{
-                optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}],
-              }}>
+            <MenuOptions customStyles={menuOptionsStyle}>
               <ModalContent
                 type={'Folder'}
                 openBottomSheet={openBottomSheet}
@@ -205,9 +127,13 @@ const FolderComponent = ({
       colorView,
       colorTheme.listAndBoxColor,
       colorTheme.textColor,
-      folderData,
       onFolderClick,
       setSearchValue,
+      menuOptionsStyle,
+      openBottomSheet,
+      deleteFolder,
+      handleCreateSetClick,
+      setSingleFolderItem,
     ],
   );
 
@@ -252,8 +178,6 @@ const FolderComponent = ({
     editFolder,
   ]);
 
-  const keyExtractor = useCallback((item, index) => index.toString(), []);
-
   const renderBody = () => {
     return (
       <View style={styles.bodyContainer}>
@@ -272,9 +196,13 @@ const FolderComponent = ({
             renderItem={renderFolder}
             keyExtractor={keyExtractor}
             style={styles.flatlist}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            removeClippedSubviews={true}
           />
         ) : (
-          visible === false && (
+          !loading && (
             <NoDataView
               content={strings.folderNotFound}
               noDataViewStyle={{marginTop: verticalScale(-70)}}
@@ -298,7 +226,7 @@ const FolderComponent = ({
           bottom={verticalScale(10)}
           onPress={() => {
             setEditBottomSheet(false);
-            setSingleFolderItem({});
+            prepareForCreate();
             openBottomSheet();
           }}
         />
@@ -308,13 +236,13 @@ const FolderComponent = ({
 
   return (
     <View style={styles.container}>
-      <Loader visible={visible} />
+      <Loader visible={loading} />
       {renderBody()}
     </View>
   );
 };
 
-export default FolderComponent;
+export default React.memo(FolderComponent);
 
 const styles = StyleSheet.create({
   container: {

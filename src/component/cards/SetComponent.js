@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -20,18 +20,17 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 import ModalContent from './ModalContent';
 import BottomSheetContent from '../BottomSheetContent';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
-import Api from '../../Api/EndPoint';
 import Loader from '../Loader';
-import showMessageonTheScreen from '../ShowMessageOnTheScreen';
 import NoDataView from '../NoDataView';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import useSetApi from '../../hooks/useSetApi';
 
 const {height} = Dimensions.get('window');
+const ITEM_HEIGHT = verticalScale(60); // Approximate height for getItemLayout
 
 const SetComponent = ({
   folderId,
@@ -41,148 +40,66 @@ const SetComponent = ({
   search,
   showFolder
 }) => {
-  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [editBottomSheet, setEditBottomSheet] = useState(false);
-  const [singleSetData, setSingleSetData] = useState({});
-  const [visible, setVisible] = useState(false);
-  const [setData, setSetData] = useState([]);
-  const [setName, setSetName] = useState();
-  const [setStatus, setSetStatus] = useState(0);
-  const [setColor, setSetColor] = useState('');
-  const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
 
-  useEffect(() => {
-    getSetData(false);
-  }, [isFocused, getSetData]);
+  // Use custom hook for API operations
+  const {
+    setData,
+    singleSetData,
+    loading,
+    setName,
+    setSetName,
+    setStatus,
+    setSetStatus,
+    setColor,
+    setSetColor,
+    colorView,
+    setColorView,
+    getSetData,
+    createSet,
+    editSet,
+    deleteSet,
+    removeFolder,
+    prepareForEdit,
+    prepareForCreate,
+    setSingleSetData,
+  } = useSetApi({folderId, search, setExternalLoading: setLoading});
 
-  useEffect(() => {
-    getSetData(true, '');
-  }, [search, getSetData]);
+  // Memoize menu options style
+  const menuOptionsStyle = useMemo(() => ({
+    optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
+  }), [colorTheme.modelNewBackground]);
 
-  useEffect(() => {
-    if (singleSetData) {
-      setSetName(singleSetData?.name);
-      setSetStatus(singleSetData?.isPrivate === true ? 1 : 0);
-      setSetColor(singleSetData?.color);
-    }
-  }, [singleSetData]);
-
+  // Handle openSetSheet prop changes
   useEffect(() => {
     if (openSetSheet) {
       setEditBottomSheet(false);
-      setSingleSetData({});
+      prepareForCreate();
       openBottomSheet();
     }
-  }, [openSetSheet]);
+  }, [openSetSheet, prepareForCreate]);
 
-  // ===================================== Api ===================================== //
-
-  const getSetData = useCallback(
-    async (message, messageValue) => {
-      message === false && setVisible(true);
-      search && setLoading(true);
-      try {
-        const url = folderId
-          ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}&search=${search}`
-          : `${Api.Set}?userId=${global?.user?._id}&search=${search}`;
-        const response = await apiGet(url);
-        setSetData(response);
-        messageValue && showMessageonTheScreen(messageValue);
-      } catch (error) {
-        console.log('error in get folder api', error);
-      } finally {
-        setVisible(false);
-        setLoading(false);
-      }
-    },
-    [folderId, search, setLoading],
-  );
-
-  const createSet = useCallback(async () => {
-    const rawData = {
-      name: setName,
-      isPrivate: setStatus,
-      color: setColor,
-      userId: global?.user?._id,
-      ...(folderId ? {folderId: folderId} : {}),
-      isHighlight: colorView,
-    };
-    setVisible(true);
-    try {
-      const response = await apiPost(Api.Set, '', JSON.stringify(rawData));
-      setSetName('');
-      setSetStatus('');
-      setSetColor('');
-      getSetData(true, response?.message);
-    } catch (error) {
-      console.log('error in create set api', error);
-    }
-  }, [colorView, folderId, getSetData, setColor, setName, setStatus]);
-
-  const editSet = useCallback(async () => {
-    const rawData = {
-      _id: singleSetData?._id,
-      name: setName,
-      isPrivate: setStatus,
-      color: setColor,
-      userId: global?.user?._id,
-      isHighlight: colorView,
-    };
-    setVisible(true);
-    try {
-      const response = await apiPut(Api.Set, '', JSON.stringify(rawData));
-      setSetName('');
-      setSetStatus(0);
-      setSetColor('');
-      getSetData(true, response?.message);
-    } catch (error) {
-      console.log('error in edit Set api', error);
-    }
-  }, [colorView, getSetData, setColor, setName, setStatus, singleSetData]);
-
-  const handleRemoveFolder = async () => {
-    const rawData = {
-      ...singleSetData,
-      folderId: ''
-    }
-    setVisible(true);
-    try {
-      const response = await apiPut(
-        Api.Set,
-        '',
-        JSON.stringify(rawData),
-      );
-      getSetData(true, response?.message);
-    } catch (error) {
-      console.log('error in remove folder api', error);
-    } finally {
-      setVisible(false);
-    }
-  }
-
-  const deleteSet = async () => {
-    try {
-      setVisible(true);
-      const response = await apiDelete(`${Api.Set}?_id=${singleSetData?._id}`);
-      getSetData(true, response?.message);
-    } catch (error) {
-      console.log('error in delete set api', error);
-    }
-  };
-
-  // ===================================== Api ===================================== //
-
-  const openBottomSheet = () => {
-    refRBSheet.current.show();
-  };
+  const openBottomSheet = useCallback(() => {
+    refRBSheet.current?.show();
+  }, []);
 
   const closeBottomSheet = useCallback(() => {
-    refRBSheet.current.hide();
+    refRBSheet.current?.hide();
     setOpenSetSheet(false);
   }, [setOpenSetSheet]);
+
+  // Memoized keyExtractor for FlatList
+  const keyExtractor = useCallback((item, index) => item?._id || index.toString(), []);
+
+  // getItemLayout for FlatList optimization
+  const getItemLayout = useCallback((data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  }), []);
 
   const renderSet = useCallback(
     ({item}) => {
@@ -246,10 +163,7 @@ const SetComponent = ({
                     style={styles.dotsIcon}
                   />
                 </MenuTrigger>
-                <MenuOptions
-                  customStyles={{
-                    optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
-                  }}>
+                <MenuOptions customStyles={menuOptionsStyle}>
                   <ModalContent
                     type={'Set'}
                     openBottomSheet={openBottomSheet}
@@ -258,7 +172,7 @@ const SetComponent = ({
                     folderId={folderId}
                     singleItem={item}
                     getSetData={getSetData}
-                    handleRemoveFolder={handleRemoveFolder}
+                    handleRemoveFolder={removeFolder}
                   />
                 </MenuOptions>
               </Menu>
@@ -282,7 +196,7 @@ const SetComponent = ({
         </View>
       );
     },
-    [setData, colorTheme, colorView, folderId, navigation, showFolder],
+    [colorTheme, colorView, folderId, navigation, showFolder, menuOptionsStyle, openBottomSheet, deleteSet, getSetData, removeFolder, setSingleSetData],
   );
 
   const BottomSheets = useCallback(() => {
@@ -333,12 +247,16 @@ const SetComponent = ({
         <FlatList
           data={setData}
           renderItem={renderSet}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={keyExtractor}
           showsVerticalScrollIndicator={false}
           style={styles.flatlist}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
+          removeClippedSubviews={true}
         />
       ) : (
-        visible === false && <NoDataView content={strings.setNotFound} />
+        !loading && <NoDataView content={strings.setNotFound} />
       )}
       <CustomeButton
         buttonColor={Color.theme1}
@@ -354,7 +272,7 @@ const SetComponent = ({
         bottom={verticalScale(10)}
         onPress={() => {
           setEditBottomSheet(false);
-          setSingleSetData({});
+          prepareForCreate();
           openBottomSheet();
         }}
       />
@@ -364,7 +282,7 @@ const SetComponent = ({
 
   return (
     <View style={styles.container}>
-      <Loader visible={visible} />
+      <Loader visible={loading} />
       {renderBody()}
     </View>
   );
