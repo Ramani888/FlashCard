@@ -1,5 +1,5 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useRef, useState, useCallback, useMemo} from 'react';
+import React, {useRef, useState, useCallback, useMemo, memo} from 'react';
 import {
   Menu,
   MenuTrigger,
@@ -20,6 +20,9 @@ import ActionSheet from 'react-native-actions-sheet';
 import useFolderApi from '../../hooks/useFolderApi';
 
 const ITEM_HEIGHT = verticalScale(55); // Approximate height for getItemLayout
+
+// Memoized no data style
+const noDataStyle = {marginTop: verticalScale(-70)};
 
 const FolderComponent = ({
   onFolderClick,
@@ -65,6 +68,13 @@ const FolderComponent = ({
   const closeBottomSheet = useCallback(() => {
     refRBSheet.current?.hide();
   }, []);
+
+  // Handler for create folder button
+  const handleCreateFolderPress = useCallback(() => {
+    setEditBottomSheet(false);
+    prepareForCreate();
+    openBottomSheet();
+  }, [prepareForCreate, openBottomSheet]);
 
   // Memoized keyExtractor for FlatList
   const keyExtractor = useCallback((item, index) => item?._id || index.toString(), []);
@@ -205,7 +215,7 @@ const FolderComponent = ({
           !loading && (
             <NoDataView
               content={strings.folderNotFound}
-              noDataViewStyle={{marginTop: verticalScale(-70)}}
+              noDataViewStyle={noDataStyle}
             />
           )
         )}
@@ -224,11 +234,7 @@ const FolderComponent = ({
           marginTop={verticalScale(15)}
           position={'absolute'}
           bottom={verticalScale(10)}
-          onPress={() => {
-            setEditBottomSheet(false);
-            prepareForCreate();
-            openBottomSheet();
-          }}
+          onPress={handleCreateFolderPress}
         />
       </View>
     );

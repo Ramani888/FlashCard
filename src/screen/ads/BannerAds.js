@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback, memo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {BannerAd, BannerAdSize, TestIds, MobileAds} from 'react-native-google-mobile-ads';
 
@@ -7,7 +7,12 @@ const adUnitId = __DEV__
   ? TestIds.ADAPTIVE_BANNER
   : 'ca-app-pub-9823475062473479/1036117247';
 
-const AdBanner = () => {
+// Memoized request options
+const REQUEST_OPTIONS = {
+  requestNonPersonalizedAdsOnly: true,
+};
+
+const AdBanner = memo(() => {
   const [isAdReady, setIsAdReady] = useState(false);
 
   useEffect(() => {
@@ -23,6 +28,15 @@ const AdBanner = () => {
       });
   }, []);
 
+  // Memoized callbacks
+  const handleAdLoaded = useCallback(() => {
+    console.log('Banner ad loaded successfully');
+  }, []);
+
+  const handleAdFailedToLoad = useCallback((error) => {
+    console.log('Banner ad failed to load:', error.message);
+  }, []);
+
   if (!isAdReady) {
     return null;
   }
@@ -32,19 +46,15 @@ const AdBanner = () => {
       <BannerAd
         unitId={adUnitId}
         size={BannerAdSize.BANNER}
-        requestOptions={{
-          requestNonPersonalizedAdsOnly: true,
-        }}
-        onAdLoaded={() => {
-          console.log('Banner ad loaded successfully');
-        }}
-        onAdFailedToLoad={error => {
-          console.log('Banner ad failed to load:', error.message);
-        }}
+        requestOptions={REQUEST_OPTIONS}
+        onAdLoaded={handleAdLoaded}
+        onAdFailedToLoad={handleAdFailedToLoad}
       />
     </View>
   );
-};
+});
+
+AdBanner.displayName = 'AdBanner';
 
 const styles = StyleSheet.create({
   container: {

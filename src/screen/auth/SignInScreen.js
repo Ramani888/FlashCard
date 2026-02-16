@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useCallback} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -18,6 +18,16 @@ import Loader from '../../component/Loader';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 
+// Validation schema memoized outside component
+const createValidationSchema = () => Yup.object().shape({
+  email: Yup.string()
+    .email(strings.invalidEmail)
+    .required(strings.emailRequired),
+  password: Yup.string()
+    .min(8, strings.passwordError)
+    .required(strings.passwordRequired),
+});
+
 const SignInScreen = () => {
   const navigation = useNavigation();
   const themeColor = useTheme();
@@ -26,7 +36,28 @@ const SignInScreen = () => {
 
   // ===================================== Api =================================== //
 
-  const loginUser = async (email, password) => {
+  const LoggedInUser = useCallback(async () => {
+    try {
+      const userData = await AsyncStorage.getItem('user');
+      const parseUserData = JSON.parse(userData);
+      global.user = parseUserData;
+      global.token = parseUserData?.token;
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: ScreenName.setAndFolder,
+          },
+        ],
+      });
+    } catch (error) {
+      console.log('error in logged in', error);
+    } finally {
+      setVisible(false);
+    }
+  }, [navigation]);
+
+  const loginUser = useCallback(async (email, password) => {
     const rawData = {
       email: email,
       password: password,
@@ -47,46 +78,22 @@ const SignInScreen = () => {
     } finally {
       setVisible(false);
     }
-  };
-
-  const LoggedInUser = async () => {
-    try {
-      const userData = await AsyncStorage.getItem('user');
-      const parseUserData = JSON.parse(userData);
-      global.user = parseUserData;
-      global.token = parseUserData?.token;
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: ScreenName.setAndFolder,
-          },
-        ],
-      });
-    } catch (error) {
-      console.log('error in logged in', error);
-    } finally {
-      setVisible(false);
-    }
-  };
+  }, [LoggedInUser]);
 
   // ===================================== Api =================================== //
 
-  const togglePasswordVisibility = () =>
-    setIsPasswordVisible(!isPasswordVisible);
+  const togglePasswordVisibility = useCallback(() =>
+    setIsPasswordVisible(prev => !prev), []);
 
-  const handleSignUp = () => {
+  const handleSignUp = useCallback(() => {
     navigation.navigate(ScreenName.signUp);
-  };
+  }, [navigation]);
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email(strings.invalidEmail)
-      .required(strings.emailRequired),
-    password: Yup.string()
-      .min(8, strings.passwordError)
-      .required(strings.passwordRequired),
-  });
+  const handleForgotPassword = useCallback(() => {
+    navigation.navigate(ScreenName.resetPassword);
+  }, [navigation]);
+
+  const validationSchema = createValidationSchema();
 
   return (
     <View style={[styles.container, {backgroundColor: themeColor.background1}]}>
@@ -174,7 +181,7 @@ const SignInScreen = () => {
 
             <Pressable
               style={styles.forgotPassBtn}
-              onPress={() => navigation.navigate(ScreenName.resetPassword)}>
+              onPress={handleForgotPassword}>
               <Text
                 style={[styles.forgotPassText, {color: themeColor.textColor}]}>
                 {strings.forgotPassword}

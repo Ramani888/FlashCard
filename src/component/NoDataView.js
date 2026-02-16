@@ -1,26 +1,32 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {memo, useMemo} from 'react';
 import {scale} from '../custome/Responsive';
 import Color from './Color';
 import Font from './Font';
 import useTheme from './Theme';
 import strings from '../language/strings';
 
-const NoDataView = ({content, noDataViewStyle, noDataTextStyle, isCommunityScreen}) => {
+const NoDataView = memo(({content, noDataViewStyle, noDataTextStyle, isCommunityScreen}) => {
   const colorTheme = useTheme();
+  
+  // Memoize text color calculation
+  const textColor = useMemo(() => {
+    if (noDataTextStyle) {
+      return isCommunityScreen ? colorTheme.textColor : Color.White;
+    }
+    return colorTheme.textColor;
+  }, [noDataTextStyle, isCommunityScreen, colorTheme.textColor]);
+
   return (
     <View style={[styles.noDataView, noDataViewStyle]}>
-      <Text
-        style={[
-          styles.noDataText,
-          noDataTextStyle,
-          {color: noDataTextStyle ? isCommunityScreen ? colorTheme.textColor : Color.White : colorTheme.textColor},
-        ]}>
-        {content ? content : strings.noDataFound}
+      <Text style={[styles.noDataText, noDataTextStyle, {color: textColor}]}>
+        {content || strings.noDataFound}
       </Text>
     </View>
   );
-};
+});
+
+NoDataView.displayName = 'NoDataView';
 
 export default NoDataView;
 

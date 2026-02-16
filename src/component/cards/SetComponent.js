@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
+import React, {useCallback, useEffect, useRef, useState, useMemo, memo} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -31,6 +31,10 @@ import useSetApi from '../../hooks/useSetApi';
 
 const {height} = Dimensions.get('window');
 const ITEM_HEIGHT = verticalScale(60); // Approximate height for getItemLayout
+
+// Memoized folder icon require
+const folderIcon = require('../../Assets/Img/folder.png');
+const cardIcon = require('../../Assets/Img/cardIcon.png');
 
 const SetComponent = ({
   folderId,
@@ -91,6 +95,13 @@ const SetComponent = ({
     setOpenSetSheet(false);
   }, [setOpenSetSheet]);
 
+  // Handler for create set button
+  const handleCreateSetPress = useCallback(() => {
+    setEditBottomSheet(false);
+    prepareForCreate();
+    openBottomSheet();
+  }, [prepareForCreate, openBottomSheet]);
+
   // Memoized keyExtractor for FlatList
   const keyExtractor = useCallback((item, index) => item?._id || index.toString(), []);
 
@@ -146,7 +157,7 @@ const SetComponent = ({
                   {item?.cardCount}
                 </Text>
                 <Image
-                  source={require('../../Assets/Img/cardIcon.png')}
+                  source={cardIcon}
                   style={styles.cardIcon}
                   tintColor={colorTheme.textColor1}
                 />
@@ -181,7 +192,7 @@ const SetComponent = ({
           {showFolder && (
             <View style={[styles.folderContainer, styles.alignSelf]}>
               <Image
-                source={require('../../Assets/Img/folder.png')}
+                source={folderIcon}
                 style={styles.folderIcon}
               />
               <Text
@@ -270,11 +281,7 @@ const SetComponent = ({
         marginTop={verticalScale(15)}
         position={'absolute'}
         bottom={verticalScale(10)}
-        onPress={() => {
-          setEditBottomSheet(false);
-          prepareForCreate();
-          openBottomSheet();
-        }}
+        onPress={handleCreateSetPress}
       />
       {BottomSheets()}
     </View>

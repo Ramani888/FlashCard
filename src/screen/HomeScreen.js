@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState, useEffect} from 'react';
+import React, {useCallback, useRef, useState, useEffect, useMemo, memo} from 'react';
 import {
   Image,
   Pressable,
@@ -29,6 +29,22 @@ import AdBanner from './ads/BannerAds';
 import ToggleSwitch from 'toggle-switch-react-native';
 
 const {height} = Dimensions.get('window');
+
+// Memoized image requires to prevent recreation
+const IMAGES = {
+  account: require('../Assets/Img/account.png'),
+  aiIcon: require('../Assets/Img/aiIcon.png'),
+  notes: require('../Assets/Img/notes.png'),
+  cardIcon: require('../Assets/Img/cardIcon.png'),
+  pdf: require('../Assets/Img/pdf.png'),
+  images: require('../Assets/Img/images.png'),
+  card: require('../Assets/Img/card.png'),
+  darkCard: require('../Assets/Img/darkCard.png'),
+};
+
+// Memoized gradient colors
+const LIGHT_GRADIENT = ['#00394d', '#00394d', '#00394d'];
+const DARK_GRADIENT = ['#00394d', '#001f2b', '#001f2b', '#00394d'];
 
 // const IconButton = memo(({name, iconComponent, selected, onPress}) => {
 //   const Icon = iconComponent;
@@ -104,15 +120,28 @@ const HomeScreen = () => {
     }, []),
   );
 
+  // Memoized navigation handlers
+  const navigateToProfile = useCallback(() => navigation.navigate(ScreenName.profile), [navigation]);
+  const navigateToAi = useCallback(() => navigation.navigate(ScreenName.aiScreen), [navigation]);
+  const navigateToNotes = useCallback(() => navigation.navigate(ScreenName.notes), [navigation]);
+  const navigateToSetAndFolder = useCallback(() => navigation.navigate(ScreenName.setAndFolder), [navigation]);
+  const navigateToPdf = useCallback(() => navigation.navigate(ScreenName.pdf), [navigation]);
+  const navigateToImage = useCallback(() => navigation.navigate(ScreenName.image), [navigation]);
+
+  // Memoized theme toggle handler
+  const handleThemeToggle = useCallback(() => {
+    setTheme(prevTheme => prevTheme === 'Light' ? 'Dark' : 'Light');
+  }, []);
+
   const tabView = useCallback(() => {
     return (
       <View style={styles.tabViewContainer}>
         <View style={styles.tabRow}>
           <Pressable
             style={styles.tabContainer}
-            onPress={() => navigation.navigate(ScreenName.profile)}>
+            onPress={navigateToProfile}>
             <Image
-              source={require('../Assets/Img/account.png')}
+              source={IMAGES.account}
               style={styles.tabIcon}
             />
             <Text style={styles.tabText}>{strings.homeTab1}</Text>
@@ -120,9 +149,9 @@ const HomeScreen = () => {
 
           <Pressable
             style={styles.tabAiContainer}
-            onPress={() => navigation.navigate(ScreenName.aiScreen)}>
+            onPress={navigateToAi}>
             <Image
-              source={require('../Assets/Img/aiIcon.png')}
+              source={IMAGES.aiIcon}
               style={styles.tabAi}
             />
             <Text style={styles.tabText}>{strings.homeTab2}</Text>
@@ -130,9 +159,9 @@ const HomeScreen = () => {
 
           <Pressable
             style={styles.tabContainer}
-            onPress={() => navigation.navigate(ScreenName.notes)}>
+            onPress={navigateToNotes}>
             <Image
-              source={require('../Assets/Img/notes.png')}
+              source={IMAGES.notes}
               style={styles.tabIcon}
               tintColor={Color.theme1}
             />
@@ -143,9 +172,9 @@ const HomeScreen = () => {
         <View style={styles.tabRowSecondary}>
           <Pressable
             style={styles.tabContainer}
-            onPress={() => navigation.navigate(ScreenName.setAndFolder)}>
+            onPress={navigateToSetAndFolder}>
             <Image
-              source={require('../Assets/Img/cardIcon.png')}
+              source={IMAGES.cardIcon}
               style={styles.tabIcon}
               tintColor={Color.theme1}
             />
@@ -154,9 +183,9 @@ const HomeScreen = () => {
 
           <Pressable
             style={styles.tabContainer}
-            onPress={() => navigation.navigate(ScreenName.pdf)}>
+            onPress={navigateToPdf}>
             <Image
-              source={require('../Assets/Img/pdf.png')}
+              source={IMAGES.pdf}
               style={styles.tabIcon}
               tintColor={Color.theme1}
             />
@@ -165,9 +194,9 @@ const HomeScreen = () => {
 
           <Pressable
             style={styles.tabContainer}
-            onPress={() => navigation.navigate(ScreenName.image)}>
+            onPress={navigateToImage}>
             <Image
-              source={require('../Assets/Img/images.png')}
+              source={IMAGES.images}
               style={styles.tabIcon}
               tintColor={Color.theme1}
             />
@@ -176,7 +205,7 @@ const HomeScreen = () => {
         </View>
       </View>
     );
-  }, [navigation]);
+  }, [navigateToProfile, navigateToAi, navigateToNotes, navigateToSetAndFolder, navigateToPdf, navigateToImage]);
 
   // const BottomSheets = useCallback(() => {
   //   return (
@@ -208,45 +237,38 @@ const HomeScreen = () => {
   //   );
   // }, [selectedIcon]);
 
+  // Memoize gradient colors based on theme
+  const gradientColors = useMemo(() => 
+    theme === 'Light' ? LIGHT_GRADIENT : DARK_GRADIENT
+  , [theme]);
+
+  // Memoize card image based on theme
+  const cardImage = useMemo(() => 
+    theme === 'Light' ? IMAGES.card : IMAGES.darkCard
+  , [theme]);
+
   const renderBody = useCallback(
     () => (
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <LinearGradient
-          colors={
-            theme === 'Light'
-              ? ['#00394d', '#00394d', '#00394d']
-              : ['#00394d', '#001f2b', '#001f2b', '#00394d']
-          }
+          colors={gradientColors}
           style={styles.headerContainer}>
-          <View style={{marginTop: verticalScale(0)}} />
+          <View style={styles.marginSpacer} />
           <View style={styles.toggleBtnView}>
             <ToggleSwitch
               isOn={theme === 'Dark'}
               onColor="#04041599"
               offColor="#FFFFFF99"
               size="medium"
-              onToggle={() =>
-                setTheme(prevTheme =>
-                  prevTheme === 'Light' ? 'Dark' : 'Light',
-                )
-              }
+              onToggle={handleThemeToggle}
             />
           </View>
           <Text style={styles.headerText}></Text>
-          {/* <Text style={styles.headerText}>{strings.myCards}</Text> */}
-          <Pressable
-            onPress={() => navigation.navigate(ScreenName.setAndFolder)}>
-            {theme === 'Light' ? (
-              <Image
-                source={require('../Assets/Img/card.png')}
-                style={styles.cardImage}
-              />
-            ) : (
-              <Image
-                source={require('../Assets/Img/darkCard.png')}
-                style={styles.cardImage}
-              />
-            )}
+          <Pressable onPress={navigateToSetAndFolder}>
+            <Image
+              source={cardImage}
+              style={styles.cardImage}
+            />
           </Pressable>
         </LinearGradient>
         {tabView()}
@@ -254,7 +276,7 @@ const HomeScreen = () => {
         <AdBanner />
       </ScrollView>
     ),
-    [theme, navigation, tabView],
+    [theme, gradientColors, cardImage, tabView, handleThemeToggle, navigateToSetAndFolder],
   );
 
   return (
@@ -291,6 +313,9 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     position: 'relative',
+  },
+  marginSpacer: {
+    marginTop: verticalScale(0),
   },
   headerContainer: {
     height: height * 0.415,

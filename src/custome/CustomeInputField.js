@@ -1,10 +1,10 @@
 import {View, Text, TextInput, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {memo, useMemo} from 'react';
 import {scale, verticalScale, moderateScale} from './Responsive';
 import Color from '../component/Color';
 import Font from '../component/Font';
 
-const CustomeInputField = ({
+const CustomeInputField = memo(({
   placeholder,
   value,
   maxLength,
@@ -36,22 +36,20 @@ const CustomeInputField = ({
   errorContainerStyle,
   onBlur,
 }) => {
+  // Memoize container style to prevent inline object recreation
+  const containerDynamicStyle = useMemo(() => ({
+    marginHorizontal: marginHorizontal || 0,
+    height: height || verticalScale(45),
+    width: width || '100%',
+    borderRadius: borderRadius || moderateScale(8),
+    backgroundColor: backgroundColor || Color.White,
+    flexDirection: 'row',
+    alignItems: 'center',
+  }), [marginHorizontal, height, width, borderRadius, backgroundColor]);
+
   return (
-    <View style={[styles.containerStyles]}>
-      <View
-        style={[
-          inputContainerStyles,
-          {
-            marginHorizontal: marginHorizontal ? marginHorizontal : 0,
-            height: height ? height : verticalScale(45),
-            width: width ? width : '100%',
-            borderRadius: borderRadius ? borderRadius : moderateScale(8),
-            backgroundColor: backgroundColor || Color.White,
-            flexDirection: 'row',
-            alignItems: 'center',
-          },
-          customStyles,
-        ]}>
+    <View style={styles.containerStyles}>
+      <View style={[inputContainerStyles, containerDynamicStyle, customStyles]}>
         {iconLeft && IconLeftComponent}
         <TextInput
           placeholder={placeholder}
@@ -78,7 +76,9 @@ const CustomeInputField = ({
       )}
     </View>
   );
-};
+});
+
+CustomeInputField.displayName = 'CustomeInputField';
 
 export default CustomeInputField;
 

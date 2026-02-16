@@ -1,9 +1,9 @@
 import {Text, StyleSheet, Pressable, Dimensions} from 'react-native';
-import React from 'react';
+import React, {memo, useMemo} from 'react';
 
 const {height} = Dimensions.get('window');
 
-const CustomeButton = ({
+const CustomeButton = memo(({
   title,
   buttonWidth,
   buttonHeight,
@@ -47,73 +47,84 @@ const CustomeButton = ({
   left,
   right,
 }) => {
+  // Memoize button style to prevent inline object recreation on each render
+  const buttonStyle = useMemo(() => ({
+    backgroundColor: buttonColor,
+    width: buttonWidth,
+    height: buttonHeight || height * 0.06,
+    borderRadius,
+    borderTopLeftRadius,
+    borderTopRightRadius,
+    borderBottomRightRadius,
+    borderBottomLeftRadius,
+    borderWidth,
+    borderColor,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    marginHorizontal,
+    paddingHorizontal,
+    marginVertical,
+    paddingVertical,
+    padding,
+    elevation,
+    alignSelf,
+    position,
+    top,
+    bottom,
+    left,
+    right,
+  }), [
+    buttonColor, buttonWidth, buttonHeight, borderRadius,
+    borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius,
+    borderWidth, borderColor, marginTop, marginBottom, marginLeft, marginRight,
+    marginHorizontal, paddingHorizontal, marginVertical, paddingVertical,
+    padding, elevation, alignSelf, position, top, bottom, left, right,
+  ]);
+
+  // Memoize text style
+  const textStyle = useMemo(() => ({
+    fontSize,
+    color: fontColor,
+    fontFamily,
+    fontWeight,
+    textTransform,
+  }), [fontSize, fontColor, fontFamily, fontWeight, textTransform]);
+
+  // Memoize icon styles
+  const leftIconStyle = useMemo(() => ({paddingRight: iconPaddingRight}), [iconPaddingRight]);
+  const rightIconStyle = useMemo(() => ({paddingLeft: iconPaddingLeft}), [iconPaddingLeft]);
+
   return (
     <Pressable
       disabled={disabled}
       onPress={onPress}
-      style={[
-        styles.btnStyle,
-        {
-          backgroundColor: buttonColor,
-          width: buttonWidth,
-          height: buttonHeight ? buttonHeight : height * 0.06,
-          borderRadius: borderRadius,
-          borderTopLeftRadius: borderTopLeftRadius,
-          borderTopRightRadius: borderTopRightRadius,
-          borderBottomRightRadius: borderBottomRightRadius,
-          borderBottomLeftRadius: borderBottomLeftRadius,
-          borderWidth: borderWidth,
-          borderColor: borderColor,
-          marginTop: marginTop,
-          marginBottom: marginBottom,
-          marginLeft: marginLeft,
-          marginRight: marginRight,
-          marginHorizontal: marginHorizontal,
-          paddingHorizontal: paddingHorizontal,
-          marginVertical: marginVertical,
-          paddingVertical: paddingVertical,
-          padding: padding,
-          elevation: elevation,
-          alignSelf: alignSelf,
-          position: position,
-          top: top,
-          bottom: bottom,
-          left: left,
-          right: right,
-        },
-      ]}>
-      {iconLeft && (
+      style={[styles.btnStyle, buttonStyle]}>
+      {iconLeft && IconComponentName && (
         <IconComponentName
           name={iconName}
           size={iconSize}
           color={iconColor}
-          style={{paddingRight: iconPaddingRight}}
+          style={leftIconStyle}
         />
       )}
-      <Text
-        style={[
-          styles.btnText,
-          {
-            fontSize: fontSize,
-            color: fontColor,
-            fontFamily: fontFamily,
-            fontWeight: fontWeight,
-            textTransform: textTransform,
-          },
-        ]}>
+      <Text style={[styles.btnText, textStyle]}>
         {title}
       </Text>
-      {iconRight && (
+      {iconRight && IconComponentName && (
         <IconComponentName
           name={iconName}
           size={iconSize}
           color={iconColor}
-          style={{paddingLeft: iconPaddingLeft}}
+          style={rightIconStyle}
         />
       )}
     </Pressable>
   );
-};
+});
+
+CustomeButton.displayName = 'CustomeButton';
 
 export default CustomeButton;
 

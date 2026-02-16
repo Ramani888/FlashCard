@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useState, useCallback, useMemo, memo} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -22,6 +22,12 @@ import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 
 const {width, height} = Dimensions.get('window');
+
+// Memoized keyboard behavior constants
+const IOS_KEYBOARD_BEHAVIOR = 'padding';
+const ANDROID_KEYBOARD_BEHAVIOR = 'height';
+const IOS_KEYBOARD_OFFSET = 0;
+const ANDROID_KEYBOARD_OFFSET = 20;
 
 const SetAndFolderScreen = () => {
   const [search, setSearch] = useState(false);

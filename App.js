@@ -1,11 +1,11 @@
 import {Image, Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
 import Color from './src/component/Color';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
-import { initializeAds } from './src/screen/ads/AdConfig';
+import {initializeAds} from './src/screen/ads/AdConfig';
 import AppNav from './src/navigation/AppNav';
 import {MenuProvider} from 'react-native-popup-menu';
 import {withIAPContext} from 'react-native-iap';
@@ -16,19 +16,31 @@ import CustomeButton from './src/custome/CustomeButton';
 import Font from './src/component/Font';
 import firestore from '@react-native-firebase/firestore';
 import DeviceInfo from 'react-native-device-info';
+import ErrorBoundary from './src/component/ErrorBoundary';
 
+/**
+ * Main App component
+ * Provider is now the outermost wrapper (after gesture handler)
+ * ErrorBoundary catches and handles any uncaught errors
+ */
 const App = gestureHandlerRootHOC(() => {
   const [updatedModal, setUpdateModal] = useState(false);
-  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [_updateAvailable, setUpdateAvailable] = useState(false);
 
-  const getVersions = async () => {
-    const users = await firestore().collection('versions').get();
-    setUpdateAvailable(users.docs[0]._data);
-    const version = await DeviceInfo.getVersion();
-    if (users.docs[0]._data.version > version) {
-      setUpdateModal(true);
+  const getVersions = useCallback(async () => {
+    try {
+      const users = await firestore().collection('versions').get();
+      if (users.docs.length > 0) {
+        setUpdateAvailable(users.docs[0]._data);
+        const version = await DeviceInfo.getVersion();
+        if (users.docs[0]._data.version > version) {
+          setUpdateModal(true);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check for updates:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Initialize AdMob with family-friendly settings for API 35 compliance
@@ -38,26 +50,34 @@ const App = gestureHandlerRootHOC(() => {
         .then(() => {
           console.log('AdMob Initialized with Family Policy settings');
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Failed to initialize AdMob:', error);
         });
     }, 1000);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     getVersions();
+  }, [getVersions]);
+
+  // Error handler for ErrorBoundary
+  const handleError = useCallback((error, errorInfo) => {
+    // Log to your error tracking service (e.g., Sentry, Crashlytics)
+    console.error('App Error:', error, errorInfo);
   }, []);
 
   return (
-    <MenuProvider>
-      <View style={{flex: 1}}>
-        <CheckNetwork />
-        <StatusBar translucent backgroundColor={Color.transparent} />
-        <NavigationContainer>
-          <Provider store={store}>
-            <AppNav />
+    // Provider is now the outermost wrapper for proper Redux access
+    <Provider store={store}>
+      <ErrorBoundary onError={handleError}>
+        <MenuProvider>
+          <View style={styles.container}>
+            <CheckNetwork />
+            <StatusBar translucent backgroundColor={Color.transparent} />
+            <NavigationContainer>
+              <AppNav />
 
             <CustomeModal
               visible={updatedModal}
@@ -100,10 +120,11 @@ const App = gestureHandlerRootHOC(() => {
                 </View>
               }
             />
-          </Provider>
-        </NavigationContainer>
-      </View>
-    </MenuProvider>
+            </NavigationContainer>
+          </View>
+        </MenuProvider>
+      </ErrorBoundary>
+    </Provider>
   );
 });
 

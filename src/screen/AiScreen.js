@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useCallback, useState} from 'react';
+import React, {useEffect, useRef, useCallback, useState, useMemo, memo} from 'react';
 import {
   KeyboardAvoidingView,
   Pressable,
@@ -28,6 +28,15 @@ import strings from '../language/strings';
 import VideoAds from './ads/VideoAds';
 
 const {width, height} = Dimensions.get('window');
+
+// Memoized IconWithLabel component
+const IconWithLabel = memo(({IconComponent, name, label}) => (
+  <View style={styles.iconContainer}>
+    <IconComponent name={name} size={scale(20)} color={Color.theme1} />
+    <Text style={styles.iconText}>{label}</Text>
+  </View>
+));
+IconWithLabel.displayName = 'IconWithLabel';
 
 const AiScreen = ({setOpenAIBottomsheet}) => {
   const [question, setQuestion] = useState('');
@@ -232,13 +241,6 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     </LinearGradient>
   );
 };
-
-const IconWithLabel = ({IconComponent, name, label}) => (
-  <View style={styles.iconContainer}>
-    <IconComponent name={name} size={scale(20)} color={Color.theme1} />
-    <Text style={styles.iconText}>{label}</Text>
-  </View>
-);
 
 export default React.memo(AiScreen);
 
