@@ -4,10 +4,15 @@ import {scale} from 'react-native-size-matters';
 import {UIActivityIndicator} from 'react-native-indicators';
 import Color from './Color';
 
-const Loader = memo(({visible, color}) => {
+interface LoaderProps {
+  visible: boolean;
+  color?: string;
+}
+
+const Loader = memo<LoaderProps>(({visible, color}) => {
   // Early return if not visible to avoid unnecessary rendering
   if (!visible) return null;
-  
+
   return (
     <Modal transparent={true} animationType="none" visible={visible}>
       <View style={styles.loaderContainer}>

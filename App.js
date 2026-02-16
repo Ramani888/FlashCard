@@ -2,7 +2,7 @@ import {Image, Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
-import store from './src/redux/store';
+import store from './src/redux/newStore';
 import Color from './src/component/Color';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import {initializeAds} from './src/screen/ads/AdConfig';
@@ -17,6 +17,7 @@ import Font from './src/component/Font';
 import firestore from '@react-native-firebase/firestore';
 import DeviceInfo from 'react-native-device-info';
 import ErrorBoundary from './src/component/ErrorBoundary';
+import {AuthProvider} from './src/context';
 
 /**
  * Main App component
@@ -71,13 +72,14 @@ const App = gestureHandlerRootHOC(() => {
   return (
     // Provider is now the outermost wrapper for proper Redux access
     <Provider store={store}>
-      <ErrorBoundary onError={handleError}>
-        <MenuProvider>
-          <View style={styles.container}>
-            <CheckNetwork />
-            <StatusBar translucent backgroundColor={Color.transparent} />
-            <NavigationContainer>
-              <AppNav />
+      <AuthProvider>
+        <ErrorBoundary onError={handleError}>
+          <MenuProvider>
+            <View style={styles.container}>
+              <CheckNetwork />
+              <StatusBar translucent backgroundColor={Color.transparent} />
+              <NavigationContainer>
+                <AppNav />
 
             <CustomeModal
               visible={updatedModal}
@@ -120,10 +122,11 @@ const App = gestureHandlerRootHOC(() => {
                 </View>
               }
             />
-            </NavigationContainer>
-          </View>
-        </MenuProvider>
-      </ErrorBoundary>
+              </NavigationContainer>
+            </View>
+          </MenuProvider>
+        </ErrorBoundary>
+      </AuthProvider>
     </Provider>
   );
 });

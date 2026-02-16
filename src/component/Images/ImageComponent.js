@@ -22,6 +22,7 @@ import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import { scale } from 'react-native-size-matters';
+import {useAppSelector} from '../../redux/hooks';
 
 const ImageComponent = ({folderId, showFolder}) => {
   const navigation = useNavigation();
@@ -32,6 +33,10 @@ const ImageComponent = ({folderId, showFolder}) => {
   const [imageId, setImageId] = useState('');
   const [editImageBottomsheet, setEditImageBottomsheet] = useState(false);
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     getImagesData(false);
@@ -42,8 +47,8 @@ const ImageComponent = ({folderId, showFolder}) => {
       try {
         message === false && setVisible(true);
         const url = folderId
-          ? `${Api.folderImage}?userId=${global?.user?._id}&folderId=${folderId}`
-          : `${Api.Images}?userId=${global?.user?._id}`;
+          ? `${Api.folderImage}?userId=${userId}&folderId=${folderId}`
+          : `${Api.Images}?userId=${userId}`;
         const response = await apiGet(url);
         if (response) {
           setImageData(response);
@@ -55,14 +60,14 @@ const ImageComponent = ({folderId, showFolder}) => {
         setVisible(false);
       }
     },
-    [folderId],
+    [folderId, userId],
   );
 
   const uploadeImage = useCallback(
     async imageFile => {
       var formdata = new FormData();
       formdata.append('image', imageFile);
-      formdata.append('userId', global.user?._id);
+      formdata.append('userId', userId);
       try {
         setVisible(true);
         const response = await apiPost(Api.Images, '', formdata);
@@ -74,7 +79,7 @@ const ImageComponent = ({folderId, showFolder}) => {
         console.log('error in upload image api', error);
       }
     },
-    [getImagesData],
+    [getImagesData, userId],
   );
 
   const deleteImage = async imageId => {

@@ -213,3 +213,9 @@ export const generateUUID = (): string => {
     return v.toString(16);
   });
 };
+
+// Re-export utility modules
+export * from './errorHandling';
+export * from './validation';
+export * from './formatters';
+export * from './performance';

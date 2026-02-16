@@ -16,6 +16,7 @@ import NoDataView from '../../component/NoDataView';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import {useAppSelector} from '../../redux/hooks';
 
 const AssignSetScreen = () => {
   const navigation = useNavigation();
@@ -30,6 +31,10 @@ const AssignSetScreen = () => {
   const [colorView, setColorView] = useState(false);
   const [selectedSetId, setSelectedSetId] = useState('');
   const {folderId, cardId, screen} = route.params;
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     getSetData(false);
@@ -61,7 +66,7 @@ const AssignSetScreen = () => {
       name: setName,
       isPrivate: setStatus,
       color: setColor,
-      userId: global?.user?._id,
+      userId: userId,
       ...(folderId ? {folderId: folderId} : {}),
       isHighlight: colorView,
     };
@@ -96,7 +101,7 @@ const AssignSetScreen = () => {
     try {
       setVisible(true);
       const response = await apiPut(
-        `${Api.mediatorCard}?setId=${selectedSetId}&cardId=${cardId}&userId=${global.user?._id}`,
+        `${Api.mediatorCard}?setId=${selectedSetId}&cardId=${cardId}&userId=${userId}`,
       );
       if (response?.success === true) {
         navigation.goBack();

@@ -21,7 +21,7 @@ import {
 } from '@react-navigation/native';
 import {ScreenName} from '../component/Screen';
 import {useDispatch} from 'react-redux';
-import {setState} from '../redux/StateSlice';
+import {setTheme as setReduxTheme} from '../redux/slices/themeSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
@@ -102,7 +102,7 @@ const HomeScreen = () => {
 
       saveTheme();
 
-      dispatch(setState({theme}));
+      dispatch(setReduxTheme(theme));
     }
   }, [theme, dispatch]);
 

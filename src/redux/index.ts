@@ -11,8 +11,8 @@ export * from './slices/folderSlice';
 export * from './slices/appSlice';
 
 // Export store
-export {default as store} from './store';
-export type {AppDispatch, RootState} from './store';
+export {default as store} from './newStore';
+export type {AppDispatch, RootState} from './newStore';
 
 // Export hooks
 export {useAppDispatch, useAppSelector} from './hooks';

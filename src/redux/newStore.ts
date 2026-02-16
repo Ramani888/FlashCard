@@ -4,17 +4,12 @@ import themeReducer from './slices/themeSlice';
 import folderReducer from './slices/folderSlice';
 import appReducer from './slices/appSlice';
 
-// Legacy reducer for backward compatibility
-import legacyReducer from './StateSlice';
-
 const rootReducer = combineReducers({
   // New typed slices
   auth: authReducer,
   theme: themeReducer,
   folders: folderReducer,
   app: appReducer,
-  // Legacy slice for backward compatibility
-  myState: legacyReducer,
 });
 
 const store = configureStore({

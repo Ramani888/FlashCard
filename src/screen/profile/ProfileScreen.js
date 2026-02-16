@@ -33,6 +33,9 @@ import strings from '../../language/strings';
 import VideoAds from '../ads/VideoAds';
 import LanguageModalContent from '../../component/auth/LanguageModalContent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppSelector, useAppDispatch} from '../../redux/hooks';
+import {setUser, logout} from '../../redux/slices/authSlice';
+import Config from '../../config';
 
 const {height} = Dimensions.get('window');
 
@@ -103,6 +106,7 @@ const LANGUAGE_CODE_MAP = {
 const ProfileScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [username, setUserName] = useState('');
@@ -121,6 +125,10 @@ const ProfileScreen = () => {
   const refEmailRBSheet = useRef();
   const adRef = useRef();
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     (async () => {
@@ -144,10 +152,10 @@ const ProfileScreen = () => {
   }, []);
 
   useEffect(() => {
-    setEmail(global.user?.email);
-    setUserName(global.user?.userName);
+    setEmail(user?.email);
+    setUserName(user?.userName);
     getProfileData();
-  }, [isFocused]);
+  }, [isFocused, user]);
 
   const tabData = [
     // {
@@ -178,13 +186,15 @@ const ProfileScreen = () => {
   const updateProfilePic = async file => {
     var formdata = new FormData();
     formdata.append('picture', file);
-    formdata.append('_id', global.user?._id);
+    formdata.append('_id', userId);
     try {
       setVisible(true);
       const response = await apiPut(Api.profilePic, '', formdata);
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
-        global.user = response.user;
+        // Update Redux state instead of global
+        dispatch(setUser({user: response.user, token: response.user?.token}));
+        await AsyncStorage.setItem(Config.STORAGE_KEYS.USER, JSON.stringify(response.user));
       }
     } catch (error) {
       console.log('error in updateProfilePicture api', error);
@@ -197,7 +207,7 @@ const ProfileScreen = () => {
     try {
       setVisible(true);
       const response = await apiGet(
-        `${Api.profile}?userId=${global.user?._id}`,
+        `${Api.profile}?userId=${userId}`,
       );
       setUserCreditData(response?.userCreditData);
       setUserStorageData(response?.userStorageData);
@@ -215,7 +225,7 @@ const ProfileScreen = () => {
   };
 
   const updateCredit = async (credit, type) => {
-    const rawData = {userId: global.user?._id, credit: credit, type: type};
+    const rawData = {userId: userId, credit: credit, type: type};
     try {
       setVisible(true);
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
@@ -271,9 +281,10 @@ const ProfileScreen = () => {
   const handleLogout = async () => {
     try {
       setVisible(true);
-      const user = await AsyncStorage.removeItem('user');
+      await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
+      // Clear Redux state instead of global
+      dispatch(logout());
       showMessageonTheScreen(strings.userLogoutSuccess);
-      global.user = user;
       navigation.reset({
         index: 0,
         routes: [{name: ScreenName.signIn}],
@@ -291,7 +302,7 @@ const ProfileScreen = () => {
         headerBackgroundColor={Color.transparent}
         goBack={true}
         profileImage={false}
-        profileUrl={global.user?.picture}
+        profileUrl={user?.picture}
         edit={true}
         language={true}
         containerStyle={styles.headerStyle}

@@ -1,16 +1,24 @@
+/**
+ * Custom hook for managing theme toggle functionality
+ * Handles AsyncStorage persistence and Redux state updates
+ */
 import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {setTheme as setReduxTheme} from '../redux/slices/themeSlice';
 
-/**
- * Custom hook for managing theme toggle functionality
- * Handles AsyncStorage persistence and Redux state updates
- * @returns {Object} { theme, toggleTheme, isDarkMode }
- */
-const useThemeToggle = () => {
+type ThemeType = 'Light' | 'Dark';
+
+interface UseThemeToggleReturn {
+  theme: ThemeType;
+  toggleTheme: () => void;
+  isDarkMode: boolean;
+  isInitialized: boolean;
+}
+
+const useThemeToggle = (): UseThemeToggleReturn => {
   const dispatch = useDispatch();
-  const [theme, setTheme] = useState('Light');
+  const [theme, setTheme] = useState<ThemeType>('Light');
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Load initial theme from storage
@@ -18,9 +26,10 @@ const useThemeToggle = () => {
     const loadInitialTheme = async () => {
       try {
         const storedTheme = await AsyncStorage.getItem('theme');
-        const initialTheme = storedTheme && storedTheme !== 'null' 
-          ? storedTheme 
-          : 'Light';
+        const initialTheme: ThemeType =
+          storedTheme && storedTheme !== 'null'
+            ? (storedTheme as ThemeType)
+            : 'Light';
         setTheme(initialTheme);
         setIsInitialized(true);
       } catch (error) {
@@ -63,4 +72,5 @@ const useThemeToggle = () => {
   };
 };
 
+export {useThemeToggle};
 export default useThemeToggle;

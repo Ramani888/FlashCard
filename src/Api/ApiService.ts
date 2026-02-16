@@ -1,17 +1,33 @@
-import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
+/**
+ * API Service - Centralized API call functions
+ * Handles authentication, request formatting, and error handling
+ */
 import store from '../redux/newStore';
+
+/**
+ * Standard API response interface
+ */
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  message?: string;
+  data?: T;
+  [key: string]: unknown;
+}
 
 /**
  * Get auth token from Redux store
  * This replaces direct usage of global.token
  */
-const getAuthToken = () => {
+const getAuthToken = (): string | null => {
   const state = store.getState();
   return state.auth?.token || null;
 };
 
-const setAuthHeader = (userToken, isFormData = false) => {
-  var myHeaders = new Headers();
+/**
+ * Build request headers with authentication
+ */
+const setAuthHeader = (userToken?: string, isFormData: boolean = false): Headers => {
+  const myHeaders = new Headers();
   // Use token from Redux store if not provided explicitly
   const token = userToken || getAuthToken();
   if (token) {
@@ -25,21 +41,34 @@ const setAuthHeader = (userToken, isFormData = false) => {
   return myHeaders;
 };
 
-export const apiGet = async (url, userToken) => {
+/**
+ * Perform GET request
+ */
+export const apiGet = async <T = ApiResponse>(
+  url: string,
+  userToken?: string,
+): Promise<T> => {
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: setAuthHeader(userToken),
     });
     const result = await response.json();
-    return result;
+    return result as T;
   } catch (error) {
     console.error('Error in GET request:', error);
     throw error;
   }
 };
 
-export const apiPost = async (url, userToken, body) => {
+/**
+ * Perform POST request
+ */
+export const apiPost = async <T = ApiResponse>(
+  url: string,
+  userToken?: string,
+  body?: string | FormData,
+): Promise<T> => {
   try {
     const isFormData = body instanceof FormData;
 
@@ -50,14 +79,21 @@ export const apiPost = async (url, userToken, body) => {
     });
 
     const result = await response.json();
-    return result;
+    return result as T;
   } catch (error) {
     console.error('Error in POST request:', error);
     throw error;
   }
 };
 
-export const apiPut = async (url, userToken, body) => {
+/**
+ * Perform PUT request
+ */
+export const apiPut = async <T = ApiResponse>(
+  url: string,
+  userToken?: string,
+  body?: string | FormData,
+): Promise<T> => {
   try {
     const isFormData = body instanceof FormData;
 
@@ -67,23 +103,39 @@ export const apiPut = async (url, userToken, body) => {
       body: body,
     });
     const result = await response.json();
-    return result;
+    return result as T;
   } catch (error) {
     console.error('Error in PUT request:', error);
     throw error;
   }
 };
 
-export const apiDelete = async (url, userToken) => {
+/**
+ * Perform DELETE request
+ */
+export const apiDelete = async <T = ApiResponse>(
+  url: string,
+  userToken?: string,
+): Promise<T> => {
   try {
     const response = await fetch(url, {
       method: 'DELETE',
       headers: setAuthHeader(userToken),
     });
     const result = await response.json();
-    return result;
+    return result as T;
   } catch (error) {
     console.error('Error in DELETE request:', error);
     throw error;
   }
+};
+
+/**
+ * Default export with all methods
+ */
+export default {
+  get: apiGet,
+  post: apiPost,
+  put: apiPut,
+  delete: apiDelete,
 };

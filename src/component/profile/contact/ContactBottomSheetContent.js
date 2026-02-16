@@ -19,6 +19,7 @@ import {apiGet} from '../../../Api/ApiService';
 import Api from '../../../Api/EndPoint';
 import debounce from 'lodash.debounce';
 import strings from '../../../language/strings';
+import {useAppSelector} from '../../../redux/hooks';
 
 const ContactBottomSheetContent = ({
   closeContactBottomSheet,
@@ -27,6 +28,10 @@ const ContactBottomSheetContent = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [userData, setUserData] = useState([]);
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   // ==================== Debounced search function =================== //
   const debouncedSearchUser = useMemo(
@@ -35,7 +40,7 @@ const ContactBottomSheetContent = ({
         try {
           setVisible(true);
           const res = await apiGet(
-            `${Api.searchUser}?search=${searchValue}&userId=${global.user?._id}`,
+            `${Api.searchUser}?search=${searchValue}&userId=${userId}`,
           );
           if (res) {
             setUserData(res);
@@ -48,7 +53,7 @@ const ContactBottomSheetContent = ({
           setVisible(false);
         }
       }, 300),
-    [],
+    [userId],
   );
 
   const searchUser = useCallback(

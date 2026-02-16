@@ -1,0 +1,345 @@
+interface ColorConfig {
+  readonly gradientTheme: readonly string[];
+  readonly theme1: string;
+  readonly theme2: string;
+  readonly theme3: string;
+  readonly AliceBlue: string;
+  readonly AntiqueWhite: string;
+  readonly Aqua: string;
+  readonly Aquamarine: string;
+  readonly Azure: string;
+  readonly Beige: string;
+  readonly Bisque: string;
+  readonly Black: string;
+  readonly BlanchedAlmond: string;
+  readonly Blue: string;
+  readonly BlueViolet: string;
+  readonly Brown: string;
+  readonly BurlyWood: string;
+  readonly CadetBlue: string;
+  readonly Chartreuse: string;
+  readonly Chocolate: string;
+  readonly Coral: string;
+  readonly CornflowerBlue: string;
+  readonly Cornsilk: string;
+  readonly Crimson: string;
+  readonly Cyan: string;
+  readonly DarkBlue: string;
+  readonly DarkCyan: string;
+  readonly DarkGoldenRod: string;
+  readonly DarkGray: string;
+  readonly DarkGreen: string;
+  readonly DarkGrey: string;
+  readonly DarkKhaki: string;
+  readonly DarkMagenta: string;
+  readonly DarkOliveGreen: string;
+  readonly DarkOrange: string;
+  readonly DarkOrchid: string;
+  readonly DarkRed: string;
+  readonly DarkSalmon: string;
+  readonly DarkSeaGreen: string;
+  readonly DarkSlateBlue: string;
+  readonly DarkSlateGray: string;
+  readonly DarkSlateGrey: string;
+  readonly DarkTurquoise: string;
+  readonly DarkViolet: string;
+  readonly DeepPink: string;
+  readonly DeepSkyBlue: string;
+  readonly DimGray: string;
+  readonly DimGrey: string;
+  readonly DodgerBlue: string;
+  readonly FireBrick: string;
+  readonly FloralWhite: string;
+  readonly ForestGreen: string;
+  readonly Fuchsia: string;
+  readonly Gainsboro: string;
+  readonly GhostWhite: string;
+  readonly Gold: string;
+  readonly GoldenRod: string;
+  readonly Gray: string;
+  readonly Grey: string;
+  readonly Green: string;
+  readonly GreenYellow: string;
+  readonly HoneyDew: string;
+  readonly HotPink: string;
+  readonly IndianRed: string;
+  readonly Indigo: string;
+  readonly Ivory: string;
+  readonly Khaki: string;
+  readonly Lavender: string;
+  readonly LavenderBlush: string;
+  readonly LawnGreen: string;
+  readonly LemonChiffon: string;
+  readonly LightBlue: string;
+  readonly LightCoral: string;
+  readonly LightCyan: string;
+  readonly LightGoldenRodYellow: string;
+  readonly LightGray: string;
+  readonly mediumGray: string;
+  readonly extraMediumGray: string;
+  readonly LightGrey: string;
+  readonly LightGreen: string;
+  readonly LightPink: string;
+  readonly LightSalmon: string;
+  readonly LightSeaGreen: string;
+  readonly LightSkyBlue: string;
+  readonly LightSlateGrey: string;
+  readonly LightSteelBlue: string;
+  readonly LightYellow: string;
+  readonly LightWhite: string;
+  readonly extraLightWhite: string;
+  readonly Lime: string;
+  readonly LimeGreen: string;
+  readonly Linen: string;
+  readonly Magenta: string;
+  readonly Maroon: string;
+  readonly MediumAquaMarine: string;
+  readonly MediumBlue: string;
+  readonly MediumOrchid: string;
+  readonly MediumPurple: string;
+  readonly MediumSeaGreen: string;
+  readonly MediumSlateBlue: string;
+  readonly MediumSpringGreen: string;
+  readonly MediumTurquoise: string;
+  readonly MediumVioletRed: string;
+  readonly MidnightBlue: string;
+  readonly MintCream: string;
+  readonly MistyRose: string;
+  readonly Moccasin: string;
+  readonly NavajoWhite: string;
+  readonly Navy: string;
+  readonly OldLace: string;
+  readonly Olive: string;
+  readonly OliveDrab: string;
+  readonly Orange: string;
+  readonly OrangeRed: string;
+  readonly Orchid: string;
+  readonly PaleGoldenRod: string;
+  readonly PaleGreen: string;
+  readonly PaleTurquoise: string;
+  readonly PaleVioletRed: string;
+  readonly PapayaWhip: string;
+  readonly PeachPuff: string;
+  readonly Peru: string;
+  readonly Pink: string;
+  readonly Plum: string;
+  readonly PowderBlue: string;
+  readonly Purple: string;
+  readonly RebeccaPurple: string;
+  readonly Red: string;
+  readonly RosyBrown: string;
+  readonly RoyalBlue: string;
+  readonly SaddleBrown: string;
+  readonly Salmon: string;
+  readonly SandyBrown: string;
+  readonly SeaGreen: string;
+  readonly SeaShell: string;
+  readonly Sienna: string;
+  readonly Silver: string;
+  readonly SkyBlue: string;
+  readonly SlateBlue: string;
+  readonly SlateGray: string;
+  readonly SlateGrey: string;
+  readonly Snow: string;
+  readonly SpringGreen: string;
+  readonly SteelBlue: string;
+  readonly Tan: string;
+  readonly Teal: string;
+  readonly Thistle: string;
+  readonly Tomato: string;
+  readonly Turquoise: string;
+  readonly Violet: string;
+  readonly Wheat: string;
+  readonly White: string;
+  readonly WhiteDefault: string;
+  readonly WhiteSmoke: string;
+  readonly Yellow: string;
+  readonly YellowGreen: string;
+  readonly transparent: string;
+  readonly success: string;
+  readonly error: string;
+  readonly iconBackground: string;
+  readonly gradient1: string;
+  readonly gradient2: string;
+  readonly gradient3: string;
+  readonly grayScale1: string;
+  readonly grayScale3: string;
+  readonly grayScale4: string;
+  readonly grayScale5: string;
+  readonly grayScale7: string;
+  readonly grayScale8: string;
+}
+
+const Color: ColorConfig = {
+  gradientTheme: ['#00394d', '#174b5d', '#104457'],
+  theme1: '#146d8b',
+  theme2: '#1b4a5b',
+  theme3: '#E6EFFD',
+  AliceBlue: '#F0F8FF',
+  AntiqueWhite: '#FAEBD7',
+  Aqua: '#00FFFF',
+  Aquamarine: '#7FFFD4',
+  Azure: '#F0FFFF',
+  Beige: '#F5F5DC',
+  Bisque: '#FFE4C4',
+  Black: '#171515',
+  BlanchedAlmond: '#FFEBCD',
+  Blue: '#0000FF',
+  BlueViolet: '#8A2BE2',
+  Brown: '#A52A2A',
+  BurlyWood: '#DEB887',
+  CadetBlue: '#5F9EA0',
+  Chartreuse: '#7FFF00',
+  Chocolate: '#D2691E',
+  Coral: '#FF7F50',
+  CornflowerBlue: '#6495ED',
+  Cornsilk: '#FFF8DC',
+  Crimson: '#DC143C',
+  Cyan: '#00FFFF',
+  DarkBlue: '#00008B',
+  DarkCyan: '#008B8B',
+  DarkGoldenRod: '#B8860B',
+  DarkGray: '#A9A9A9',
+  DarkGreen: '#006400',
+  DarkGrey: '#A9A9A9',
+  DarkKhaki: '#BDB76B',
+  DarkMagenta: '#8B008B',
+  DarkOliveGreen: '#556B2F',
+  DarkOrange: '#FF8C00',
+  DarkOrchid: '#9932CC',
+  DarkRed: '#8B0000',
+  DarkSalmon: '#E9967A',
+  DarkSeaGreen: '#8FBC8F',
+  DarkSlateBlue: '#483D8B',
+  DarkSlateGray: '#2F4F4F',
+  DarkSlateGrey: '#2F4F4F',
+  DarkTurquoise: '#00CED1',
+  DarkViolet: '#9400D3',
+  DeepPink: '#FF1493',
+  DeepSkyBlue: '#00BFFF',
+  DimGray: '#696969',
+  DimGrey: '#696969',
+  DodgerBlue: '#1E90FF',
+  FireBrick: '#B22222',
+  FloralWhite: '#FFFAF0',
+  ForestGreen: '#228B22',
+  Fuchsia: '#FF00FF',
+  Gainsboro: '#DCDCDC',
+  GhostWhite: '#F8F8FF',
+  Gold: '#FFD700',
+  GoldenRod: '#DAA520',
+  Gray: '#808080',
+  Grey: '#808080',
+  Green: '#008000',
+  GreenYellow: '#ADFF2F',
+  HoneyDew: '#F0FFF0',
+  HotPink: '#FF69B4',
+  IndianRed: '#CD5C5C',
+  Indigo: '#4B0082',
+  Ivory: '#FFFFF0',
+  Khaki: '#F0E68C',
+  Lavender: '#E6E6FA',
+  LavenderBlush: '#FFF0F5',
+  LawnGreen: '#7CFC00',
+  LemonChiffon: '#FFFACD',
+  LightBlue: '#ADD8E6',
+  LightCoral: '#F08080',
+  LightCyan: '#E0FFFF',
+  LightGoldenRodYellow: '#FAFAD2',
+  LightGray: '#D3D3D3',
+  mediumGray: '#8E9494',
+  extraMediumGray: '#E7EAEB',
+  LightGrey: '#D3D3D3',
+  LightGreen: '#90EE90',
+  LightPink: '#FFB6C1',
+  LightSalmon: '#FFA07A',
+  LightSeaGreen: '#20B2AA',
+  LightSkyBlue: '#87CEFA',
+  LightSlateGrey: '#778899',
+  LightSteelBlue: '#B0C4DE',
+  LightYellow: '#FFFFE0',
+  LightWhite: '#FFFFF7 ',
+  extraLightWhite: '#F2F7F7',
+  Lime: '#00FF00',
+  LimeGreen: '#32CD32',
+  Linen: '#FAF0E6',
+  Magenta: '#FF00FF',
+  Maroon: '#800000',
+  MediumAquaMarine: '#66CDAA',
+  MediumBlue: '#0000CD',
+  MediumOrchid: '#BA55D3',
+  MediumPurple: '#9370DB',
+  MediumSeaGreen: '#3CB371',
+  MediumSlateBlue: '#7B68EE',
+  MediumSpringGreen: '#00FA9A',
+  MediumTurquoise: '#48D1CC',
+  MediumVioletRed: '#C71585',
+  MidnightBlue: '#191970',
+  MintCream: '#F5FFFA',
+  MistyRose: '#FFE4E1',
+  Moccasin: '#FFE4B5',
+  NavajoWhite: '#FFDEAD',
+  Navy: '#000080',
+  OldLace: '#FDF5E6',
+  Olive: '#808000',
+  OliveDrab: '#6B8E23',
+  Orange: '#FFA500',
+  OrangeRed: '#FF4500',
+  Orchid: '#DA70D6',
+  PaleGoldenRod: '#EEE8AA',
+  PaleGreen: '#98FB98',
+  PaleTurquoise: '#AFEEEE',
+  PaleVioletRed: '#DB7093',
+  PapayaWhip: '#FFEFD5',
+  PeachPuff: '#FFDAB9',
+  Peru: '#CD853F',
+  Pink: '#FFC0CB',
+  Plum: '#DDA0DD',
+  PowderBlue: '#B0E0E6',
+  Purple: '#800080',
+  RebeccaPurple: '#663399',
+  Red: '#FF0000',
+  RosyBrown: '#BC8F8F',
+  RoyalBlue: '#4169E1',
+  SaddleBrown: '#8B4513',
+  Salmon: '#FA8072',
+  SandyBrown: '#ffd27f',
+  SeaGreen: '#2E8B57',
+  SeaShell: '#FFF5EE',
+  Sienna: '#A0522D',
+  Silver: '#C0C0C0',
+  SkyBlue: '#87CEEB',
+  SlateBlue: '#6A5ACD',
+  SlateGray: '#708090',
+  SlateGrey: '#708090',
+  Snow: '#FFFAFA',
+  SpringGreen: '#00FF7F',
+  SteelBlue: '#4682B4',
+  Tan: '#D2B48C',
+  Teal: '#008080',
+  Thistle: '#D8BFD8',
+  Tomato: '#FF6347',
+  Turquoise: '#40E0D0',
+  Violet: '#EE82EE',
+  Wheat: '#F5DEB3',
+  White: '#FFFFFF',
+  WhiteDefault: '#F2F2F2',
+  WhiteSmoke: '#F5F5F5',
+  Yellow: '#FFFF00',
+  YellowGreen: '#9ACD32',
+  transparent: 'transparent',
+  success: '#159587',
+  error: '#d03135',
+  iconBackground: '#1e4e5e',
+  gradient1: '#00394d',
+  gradient2: '#174b5d',
+  gradient3: '#104457',
+  grayScale1: '#F5F5F5',
+  grayScale3: '#E0E0E0',
+  grayScale4: '#BDBDBD',
+  grayScale5: '#9E9E9E',
+  grayScale7: '#616161',
+  grayScale8: '#424242',
+} as const;
+
+export default Color;

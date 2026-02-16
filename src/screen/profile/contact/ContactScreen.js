@@ -16,12 +16,17 @@ import useTheme from '../../../component/Theme';
 import strings from '../../../language/strings';
 import NoDataView from '../../../component/NoDataView';
 import ActionSheet from 'react-native-actions-sheet';
+import {useAppSelector} from '../../../redux/hooks';
 
 const ContactScreen = () => {
   const [visible, setVisible] = useState(false);
   const [contactData, setContactData] = useState([]);
   const refContactRBSheet = useRef();
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     getContacts(false);
@@ -33,7 +38,7 @@ const ContactScreen = () => {
     try {
       message === false && setVisible(true);
       const response = await apiGet(
-        `${Api.contacts}?userId=${global.user?._id}`,
+        `${Api.contacts}?userId=${userId}`,
       );
       if (response) {
         setContactData(response);
@@ -48,7 +53,7 @@ const ContactScreen = () => {
 
   const createContacts = useCallback(async selectedUserId => {
     const rawData = {
-      userId: global.user?._id,
+      userId: userId,
       contactUserId: selectedUserId,
     };
     try {
@@ -60,7 +65,7 @@ const ContactScreen = () => {
     } catch (error) {
       console.log('error in get contact api', error);
     }
-  }, []);
+  }, [userId]);
 
   const deleteContacts = async contactId => {
     try {

@@ -1,19 +1,25 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import AppStack from './AppStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import strings from '../language/strings';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../component/Screen';
+import {useAppSelector} from '../redux/hooks';
 
 const AppNav = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const [user, setUser] = useState('');
+  
+  // Use Redux auth state instead of global variables
+  const {user, isAuthenticated, isLoading} = useAppSelector(state => state.auth);
 
+  // Navigate based on auth state
   useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+    if (!isLoading && isAuthenticated && user) {
+      navigation.navigate(ScreenName.setAndFolder);
+    }
+  }, [isAuthenticated, isLoading, user, navigation]);
 
   useEffect(() => {
     (async () => {
@@ -34,26 +40,6 @@ const AppNav = () => {
       }
     })();
   }, [isFocused]);
-
-  const fetchUser = useCallback(async () => {
-    try {
-      const userData = await AsyncStorage.getItem('user');
-      if (userData) {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-        global.user = parsedUser;
-        global.token = parsedUser?.token;
-        navigation.navigate(ScreenName.setAndFolder);
-      } else {
-        global.user = null;
-        setUser(null);
-      }
-    } catch (error) {
-      console.error('Failed to load user data:', error);
-      global.user = null;
-      setUser(null);
-    }
-  }, [navigation]);
 
   return (
     <View style={styles.container}>

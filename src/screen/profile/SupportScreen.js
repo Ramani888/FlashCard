@@ -21,6 +21,7 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CustomeInputField from '../../custome/CustomeInputField';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import {useAppSelector} from '../../redux/hooks';
 
 const options = {
   mediaType: 'photo',
@@ -34,13 +35,17 @@ const SupportScreen = () => {
   const [imageFile, setImageFile] = useState('');
   const [issueDesc, setIssueDesc] = useState('');
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   const submit = useCallback(async () => {
     const formdata = new FormData();
     formdata.append('image', imageFile);
     formdata.append('supportType', selectedIssue);
     formdata.append('supportMessage', issueDesc);
-    formdata.append('userId', global.user?._id);
+    formdata.append('userId', userId);
 
     try {
       setVisible(true);
@@ -55,7 +60,7 @@ const SupportScreen = () => {
     } finally {
       setVisible(false);
     }
-  }, [imageFile, selectedIssue, issueDesc]);
+  }, [imageFile, selectedIssue, issueDesc, userId]);
 
   const handleSubmit = useCallback(() => {
     if (selectedIssue) {

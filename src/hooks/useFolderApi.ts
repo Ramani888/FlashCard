@@ -1,26 +1,71 @@
+/**
+ * Custom hook for managing Folder API operations
+ * Encapsulates CRUD operations for folders
+ */
 import {useCallback, useEffect, useState} from 'react';
 import {apiDelete, apiGet, apiPost, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
+import {useAppSelector} from '../redux/hooks';
 
-/**
- * Custom hook for managing Folder API operations
- * Encapsulates CRUD operations for folders
- * @param {Object} options - Hook options
- * @param {string} options.search - Search query
- * @param {Function} options.setExternalLoading - External loading state setter
- * @returns {Object} Folder API methods and state
- */
-const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
-  const [folderData, setFolderData] = useState([]);
+export interface Folder {
+  _id: string;
+  name: string;
+  color: string;
+  isHighlight: boolean;
+  isPrivate?: boolean;
+  userId?: string;
+}
+
+interface UseFolderApiOptions {
+  search?: string;
+  setExternalLoading?: ((loading: boolean) => void) | null;
+}
+
+interface UseFolderApiReturn {
+  // Data
+  folderData: Folder[];
+  singleFolderItem: Partial<Folder>;
+  loading: boolean;
+
+  // Form state
+  folderName: string;
+  setFolderName: (name: string) => void;
+  folderStatus: number;
+  setFolderStatus: (status: number) => void;
+  folderColor: string;
+  setFolderColor: (color: string) => void;
+  colorView: boolean;
+  setColorView: (view: boolean) => void;
+
+  // Actions
+  getFolderData: (showMessage?: boolean, messageValue?: string) => Promise<void>;
+  createFolder: () => Promise<void>;
+  editFolder: () => Promise<void>;
+  deleteFolder: () => Promise<void>;
+  prepareForEdit: (item: Folder) => void;
+  prepareForCreate: () => void;
+  resetForm: () => void;
+  setSingleFolderItem: (item: Partial<Folder>) => void;
+}
+
+const useFolderApi = ({
+  search = '',
+  setExternalLoading = null,
+}: UseFolderApiOptions = {}): UseFolderApiReturn => {
+  const [folderData, setFolderData] = useState<Folder[]>([]);
   const [loading, setLoading] = useState(false);
-  const [singleFolderItem, setSingleFolderItem] = useState({});
+  const [singleFolderItem, setSingleFolderItem] = useState<Partial<Folder>>({});
 
   // Form state
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
+
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   // Sync single folder data with form fields
   useEffect(() => {
@@ -34,14 +79,18 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
 
   // Initial fetch
   useEffect(() => {
-    getFolderData(false);
-  }, []);
+    if (userId) {
+      getFolderData(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   // Fetch on search change
   useEffect(() => {
-    if (search !== undefined) {
+    if (search !== undefined && userId) {
       getFolderData(true, '');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   /**
@@ -49,6 +98,8 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
    */
   const getFolderData = useCallback(
     async (showMessage = false, messageValue = '') => {
+      if (!userId) return;
+
       if (!showMessage) {
         setLoading(true);
       }
@@ -57,11 +108,11 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
       }
 
       try {
-        const response = await apiGet(
-          `${Api.Folder}?userId=${global?.user?._id}&search=${search || ''}`,
+        const response = await apiGet<Folder[]>(
+          `${Api.Folder}?userId=${userId}&search=${search || ''}`,
         );
         setFolderData(response || []);
-        
+
         if (messageValue) {
           showMessageonTheScreen(messageValue);
         }
@@ -75,17 +126,19 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
         }
       }
     },
-    [search, setExternalLoading],
+    [search, setExternalLoading, userId],
   );
 
   /**
    * Create a new folder
    */
   const createFolder = useCallback(async () => {
+    if (!userId) return;
+
     const rawData = {
       name: folderName,
       color: folderColor,
-      userId: global?.user?._id,
+      userId: userId,
       isHighlight: colorView,
     };
 
@@ -97,17 +150,19 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
     } catch (error) {
       console.log('Error creating folder:', error);
     }
-  }, [colorView, folderColor, folderName, getFolderData]);
+  }, [colorView, folderColor, folderName, getFolderData, userId]);
 
   /**
    * Edit an existing folder
    */
   const editFolder = useCallback(async () => {
+    if (!userId) return;
+
     const rawData = {
       _id: singleFolderItem?._id,
       name: folderName,
       color: folderColor,
-      userId: global?.user?._id,
+      userId: userId,
       isHighlight: colorView,
     };
 
@@ -119,7 +174,7 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
     } catch (error) {
       console.log('Error editing folder:', error);
     }
-  }, [colorView, folderColor, folderName, getFolderData, singleFolderItem]);
+  }, [colorView, folderColor, folderName, getFolderData, singleFolderItem, userId]);
 
   /**
    * Delete a folder
@@ -151,7 +206,7 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
   /**
    * Prepare form for editing
    */
-  const prepareForEdit = useCallback((item) => {
+  const prepareForEdit = useCallback((item: Folder) => {
     setSingleFolderItem(item);
   }, []);
 
@@ -168,7 +223,7 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
     folderData,
     singleFolderItem,
     loading,
-    
+
     // Form state
     folderName,
     setFolderName,
@@ -178,7 +233,7 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
     setFolderColor,
     colorView,
     setColorView,
-    
+
     // Actions
     getFolderData,
     createFolder,
@@ -191,4 +246,5 @@ const useFolderApi = ({search = '', setExternalLoading = null} = {}) => {
   };
 };
 
+export {useFolderApi};
 export default useFolderApi;

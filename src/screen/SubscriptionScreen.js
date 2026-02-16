@@ -33,6 +33,7 @@ import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import CancelSubscriptionBottomSheet from '../component/CancelSubscriptionBottomSheet';
+import {useAppSelector} from '../redux/hooks';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -54,6 +55,11 @@ const SubscriptionScreen = () => {
   const colorTheme = useTheme();
   const refRBSheet = useRef(null);
   const {selectedSubscription} = route.params;
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
+  const userToken = user?.token;
 
   useEffect(() => {
     initializeIAP();
@@ -163,13 +169,13 @@ const SubscriptionScreen = () => {
       packageName: 'com.flashcard.app',
       subscriptionId: subscribedData?.productId,
       purchaseToken: offerToken,
-      userId: global.user?._id,
+      userId: userId,
     };
     setVisible(true);
     try {
       const response = await apiPut(
         Api.cancelSubscription,
-        global.user?.token,
+        userToken,
         JSON.stringify(rawData),
       );
     } catch (error) {

@@ -20,6 +20,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import {useAppSelector} from '../../redux/hooks';
 
 const PdfComponent = memo(({folderId}) => {
   const isFocused = useIsFocused();
@@ -34,6 +35,10 @@ const PdfComponent = memo(({folderId}) => {
   const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef(null);
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     getPdf(false);
@@ -46,8 +51,8 @@ const PdfComponent = memo(({folderId}) => {
       try {
         message === false && setVisible(true);
         const url = folderId
-          ? `${Api.FolderPdf}?userId=${global?.user?._id}&folderId=${folderId}`
-          : `${Api.pdf}?userId=${global?.user?._id}`;
+          ? `${Api.FolderPdf}?userId=${userId}&folderId=${folderId}`
+          : `${Api.pdf}?userId=${userId}`;
         const response = await apiGet(url);
         if (response) {
           setPdfData(response);
@@ -59,13 +64,13 @@ const PdfComponent = memo(({folderId}) => {
         setVisible(false);
       }
     },
-    [folderId],
+    [folderId, userId],
   );
 
   const createPdf = useCallback(
     async (pdfId, pdf) => {
       var formdata = new FormData();
-      formdata.append('userId', global.user?._id);
+      formdata.append('userId', userId);
       formdata.append('color', pdfColor);
       formdata.append('name', pdfName);
       formdata.append('pdf', pdf);
@@ -80,14 +85,14 @@ const PdfComponent = memo(({folderId}) => {
         console.log('error in upload pdf api', error);
       }
     },
-    [colorView, getPdf, pdfColor, pdfName],
+    [colorView, getPdf, pdfColor, pdfName, userId],
   );
 
   const editPdf = useCallback(
     async (pdfId, pdf) => {
       var formdata = new FormData();
       formdata.append('_id', pdfId);
-      formdata.append('userId', global.user?._id);
+      formdata.append('userId', userId);
       formdata.append('color', pdfColor);
       formdata.append('name', pdfName);
       formdata.append('pdf', pdf?.name ? pdf : '');
@@ -322,7 +327,7 @@ const PdfComponent = memo(({folderId}) => {
   };
 
   const updateCredit = async (credit, type) => {
-    const rawData = {userId: global.user?._id, credit: credit, type: type};
+    const rawData = {userId: userId, credit: credit, type: type};
     try {
       setVisible(true);
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));

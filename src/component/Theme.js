@@ -7,7 +7,8 @@ import {useIsFocused} from '@react-navigation/native';
 const useTheme = () => {
   const isFocused = useIsFocused();
   const [initialTheme, setInitialTheme] = useState(null);
-  const theme = useSelector(state => state.myState.theme);
+  // Use new theme slice instead of legacy myState
+  const theme = useSelector(state => state.theme?.theme || 'Light');
 
   useEffect(() => {
     const fetchTheme = async () => {

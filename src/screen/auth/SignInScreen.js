@@ -12,11 +12,14 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import {apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import Loader from '../../component/Loader';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import {useAppDispatch} from '../../redux/hooks';
+import {setUser} from '../../redux/slices/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Config from '../../config';
 
 // Validation schema memoized outside component
 const createValidationSchema = () => Yup.object().shape({
@@ -31,31 +34,11 @@ const createValidationSchema = () => Yup.object().shape({
 const SignInScreen = () => {
   const navigation = useNavigation();
   const themeColor = useTheme();
+  const dispatch = useAppDispatch();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [visible, setVisible] = useState(false);
 
   // ===================================== Api =================================== //
-
-  const LoggedInUser = useCallback(async () => {
-    try {
-      const userData = await AsyncStorage.getItem('user');
-      const parseUserData = JSON.parse(userData);
-      global.user = parseUserData;
-      global.token = parseUserData?.token;
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: ScreenName.setAndFolder,
-          },
-        ],
-      });
-    } catch (error) {
-      console.log('error in logged in', error);
-    } finally {
-      setVisible(false);
-    }
-  }, [navigation]);
 
   const loginUser = useCallback(async (email, password) => {
     const rawData = {
@@ -66,19 +49,26 @@ const SignInScreen = () => {
       setVisible(true);
       const response = await apiPost(Api.signIn, '', JSON.stringify(rawData));
       if (response?.success === true) {
-        await AsyncStorage.setItem('user', JSON.stringify(response?.user));
-        LoggedInUser();
+        const userData = response?.user;
+        // Save to AsyncStorage
+        await AsyncStorage.setItem(Config.STORAGE_KEYS.USER, JSON.stringify(userData));
+        // Update Redux state (no more global variables!)
+        dispatch(setUser({user: userData, token: userData?.token}));
         showMessageonTheScreen(response?.message);
+        // Navigate to home
+        navigation.reset({
+          index: 0,
+          routes: [{name: ScreenName.setAndFolder}],
+        });
       } else {
         showMessageonTheScreen(response?.message);
-        setVisible(false);
       }
     } catch (error) {
       console.log('error in login api', error);
     } finally {
       setVisible(false);
     }
-  }, [LoggedInUser]);
+  }, [dispatch, navigation]);
 
   // ===================================== Api =================================== //
 

@@ -1,29 +1,77 @@
+/**
+ * Custom hook for managing Set API operations
+ * Encapsulates CRUD operations for sets
+ */
 import {useCallback, useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {apiDelete, apiGet, apiPost, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
+import {useAppSelector} from '../redux/hooks';
 
-/**
- * Custom hook for managing Set API operations
- * Encapsulates CRUD operations for sets
- * @param {Object} options - Hook options
- * @param {string} options.folderId - Optional folder ID to filter sets
- * @param {string} options.search - Search query
- * @param {Function} options.setExternalLoading - External loading state setter
- * @returns {Object} Set API methods and state
- */
-const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {}) => {
+export interface CardSet {
+  _id: string;
+  name: string;
+  color: string;
+  isHighlight: boolean;
+  isPrivate?: boolean | number;
+  userId?: string;
+  folderId?: string;
+}
+
+interface UseSetApiOptions {
+  folderId?: string;
+  search?: string;
+  setExternalLoading?: ((loading: boolean) => void) | null;
+}
+
+interface UseSetApiReturn {
+  // Data
+  setData: CardSet[];
+  singleSetData: Partial<CardSet>;
+  loading: boolean;
+
+  // Form state
+  setName: string;
+  setSetName: (name: string) => void;
+  setStatus: number;
+  setSetStatus: (status: number) => void;
+  setColor: string;
+  setSetColor: (color: string) => void;
+  colorView: boolean;
+  setColorView: (view: boolean) => void;
+
+  // Actions
+  getSetData: (showMessage?: boolean, messageValue?: string) => Promise<void>;
+  createSet: () => Promise<void>;
+  editSet: () => Promise<void>;
+  deleteSet: () => Promise<void>;
+  removeFolder: () => Promise<void>;
+  prepareForEdit: (item: CardSet) => void;
+  prepareForCreate: () => void;
+  resetForm: () => void;
+  setSingleSetData: (item: Partial<CardSet>) => void;
+}
+
+const useSetApi = ({
+  folderId = '',
+  search = '',
+  setExternalLoading = null,
+}: UseSetApiOptions = {}): UseSetApiReturn => {
   const isFocused = useIsFocused();
-  const [setData, setSetData] = useState([]);
+  const [setData, setSetData] = useState<CardSet[]>([]);
   const [loading, setLoading] = useState(false);
-  const [singleSetData, setSingleSetData] = useState({});
+  const [singleSetData, setSingleSetData] = useState<Partial<CardSet>>({});
 
   // Form state
   const [setName, setSetName] = useState('');
   const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
   const [colorView, setColorView] = useState(false);
+
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   // Sync single set data with form fields
   useEffect(() => {
@@ -37,16 +85,18 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
 
   // Fetch sets on focus
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && userId) {
       getSetData(false);
     }
-  }, [isFocused]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused, userId]);
 
   // Fetch sets on search change
   useEffect(() => {
-    if (search !== undefined) {
+    if (search !== undefined && userId) {
       getSetData(true, '');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   /**
@@ -54,6 +104,8 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
    */
   const getSetData = useCallback(
     async (showMessage = false, messageValue = '') => {
+      if (!userId) return;
+
       if (!showMessage) {
         setLoading(true);
       }
@@ -63,12 +115,12 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
 
       try {
         const url = folderId
-          ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}&search=${search || ''}`
-          : `${Api.Set}?userId=${global?.user?._id}&search=${search || ''}`;
-        
-        const response = await apiGet(url);
+          ? `${Api.FolderSet}?userId=${userId}&folderId=${folderId}&search=${search || ''}`
+          : `${Api.Set}?userId=${userId}&search=${search || ''}`;
+
+        const response = await apiGet<CardSet[]>(url);
         setSetData(response || []);
-        
+
         if (messageValue) {
           showMessageonTheScreen(messageValue);
         }
@@ -82,18 +134,20 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
         }
       }
     },
-    [folderId, search, setExternalLoading],
+    [folderId, search, setExternalLoading, userId],
   );
 
   /**
    * Create a new set
    */
   const createSet = useCallback(async () => {
+    if (!userId) return;
+
     const rawData = {
       name: setName,
       isPrivate: setStatus,
       color: setColor,
-      userId: global?.user?._id,
+      userId: userId,
       ...(folderId ? {folderId} : {}),
       isHighlight: colorView,
     };
@@ -106,18 +160,20 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
     } catch (error) {
       console.log('Error creating set:', error);
     }
-  }, [colorView, folderId, getSetData, setColor, setName, setStatus]);
+  }, [colorView, folderId, getSetData, setColor, setName, setStatus, userId]);
 
   /**
    * Edit an existing set
    */
   const editSet = useCallback(async () => {
+    if (!userId) return;
+
     const rawData = {
       _id: singleSetData?._id,
       name: setName,
       isPrivate: setStatus,
       color: setColor,
-      userId: global?.user?._id,
+      userId: userId,
       isHighlight: colorView,
     };
 
@@ -129,7 +185,7 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
     } catch (error) {
       console.log('Error editing set:', error);
     }
-  }, [colorView, getSetData, setColor, setName, setStatus, singleSetData]);
+  }, [colorView, getSetData, setColor, setName, setStatus, singleSetData, userId]);
 
   /**
    * Remove folder association from a set
@@ -181,7 +237,7 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
   /**
    * Prepare form for editing
    */
-  const prepareForEdit = useCallback((item) => {
+  const prepareForEdit = useCallback((item: CardSet) => {
     setSingleSetData(item);
   }, []);
 
@@ -198,7 +254,7 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
     setData,
     singleSetData,
     loading,
-    
+
     // Form state
     setName,
     setSetName,
@@ -208,7 +264,7 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
     setSetColor,
     colorView,
     setColorView,
-    
+
     // Actions
     getSetData,
     createSet,
@@ -222,4 +278,5 @@ const useSetApi = ({folderId = '', search = '', setExternalLoading = null} = {})
   };
 };
 
+export {useSetApi};
 export default useSetApi;

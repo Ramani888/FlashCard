@@ -26,6 +26,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
 import VideoAds from './ads/VideoAds';
+import {useAppSelector} from '../redux/hooks';
 
 const {width, height} = Dimensions.get('window');
 
@@ -47,6 +48,10 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const refAiRBSheet = useRef();
   const colorTheme = useTheme();
   const adRef = useRef();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     if (question) {
@@ -87,7 +92,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
         setVisible(true);
       }
       const response = await apiGet(
-        `${Api.profile}?userId=${global.user?._id}`,
+        `${Api.profile}?userId=${userId}`,
       );
       setUserCredit(response?.userCreditData?.credit);
     } catch (error) {
@@ -98,7 +103,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   };
 
   const updateCredit = async (credit, type) => {
-    const rawData = {userId: global.user?._id, credit: credit, type: type};
+    const rawData = {userId: userId, credit: credit, type: type};
     try {
       setVisible(true);
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));

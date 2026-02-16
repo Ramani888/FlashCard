@@ -29,6 +29,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {MenuProvider, Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
+import {useAppSelector} from '../../redux/hooks';
 
 if (
   Platform.OS === 'android' &&
@@ -49,6 +50,10 @@ const SetDetailScreen = () => {
   const {setName} = route.params;
   const {setId, folderId} = route.params;
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     getCardData(false, false);
@@ -63,7 +68,7 @@ const SetDetailScreen = () => {
           setVisible(true);
         }
         const response = await apiGet(
-          `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${global.user?._id}`,
+          `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${userId}`,
         );
         setCardData(response);
       } catch (error) {
@@ -72,7 +77,7 @@ const SetDetailScreen = () => {
         setVisible(false);
       }
     },
-    [folderId, setId],
+    [folderId, setId, userId],
   );
 
   const updateCard = useCallback(
@@ -80,7 +85,7 @@ const SetDetailScreen = () => {
       !position && setVisible(true);
       const rawData = {
         _id: cardId,
-        userId: global?.user?._id,
+        userId: userId,
         folderId: folderId,
         setId: setId,
         top: top,
