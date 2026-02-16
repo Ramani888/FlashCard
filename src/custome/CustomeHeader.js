@@ -1,7 +1,9 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, Pressable, Image, ActivityIndicator, View} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {scale, verticalScale} from './Responsive';
 import Color from '../component/Color';
@@ -14,6 +16,11 @@ import strings from '../language/strings';
 import {Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
 import LanguageModalContent from '../component/auth/LanguageModalContent';
 import ProfileModalContent from '../component/profile/profile/ProfileModalContent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ToggleSwitch from 'toggle-switch-react-native';
+import { useDispatch } from 'react-redux';
+import { setState } from '../redux/StateSlice';
+import { ScreenName } from '../component/Screen';
 
 const CustomeHeader = ({
   goBack,
@@ -57,12 +64,41 @@ const CustomeHeader = ({
   handleLanguageSaved,
   adReady,
   adLoading,
+  isSetAndFolder
 }) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const editRef = useRef(null);
   const threeDotIconRef = useRef(null);
   const colorTheme = useTheme();
   const languageRef = useRef();
+  const [theme, setTheme] = useState('Light');
+
+  useEffect(() => {
+    const getInitialTheme = async () => {
+      const initialTheme = await AsyncStorage.getItem('theme');
+      setTheme(initialTheme);
+      if (!initialTheme || initialTheme === 'null') {
+        setTheme('Light');
+      } else {
+        setTheme(initialTheme);
+      }
+    };
+
+    getInitialTheme();
+  }, []);
+
+  useEffect(() => {
+    if (theme) {
+      const saveTheme = async () => {
+        await AsyncStorage.setItem('theme', theme);
+      };
+
+      saveTheme();
+
+      dispatch(setState({theme}));
+    }
+  }, [theme, dispatch]);
 
   return (
     <LinearGradient
@@ -130,7 +166,7 @@ const CustomeHeader = ({
           <AntDesign name="search1" size={scale(20)} color={Color.White} />
         </Pressable>
       )}
-      {imageFolder && (
+      {/* {imageFolder && (
         <Pressable
           style={[styles.adIcon, videoIconStyle, searchIcon ? { top: verticalScale(50), right: scale(60) } : { right: scale(15) }]}
           onPress={() => setShowFolder(!showFolder)}>
@@ -139,7 +175,7 @@ const CustomeHeader = ({
             style={styles.imageFolder}
           />
         </Pressable>
-      )}
+      )} */}
       {edit && (
         <Menu style={styles.editIcon}>
           <MenuTrigger>
@@ -224,6 +260,49 @@ const CustomeHeader = ({
           />
         </Pressable>
       )}
+      {isSetAndFolder && (
+        <View style={styles.iconWrapper}>
+          <ToggleSwitch
+            isOn={theme === 'Dark'}
+            onColor="#04041599"
+            offColor="#FFFFFF99"
+            size="medium"
+            onToggle={() =>
+              setTheme(prevTheme =>
+                prevTheme === 'Light' ? 'Dark' : 'Light',
+              )
+            }
+          />
+
+          <Pressable
+            style={[styles.iconContainer]}
+            onPress={() => navigation.navigate(ScreenName.profile)}
+          >
+            <AntDesign name="user" size={scale(20)} color={Color.White} />
+          </Pressable>
+
+          <Pressable
+            style={[styles.iconContainer]}
+            onPress={() => navigation.navigate(ScreenName.notes)}
+          >
+            <Ionicons name="reader-outline" size={scale(20)} color={Color.White} />
+          </Pressable>
+
+          {imageFolder && (
+            <Pressable
+              style={[styles.iconContainer]}
+              onPress={() => setShowFolder(!showFolder)}>
+              <Feather name="folder-minus" size={scale(20)} color={Color.White} />
+            </Pressable>
+          )}
+          
+          <Pressable
+            style={[styles.iconContainer]}
+            onPress={() => setSearch(!search)}>
+            <AntDesign name="search1" size={scale(20)} color={Color.White} />
+          </Pressable>
+        </View>
+      )}
     </LinearGradient>
   );
 };
@@ -262,6 +341,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: scale(15),
     bottom: verticalScale(7),
+    padding: scale(10),
+    elevation: scale(5),
+  },
+  iconWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: scale(20),
+    paddingRight: scale(20),
+    width: '100%',
+  },
+  iconContainer: {
+    backgroundColor: Color.iconBackground,
+    borderRadius: scale(12),
     padding: scale(10),
     elevation: scale(5),
   },

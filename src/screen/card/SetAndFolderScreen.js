@@ -55,15 +55,15 @@ const SetAndFolderScreen = () => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
-        goBack={true}
         imageFolder={isImageFolder}
         setShowFolder={setShowFolder}
         showFolder={showFolder}
-        // title={strings.myCards}
         containerStyle={styles.headerStyle}
-        searchIcon={true}
         setSearch={setSearch}
         search={search}
+        themeSwitch={true}
+        profile={true}
+        isSetAndFolder={true}
       />
     );
   }, [search, tab, showFolder]);
@@ -73,7 +73,7 @@ const SetAndFolderScreen = () => {
       <View style={styles.buttonContainer}>
         <CustomeButton
           buttonColor={tab === 'SET' ? Color.White : Color.theme1}
-          buttonWidth={scale(150)}
+          buttonWidth={'48%'}
           buttonHeight={scale(45)}
           title={strings.set}
           borderRadius={scale(10)}
@@ -90,7 +90,7 @@ const SetAndFolderScreen = () => {
 
         <CustomeButton
           buttonColor={tab === 'FOLDERS' ? Color.White : Color.theme1}
-          buttonWidth={scale(150)}
+          buttonWidth={'48%'}
           buttonHeight={scale(45)}
           title={strings.folder}
           borderRadius={scale(10)}
@@ -124,14 +124,14 @@ const SetAndFolderScreen = () => {
               style={styles.headerContainer}>
             {renderHeader()}
             {search && (
-              <View>
+              <View style={{paddingLeft: scale(20), paddingRight: scale(20)}}>
                 <CustomeInputField
                   placeholder={strings.search}
                   placeholderTextColor={Color.Gainsboro}
                   onChangeText={setSearchValue}
                   value={searchValue}
                   backgroundColor={'#3a6675'}
-                  width={width * 0.88}
+                  // width={width}
                   height={height * 0.065}
                   iconLeft={true}
                   IconLeftComponent={
@@ -235,10 +235,11 @@ const styles = StyleSheet.create({
     marginLeft: scale(6),
   },
   buttonContainer: {
-    alignSelf: 'center',
+    paddingLeft: scale(20),
+    paddingRight: scale(20),
+    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: scale(10),
+    justifyContent: 'space-between'
   },
   loadingIndicator: {
     alignSelf: 'center',

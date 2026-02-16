@@ -102,11 +102,11 @@ const AppStack = () => {
         options={{headerShown: false}}
       />
 
-      <Stack.Screen
+      {/* <Stack.Screen
         name={home}
         component={HomeScreen}
         options={{headerShown: false}}
-      />
+      /> */}
 
       <Stack.Screen
         name={community}

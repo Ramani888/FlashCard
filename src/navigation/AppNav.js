@@ -43,7 +43,7 @@ const AppNav = () => {
         setUser(parsedUser);
         global.user = parsedUser;
         global.token = parsedUser?.token;
-        navigation.navigate(ScreenName.home);
+        navigation.navigate(ScreenName.setAndFolder);
       } else {
         global.user = null;
         setUser(null);

@@ -59,7 +59,7 @@ const SignInScreen = () => {
         index: 0,
         routes: [
           {
-            name: ScreenName.home,
+            name: ScreenName.setAndFolder,
           },
         ],
       });

@@ -24,7 +24,7 @@ const SplashScreen = () => {
         LottieSplashScreen.hide();
         navigation.reset({
           index: 0,
-          routes: [{name: ScreenName.home}],
+          routes: [{name: ScreenName.setAndFolder}],
         });
       }, 500);
     } else {
