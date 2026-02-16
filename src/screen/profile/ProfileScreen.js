@@ -16,8 +16,7 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import Font from '../../component/Font';
 import CustomeInputField from '../../custome/CustomeInputField';
-import {Menu, MenuTrigger, MenuOptions, MenuProvider} from 'react-native-popup-menu';
-import ProfileModalContent from '../../component/profile/profile/ProfileModalContent';
+import {MenuProvider} from 'react-native-popup-menu';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
 import EmailBottomSheetsContent from '../../component/profile/profile/EmailBottomSheetsContent';
@@ -86,6 +85,21 @@ const languages = [
   {id: 10, name: 'Hindi', flag: require('../../Assets/FlagImage/india.png'), code: 'hi'},
 ];
 
+// Language code mapping for cleaner language setting
+const LANGUAGE_CODE_MAP = {
+  'English': 'en',
+  'Español': 'es',
+  'Português': 'pt',
+  'Français': 'fr',
+  'Italiano': 'it',
+  'Deutsch': 'de',
+  'Polski': 'pl',
+  '普通话': 'zh',
+  'Kiswahili': 'sw',
+  'Tagalog': 'tl',
+  'हिंदी': 'hi',
+};
+
 const ProfileScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -93,7 +107,6 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(false);
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
-  const [profileUpdate, setProfileUpdate] = useState(false);
   const [userCreditData, setUserCreditData] = useState({});
   const [userStorageData, setUserStorageData] = useState({});
   //   const [userSubscriptionData, setUserSubscriptionData] = useState({});
@@ -122,20 +135,13 @@ const ProfileScreen = () => {
     })();
   }, [isFocused]);
 
-  const handleLanguageSaved = async Language => {
+  const handleLanguageSaved = useCallback(async Language => {
     await AsyncStorage.setItem('Language', JSON.stringify(Language));
-    Language?.name === 'English' && strings.setLanguage('en');
-    Language?.name === 'Español' && strings.setLanguage('es');
-    Language?.name === 'Português' && strings.setLanguage('pt');
-    Language?.name === 'Français' && strings.setLanguage('fr');
-    Language?.name === 'Italiano' && strings.setLanguage('it');
-    Language?.name === 'Deutsch' && strings.setLanguage('de');
-    Language?.name === 'Polski' && strings.setLanguage('pl');
-    Language?.name === '普通话' && strings.setLanguage('zh');
-    Language?.name === 'Kiswahili' && strings.setLanguage('sw');
-    Language?.name === 'Tagalog' && strings.setLanguage('tl');
-    Language?.name === 'हिंदी' && strings.setLanguage('hi');
-  };
+    const langCode = LANGUAGE_CODE_MAP[Language?.name];
+    if (langCode) {
+      strings.setLanguage(langCode);
+    }
+  }, []);
 
   useEffect(() => {
     setEmail(global.user?.email);
@@ -179,7 +185,6 @@ const ProfileScreen = () => {
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
         global.user = response.user;
-        setProfileUpdate(true);
       }
     } catch (error) {
       console.log('error in updateProfilePicture api', error);
@@ -375,8 +380,7 @@ const ProfileScreen = () => {
     <MenuProvider>
       <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
         <StatusBar translucent backgroundColor={Color.transparent} />
-        <Loader visible={visible} color={Color.White} />
-        <Loader visible={loading} color={Color.White} />
+        <Loader visible={visible || loading} color={Color.White} />
         <ScrollView
           style={styles.scrollContainer}
           showsVerticalScrollIndicator={false}>
@@ -497,23 +501,20 @@ const ProfileScreen = () => {
         /> */}
 
         <View style={styles.tabWrapper}>
-          {tabData.map(item => {
-            return (
-              <Pressable
-                style={[
-                  styles.tabContainer
-                ]}
-                onPress={() => handleTabPress(item?.tabname)}>
-                <Image
-                  source={item?.image}
-                  style={styles.tabIcon}
-                  tintColor={Color.White}
-                  resizeMode="contain"
-                />
-                <Text style={styles.tabText}>{item?.tabname}</Text>
-              </Pressable>
-            )
-          })}
+          {tabData.map((item, index) => (
+            <Pressable
+              key={`tab-${index}`}
+              style={styles.tabContainer}
+              onPress={() => handleTabPress(item?.tabname)}>
+              <Image
+                source={item?.image}
+                style={styles.tabIcon}
+                tintColor={Color.White}
+                resizeMode="contain"
+              />
+              <Text style={styles.tabText}>{item?.tabname}</Text>
+            </Pressable>
+          ))}
         </View>
 
         {userNameBottomSheets()}

@@ -28,8 +28,6 @@ import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger} from 'react-native-popup-menu';
 
-const notesData = [{name: 'Cults'}, {name: 'To do'}, {name: 'Catholics'}];
-
 const NotesScreen = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -106,7 +104,7 @@ const NotesScreen = () => {
     [colorView, noteColor, noteName, singleNoteData],
   );
 
-  const deleteNote = async noteId => {
+  const deleteNote = useCallback(async noteId => {
     try {
       setVisible(true);
       const response = await apiDelete(`${Api.notes}?_id=${noteId}`);
@@ -115,8 +113,10 @@ const NotesScreen = () => {
       }
     } catch (error) {
       console.log('error in delete note api', error);
+    } finally {
+      setVisible(false);
     }
-  };
+  }, []);
 
   // ====================================== End ===================================== //
 
@@ -209,7 +209,7 @@ const NotesScreen = () => {
             global.note = item?.note;
           }}>
           <View style={styles.colorView}>
-            {!colorView && (
+            {!item?.isHighlight && (
               <Text style={[styles.color, {backgroundColor: item?.color}]} />
             )}
             <Text
@@ -221,10 +221,7 @@ const NotesScreen = () => {
             </Text>
           </View>
           <Menu>
-            <MenuTrigger
-              onPress={() => {
-                setSingleNoteData(item);
-              }}>
+            <MenuTrigger>
               <Entypo
                 name="dots-three-vertical"
                 size={scale(13)}
@@ -241,10 +238,11 @@ const NotesScreen = () => {
             </MenuTrigger>
             <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground}}}>
               <NoteModalContent
-                item={singleNoteData}
+                item={item}
                 openBottomSheet={openBottomSheet}
                 setEditBottomSheet={setEditBottomSheet}
                 deleteData={deleteNote}
+                setSingleNoteData={setSingleNoteData}
               />
             </MenuOptions>
           </Menu>
@@ -255,10 +253,9 @@ const NotesScreen = () => {
       colorTheme.listAndBoxColor,
       colorTheme.textColor,
       colorTheme.threeDotIcon,
-      colorView,
+      colorTheme.modelNewBackground,
       editNote,
       navigation,
-      singleNoteData,
       openBottomSheet,
       deleteNote,
     ],
@@ -271,8 +268,11 @@ const NotesScreen = () => {
           <FlatList
             data={noteData}
             renderItem={renderNotes}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={item => item._id || item.name}
             style={styles.flatlist}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={10}
+            windowSize={5}
           />
         ) : (
           visible === false && (

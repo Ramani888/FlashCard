@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {scale, verticalScale} from '../../custome/Responsive';
@@ -7,8 +7,7 @@ import Color from '../Color';
 import Font from '../Font';
 import strings from '../../language/strings';
 import {MenuOption} from 'react-native-popup-menu';
-import { Divider } from '@rneui/themed/dist/Divider';
-import { color } from '@rneui/themed/dist/config';
+import {Divider} from '@rneui/themed/dist/Divider';
 import useTheme from '../Theme';
 
 const NoteModalContent = ({
@@ -16,54 +15,58 @@ const NoteModalContent = ({
   openBottomSheet,
   setEditBottomSheet,
   deleteData,
+  setSingleNoteData,
 }) => {
   const colorTheme = useTheme();
-  const renderBody = () => {
-    return (
-      <View style={styles.wrapper}>
-        <MenuOption
-          onSelect={() => {
-            setEditBottomSheet(true);
-            openBottomSheet();
-          }}
-          customStyles={{optionWrapper: {paddingLeft: scale(5)}}}>
-          <View style={styles.container}>
-            <MaterialIcons
-              name="edit"
-              size={scale(18)}
-              color={colorTheme.textColor}
-            />
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              {strings.edit}
-            </Text>
-          </View>
-        </MenuOption>
-        <Divider />
-        <MenuOption
-          onSelect={() => {
-            deleteData(item?._id);
-          }}
-          customStyles={{optionWrapper: {paddingLeft: scale(5)}}}>
-          <View style={[
-            styles.container
-          ]}>
-            <MaterialCommunityIcons
-              name="delete"
-              size={scale(18)}
-              color={Color.Red}
-            />
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              {strings.delete}
-            </Text>
-          </View>
-        </MenuOption>
-      </View>
-    );
-  };
-  return <View>{renderBody()}</View>;
+
+  const handleEdit = useCallback(() => {
+    if (setSingleNoteData) {
+      setSingleNoteData(item);
+    }
+    setEditBottomSheet(true);
+    openBottomSheet();
+  }, [item, setSingleNoteData, setEditBottomSheet, openBottomSheet]);
+
+  const handleDelete = useCallback(() => {
+    deleteData(item?._id);
+  }, [item?._id, deleteData]);
+
+  return (
+    <View style={styles.wrapper}>
+      <MenuOption
+        onSelect={handleEdit}
+        customStyles={{optionWrapper: {paddingLeft: scale(5)}}}>
+        <View style={styles.container}>
+          <MaterialIcons
+            name="edit"
+            size={scale(18)}
+            color={colorTheme.textColor}
+          />
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.edit}
+          </Text>
+        </View>
+      </MenuOption>
+      <Divider />
+      <MenuOption
+        onSelect={handleDelete}
+        customStyles={{optionWrapper: {paddingLeft: scale(5)}}}>
+        <View style={styles.container}>
+          <MaterialCommunityIcons
+            name="delete"
+            size={scale(18)}
+            color={Color.Red}
+          />
+          <Text style={[styles.text, {color: colorTheme.textColor}]}>
+            {strings.delete}
+          </Text>
+        </View>
+      </MenuOption>
+    </View>
+  );
 };
 
-export default NoteModalContent;
+export default React.memo(NoteModalContent);
 
 const styles = StyleSheet.create({
   wrapper: {

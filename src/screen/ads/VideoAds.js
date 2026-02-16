@@ -6,14 +6,12 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import {View, StatusBar, StyleSheet} from 'react-native';
 import {
   RewardedAd,
   RewardedAdEventType,
   AdEventType,
   TestIds,
 } from 'react-native-google-mobile-ads';
-import Color from '../../component/Color';
 
 const adUnitId = __DEV__
   ? TestIds.REWARDED
@@ -124,15 +122,10 @@ const VideoAds = forwardRef(({updateCredit, onAdStatusChange}, ref) => {
     isLoadingAd: () => isLoadingAd,
   }));
 
-  return (
-    <View style={styles.container}>
-      <StatusBar translucent backgroundColor={Color.transparent} />
-    </View>
-  );
+  // No visible UI needed for video ads
+  return null;
 });
 
 export default VideoAds;
 
-const styles = StyleSheet.create({
-  container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
-});
+// Removed unused styles

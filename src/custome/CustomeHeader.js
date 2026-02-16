@@ -166,9 +166,6 @@ const CustomeHeader = ({
           </MenuTrigger>
           <MenuOptions customStyles={menuOptionsStyle}>
             <ProfileModalContent
-              openUserNameBottomSheets={openUserNameBottomSheets}
-              openEmailBottomSheets={openEmailBottomSheets}
-              updateProfilePic={updateProfilePic}
               handleLogout={handleLogout}
               colorTheme={colorTheme}
             />
