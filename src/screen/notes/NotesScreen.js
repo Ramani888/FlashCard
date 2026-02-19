@@ -27,6 +27,7 @@ import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger} from 'react-native-popup-menu';
+import {useAppSelector} from '../../redux/hooks';
 
 const NotesScreen = () => {
   const navigation = useNavigation();
@@ -40,18 +41,36 @@ const NotesScreen = () => {
   const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
-    getNoteData(true);
-  }, []);
+    if (userId) {
+      getNoteData(true);
+    }
+  }, [userId]);
 
   // ====================================== Api ===================================== //
 
   const getNoteData = async (initialLoader, message) => {
     try {
       initialLoader && setVisible(true);
-      const response = await apiGet(`${Api.notes}?userId=${global?.user?._id}`);
-      setNoteData(response);
+      const response = await apiGet(`${Api.notes}?userId=${userId}`);
+      
+      // Handle different response structures
+      let notes = [];
+      if (Array.isArray(response)) {
+        notes = response;
+      } else if (response?.data && Array.isArray(response.data)) {
+        notes = response.data;
+      } else if (response?.notes && Array.isArray(response.notes)) {
+        notes = response.notes;
+      }
+      
+      setNoteData(notes);
+      
       if (!initialLoader && message) {
         showMessageonTheScreen(message);
       }
@@ -64,7 +83,7 @@ const NotesScreen = () => {
 
   const createNote = useCallback(async () => {
     const rawData = {
-      userId: global?.user?._id,
+      userId: userId,
       name: noteName,
       color: noteColor,
       note: '',
@@ -78,14 +97,16 @@ const NotesScreen = () => {
       }
     } catch (error) {
       console.log('error in create note api', error);
+    } finally {
+      setVisible(false);
     }
-  }, [colorView, noteColor, noteName]);
+  }, [colorView, noteColor, noteName, userId]);
 
   const editNote = useCallback(
     async (editWithNote, noteId, name, color, noteDesc, isColorView) => {
       const rawData = {
         _id: editWithNote ? noteId : singleNoteData?._id,
-        userId: global?.user?._id,
+        userId: userId,
         name: editWithNote ? name : noteName,
         color: editWithNote ? color : noteColor,
         note: noteDesc,
@@ -99,9 +120,11 @@ const NotesScreen = () => {
         }
       } catch (error) {
         console.log('error in update note api', error);
+      } finally {
+        setVisible(false);
       }
     },
-    [colorView, noteColor, noteName, singleNoteData],
+    [colorView, noteColor, noteName, singleNoteData, userId],
   );
 
   const deleteNote = useCallback(async noteId => {

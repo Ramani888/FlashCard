@@ -17,7 +17,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "Study Kit";
+    return "FlashCard";
   }
 
     @Override

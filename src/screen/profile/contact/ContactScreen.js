@@ -41,7 +41,7 @@ const ContactScreen = () => {
         `${Api.contacts}?userId=${userId}`,
       );
       if (response) {
-        setContactData(response);
+        setContactData(response?.data || response || []);
         message && showMessageonTheScreen(messageValue);
       }
     } catch (error) {

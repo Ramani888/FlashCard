@@ -36,7 +36,7 @@ const OtherUserCardScreen = () => {
       const response = await apiGet(
         `${Api.card}?setId=${item?._id}&folderId=${item?.folderId}&userId=${item?.userId}`,
       );
-      setCardData(response);
+      setCardData(response?.data || response || []);
     } catch (error) {
       console.log('error', error);
     } finally {

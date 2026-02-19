@@ -15,6 +15,7 @@ import NoDataView from '../../component/NoDataView';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import {useAppSelector} from '../../redux/hooks';
 
 const AssignFolderScreen = () => {
   const navigation = useNavigation();
@@ -30,10 +31,16 @@ const AssignFolderScreen = () => {
   const [noFolderClick, setNofolderClick] = useState(false);
   const colorTheme = useTheme();
   const {setId, folderId, screen} = route.params;
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
-    getFolderData();
-  }, []);
+    if (userId) {
+      getFolderData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (folderId) {
@@ -49,9 +56,9 @@ const AssignFolderScreen = () => {
     }
     try {
       const response = await apiGet(
-        `${Api.Folder}?userId=${global?.user?._id}`,
+        `${Api.Folder}?userId=${userId}`,
       );
-      setFolderData(response);
+      setFolderData(response?.data || response || []);
       if (message) {
         showMessageonTheScreen(messageValue);
       }
@@ -67,7 +74,7 @@ const AssignFolderScreen = () => {
       name: folderName,
       isPrivate: folderStatus,
       color: folderColor,
-      userId: global?.user?._id,
+      userId: userId,
       isHighlight: colorView,
     };
     setVisible(true);
@@ -80,7 +87,7 @@ const AssignFolderScreen = () => {
     } catch (error) {
       console.error('Error in creating folder', error);
     }
-  }, [colorView, folderColor, folderName, folderStatus]);
+  }, [colorView, folderColor, folderName, folderStatus, userId]);
 
   const assignFolder = async () => {
     try {
@@ -101,7 +108,7 @@ const AssignFolderScreen = () => {
     try {
       setVisible(true);
       const response = await apiPut(
-        `${Api.mediatorUserSet}?folderId=${selectedFolderId}&setId=${setId}&userId=${global?.user?._id}`,
+        `${Api.mediatorUserSet}?folderId=${selectedFolderId}&setId=${setId}&userId=${userId}`,
       );
       if (response?.success) {
         navigation.goBack();

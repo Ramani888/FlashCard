@@ -23,6 +23,7 @@ import NoDataView from '../NoDataView';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import {useAppSelector} from '../../redux/hooks';
 
 const {height} = Dimensions.get('window');
 
@@ -37,10 +38,16 @@ const ImageFolderComponent = ({onFolderClick}) => {
   const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
-    getImageFolderData(false);
-  }, []);
+    if (userId) {
+      getImageFolderData(false);
+    }
+  }, [userId]);
 
   // ================================== Api =================================== //
 
@@ -48,9 +55,9 @@ const ImageFolderComponent = ({onFolderClick}) => {
     message === false && setVisible(true);
     try {
       const response = await apiGet(
-        `${Api.imageFolder}?userId=${global?.user?._id}`,
+        `${Api.imageFolder}?userId=${userId}`,
       );
-      setPdfFolderData(response);
+      setPdfFolderData(response?.data || response || []);
       message && showMessageonTheScreen(messageValue);
     } catch (error) {
       console.log('error in get pdf folder api', error);
@@ -63,7 +70,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
     const rawData = {
       name: folderName,
       color: folderColor,
-      userId: global?.user?._id,
+      userId: userId,
       isHighlight: colorView,
     };
     setVisible(true);
@@ -80,14 +87,14 @@ const ImageFolderComponent = ({onFolderClick}) => {
     } catch (error) {
       console.log('error in create pdf folder api', error);
     }
-  }, [colorView, folderColor, folderName]);
+  }, [colorView, folderColor, folderName, userId]);
 
   const editImageFolder = useCallback(async () => {
     const rawData = {
       _id: singleFolderItem?._id,
       name: folderName,
       color: folderColor,
-      userId: global?.user?._id,
+      userId: userId,
       isHighlight: colorView,
     };
     setVisible(true);
@@ -104,7 +111,7 @@ const ImageFolderComponent = ({onFolderClick}) => {
     } catch (error) {
       console.log('error in edit pdf folder api', error);
     }
-  }, [colorView, folderColor, folderName, singleFolderItem]);
+  }, [colorView, folderColor, folderName, singleFolderItem, userId]);
 
   const deletePdfFolder = async () => {
     try {

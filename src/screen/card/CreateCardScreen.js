@@ -26,6 +26,7 @@ import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {ScreenName} from '../../component/Screen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import {useAppSelector} from '../../redux/hooks';
 
 const CreateCardScreen = () => {
   const navigation = useNavigation();
@@ -38,6 +39,10 @@ const CreateCardScreen = () => {
   const {folderId, setId, initialData, editNote} = route.params;
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -72,7 +77,7 @@ const CreateCardScreen = () => {
     const rawData = {
       top: top,
       bottom: bottom,
-      userId: global?.user?._id,
+      userId: userId,
       folderId: folderId,
       setId: setId,
       note: note,
@@ -95,7 +100,7 @@ const CreateCardScreen = () => {
   const updateCard = async () => {
     const rawData = {
       _id: initialData?._id,
-      userId: global?.user?._id,
+      userId: userId,
       folderId: folderId,
       setId: setId,
       top: top,

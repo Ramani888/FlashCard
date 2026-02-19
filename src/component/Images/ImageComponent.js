@@ -51,7 +51,7 @@ const ImageComponent = ({folderId, showFolder}) => {
           : `${Api.Images}?userId=${userId}`;
         const response = await apiGet(url);
         if (response) {
-          setImageData(response);
+          setImageData(response?.data || response || []);
           message && showMessageonTheScreen(messageValue);
         }
       } catch (error) {

@@ -70,7 +70,7 @@ const SetDetailScreen = () => {
         const response = await apiGet(
           `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${userId}`,
         );
-        setCardData(response);
+        setCardData(response?.data || response || []);
       } catch (error) {
         console.log('error', error);
       } finally {

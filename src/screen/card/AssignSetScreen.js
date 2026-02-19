@@ -37,8 +37,10 @@ const AssignSetScreen = () => {
   const userId = user?._id;
 
   useEffect(() => {
-    getSetData(false);
-  }, [getSetData]);
+    if (userId) {
+      getSetData(false);
+    }
+  }, [getSetData, userId]);
 
   // ===================================== Api ===================================== //
 
@@ -47,10 +49,10 @@ const AssignSetScreen = () => {
       message === false && setVisible(true);
       try {
         const url = folderId
-          ? `${Api.FolderSet}?userId=${global?.user?._id}&folderId=${folderId}`
-          : `${Api.Set}?userId=${global?.user?._id}`;
+          ? `${Api.FolderSet}?userId=${userId}&folderId=${folderId}`
+          : `${Api.Set}?userId=${userId}`;
         const response = await apiGet(url);
-        setSetData(response);
+        setSetData(response?.data || response || []);
         message && showMessageonTheScreen(messageValue);
       } catch (error) {
         console.log('error in get folder api', error);
@@ -58,7 +60,7 @@ const AssignSetScreen = () => {
         setVisible(false);
       }
     },
-    [folderId],
+    [folderId, userId],
   );
 
   const createSet = useCallback(async () => {

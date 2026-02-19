@@ -15,6 +15,7 @@ import NoDataView from '../../component/NoDataView';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
+import {useAppSelector} from '../../redux/hooks';
 
 const AssignImageFolder = () => {
   const navigation = useNavigation();
@@ -29,10 +30,16 @@ const AssignImageFolder = () => {
   const [selectedFolderId, setSelectedFolderId] = useState('');
   const [colorView, setColorView] = useState(false);
   const colorTheme = useTheme();
+  
+  // Get user from Redux state instead of global
+  const user = useAppSelector(state => state.auth.user);
+  const userId = user?._id;
 
   useEffect(() => {
-    getImageFolderData(false);
-  }, []);
+    if (userId) {
+      getImageFolderData(false);
+    }
+  }, [userId]);
 
   // ============================ API Calls ============================ //
 
@@ -40,9 +47,9 @@ const AssignImageFolder = () => {
     message === false && setVisible(true);
     try {
       const response = await apiGet(
-        `${Api.imageFolder}?userId=${global?.user?._id}`,
+        `${Api.imageFolder}?userId=${userId}`,
       );
-      setFolderData(response);
+      setFolderData(response?.data || response || []);
       message && showMessageonTheScreen(messageValue);
     } catch (error) {
       console.log('error in get pdf folder api', error);
@@ -56,7 +63,7 @@ const AssignImageFolder = () => {
       const rawData = {
         name: folderName,
         color: folderColor,
-        userId: global?.user?._id,
+        userId: userId,
         isHighlight: colorView,
       };
       setVisible(true);
@@ -74,7 +81,7 @@ const AssignImageFolder = () => {
         console.log('error in create pdf folder api', error);
       }
     },
-    [colorView, folderColor, folderName],
+    [colorView, folderColor, folderName, userId],
   );
 
   const assignImageFolder = async () => {

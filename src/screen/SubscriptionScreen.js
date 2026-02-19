@@ -136,7 +136,7 @@ const SubscriptionScreen = () => {
       const rawData = {
         _id: selectedSubscription?._id,
         productId: productId,
-        userId: global?.user?._id,
+        userId: userId,
         tierId: tierId,
         startDate: startDate,
         endDate: endDate,
@@ -157,7 +157,7 @@ const SubscriptionScreen = () => {
         setVisible(false);
       }
     },
-    [cancelSubscription, selectedSubscription],
+    [cancelSubscription, selectedSubscription, userId],
   );
 
   const cancelSubscription = useCallback(async () => {

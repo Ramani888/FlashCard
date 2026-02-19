@@ -38,7 +38,7 @@ const OtherUserScreen = () => {
         `${Api.mediatorUserSet}?userId=${item?.contactUserId}`,
       );
       if (response) {
-        setSetData(response);
+        setSetData(response?.data || response || []);
       }
     } catch (error) {
       console.log('error in get set data api', error);

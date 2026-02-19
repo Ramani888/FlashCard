@@ -55,7 +55,7 @@ const PdfComponent = memo(({folderId}) => {
           : `${Api.pdf}?userId=${userId}`;
         const response = await apiGet(url);
         if (response) {
-          setPdfData(response);
+          setPdfData(response?.data || response || []);
           message && showMessageonTheScreen(messageValue);
         }
       } catch (error) {
