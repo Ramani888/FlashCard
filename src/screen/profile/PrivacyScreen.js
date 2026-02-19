@@ -1,5 +1,14 @@
-import React, {useCallback} from 'react';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  SafeAreaView,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale, moderateScale} from '../../custome/Responsive';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
@@ -7,15 +16,20 @@ import CustomeHeader from '../../custome/CustomeHeader';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 
+const {height: SCREEN_HEIGHT} = Dimensions.get('window');
+const HEADER_HEIGHT = verticalScale(60);
+const TAB_HEIGHT = verticalScale(65);
+
 const TermsScreen = () => {
   const colorTheme = useTheme();
+  const [activeTab, setActiveTab] = useState('terms'); // 'privacy' or 'terms'
 
   const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
         goBack={true}
-        title={strings.privacyAndTerms}
+        title={''}
         iconColor={colorTheme.textColor}
         containerStyle={styles.headerStyle}
         titleStyle={[styles.headerTitleStyle, {color: colorTheme.textColor}]}
@@ -23,192 +37,419 @@ const TermsScreen = () => {
     );
   }, [colorTheme.textColor]);
 
+  const renderTabs = () => {
+    return (
+      <View style={[styles.tabOuterContainer, {backgroundColor: '#E8E8E8'}]}>
+        <TouchableOpacity
+          style={styles.tabButton}
+          activeOpacity={0.8}
+          onPress={() => setActiveTab('terms')}>
+          {activeTab === 'terms' ? (
+            <LinearGradient
+              colors={colorTheme.gradientTheme}
+              style={styles.activeTabGradient}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}>
+              <Text style={[styles.tabText, styles.activeTabText]}>
+                Terms and Conditions
+              </Text>
+            </LinearGradient>
+          ) : (
+            <Text style={styles.tabText}>Terms and Conditions</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.tabButton}
+          activeOpacity={0.8}
+          onPress={() => setActiveTab('privacy')}>
+          {activeTab === 'privacy' ? (
+            <LinearGradient
+              colors={colorTheme.gradientTheme}
+              style={styles.activeTabGradient}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}>
+              <Text style={[styles.tabText, styles.activeTabText]}>
+                Privacy Policy
+              </Text>
+            </LinearGradient>
+          ) : (
+            <Text style={styles.tabText}>Privacy Policy</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const renderPrivacyPolicy = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Bible Flashcards & Notes ("we," "our," or "us") operates from the
+          United States. This Privacy Policy explains how we collect, use, and
+          protect information when you use our mobile application.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          1. Information We Collect
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We collect the following information:
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Account Information{'\n'}
+          • Email address{'\n'}
+          • Encrypted authentication credentials
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          User Content{'\n'}
+          • Flashcards{'\n'}
+          • Notes{'\n'}
+          • Study content you create or modify
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Device & Usage Information{'\n'}
+          • Basic device information (such as device type, operating system){'\n'}
+          • App usage data{'\n'}
+          • Advertising identifiers (for ads)
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We do not collect:{'\n'}
+          • Government ID numbers{'\n'}
+          • Financial information{'\n'}
+          • Precise GPS location{'\n'}
+          • Sensitive personal data
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          2. How We Use Information
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We use your information to:{'\n'}
+          • Create and manage your account{'\n'}
+          • Provide secure cloud storage and synchronization{'\n'}
+          • Display advertisements{'\n'}
+          • Maintain and improve app functionality{'\n'}
+          • Prevent abuse and maintain security
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          3. Advertising
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We use third-party advertising services, including:
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Google AdMob
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          AdMob may collect device identifiers and usage data to provide
+          personalized or non-personalized advertisements in accordance with its
+          own privacy policy.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Users in certain regions (such as the European Economic Area) may be
+          presented with consent options for personalized advertising where
+          required by law.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          4. Cloud Storage & Security
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          User content is stored using secure cloud infrastructure provided by
+          third-party hosting services.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We implement reasonable administrative and technical safeguards.
+          However, no system can guarantee absolute security.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          5. Data Retention
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We retain your information for as long as your account remains active.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          You may request deletion of your account and associated data by
+          contacting: support@biblestudycards.app
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Upon verified request, we will delete your account and stored data
+          within a reasonable timeframe, unless retention is required by law.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          6. International Users
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          If you access the app from outside the United States, you understand
+          that your information may be processed and stored in the United
+          States.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We comply with applicable data protection laws, including general
+          principles of the GDPR and other international privacy regulations
+          where applicable.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          7. Children's Privacy
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          This app is not directed to children under 13 years of age. We do not
+          knowingly collect personal information from children under 13.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          If we become aware that such information has been collected, we will
+          delete it promptly.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          8. Changes to This Policy
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We may update this Privacy Policy periodically. Updates will be
+          reflected by revising the "Last Updated" date.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Continued use of the app after changes means you accept the revised
+          policy.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          10. Contact
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          If you have questions about this Privacy Policy, contact:{'\n'}
+          support@biblestudycards.app
+        </Text>
+      </View>
+    );
+  };
+
+  const renderTermsAndConditions = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          By accessing or using Bible Flashcards & Notes, you agree to these
+          Terms & Conditions.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          1. Use of the App
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          You agree to use the app only for lawful purposes and in
+          accordance with these Terms.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          You may not:
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          • Attempt to disrupt or reverse engineer the app{'\n'}
+          • Upload unlawful or harmful content{'\n'}
+          • Use the app to violate any applicable laws
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          2. Accounts
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          You are responsible for maintaining the confidentiality of your
+          account credentials.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          You are responsible for all activities that occur under your
+          account.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          3. User Content
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          You retain ownership of the content you create within the app.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          By using the app, you grant us a limited license to store and
+          process your content solely for the purpose of operating and
+          improving the service.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We are not responsible for user-generated content.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          4. Disclaimer
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          The app is provided "as is" and "as available."
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We make no warranties regarding:{'\n'}
+          • Accuracy of content{'\n'}
+          • Availability of service{'\n'}
+          • Continuous or error-free operation
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          5. Limitation of Liability
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          To the fullest extent permitted by law, we are not liable for
+          indirect, incidental, special, or consequential damages arising
+          from use of the app.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          6. Account Termination
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We reserve the right to suspend or terminate accounts that violate
+          these Terms.
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          Users may request account deletion at any time.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          7. Changes to Terms
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          We may update these Terms periodically. Continued use of the app
+          constitutes acceptance of updated Terms.
+        </Text>
+
+        <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
+          9. Governing Law
+        </Text>
+        <Text style={[styles.text, {color: colorTheme.textColor}]}>
+          These Terms shall be governed by the laws of the United States and
+          the State of California.
+        </Text>
+      </View>
+    );
+  };
+
   return (
-    <View
+    <SafeAreaView
       style={[styles.mainContainer, {backgroundColor: colorTheme.background1}]}>
-      {renderHeader()}
-      <ScrollView style={styles.container}>
-        <View
-          style={[
-            styles.section,
-            {backgroundColor: colorTheme.listAndBoxColor},
-          ]}>
-          <View style={styles.contentContainer}>
-            <Text style={[styles.title, {color: colorTheme.textColor}]}>
-              Bible Study Kit: Terms of Agreement & Privacy Policy
-            </Text>
-            <Text style={[styles.date, {color: colorTheme.textColor}]}>
-              Last updated: October 7th, 2024
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              By signing up for and using Bible Study Kit (the "App"), you
-              ("User") agree to the following Terms of Agreement and Privacy
-              Policy. These terms outline the obligations, restrictions, and
-              privacy policies associated with the use of this App. Please read
-              carefully before creating an account.
-            </Text>
+      {/* Header - Fixed */}
+      <View style={styles.headerContainer}>
+        {renderHeader()}
+      </View>
 
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              1. User Information and Access
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              By creating an account, you agree that any information you input,
-              upload, or save in the App can be viewed and used by the Bible
-              study kit team as deemed necessary. This includes, but is not
-              limited to, usage for app improvement, analytics, and
-              troubleshooting.
-            </Text>
+      {/* Tabs - Fixed */}
+      <View style={styles.tabsContainer}>
+        {renderTabs()}
+      </View>
 
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              2. Public Content
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              When toggling content to "Public Mode," you agree that such
-              content can be viewed, shared, copied, or used by other users. You
-              are responsible for ensuring that any public content complies with
-              all terms outlined here.
-            </Text>
-
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              3. Email Subscription
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              By signing up with your email, you are automatically subscribed to
-              our email list. We reserve the right to email you regarding
-              updates, news, roadmaps, or information about other apps and
-              services. You may unsubscribe at any time using the link provided
-              in the emails.
-            </Text>
-
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              4. Appropriate Usage
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              The App is intended for Bible study and religious content only.
-              Users agree not to upload or store content unrelated to these
-              purposes, including but not limited to personal pictures,
-              irrelevant documents, or non-religious materials. If other types
-              of content created or uploaded in the app can somehow tie into the
-              allowed content, then that is allowed.
-            </Text>
-
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              5. Cloud Storage and Data Loss
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              Your content is saved in the cloud. Bible Study Kit is not
-              responsible for any lost data, whether caused by technical issues,
-              user error, or external factors. It is recommended that users back
-              up their important data independently.
-            </Text>
-
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              6. Account Suspension or Termination
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              We reserve the right to delete, suspend, or discontinue your
-              account at any time if we feel you are misusing the App for
-              purposes outside of Bible study, church, or religious content.
-              Prohibited activities include, but are not limited to, using the
-              app for unlawful purposes, attempting to interfere with
-              functionality or security of the app, and posting or transmitting
-              offensive, inappropriate, or harmful content.
-            </Text>
-
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              7. Data Privacy and Security
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              While we strive to maintain the security of your data, we cannot
-              guarantee complete protection against breaches or privacy issues.
-              Bible Study Kit is not responsible for any data breaches but will
-              take reasonable measures to keep your information safe and secure.
-            </Text>
-
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              8. Changes to the Terms
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              Bible Study Kit reserves the right to modify these terms at any
-              time. Continued use of the App constitutes acceptance of the
-              updated terms.
-            </Text>
-
-            <Text style={[styles.subTitle, {color: colorTheme.textColor}]}>
-              9. Governing Law
-            </Text>
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              These Terms of Agreement and Privacy Policy will be governed by
-              and construed in accordance with the laws of where the app is
-              registered under. Any disputes arising from the use of this App
-              shall be resolved under the jurisdiction the app was first
-              registered under.
-            </Text>
-
-            <Text style={[styles.text, {color: colorTheme.textColor}]}>
-              By creating an account and using the App, you acknowledge that you
-              have read, understood, and agree to abide by these Terms of
-              Agreement and Privacy Policy.
-            </Text>
-          </View>
+      {/* Content - Scrollable */}
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}>
+        <View style={[styles.contentCard, {backgroundColor: colorTheme.background}]}>
+          {activeTab === 'privacy' ? renderPrivacyPolicy() : renderTermsAndConditions()}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {flex: 1},
-  container: {
+  // Main container takes full screen
+  mainContainer: {
     flex: 1,
-    padding: scale(10),
+  },
+  
+  // Header container - Fixed height
+  headerContainer: {
+    height: HEADER_HEIGHT,
   },
   headerStyle: {
     backgroundColor: Color.transparent,
-    height: verticalScale(90),
+    height: HEADER_HEIGHT,
     alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   headerTitleStyle: {
     color: Color.Black,
     fontSize: scale(20),
   },
-  section: {
-    marginBottom: verticalScale(20),
-    backgroundColor: Color.White,
-    elevation: scale(2),
-    margin: scale(6),
-    marginTop: verticalScale(5),
-    padding: scale(15),
-    borderRadius: scale(10),
+  
+  // Tabs container - Fixed height
+  tabsContainer: {
+    height: TAB_HEIGHT,
+    justifyContent: 'center',
   },
-  contentContainer: {
-    paddingBottom: verticalScale(40),
+  tabOuterContainer: {
+    flexDirection: 'row',
+    marginHorizontal: scale(16),
+    backgroundColor: '#E8E8E8',
+    borderRadius: scale(25),
+    padding: scale(4),
+    gap: scale(6),
   },
-  title: {
-    fontSize: moderateScale(22),
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: scale(22),
+    backgroundColor: 'transparent',
+    overflow: 'hidden',
+  },
+  activeTabGradient: {
+    width: '100%',
+    paddingVertical: verticalScale(14),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: scale(22),
+  },
+  tabText: {
+    fontSize: moderateScale(15),
+    fontFamily: Font.medium,
+    color: '#999999',
+  },
+  activeTabText: {
     fontFamily: Font.bold,
-    textAlign: 'center',
-    marginBottom: verticalScale(10),
-    color: Color.Black,
+    color: Color.White,
   },
-  date: {
-    fontSize: moderateScale(14),
-    textAlign: 'center',
-    color: 'gray',
-    marginBottom: verticalScale(20),
+  
+  // Scrollable content area - Takes remaining space
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: scale(16),
+    paddingBottom: verticalScale(20),
+  },
+  contentCard: {
+    backgroundColor: Color.White,
+    padding: scale(20),
+    borderRadius: scale(12),
+    marginTop: verticalScale(10),
+  },
+  
+  // Content text styles
+  contentContainer: {
+    paddingBottom: verticalScale(10),
   },
   subTitle: {
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(16),
     fontFamily: Font.bold,
-    marginVertical: verticalScale(10),
+    marginTop: verticalScale(15),
+    marginBottom: verticalScale(8),
     color: Color.Black,
   },
   text: {
     fontSize: moderateScale(14),
-    lineHeight: verticalScale(21),
-    marginBottom: verticalScale(10),
+    fontFamily: Font.regular,
+    lineHeight: verticalScale(22),
+    marginBottom: verticalScale(12),
     color: Color.Black,
-    textAlign: 'justify',
+    textAlign: 'left',
   },
 });
 
