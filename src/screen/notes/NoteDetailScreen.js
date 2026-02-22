@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -30,8 +30,9 @@ const NoteDetailScreen = () => {
   const lineHeight = 10;
   const paddingOffset = 80;
 
-  const responsiveNumberOfLines = Math.floor(
-    (height - paddingOffset) / lineHeight,
+  const responsiveNumberOfLines = useMemo(
+    () => Math.floor((height - paddingOffset) / lineHeight),
+    [],
   );
 
   useEffect(() => {
@@ -40,10 +41,22 @@ const NoteDetailScreen = () => {
     }
   }, [note]);
 
-  const handleNoteDesc = text => {
+  const handleNoteDesc = useCallback(text => {
     setNotes(text);
     notesRef.current = text;
-  };
+  }, []);
+
+  const saveNote = useCallback(() => {
+    editNote(
+      true,
+      noteId,
+      noteName,
+      noteColor,
+      notesRef.current ? notesRef.current : global.note,
+      colorView,
+    );
+    navigation.goBack();
+  }, [colorView, editNote, navigation, noteColor, noteId, noteName]);
 
   useEffect(() => {
     const backAction = () => {
@@ -59,19 +72,7 @@ const NoteDetailScreen = () => {
     return () => backHandler.remove();
   }, [saveNote]);
 
-  const saveNote = useCallback(() => {
-    editNote(
-      true,
-      noteId,
-      noteName,
-      noteColor,
-      notesRef.current ? notesRef.current : global.note,
-      colorView,
-    );
-    navigation.goBack();
-  }, [colorView, editNote, navigation, noteColor, noteId, noteName]);
-
-  const renderHeader = () => {
+  const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
         headerBackgroundColor={Color.transparent}
@@ -82,7 +83,7 @@ const NoteDetailScreen = () => {
         containerStyle={styles.headerStyle}
       />
     );
-  };
+  }, [saveNote]);
 
   return (
     <KeyboardAvoidingView

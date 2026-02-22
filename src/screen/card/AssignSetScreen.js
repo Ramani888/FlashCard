@@ -64,6 +64,11 @@ const AssignSetScreen = () => {
   );
 
   const createSet = useCallback(async () => {
+    if (!setName?.trim()) {
+      showMessageonTheScreen('Please enter set name');
+      return;
+    }
+
     const rawData = {
       name: setName,
       isPrivate: setStatus,
@@ -76,47 +81,82 @@ const AssignSetScreen = () => {
     try {
       const response = await apiPost(Api.Set, '', JSON.stringify(rawData));
       setSetName('');
-      setSetStatus('');
+      setSetStatus(0);
       setSetColor('');
+      setColorView(false);
+      refRBSheet.current?.hide();
       getSetData(true, response?.message);
     } catch (error) {
       console.log('error in create set api', error);
+      showMessageonTheScreen('Failed to create set');
+    } finally {
+      hideLoader();
     }
-  }, [colorView, folderId, getSetData, setColor, setName, setStatus, userId, showLoader]);
+  }, [colorView, folderId, getSetData, setColor, setName, setStatus, userId, showLoader, hideLoader]);
 
-  const assignSet = async () => {
+  const assignSet = useCallback(async () => {
     try {
       showLoader();
       const response = await apiPut(
         `${Api.moveCard}?setId=${selectedSetId}&cardId=${cardId}`,
       );
       if (response?.success === true) {
+        showMessageonTheScreen(response?.message);
         navigation.goBack();
-        getSetData(true, response?.message);
       }
     } catch (error) {
       console.log('error in assignSet api', error);
+      showMessageonTheScreen('Failed to assign set');
+    } finally {
+      hideLoader();
     }
-  };
+  }, [selectedSetId, cardId, showLoader, hideLoader, navigation]);
 
-  const assignOtherUserCard = async () => {
+  const assignOtherUserCard = useCallback(async () => {
     try {
       showLoader();
       const response = await apiPut(
         `${Api.mediatorCard}?setId=${selectedSetId}&cardId=${cardId}&userId=${userId}`,
       );
       if (response?.success === true) {
+        showMessageonTheScreen(response?.message);
         navigation.goBack();
-        getSetData(true, response?.message);
       }
     } catch (error) {
       console.log('error in assignOtherUserCard api', error);
+      showMessageonTheScreen('Failed to assign card');
+    } finally {
+      hideLoader();
     }
-  };
+  }, [selectedSetId, cardId, userId, showLoader, hideLoader, navigation]);
 
   // ================================== Api =================================== //
 
-  const renderHeader = () => {
+  const handleSetSelect = useCallback((setId) => {
+    setSelectedSetId(setId);
+  }, []);
+
+  const openBottomSheet = useCallback(() => {
+    refRBSheet.current.show();
+  }, []);
+
+  const closeBottomSheet = useCallback(() => {
+    refRBSheet.current.hide();
+  }, []);
+
+  const handleAssignPress = useCallback(() => {
+    if (selectedSetId) {
+      if (screen === 'OtherUserCardScreen') {
+        assignOtherUserCard();
+      } else {
+        assignSet();
+      }
+    } else {
+      showMessageonTheScreen(strings.pleaseSelectTheSet);
+    }
+  }, [selectedSetId, screen, assignOtherUserCard, assignSet]);
+
+  const renderHeader = useCallback(() => {
     return (
       <CustomeHeader
         goBack={true}
@@ -129,7 +169,7 @@ const AssignSetScreen = () => {
         plusIconAction={openBottomSheet}
       />
     );
-  };
+  }, [openBottomSheet]);
 
   const renderSet = useCallback(
     ({item, index}) => {
@@ -150,7 +190,7 @@ const AssignSetScreen = () => {
                   : colorTheme.listAndBoxColor,
               },
             ]}
-            onPress={() => setSelectedSetId(item?._id)}>
+            onPress={() => handleSetSelect(item?._id)}>
             <View style={styles.rowContainer}>
               {!colorView && (
                 <Image
@@ -208,16 +248,9 @@ const AssignSetScreen = () => {
       colorTheme.listAndBoxColor,
       colorTheme.textColor,
       colorView,
+      handleSetSelect,
     ],
   );
-
-  const openBottomSheet = () => {
-    refRBSheet.current.show();
-  };
-
-  const closeBottomSheet = () => {
-    refRBSheet.current.hide();
-  };
 
   const BottomSheets = useCallback(() => {
     return (
@@ -254,11 +287,12 @@ const AssignSetScreen = () => {
     colorView,
     colorTheme.background,
     createSet,
+    closeBottomSheet,
   ]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
-  const renderBody = () => {
+  const renderBody = useCallback(() => {
     return (
       <View style={styles.bodyContainer}>
         {setData?.length > 0 ? (
@@ -289,21 +323,11 @@ const AssignSetScreen = () => {
           marginTop={verticalScale(15)}
           position={'absolute'}
           bottom={verticalScale(10)}
-          onPress={() => {
-            if (selectedSetId) {
-              if (screen === 'OtherUserCardScreen') {
-                assignOtherUserCard();
-              } else {
-                assignSet();
-              }
-            } else {
-              showMessageonTheScreen(strings.pleaseSelectTheSet);
-            }
-          }}
+          onPress={handleAssignPress}
         />
       </View>
     );
-  };
+  }, [setData, renderSet, keyExtractor, BottomSheets, handleAssignPress]);
 
   return (
     <View

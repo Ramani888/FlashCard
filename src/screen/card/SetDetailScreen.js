@@ -106,12 +106,15 @@ const SetDetailScreen = () => {
         }
       } catch (error) {
         console.log('error in update card', error);
+        showMessageonTheScreen('Failed to update card');
+      } finally {
+        !position && hideLoader();
       }
     },
-    [folderId, setId, userId, getCardData, showLoader],
+    [folderId, setId, userId, getCardData, showLoader, hideLoader],
   );
 
-  const blurAllCard = async isBlur => {
+  const blurAllCard = useCallback(async isBlur => {
     setIsAllBlur(isBlur);
     try {
       showLoader();
@@ -120,13 +123,17 @@ const SetDetailScreen = () => {
       );
       if (response?.success === true) {
         getCardData(false);
+        showMessageonTheScreen(response?.message || 'Cards updated');
       }
     } catch (error) {
       console.log('error', error);
+      showMessageonTheScreen('Failed to update card blur');
+    } finally {
+      hideLoader();
     }
-  };
+  }, [setId, showLoader, hideLoader, getCardData]);
 
-  const deleteCard = async cardId => {
+  const deleteCard = useCallback(async cardId => {
     try {
       showLoader();
       const response = await apiDelete(`${Api.card}?_id=${cardId}`);
@@ -136,8 +143,11 @@ const SetDetailScreen = () => {
       }
     } catch (error) {
       console.log('error in delete card', error);
+      showMessageonTheScreen('Failed to delete card');
+    } finally {
+      hideLoader();
     }
-  };
+  }, [showLoader, hideLoader, getCardData]);
 
   const handleDeleteCardPress = useCallback((card) => {
     setCardToDelete(card);
@@ -155,7 +165,7 @@ const SetDetailScreen = () => {
   const updatePosition = useCallback(() => {
     try {
       showLoader();
-      cardData?.map((item, index) =>
+      cardData?.forEach((item, index) =>
         updateCard(
           item?._id,
           item?.top,
@@ -165,12 +175,24 @@ const SetDetailScreen = () => {
           index,
         ),
       );
+      showMessageonTheScreen('Card positions updated');
     } catch (error) {
-      console.log('error in update position functionality');
+      console.log('error in update position functionality', error);
+      showMessageonTheScreen('Failed to update positions');
+    } finally {
+      hideLoader();
     }
-  }, [cardData, updateCard, showLoader]);
+  }, [cardData, updateCard, showLoader, hideLoader]);
 
   // ====================================== End ===================================== //
+
+  const handleLayoutChange = useCallback((newLayout) => {
+    setLayout(newLayout);
+  }, []);
+
+  const keyExtractor = useCallback((item, index) => {
+    return item?._id ? item._id.toString() : index.toString();
+  }, []);
 
   const renderHeader = useCallback(() => {
     return (
@@ -210,7 +232,7 @@ const SetDetailScreen = () => {
               <SetDetailModalContent
                 folderId={folderId}
                 setId={setId}
-                setLayout={setLayout}
+                setLayout={handleLayoutChange}
                 layout={layout}
                 blurAllCard={blurAllCard}
                 isBlur={isAllBlur}
@@ -231,7 +253,7 @@ const SetDetailScreen = () => {
         )}
       </View>
     );
-  }, [setName, changeOrder, navigation, updatePosition]);
+  }, [setName, changeOrder, folderId, setId, layout, isAllBlur, colorTheme.modelNewBackground, navigation, updatePosition, blurAllCard, handleLayoutChange]);
 
   const renderItem = useCallback(
     ({item, drag, isActive}) => {
@@ -254,9 +276,31 @@ const SetDetailScreen = () => {
     setCardData(reorderedData);
   }, []);
 
-  const keyExtractor = (item, index) => {
-    return item?._id ? item._id.toString() : index.toString();
-  };
+  const renderSimpleItem = useCallback(
+    (item) => (
+      <SimpleLayout
+        item={item?.item}
+        updateCard={updateCard}
+        folderId={folderId}
+        setId={setId}
+        onDeleteCardPress={handleDeleteCardPress}
+      />
+    ),
+    [updateCard, folderId, setId, handleDeleteCardPress],
+  );
+
+  const renderGridItem = useCallback(
+    ({item}) => (
+      <CardGridLayout
+        item={item}
+        updateCard={updateCard}
+        folderId={folderId}
+        setId={setId}
+        onDeleteCardPress={handleDeleteCardPress}
+      />
+    ),
+    [updateCard, folderId, setId, handleDeleteCardPress],
+  );
 
   const renderBody = useMemo(
     () => (
@@ -278,17 +322,7 @@ const SetDetailScreen = () => {
                   keyExtractor={keyExtractor}
                   showsVerticalScrollIndicator={false}
                   contentContainerStyle={{paddingBottom: scale(10)}}
-                  renderItem={item => {
-                    return (
-                      <SimpleLayout
-                        item={item?.item}
-                        updateCard={updateCard}
-                        folderId={folderId}
-                        setId={setId}
-                        onDeleteCardPress={handleDeleteCardPress}
-                      />
-                    );
-                  }}
+                  renderItem={renderSimpleItem}
                 />
               )
             ) : (
@@ -308,17 +342,7 @@ const SetDetailScreen = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{paddingBottom: scale(50)}}
                 style={styles.masonryFlatlist}
-                renderItem={({item}) => {
-                  return (
-                    <CardGridLayout
-                      item={item}
-                      updateCard={updateCard}
-                      folderId={folderId}
-                      setId={setId}
-                      onDeleteCardPress={handleDeleteCardPress}
-                    />
-                  );
-                }}
+                renderItem={renderGridItem}
               />
             ) : (
               <NoDataView
@@ -335,11 +359,11 @@ const SetDetailScreen = () => {
       cardData,
       layout,
       changeOrder,
-      folderId,
+      keyExtractor,
       renderItem,
-      setId,
-      updateCard,
-      handleDeleteCardPress,
+      handleReorder,
+      renderSimpleItem,
+      renderGridItem,
     ],
   );
 

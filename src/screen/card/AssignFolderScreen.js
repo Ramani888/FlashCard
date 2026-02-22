@@ -36,21 +36,9 @@ const AssignFolderScreen = () => {
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
 
-  useEffect(() => {
-    if (userId) {
-      getFolderData();
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    if (folderId) {
-      setSelectedFolderId(folderId);
-    }
-  }, [folderId]);
-
   // ============================ API Calls ============================ //
 
-  const getFolderData = async (message = false, messageValue) => {
+  const getFolderData = useCallback(async (message = false, messageValue) => {
     if (!message) {
       showLoader();
     }
@@ -64,12 +52,30 @@ const AssignFolderScreen = () => {
       }
     } catch (error) {
       console.error('Error in fetching folder data', error);
+      showMessageonTheScreen('Failed to fetch folders');
     } finally {
       hideLoader();
     }
-  };
+  }, [userId, showLoader, hideLoader]);
+
+  useEffect(() => {
+    if (userId) {
+      getFolderData();
+    }
+  }, [userId, getFolderData]);
+
+  useEffect(() => {
+    if (folderId) {
+      setSelectedFolderId(folderId);
+    }
+  }, [folderId]);
 
   const createFolder = useCallback(async () => {
+    if (!folderName?.trim()) {
+      showMessageonTheScreen('Please enter folder name');
+      return;
+    }
+
     const rawData = {
       name: folderName,
       isPrivate: folderStatus,
@@ -83,43 +89,72 @@ const AssignFolderScreen = () => {
       setFolderName('');
       setFolderStatus(0);
       setFolderColor('');
+      setColorView(false);
+      refRBSheet.current?.hide();
       getFolderData(true, response?.message);
     } catch (error) {
       console.error('Error in creating folder', error);
+      showMessageonTheScreen('Failed to create folder');
+    } finally {
+      hideLoader();
     }
-  }, [colorView, folderColor, folderName, folderStatus, userId, showLoader, getFolderData]);
+  }, [colorView, folderColor, folderName, folderStatus, userId, showLoader, hideLoader, getFolderData]);
 
-  const assignFolder = async () => {
+  const assignFolder = useCallback(async () => {
     try {
       showLoader();
       const response = await apiPut(
         `${Api.assignedFolder}?folderId=${selectedFolderId}&setId=${setId}`,
       );
       if (response?.success) {
+        showMessageonTheScreen(response?.message);
         navigation.goBack();
-        getFolderData(true, response?.message);
       }
     } catch (error) {
       console.error('Error in assigning folder', error);
+      showMessageonTheScreen('Failed to assign folder');
+    } finally {
+      hideLoader();
     }
-  };
+  }, [selectedFolderId, setId, showLoader, hideLoader, navigation]);
 
-  const assignOtherSet = async () => {
+  const assignOtherSet = useCallback(async () => {
     try {
       showLoader();
       const response = await apiPut(
         `${Api.mediatorUserSet}?folderId=${selectedFolderId}&setId=${setId}&userId=${userId}`,
       );
       if (response?.success) {
+        showMessageonTheScreen(response?.message);
         navigation.goBack();
-        getFolderData(true, response?.message);
       }
     } catch (error) {
       console.error('Error in assigning folder', error);
+      showMessageonTheScreen('Failed to assign folder');
+    } finally {
+      hideLoader();
     }
-  };
+  }, [selectedFolderId, setId, userId, showLoader, hideLoader, navigation]);
   // ?userId&setId&folderId
   // =================================================================== //
+
+  const handleFolderSelect = useCallback((folderId) => {
+    setSelectedFolderId(folderId);
+    setNofolderClick(false);
+  }, []);
+
+  const handleNoFolderPress = useCallback(() => {
+    setSelectedFolderId('');
+    setNofolderClick(prev => !prev);
+  }, []);
+
+  const handleAssignPress = useCallback(() => {
+    if (selectedFolderId || noFolderClick) {
+      screen === 'OtherUserScreen' ? assignOtherSet() : assignFolder();
+    } else {
+      showMessageonTheScreen(strings.pleaseSelectFolder);
+    }
+  }, [selectedFolderId, noFolderClick, screen, assignOtherSet, assignFolder]);
 
   const renderFolder = useCallback(
     ({item, index}) => {
@@ -136,10 +171,7 @@ const AssignFolderScreen = () => {
                 : colorTheme.listAndBoxColor,
             },
           ]}
-          onPress={() => {
-            setSelectedFolderId(item?._id);
-            setNofolderClick(false);
-          }}>
+          onPress={() => handleFolderSelect(item?._id)}>
           <View style={styles.folderInfo}>
             {!colorView && (
               <View style={[styles.iconColor, {backgroundColor: item.color}]} />
@@ -160,6 +192,7 @@ const AssignFolderScreen = () => {
       colorTheme.listAndBoxColor,
       colorTheme.textColor,
       colorView,
+      handleFolderSelect,
     ],
   );
 
@@ -246,10 +279,7 @@ const AssignFolderScreen = () => {
                 borderColor: colorTheme.textColor,
               },
             ]}
-            onPress={() => {
-              setSelectedFolderId('');
-              setNofolderClick(!noFolderClick);
-            }}>
+            onPress={handleNoFolderPress}>
             <Text style={styles.noFolderText}>{strings.noFolder}</Text>
           </Pressable>
         )}
@@ -264,13 +294,7 @@ const AssignFolderScreen = () => {
           fontFamily={Font.semiBold}
           marginTop={verticalScale(15)}
           bottom={verticalScale(10)}
-          onPress={() => {
-            if (selectedFolderId || noFolderClick) {
-              screen === 'OtherUserScreen' ? assignOtherSet() : assignFolder();
-            } else {
-              showMessageonTheScreen(strings.pleaseSelectFolder);
-            }
-          }}
+          onPress={handleAssignPress}
         />
       </View>
     </View>

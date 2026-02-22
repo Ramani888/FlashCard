@@ -49,15 +49,9 @@ const NotesScreen = () => {
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
 
-  useEffect(() => {
-    if (userId) {
-      getNoteData(true);
-    }
-  }, [userId]);
-
   // ====================================== Api ===================================== //
 
-  const getNoteData = async (initialLoader, message) => {
+  const getNoteData = useCallback(async (initialLoader, message) => {
     try {
       initialLoader && showLoader();
       const response = await apiGet(`${Api.notes}?userId=${userId}`);
@@ -82,9 +76,20 @@ const NotesScreen = () => {
     } finally {
       hideLoader();
     }
-  };
+  }, [userId, showLoader, hideLoader]);
+
+  useEffect(() => {
+    if (userId) {
+      getNoteData(true);
+    }
+  }, [userId, getNoteData]);
 
   const createNote = useCallback(async () => {
+    if (!noteName?.trim()) {
+      showMessageonTheScreen('Please enter note name');
+      return;
+    }
+    
     const rawData = {
       userId: userId,
       name: noteName,
@@ -97,13 +102,18 @@ const NotesScreen = () => {
       const response = await apiPost(Api.notes, '', JSON.stringify(rawData));
       if (response?.success === true) {
         getNoteData(false, response?.message);
+        closeBottomSheet();
+        setNoteName('');
+        setNoteColor('');
+        setColorView(false);
       }
     } catch (error) {
       console.log('error in create note api', error);
+      showMessageonTheScreen('Failed to create note');
     } finally {
       hideLoader();
     }
-  }, [colorView, noteColor, noteName, userId]);
+  }, [colorView, noteColor, noteName, userId, showLoader, hideLoader, getNoteData, closeBottomSheet]);
 
   const editNote = useCallback(
     async (editWithNote, noteId, name, color, noteDesc, isColorView) => {
@@ -120,14 +130,18 @@ const NotesScreen = () => {
         const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
         if (response?.success === true) {
           getNoteData(false, false);
+          if (!editWithNote) {
+            closeBottomSheet();
+          }
         }
       } catch (error) {
         console.log('error in update note api', error);
+        showMessageonTheScreen('Failed to update note');
       } finally {
         hideLoader();
       }
     },
-    [colorView, noteColor, noteName, singleNoteData, userId],
+    [colorView, noteColor, noteName, singleNoteData, userId, showLoader, hideLoader, getNoteData, closeBottomSheet],
   );
 
   const deleteNote = useCallback(async noteId => {
@@ -139,10 +153,11 @@ const NotesScreen = () => {
       }
     } catch (error) {
       console.log('error in delete note api', error);
+      showMessageonTheScreen('Failed to delete note');
     } finally {
       hideLoader();
     }
-  }, []);
+  }, [showLoader, hideLoader, getNoteData]);
 
   const handleDeleteNotePress = useCallback((noteId) => {
     setNoteToDelete(noteId);
@@ -166,6 +181,15 @@ const NotesScreen = () => {
   const closeBottomSheet = useCallback(() => {
     refRBSheet.current.hide();
   }, []);
+
+  const handleCreateNotePress = useCallback(() => {
+    setEditBottomSheet(false);
+    setSingleNoteData({});
+    setNoteName('');
+    setNoteColor('');
+    setColorView(false);
+    openBottomSheet();
+  }, [openBottomSheet]);
 
   const renderHeader = useCallback(
     () => (
@@ -344,11 +368,7 @@ const NotesScreen = () => {
           position="absolute"
           alignSelf="center"
           bottom={verticalScale(10)}
-          onPress={() => {
-            setEditBottomSheet(false);
-            setSingleNoteData({});
-            openBottomSheet();
-          }}
+          onPress={handleCreateNotePress}
         />
 
         <ConfirmationDialog

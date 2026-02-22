@@ -41,8 +41,15 @@ const SupportScreen = () => {
   const userId = user?._id;
 
   const submit = useCallback(async () => {
+    if (!issueDesc?.trim()) {
+      showMessageonTheScreen('Please describe your issue');
+      return;
+    }
+
     const formdata = new FormData();
-    formdata.append('image', imageFile);
+    if (imageFile?.uri) {
+      formdata.append('image', imageFile);
+    }
     formdata.append('supportType', selectedIssue);
     formdata.append('supportMessage', issueDesc);
     formdata.append('userId', userId);
@@ -51,25 +58,32 @@ const SupportScreen = () => {
       showLoader();
       const response = await apiPost(Api.support, '', formdata);
       if (response?.success) {
-        showMessageonTheScreen(response.message);
+        showMessageonTheScreen(response.message || 'Support request submitted');
         setSelectedIssue('');
         setImageFile({});
+        setIssueDesc('');
+      } else {
+        showMessageonTheScreen('Failed to submit support request');
       }
     } catch (error) {
-      console.log('error in upload image api', error);
+      console.log('error in submit support api', error);
+      showMessageonTheScreen('Failed to submit support request');
     } finally {
       hideLoader();
     }
-  }, [imageFile, selectedIssue, issueDesc, userId]);
+  }, [imageFile, selectedIssue, issueDesc, userId, showLoader, hideLoader]);
 
   const handleSubmit = useCallback(() => {
-    if (selectedIssue) {
-      submit();
-    } else {
-      const message = strings.selectIssue;
-      showMessageonTheScreen(message);
+    if (!selectedIssue) {
+      showMessageonTheScreen(strings.selectIssue);
+      return;
     }
-  }, [selectedIssue, submit]);
+    if (!issueDesc?.trim()) {
+      showMessageonTheScreen('Please describe your issue');
+      return;
+    }
+    submit();
+  }, [selectedIssue, issueDesc, submit]);
 
   const handleSelectFromGallery = useCallback(async () => {
     const result = await launchImageLibrary(options);
@@ -190,7 +204,7 @@ const SupportScreen = () => {
         </View>
       </ScrollView>
     ),
-    [handleSelectFromGallery, renderIssue, imageFile, colorTheme.textColor],
+    [handleSelectFromGallery, renderIssue, imageFile.uri, colorTheme.textColor],
   );
 
   return (

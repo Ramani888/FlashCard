@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback, useRef, useEffect} from 'react';
+import React, {useState, useMemo, useCallback, useEffect, memo} from 'react';
 import {
   Image,
   StyleSheet,
@@ -30,100 +30,127 @@ const CreateCardScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const {showLoader, hideLoader} = useLoader();
+  const colorTheme = useTheme();
+  
+  // Get params
+  const {folderId, setId, initialData, editNote} = route.params || {};
+  
+  // Get user from Redux state
+  const userId = useAppSelector(state => state.auth.user?._id);
+  
+  // Form state
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
   const [noteVisible, setNoteVisible] = useState(false);
   const [note, setNote] = useState('');
-  const {folderId, setId, initialData, editNote} = route.params;
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const colorTheme = useTheme();
-  
-  // Get user from Redux state instead of global
-  const user = useAppSelector(state => state.auth.user);
-  const userId = user?._id;
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => setKeyboardOpen(true),
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => setKeyboardOpen(false),
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
+  // Initialize form with existing data (edit mode)
   useEffect(() => {
     if (initialData) {
-      setTop(initialData?.top);
-      setBottom(initialData?.bottom);
-    }
-    if (editNote) {
-      setNoteVisible(true);
-      setNote(initialData?.note);
+      setTop(initialData.top || '');
+      setBottom(initialData.bottom || '');
+      
+      if (editNote) {
+        setNoteVisible(true);
+        setNote(initialData.note || '');
+      }
     }
   }, [initialData, editNote]);
 
-  // ======================================== Api ======================================== //
+  // ======================================== API Calls ======================================== //
 
-  const createCard = async () => {
+  const createCard = useCallback(async () => {
+    if (!userId) {
+      showMessageonTheScreen('User not found');
+      return;
+    }
+
     const rawData = {
-      top: top,
-      bottom: bottom,
-      userId: userId,
-      folderId: folderId,
-      setId: setId,
-      note: note,
+      top,
+      bottom,
+      userId,
+      folderId,
+      setId,
+      note,
     };
 
     try {
       showLoader();
       const response = await apiPost(Api.card, '', JSON.stringify(rawData));
-      if (response.success === true) {
-        showMessageonTheScreen(response?.message);
+      if (response?.success) {
+        showMessageonTheScreen(response.message);
         navigation.goBack();
       }
     } catch (err) {
-      console.log('Error creating card:', err);
+      console.error('Error creating card:', err);
+      showMessageonTheScreen('Failed to create card');
     } finally {
       hideLoader();
     }
-  };
+  }, [userId, top, bottom, folderId, setId, note, showLoader, hideLoader, navigation]);
 
-  const updateCard = async () => {
+  const updateCard = useCallback(async () => {
+    if (!userId || !initialData?._id) {
+      showMessageonTheScreen('Invalid data');
+      return;
+    }
+
     const rawData = {
-      _id: initialData?._id,
-      userId: userId,
-      folderId: folderId,
-      setId: setId,
-      top: top,
-      bottom: bottom,
-      note: note,
-      isBlur: initialData?.isBlur === false ? 0 : 1,
+      _id: initialData._id,
+      userId,
+      folderId,
+      setId,
+      top,
+      bottom,
+      note,
+      isBlur: initialData.isBlur === false ? 0 : 1,
     };
+
     try {
       showLoader();
       const response = await apiPut(Api.card, '', JSON.stringify(rawData));
-      if (response.success === true) {
-        showMessageonTheScreen(response?.message);
+      if (response?.success) {
+        showMessageonTheScreen(response.message);
         navigation.goBack();
       }
     } catch (error) {
-      console.log('error in update card', error);
+      console.error('Error updating card:', error);
+      showMessageonTheScreen('Failed to update card');
     } finally {
       hideLoader();
     }
-  };
+  }, [userId, initialData, folderId, setId, top, bottom, note, showLoader, hideLoader, navigation]);
 
-  // ======================================== End ======================================== //
+  // ======================================== Handlers ======================================== //
 
   const handleTopChange = useCallback(text => setTop(text), []);
   const handleBottomChange = useCallback(text => setBottom(text), []);
+  const handleNoteChange = useCallback(text => setNote(text), []);
+  
+  const toggleNoteVisible = useCallback(() => {
+    setNoteVisible(prev => !prev);
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    if (!top.trim()) {
+      showMessageonTheScreen('Please enter top text');
+      return;
+    }
+    if (!bottom.trim()) {
+      showMessageonTheScreen('Please enter bottom text');
+      return;
+    }
+
+    if (initialData) {
+      updateCard();
+    } else {
+      createCard();
+    }
+  }, [top, bottom, initialData, createCard, updateCard]);
+
+  // ======================================== Memoized Components ======================================== //
+
+  // ======================================== Memoized Components ======================================== //
 
   const header = useMemo(
     () => (
@@ -139,7 +166,7 @@ const CreateCardScreen = () => {
         containerStyle={styles.headerStyle}
       />
     ),
-    [],
+    [strings.createCard],
   );
 
   const cardImage = useMemo(
@@ -155,16 +182,26 @@ const CreateCardScreen = () => {
     [],
   );
 
+  const gradientColors = useMemo(() => colorTheme.gradientTheme, [colorTheme.gradientTheme]);
+  
+  const inputContainerStyle = useMemo(
+    () => [styles.inputContainerStyle, styles.topInputStyle],
+    [],
+  );
+
+  // ======================================== Render ======================================== //
+
+  // ======================================== Render ======================================== //
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={[styles.container, {backgroundColor: colorTheme.background}]}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled">
-        <LinearGradient
-          colors={colorTheme.gradientTheme}
-          style={styles.headerContainer}>
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
+        <LinearGradient colors={gradientColors} style={styles.headerContainer}>
           {header}
           {cardImage}
         </LinearGradient>
@@ -178,12 +215,10 @@ const CreateCardScreen = () => {
             height={verticalScale(45)}
             width="100%"
             backgroundColor={colorTheme.listAndBoxColor}
-            inputContainerStyles={[
-              styles.inputContainerStyle,
-              styles.topInputStyle,
-            ]}
+            inputContainerStyles={inputContainerStyle}
             inputStyles={{color: colorTheme.textColor}}
           />
+          
           <CustomeInputField
             placeholder={strings.bottom}
             height={verticalScale(180)}
@@ -204,7 +239,7 @@ const CreateCardScreen = () => {
             <CustomeInputField
               placeholder={strings.note}
               height={verticalScale(180)}
-              onChangeText={setNote}
+              onChangeText={handleNoteChange}
               value={note}
               textArea={true}
               placeholderTextColor={Color.Gray}
@@ -223,7 +258,7 @@ const CreateCardScreen = () => {
               styles.optionalContainer,
               {backgroundColor: colorTheme.listAndBoxColor},
             ]}
-            onPress={() => setNoteVisible(!noteVisible)}>
+            onPress={toggleNoteVisible}>
             <Text style={[styles.optionalText, {color: colorTheme.textColor}]}>
               {strings.homeTab3}
             </Text>
@@ -241,13 +276,7 @@ const CreateCardScreen = () => {
             marginTop={verticalScale(35)}
             marginBottom={verticalScale(0)}
             bottom={verticalScale(10)}
-            onPress={() => {
-              if (initialData) {
-                updateCard();
-              } else {
-                createCard();
-              }
-            }}
+            onPress={handleSubmit}
           />
         </View>
       </ScrollView>
@@ -255,7 +284,7 @@ const CreateCardScreen = () => {
   );
 };
 
-export default React.memo(CreateCardScreen);
+export default memo(CreateCardScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -287,9 +316,10 @@ const styles = StyleSheet.create({
     borderColor: Color.LightGray,
     borderRadius: scale(10),
     marginBottom: verticalScale(15),
-    // backgroundColor: 'red',
   },
-  topInputStyle: {marginTop: verticalScale(15)},
+  topInputStyle: {
+    marginTop: verticalScale(15),
+  },
   imageContainer: {
     alignItems: 'center',
     marginVertical: verticalScale(40),

@@ -180,7 +180,7 @@ const ProfileScreen = () => {
 
   // =================================== Api =================================== //
 
-  const updateProfilePic = async file => {
+  const updateProfilePic = useCallback(async file => {
     var formdata = new FormData();
     formdata.append('picture', file);
     formdata.append('_id', userId);
@@ -188,69 +188,78 @@ const ProfileScreen = () => {
       showLoader();
       const response = await apiPut(Api.profilePic, '', formdata);
       if (response?.success === true) {
-        showMessageonTheScreen(response?.message);
+        showMessageonTheScreen(response?.message || 'Profile picture updated');
         // Update Redux state instead of global
         dispatch(setUser({user: response.user, token: response.user?.token}));
         await AsyncStorage.setItem(Config.STORAGE_KEYS.USER, JSON.stringify(response.user));
+      } else {
+        showMessageonTheScreen('Failed to update profile picture');
       }
     } catch (error) {
       console.log('error in updateProfilePicture api', error);
+      showMessageonTheScreen('Failed to update profile picture');
     } finally {
       hideLoader();
     }
-  };
+  }, [userId, showLoader, hideLoader, dispatch]);
 
-  const getProfileData = async () => {
+  const getProfileData = useCallback(async () => {
     try {
       showLoader();
       const response = await apiGet(
         `${Api.profile}?userId=${userId}`,
       );
-      setUserCreditData(response?.userCreditData);
-      setUserStorageData(response?.userStorageData);
+      setUserCreditData(response?.userCreditData || {});
+      setUserStorageData(response?.userStorageData || {});
       //   setUserSubscriptionData(response?.userSubscriptionData);
       //   setSubscribedPlan(response?.userTierData);
-      AsyncStorage.setItem(
-        'selectedSubscription',
-        JSON.stringify(response?.userTierData),
-      );
+      if (response?.userTierData) {
+        AsyncStorage.setItem(
+          'selectedSubscription',
+          JSON.stringify(response?.userTierData),
+        );
+      }
     } catch (error) {
       console.log('error in get profile api', error);
+      showMessageonTheScreen('Failed to load profile data');
     } finally {
       hideLoader();
     }
-  };
+  }, [userId, showLoader, hideLoader]);
 
-  const updateCredit = async (credit, type) => {
+  const updateCredit = useCallback(async (credit, type) => {
     const rawData = {userId: userId, credit: credit, type: type};
     try {
       showLoader();
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
-      if (response.success) {
-        getProfileData(false);
+      if (response?.success) {
+        getProfileData();
+      } else {
+        showMessageonTheScreen('Failed to update credits');
       }
     } catch (error) {
       console.error('Error updating credit:', error);
+      showMessageonTheScreen('Failed to update credits');
     } finally {
       hideLoader();
     }
-  };
+  }, [userId, showLoader, hideLoader, getProfileData]);
 
   // =================================== End =================================== //
 
-  const openEmailBottomSheets = () => {
+  const openEmailBottomSheets = useCallback(() => {
     refEmailRBSheet.current.open();
-  };
+  }, []);
 
-  const closeEmailBottomSheet = () => {
+  const closeEmailBottomSheet = useCallback(() => {
     refEmailRBSheet.current.close();
-  };
+  }, []);
 
-  const handleShowAd = () => {
+  const handleShowAd = useCallback(() => {
     if (adRef.current) {
       adRef.current.showAd();
     }
-  };
+  }, []);
 
   const handleTabPress = useCallback(
     tabname => {
@@ -267,7 +276,7 @@ const ProfileScreen = () => {
     [navigation],
   );
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       showLoader();
       await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
@@ -280,12 +289,13 @@ const ProfileScreen = () => {
       });
     } catch (error) {
       console.log('error in logout', error);
+      showMessageonTheScreen('Failed to logout');
     } finally {
       hideLoader();
     }
-  };
+  }, [showLoader, hideLoader, dispatch, navigation]);
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = useCallback(async () => {
     try {
       showLoader();
       const response = await apiDelete(Api.deleteAccount);
@@ -306,7 +316,7 @@ const ProfileScreen = () => {
     } finally {
       hideLoader();
     }
-  };
+  }, [showLoader, hideLoader, dispatch, navigation]);
 
   const renderHeader = useCallback(() => {
     return (
@@ -327,7 +337,7 @@ const ProfileScreen = () => {
         handleLanguageSaved={handleLanguageSaved}
       />
     );
-  }, [selectedLanguage]);
+  }, [selectedLanguage, user?.picture, updateProfilePic, handleLogout, handleDeleteAccount, openEmailBottomSheets, handleLanguageSaved]);
 
   const renderTab = useCallback(
     ({item}) => {
@@ -372,7 +382,7 @@ const ProfileScreen = () => {
         </View>
       </RBSheet>
     );
-  }, []);
+  }, [closeEmailBottomSheet]);
 
   const currentStorage = userStorageData?.coveredStorage;
   const totalStorage = userStorageData?.storage;
