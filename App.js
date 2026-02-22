@@ -6,6 +6,7 @@ import store from './src/redux/newStore';
 import Color from './src/component/Color';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import {initializeAds} from './src/screen/ads/AdConfig';
+import {useAppLaunchInterstitial} from './src/screen/ads/InterstitialAds';
 import AppNav from './src/navigation/AppNav';
 import {MenuProvider} from 'react-native-popup-menu';
 import {withIAPContext} from 'react-native-iap';
@@ -27,6 +28,9 @@ import {AuthProvider} from './src/context';
 const App = gestureHandlerRootHOC(() => {
   const [updatedModal, setUpdateModal] = useState(false);
   const [_updateAvailable, setUpdateAvailable] = useState(false);
+
+  // Initialize app open ad - shows automatically on app launch
+  useAppLaunchInterstitial();
 
   const getVersions = useCallback(async () => {
     try {

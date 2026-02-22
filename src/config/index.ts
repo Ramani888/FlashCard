@@ -41,7 +41,7 @@ const Config = {
   // Ad Unit IDs (Replace with actual IDs in production)
   ADS: {
     BANNER_ID: '__BANNER_AD_ID__',
-    INTERSTITIAL_ID: '__INTERSTITIAL_AD_ID__',
+    INTERSTITIAL_ID: 'ca-app-pub-9823475062473479/4712871516',
     REWARDED_ID: '__REWARDED_AD_ID__',
   },
 };
