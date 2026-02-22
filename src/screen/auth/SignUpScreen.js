@@ -103,9 +103,6 @@ const SignUpScreen = () => {
     email: Yup.string()
       .email(strings.invalidEmail)
       .required(strings.emailRequired),
-    userName: Yup.string()
-      .min(3, strings.usernameError)
-      .required(strings.usernameRequired),
     password: Yup.string()
       .min(8, strings.passwordError)
       .required(strings.passwordRequired),
@@ -137,7 +134,6 @@ const SignUpScreen = () => {
       <Formik
         initialValues={{
           email: '',
-          userName: '',
           password: '',
         }}
         validationSchema={validationSchema}
@@ -194,30 +190,6 @@ const SignUpScreen = () => {
                 <View style={styles.iconWrapper}>
                   <MaterialCommunityIcons
                     name={'email-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
-              inputContainerStyles={styles.inputContainer}
-            />
-
-            <CustomeInputField
-              key={'userName'}
-              placeholder={strings.enterUsername}
-              placeholderTextColor={Color.mediumGray}
-              onChangeText={handleChange('userName')}
-              onBlur={handleBlur('userName')}
-              value={values?.userName}
-              errors={errors?.userName}
-              touched={touched?.userName}
-              iconLeft={true}
-              inputStyles={styles.inputStyles}
-              errorTextStyles={styles.errorText}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'account-outline'}
                     size={scale(17)}
                     color={Color.Gray}
                   />

@@ -18,7 +18,6 @@ import Font from '../../component/Font';
 import CustomeInputField from '../../custome/CustomeInputField';
 import {MenuProvider} from 'react-native-popup-menu';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import UserNameBottomSheetsContent from '../../component/profile/profile/UserNameBottomSheetsContent';
 import EmailBottomSheetsContent from '../../component/profile/profile/EmailBottomSheetsContent';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
@@ -109,7 +108,6 @@ const ProfileScreen = () => {
   const dispatch = useAppDispatch();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [userCreditData, setUserCreditData] = useState({});
   const [userStorageData, setUserStorageData] = useState({});
@@ -121,7 +119,6 @@ const ProfileScreen = () => {
     flag: require('../../Assets/FlagImage/UsaFlag.png'),
   });
 
-  const refUserNameRBSheet = useRef();
   const refEmailRBSheet = useRef();
   const adRef = useRef();
   const colorTheme = useTheme();
@@ -153,7 +150,6 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     setEmail(user?.email);
-    setUserName(user?.userName);
     getProfileData();
   }, [isFocused, user]);
 
@@ -241,14 +237,6 @@ const ProfileScreen = () => {
 
   // =================================== End =================================== //
 
-  const openUserNameBottomSheets = () => {
-    refUserNameRBSheet.current.open();
-  };
-
-  const closeUserNameBottomSheet = () => {
-    refUserNameRBSheet.current.close();
-  };
-
   const openEmailBottomSheets = () => {
     refEmailRBSheet.current.open();
   };
@@ -310,7 +298,6 @@ const ProfileScreen = () => {
         setSelectedLanguage={setSelectedLanguage}
         updateProfilePic={updateProfilePic}
         handleLogout={handleLogout}
-        openUserNameBottomSheets={openUserNameBottomSheets}
         openEmailBottomSheets={openEmailBottomSheets}
         handleLanguageSaved={handleLanguageSaved}
       />
@@ -341,26 +328,6 @@ const ProfileScreen = () => {
     },
     [handleTabPress],
   );
-
-  const userNameBottomSheets = useCallback(() => {
-    return (
-      <RBSheet
-        ref={refUserNameRBSheet}
-        height={height * 0.34}
-        openDuration={250}
-        draggable={true}
-        customStyles={{
-          container: styles.bottomSheetContainer,
-          draggableIcon: styles.dragableIcon,
-        }}>
-        <View style={styles.sheetContainer}>
-          <UserNameBottomSheetsContent
-            closeUserNameBottomSheet={closeUserNameBottomSheet}
-          />
-        </View>
-      </RBSheet>
-    );
-  }, []);
 
   const emailBottomSheets = useCallback(() => {
     return (
@@ -404,25 +371,6 @@ const ProfileScreen = () => {
           />
 
           <View style={styles.bodyContainer}>
-          <View>
-            <Text style={styles.label}>{strings.userName}</Text>
-            <CustomeInputField
-              placeholder={strings.userName}
-              placeholderTextColor={Color.mediumGray}
-              onChangeText={setUserName}
-              value={username}
-              editable={false}
-              borderWidth={1}
-              borderColor={Color.LightGray}
-              height={scale(40)}
-              marginTop={verticalScale(5)}
-              width="100%"
-              backgroundColor={colorTheme.listAndBoxColor}
-              inputContainerStyles={styles.inputContainer}
-              inputStyles={[styles.inputStyles, {color: colorTheme.textColor}]}
-            />
-          </View>
-
           <View>
             <Text style={styles.label}>{strings.email}</Text>
             <CustomeInputField
@@ -528,7 +476,6 @@ const ProfileScreen = () => {
           ))}
         </View>
 
-        {userNameBottomSheets()}
         {emailBottomSheets()}
       </ScrollView>
     </LinearGradient>
