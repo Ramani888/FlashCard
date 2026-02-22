@@ -23,11 +23,18 @@ import strings from '../../language/strings';
 
 const {width, height} = Dimensions.get('window');
 
-// Memoized keyboard behavior constants
-const IOS_KEYBOARD_BEHAVIOR = 'padding';
-const ANDROID_KEYBOARD_BEHAVIOR = 'height';
-const IOS_KEYBOARD_OFFSET = 0;
-const ANDROID_KEYBOARD_OFFSET = 20;
+// Memoized search icon component
+const SearchIcon = memo(() => (
+  <View style={styles.searchIcon}>
+    <AntDesign
+      name="search1"
+      size={scale(14)}
+      color={Color.White}
+    />
+  </View>
+));
+
+SearchIcon.displayName = 'SearchIcon';
 
 const SetAndFolderScreen = () => {
   const [search, setSearch] = useState(false);
@@ -42,9 +49,20 @@ const SetAndFolderScreen = () => {
   // Memoize whether to show image folder icon
   const isImageFolder = useMemo(() => tab === 'SET', [tab]);
 
+  // Memoize keyboard avoiding view props
+  const keyboardAvoidingProps = useMemo(() => ({
+    behavior: Platform.OS === 'ios' ? 'padding' : 'height',
+    keyboardVerticalOffset: Platform.OS === 'ios' ? 0 : 20,
+    enabled: Platform.OS === 'ios',
+  }), []);
+
+  // Memoize search input icon
+  const searchIconComponent = useMemo(() => <SearchIcon />, []);
+
   const handleFolderClick = useCallback((folderId) => {
     setFolderId(folderId);
     setTab('SET');
+    setShowFolder(false);
   }, []);
 
   const handleCreateSetClick = useCallback((folderId) => {
@@ -58,12 +76,15 @@ const SetAndFolderScreen = () => {
     setTab('SET');
     setFolderId('');
     setSearchValue('');
+    setSearch(false);
   }, []);
 
   const handleFoldersTabClick = useCallback(() => {
     setTab('FOLDERS');
     setOpenSetSheet(false);
     setSearchValue('');
+    setSearch(false);
+    setShowFolder(false);
   }, []);
 
   const renderHeader = useCallback(() => (
@@ -117,9 +138,7 @@ const SetAndFolderScreen = () => {
       <MenuProvider>
         <KeyboardAvoidingView
           style={styles.bodyContainer}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-          enabled={Platform.OS === 'ios' ? true : false}>
+          {...keyboardAvoidingProps}>
           <View
             style={[styles.mainView, {backgroundColor: colorTheme.background1}]}>
             <LinearGradient
@@ -127,29 +146,20 @@ const SetAndFolderScreen = () => {
               style={styles.headerContainer}>
             {renderHeader()}
             {search && (
-              <View style={{paddingLeft: scale(20), paddingRight: scale(20)}}>
+              <View style={styles.searchContainer}>
                 <CustomeInputField
                   placeholder={strings.search}
                   placeholderTextColor={Color.Gainsboro}
                   onChangeText={setSearchValue}
                   value={searchValue}
                   backgroundColor={'#3a6675'}
-                  // width={width}
                   height={height * 0.065}
                   iconLeft={true}
-                  IconLeftComponent={
-                    <View
-                      style={styles.searchIcon}
-                      onPress={() => setSearch(!search)}>
-                      <AntDesign
-                        name="search1"
-                        size={scale(14)}
-                        color={Color.White}
-                      />
-                    </View>
-                  }
+                  IconLeftComponent={searchIconComponent}
                   inputContainerStyles={styles.inputContainerStyle}
                   inputStyles={styles.inputStyles}
+                  autoCorrect={false}
+                  autoCapitalize="none"
                 />
               </View>
             )}
@@ -187,10 +197,11 @@ const SetAndFolderScreen = () => {
       </MenuProvider>
     );
   }, [
+    keyboardAvoidingProps,
     renderHeader,
     search,
-    tab,
     searchValue,
+    searchIconComponent,
     renderButtons,
     colorTheme.background1,
     colorTheme.gradientTheme,
@@ -198,6 +209,7 @@ const SetAndFolderScreen = () => {
     loading,
     openSetSheet,
     showFolder,
+    tab,
     handleFolderClick,
     handleCreateSetClick,
   ]);
@@ -246,6 +258,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  searchContainer: {
+    paddingHorizontal: scale(20),
   },
   loadingIndicator: {
     alignSelf: 'center',

@@ -31,11 +31,107 @@ import useSetApi from '../../hooks/useSetApi';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const {height} = Dimensions.get('window');
-const ITEM_HEIGHT = verticalScale(60); // Approximate height for getItemLayout
+const ITEM_HEIGHT = verticalScale(75); // Updated for accurate item height with folder
 
-// Memoized folder icon require
+// Memoized icon requires
 const folderIcon = require('../../Assets/Img/folder.png');
 const cardIcon = require('../../Assets/Img/cardIcon.png');
+
+// Memoized SetItem component for better performance
+const SetItem = memo(({item, onPress, onMenuPress, showFolder, colorTheme, colorView, menuOptionsStyle, openBottomSheet, handleDeleteSetPress, handleRemoveFolderPress, folderId, getSetData}) => {
+  const handlePress = useCallback(() => {
+    onPress(item);
+  }, [item, onPress]);
+
+  const handleMenuTriggerPress = useCallback(() => {
+    onMenuPress(item);
+  }, [item, onMenuPress]);
+
+  return (
+    <View style={styles.itemContainer}>
+      <Pressable
+        style={[
+          styles.setContainer,
+          {
+            backgroundColor: item?.isHighlight
+              ? item.color
+              : colorTheme.listAndBoxColor,
+          },
+        ]}
+        onPress={handlePress}>
+        <View style={styles.rowContainer}>
+          {!colorView && (
+            <View
+              style={[styles.colorBox, {backgroundColor: item?.color}]}
+            />
+          )}
+          <Text
+            style={[
+              styles.setTitle,
+              {
+                color: item?.isHighlight
+                  ? Color.Black
+                  : colorTheme.textColor,
+              },
+            ]}
+            numberOfLines={1}>
+            {item?.name}
+          </Text>
+        </View>
+        <View style={styles.rowWithGap}>
+          <View style={styles.subSetContainer}>
+            <Text
+              style={[styles.subSetText, {color: colorTheme.textColor1}]}>
+              {item?.cardCount}
+            </Text>
+            <Image
+              source={cardIcon}
+              style={styles.cardIcon}
+              tintColor={colorTheme.textColor1}
+              resizeMode="contain"
+            />
+          </View>
+          <Menu>
+            <MenuTrigger onPress={handleMenuTriggerPress}>
+              <Entypo
+                name="dots-three-vertical"
+                size={scale(13)}
+                color={Color.Black}
+                style={styles.dotsIcon}
+              />
+            </MenuTrigger>
+            <MenuOptions customStyles={menuOptionsStyle}>
+              <ModalContent
+                type={'Set'}
+                openBottomSheet={openBottomSheet}
+                setEditBottomSheet={() => {}}
+                onDeletePress={handleDeleteSetPress}
+                onRemoveFolderPress={handleRemoveFolderPress}
+                folderId={folderId}
+                singleItem={item}
+                getSetData={getSetData}
+              />
+            </MenuOptions>
+          </Menu>
+        </View>
+      </Pressable>
+      {showFolder && item?.folderName && (
+        <View style={[styles.folderContainer, styles.alignSelf]}>
+          <Image
+            source={folderIcon}
+            style={styles.folderIcon}
+            resizeMode="contain"
+          />
+          <Text style={styles.folderText} numberOfLines={1}>
+            {item.folderName}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+});
+
+SetItem.displayName = 'SetItem';
 
 const SetComponent = ({
   folderId,
@@ -133,111 +229,47 @@ const SetComponent = ({
   }, [prepareForCreate, openBottomSheet]);
 
   // Memoized keyExtractor for FlatList
-  const keyExtractor = useCallback((item, index) => item?._id || index.toString(), []);
+  const keyExtractor = useCallback((item) => item?._id || String(item?.name), []);
 
-  // getItemLayout for FlatList optimization
+  // getItemLayout for FlatList optimization - fixed item heights for better performance
   const getItemLayout = useCallback((data, index) => ({
     length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,
     index,
   }), []);
 
+  // Handle item press
+  const handleItemPress = useCallback((item) => {
+    navigation.navigate(ScreenName.setDetail, {
+      setName: item?.name,
+      setId: item?._id,
+      folderId: folderId,
+    });
+  }, [navigation, folderId]);
+
+  // Handle menu trigger press
+  const handleMenuPress = useCallback((item) => {
+    setSingleSetData(item);
+  }, [setSingleSetData]);
+
   const renderSet = useCallback(
-    ({item}) => {
-      return (
-        <View style={styles.itemContainer}>
-          <Pressable
-            style={[
-              styles.setContainer,
-              {
-                backgroundColor: item?.isHighlight
-                  ? item.color
-                  : colorTheme.listAndBoxColor,
-              },
-            ]}
-            onPress={() =>
-              navigation.navigate(ScreenName.setDetail, {
-                setName: item?.name,
-                setId: item?._id,
-                folderId: folderId,
-              })
-            }>
-            <View style={styles.rowContainer}>
-              {!colorView && (
-                <Text
-                  style={[styles.colorBox, {backgroundColor: item?.color}]}
-                />
-              )}
-              <Text
-                style={[
-                  styles.setTitle,
-                  {
-                    color: item?.isHighlight
-                      ? Color.Black
-                      : colorTheme.textColor,
-                  },
-                ]}>
-                {item?.name}
-              </Text>
-            </View>
-            <View style={styles.rowWithGap}>
-              <View style={styles.subSetContainer}>
-                <Text
-                  style={[styles.subSetText, {color: colorTheme.textColor1}]}>
-                  {item?.cardCount}
-                </Text>
-                <Image
-                  source={cardIcon}
-                  style={styles.cardIcon}
-                  tintColor={colorTheme.textColor1}
-                />
-              </View>
-              <Menu>
-                <MenuTrigger
-                  onPress={() => {
-                    setSingleSetData(item);
-                  }}>
-                  <Entypo
-                    name="dots-three-vertical"
-                    size={scale(13)}
-                    color={Color.Black}
-                    style={styles.dotsIcon}
-                  />
-                </MenuTrigger>
-                <MenuOptions customStyles={menuOptionsStyle}>
-                  <ModalContent
-                    type={'Set'}
-                    openBottomSheet={openBottomSheet}
-                    setEditBottomSheet={setEditBottomSheet}
-                    onDeletePress={handleDeleteSetPress}
-                    onRemoveFolderPress={handleRemoveFolderPress}
-                    folderId={folderId}
-                    singleItem={item}
-                    getSetData={getSetData}
-                  />
-                </MenuOptions>
-              </Menu>
-            </View>
-          </Pressable>
-          {showFolder && (
-            <View style={[styles.folderContainer, styles.alignSelf]}>
-              <Image
-                source={folderIcon}
-                style={styles.folderIcon}
-              />
-              <Text
-                style={[
-                  styles.folderText,
-                  {marginLeft: item?.folderName ? scale(5) : 0},
-                ]}>
-                {item?.folderName ? item?.folderName : ''}
-              </Text>
-            </View>
-          )}
-        </View>
-      );
-    },
-    [colorTheme, colorView, folderId, navigation, showFolder, menuOptionsStyle, openBottomSheet, getSetData, setSingleSetData, handleDeleteSetPress, handleRemoveFolderPress],
+    ({item}) => (
+      <SetItem
+        item={item}
+        onPress={handleItemPress}
+        onMenuPress={handleMenuPress}
+        showFolder={showFolder}
+        colorTheme={colorTheme}
+        colorView={colorView}
+        menuOptionsStyle={menuOptionsStyle}
+        openBottomSheet={openBottomSheet}
+        handleDeleteSetPress={handleDeleteSetPress}
+        handleRemoveFolderPress={handleRemoveFolderPress}
+        folderId={folderId}
+        getSetData={getSetData}
+      />
+    ),
+    [handleItemPress, handleMenuPress, showFolder, colorTheme, colorView, menuOptionsStyle, openBottomSheet, handleDeleteSetPress, handleRemoveFolderPress, folderId, getSetData],
   );
 
   const BottomSheets = useCallback(() => {
@@ -289,12 +321,15 @@ const SetComponent = ({
           data={setData}
           renderItem={renderSet}
           keyExtractor={keyExtractor}
+          getItemLayout={getItemLayout}
           showsVerticalScrollIndicator={false}
           style={styles.flatlist}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={5}
+          initialNumToRender={15}
+          maxToRenderPerBatch={15}
+          windowSize={10}
           removeClippedSubviews={true}
+          updateCellsBatchingPeriod={50}
+          maxToRenderPerBatchDuringScrolling={5}
         />
       ) : (
         !loading && <NoDataView content={strings.setNotFound} />
@@ -376,6 +411,7 @@ const styles = StyleSheet.create({
     width: scale(13),
     height: verticalScale(35),
     borderRadius: scale(10),
+    marginRight: 0,
   },
   setTitle: {
     fontSize: scale(15),
@@ -435,6 +471,8 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     textTransform: 'capitalize',
+    marginLeft: scale(5),
+    flex: 1,
   },
   indicatorStyle: {
     marginTop: verticalScale(10),

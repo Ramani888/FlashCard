@@ -20,10 +20,70 @@ import ActionSheet from 'react-native-actions-sheet';
 import useFolderApi from '../../hooks/useFolderApi';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
-const ITEM_HEIGHT = verticalScale(55); // Approximate height for getItemLayout
+const ITEM_HEIGHT = verticalScale(65); // Updated for accurate item height
 
 // Memoized no data style
 const noDataStyle = {marginTop: verticalScale(-70)};
+
+// Memoized FolderItem component for better performance
+const FolderItem = memo(({item, onPress, onMenuPress, colorView, colorTheme, menuOptionsStyle, openBottomSheet, handleDeleteFolderPress, handleCreateSetClick}) => {
+  const handlePress = useCallback(() => {
+    onPress(item._id);
+  }, [item._id, onPress]);
+
+  const handleMenuTriggerPress = useCallback(() => {
+    onMenuPress(item);
+  }, [item, onMenuPress]);
+
+  return (
+    <Pressable
+      style={[
+        styles.folderItem,
+        {
+          backgroundColor: item?.isHighlight
+            ? item.color
+            : colorTheme.listAndBoxColor,
+        },
+      ]}
+      onPress={handlePress}>
+      <View style={styles.folderInfo}>
+        {!colorView && (
+          <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+        )}
+        <Text
+          style={[
+            styles.folderName,
+            {color: item?.isHighlight ? Color.Black : colorTheme.textColor},
+          ]}
+          numberOfLines={1}>
+          {item.name}
+        </Text>
+      </View>
+      <Menu>
+        <MenuTrigger onPress={handleMenuTriggerPress}>
+          <Entypo
+            name="dots-three-vertical"
+            size={scale(13)}
+            color={Color.Black}
+            style={styles.dotsIcon}
+          />
+        </MenuTrigger>
+        <MenuOptions customStyles={menuOptionsStyle}>
+          <ModalContent
+            type={'Folder'}
+            openBottomSheet={openBottomSheet}
+            setEditBottomSheet={() => {}}
+            onDeletePress={handleDeleteFolderPress}
+            handleCreateSetClick={handleCreateSetClick}
+            singleItem={item}
+          />
+        </MenuOptions>
+      </Menu>
+    </Pressable>
+  );
+});
+
+FolderItem.displayName = 'FolderItem';
 
 const FolderComponent = ({
   onFolderClick,
@@ -91,75 +151,48 @@ const FolderComponent = ({
   }, [prepareForCreate, openBottomSheet]);
 
   // Memoized keyExtractor for FlatList
-  const keyExtractor = useCallback((item, index) => item?._id || index.toString(), []);
+  const keyExtractor = useCallback((item) => item?._id || String(item?.name), []);
+
+  // getItemLayout for FlatList optimization - fixed item heights for better performance
+  const getItemLayout = useCallback((data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  }), []);
+
+  // Handle folder press
+  const handleFolderPress = useCallback((folderId) => {
+    onFolderClick(folderId);
+    setSearchValue('');
+  }, [onFolderClick, setSearchValue]);
+
+  // Handle menu trigger press
+  const handleMenuPress = useCallback((item) => {
+    setSingleFolderItem(item);
+  }, [setSingleFolderItem]);
 
   const renderFolder = useCallback(
-    ({item}) => {
-      return (
-        <Pressable
-          style={[
-            styles.folderItem,
-            {
-              backgroundColor: item?.isHighlight
-                ? item.color
-                : colorTheme.listAndBoxColor,
-            },
-          ]}
-          onPress={() => {
-            onFolderClick(item._id);
-            setSearchValue('');
-          }}>
-          <View style={styles.folderInfo}>
-            {!colorView && (
-              <View style={[styles.iconColor, {backgroundColor: item.color}]} />
-            )}
-            <Text
-              style={[
-                styles.folderName,
-                {color: item?.isHighlight ? Color.Black : colorTheme.textColor},
-              ]}>
-              {item.name}
-            </Text>
-          </View>
-          <Menu>
-            <MenuTrigger
-              onPress={() => {
-                setSingleFolderItem(item);
-              }}>
-              <Entypo
-                name="dots-three-vertical"
-                size={scale(13)}
-                color={Color.Black}
-                style={styles.dotsIcon}
-              />
-            </MenuTrigger>
-            <MenuOptions customStyles={menuOptionsStyle}>
-              <ModalContent
-                type={'Folder'}
-                openBottomSheet={openBottomSheet}
-                setEditBottomSheet={setEditBottomSheet}
-                onDeletePress={handleDeleteFolderPress}
-                handleCreateSetClick={handleCreateSetClick}
-                singleItem={item}
-              />
-            </MenuOptions>
-          </Menu>
-        </Pressable>
-      );
-    },
-    [
-      colorView,
-      colorTheme.listAndBoxColor,
-      colorTheme.textColor,
-      onFolderClick,
-      setSearchValue,
-      menuOptionsStyle,
-      openBottomSheet,
-      handleDeleteFolderPress,
-      handleCreateSetClick,
-      setSingleFolderItem,
-    ],
+    ({item}) => (
+      <FolderItem
+        item={item}
+        onPress={handleFolderPress}
+        onMenuPress={handleMenuPress}
+        colorView={colorView}
+        colorTheme={colorTheme}
+        menuOptionsStyle={menuOptionsStyle}
+        openBottomSheet={openBottomSheet}
+        handleDeleteFolderPress={handleDeleteFolderPress}
+        handleCreateSetClick={handleCreateSetClick}
+      />
+    ),
+    [handleFolderPress, handleMenuPress, colorView, colorTheme, menuOptionsStyle, openBottomSheet, handleDeleteFolderPress, handleCreateSetClick],
   );
+
+  // Handle "All Set" folder press
+  const handleAllSetPress = useCallback(() => {
+    onFolderClick('');
+    setSearchValue('');
+  }, [onFolderClick, setSearchValue]);
 
   const BottomSheets = useCallback(() => {
     return (
@@ -207,10 +240,7 @@ const FolderComponent = ({
       <View style={styles.bodyContainer}>
         <Pressable
           style={styles.folderContainer}
-          onPress={() => {
-            onFolderClick('');
-            setSearchValue('');
-          }}>
+          onPress={handleAllSetPress}>
           <Text style={styles.folderText}>{strings.allSet}</Text>
         </Pressable>
 
@@ -219,11 +249,15 @@ const FolderComponent = ({
             data={folderData}
             renderItem={renderFolder}
             keyExtractor={keyExtractor}
+            getItemLayout={getItemLayout}
             style={styles.flatlist}
-            initialNumToRender={10}
-            maxToRenderPerBatch={10}
-            windowSize={5}
+            showsVerticalScrollIndicator={false}
+            initialNumToRender={15}
+            maxToRenderPerBatch={15}
+            windowSize={10}
             removeClippedSubviews={true}
+            updateCellsBatchingPeriod={50}
+            maxToRenderPerBatchDuringScrolling={5}
           />
         ) : (
           !loading && (
@@ -322,7 +356,7 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(10),
-    width: scale(200),
+    flex: 1,
   },
   dotsIcon: {
     backgroundColor: Color.WhiteDefault,
