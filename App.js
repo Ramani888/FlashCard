@@ -19,18 +19,22 @@ import firestore from '@react-native-firebase/firestore';
 import DeviceInfo from 'react-native-device-info';
 import ErrorBoundary from './src/component/ErrorBoundary';
 import {AuthProvider} from './src/context';
+import {useAppSelector} from './src/redux/hooks';
 
 /**
  * Main App component
  * Provider is now the outermost wrapper (after gesture handler)
  * ErrorBoundary catches and handles any uncaught errors
  */
-const App = gestureHandlerRootHOC(() => {
+const AppContent = () => {
   const [updatedModal, setUpdateModal] = useState(false);
   const [_updateAvailable, setUpdateAvailable] = useState(false);
+  
+  // Get authentication status from Redux
+  const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
 
-  // Initialize app open ad - shows automatically on app launch
-  useAppLaunchInterstitial();
+  // Initialize app open ad - only shows when user is logged in
+  useAppLaunchInterstitial(isAuthenticated);
 
   const getVersions = useCallback(async () => {
     try {
@@ -74,16 +78,13 @@ const App = gestureHandlerRootHOC(() => {
   }, []);
 
   return (
-    // Provider is now the outermost wrapper for proper Redux access
-    <Provider store={store}>
-      <AuthProvider>
-        <ErrorBoundary onError={handleError}>
-          <MenuProvider>
-            <View style={styles.container}>
-              <CheckNetwork />
-              <StatusBar translucent backgroundColor={Color.transparent} />
-              <NavigationContainer>
-                <AppNav />
+    <ErrorBoundary onError={handleError}>
+      <MenuProvider>
+        <View style={styles.container}>
+          <CheckNetwork />
+          <StatusBar translucent backgroundColor={Color.transparent} />
+          <NavigationContainer>
+            <AppNav />
 
             <CustomeModal
               visible={updatedModal}
@@ -126,10 +127,21 @@ const App = gestureHandlerRootHOC(() => {
                 </View>
               }
             />
-              </NavigationContainer>
-            </View>
-          </MenuProvider>
-        </ErrorBoundary>
+          </NavigationContainer>
+        </View>
+      </MenuProvider>
+    </ErrorBoundary>
+  );
+};
+
+/**
+ * Root App component with gesture handler and providers
+ */
+const App = gestureHandlerRootHOC(() => {
+  return (
+    <Provider store={store}>
+      <AuthProvider>
+        <AppContent />
       </AuthProvider>
     </Provider>
   );

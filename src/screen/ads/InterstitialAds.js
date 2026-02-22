@@ -16,8 +16,9 @@ const adUnitId = __DEV__
  * Shows full-screen video ad when app opens
  * User can close after 5 seconds (Google's standard policy)
  * Note: Close button appears automatically after ~5 seconds
+ * @param {boolean} isEnabled - Whether to load and show the ad (e.g., only when user is logged in)
  */
-export const useAppLaunchInterstitial = () => {
+export const useAppLaunchInterstitial = (isEnabled = true) => {
   const interstitialAdRef = useRef(null);
   const listenersRef = useRef([]);
   const isLoadedRef = useRef(false);
@@ -124,6 +125,12 @@ export const useAppLaunchInterstitial = () => {
 
   // Initialize and load ad on mount
   useEffect(() => {
+    // Only load ad if enabled (e.g., user is logged in)
+    if (!isEnabled) {
+      console.log('Interstitial video ad disabled (user not authenticated)');
+      return;
+    }
+
     // Delay loading to ensure app is fully mounted
     const timer = setTimeout(() => {
       loadInterstitialAd();
@@ -133,7 +140,7 @@ export const useAppLaunchInterstitial = () => {
       clearTimeout(timer);
       cleanup();
     };
-  }, [loadInterstitialAd, cleanup]);
+  }, [isEnabled, loadInterstitialAd, cleanup]);
 
   return {
     showInterstitialAd,
