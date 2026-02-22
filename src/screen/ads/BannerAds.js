@@ -7,9 +7,10 @@ const adUnitId = __DEV__
   ? TestIds.ADAPTIVE_BANNER
   : 'ca-app-pub-9823475062473479/1036117247';
 
-// Memoized request options
+// Memoized request options for child-friendly educational content
 const REQUEST_OPTIONS = {
   requestNonPersonalizedAdsOnly: true,
+  keywords: ['education', 'learning', 'students', 'study'],
 };
 
 const AdBanner = memo(() => {

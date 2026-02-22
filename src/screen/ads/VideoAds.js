@@ -41,6 +41,7 @@ const VideoAds = forwardRef(({updateCredit, onAdStatusChange}, ref) => {
 
     const rewarded = RewardedAd.createForAdRequest(adUnitId, {
       requestNonPersonalizedAdsOnly: true,
+      keywords: ['education', 'learning', 'students', 'study'],
     });
 
     // Listen for ad loaded

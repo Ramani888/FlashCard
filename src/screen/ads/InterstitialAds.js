@@ -45,7 +45,11 @@ export const useAppLaunchInterstitial = () => {
       console.log('Loading interstitial video ad...');
 
       const interstitialAd = InterstitialAd.createForAdRequest(adUnitId, {
+        // Request non-personalized ads only (privacy-friendly)
         requestNonPersonalizedAdsOnly: true,
+        
+        // Additional keywords for educational content
+        keywords: ['education', 'learning', 'students', 'study'],
       });
 
       // Listen for ad loaded
