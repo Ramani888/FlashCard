@@ -20,7 +20,8 @@ const SimpleLayout = ({
   folderId,
   setId,
   onDragStart,
-  onDragEnd,
+  changeOrder,
+  isActive,
   onDeleteCardPress,
 }) => {
   const navigation = useNavigation();
@@ -50,18 +51,33 @@ const SimpleLayout = ({
     });
   };
 
+  const CardWrapper = changeOrder ? Pressable : View;
+
   return (
-    <Pressable
-      onPressIn={onDragStart}
-      onPressOut={onDragEnd}
+    <CardWrapper
       ref={cardContainerRef}
       onLayout={onCardLayout}
-      style={styles.cardContainer}>
+      onLongPress={changeOrder ? onDragStart : undefined}
+      delayLongPress={300}
+      style={[
+        styles.cardContainer,
+        isActive && styles.activeCard,
+      ]}>
       <View
         style={[styles.cardHeader, {backgroundColor: themeColor.cardHeader}]}>
-        <Text style={[styles.cardTitle, {color: themeColor.textColor}]}>
+        {changeOrder && (
+          <View style={styles.dragHandle}>
+            <Entypo
+              name="menu"
+              size={scale(20)}
+              color={themeColor.textColor}
+            />
+          </View>
+        )}
+        <Text style={[styles.cardTitle, {color: themeColor.textColor, width: changeOrder ? scale(200) : scale(230)}]}>
           {item.top}
         </Text>
+        {!changeOrder && (
         <View style={styles.cardActions}>
           {item?.note ? (
             <Pressable onPress={toggleNote}>
@@ -118,6 +134,7 @@ const SimpleLayout = ({
             </MenuOptions>
           </Menu>
         </View>
+        )}
       </View>
       <View
         style={[
@@ -163,7 +180,7 @@ const SimpleLayout = ({
           </Text>
         )}
       </View>
-    </Pressable>
+    </CardWrapper>
   );
 };
 
@@ -172,6 +189,22 @@ export default memo(SimpleLayout);
 const styles = StyleSheet.create({
   cardContainer: {
     marginBottom: verticalScale(10),
+  },
+  activeCard: {
+    opacity: 0.7,
+    transform: [{scale: 1.02}],
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  dragHandle: {
+    paddingLeft: scale(8),
+    paddingRight: scale(8),
+    paddingVertical: verticalScale(5),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardHeader: {
     flexDirection: 'row',

@@ -264,12 +264,13 @@ const SetDetailScreen = () => {
           folderId={folderId}
           setId={setId}
           onDragStart={drag}
-          onDragEnd={() => {}}
+          changeOrder={changeOrder}
+          isActive={isActive}
           onDeleteCardPress={handleDeleteCardPress}
         />
       );
     },
-    [folderId, setId, updateCard, handleDeleteCardPress],
+    [folderId, setId, updateCard, changeOrder, handleDeleteCardPress],
   );
 
   const handleReorder = useCallback((reorderedData) => {
@@ -315,6 +316,10 @@ const SetDetailScreen = () => {
                   keyExtractor={keyExtractor}
                   renderItem={renderItem}
                   onDragEnd={({data}) => handleReorder(data)}
+                  activationDistance={20}
+                  autoscrollSpeed={200}
+                  autoscrollThreshold={80}
+                  containerStyle={{flex: 1}}
                 />
               ) : (
                 <FlatList
