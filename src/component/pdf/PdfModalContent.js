@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useCallback} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {MenuOption} from 'react-native-popup-menu';
 import {Divider} from '@rneui/themed/dist/Divider';
@@ -17,7 +17,7 @@ const PdfModalContent = ({
   type,
   openBottomSheet,
   setEditBottomSheet,
-  deleteItem,
+  onDeletePress,
   pdfId,
   colorTheme,
   downloadPdf,
@@ -25,6 +25,12 @@ const PdfModalContent = ({
 }) => {
   const navigation = useNavigation();
   const iconSize = useMemo(() => scale(20), []);
+
+  const handleDelete = useCallback(() => {
+    if (onDeletePress) {
+      onDeletePress(pdfId);
+    }
+  }, [onDeletePress, pdfId]);
 
   const renderBody = useMemo(
     () => (
@@ -49,9 +55,7 @@ const PdfModalContent = ({
             </MenuOption>
             <Divider />
             <MenuOption
-              onSelect={() => {
-                deleteItem(pdfId);
-              }}>
+              onSelect={handleDelete}>
               <View style={[styles.container, styles.lastItem]}>
                 <MaterialCommunityIcons
                   name="delete"
@@ -84,9 +88,7 @@ const PdfModalContent = ({
             </MenuOption>
             <Divider />
             <MenuOption
-              onSelect={() => {
-                deleteItem(pdfId);
-              }}>
+              onSelect={handleDelete}>
               <View style={styles.container}>
                 <MaterialCommunityIcons
                   name="delete"
@@ -144,7 +146,7 @@ const PdfModalContent = ({
     [
       iconSize,
       colorTheme,
-      deleteItem,
+      handleDelete,
       downloadPdf,
       navigation,
       setEditBottomSheet,
@@ -155,7 +157,11 @@ const PdfModalContent = ({
     ],
   );
 
-  return <View>{renderBody}</View>;
+  return (
+    <View>
+      {renderBody}
+    </View>
+  );
 };
 
 export default React.memo(PdfModalContent);

@@ -177,4 +177,19 @@ export default {
   deleteAccountConfirmMessage: 'Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć i wszystkie Twoje dane zostaną trwale usunięte.',
   cancel: 'Anuluj',
   deleteAccountSuccess: 'Konto usunięte pomyślnie',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Usuń Notatkę',
+  deleteNoteConfirmMessage: 'Czy na pewno chcesz usunąć tę notatkę? Tej akcji nie można cofnąć.',
+  deleteCard: 'Usuń Kartę',
+  deleteCardConfirmMessage: 'Czy na pewno chcesz usunąć tę kartę? Tej akcji nie można cofnąć.',
+  deleteSetConfirmMessage: 'Czy na pewno chcesz usunąć ten zestaw? Wszystkie karty w tym zestawie również zostaną usunięte.',
+  deleteFolderConfirmMessage: 'Czy na pewno chcesz usunąć ten folder? Wszystkie zestawy i karty w tym folderze również zostaną usunięte.',
+  deletePdf: 'Usuń PDF',
+  deletePdfConfirmMessage: 'Czy na pewno chcesz usunąć ten PDF? Tej akcji nie można cofnąć.',
+  deletePdfFolderConfirmMessage: 'Czy na pewno chcesz usunąć ten folder? Wszystkie pliki PDF w tym folderze również zostaną usunięte.',
+  logoutConfirmMessage: 'Czy na pewno chcesz wylogować się ze swojego konta?',
+  removeFolder: 'Usuń Folder',
+  removeFolderConfirmMessage: 'Czy na pewno chcesz usunąć ten zestaw z folderu?',
+  remove: 'Usuń',
 };

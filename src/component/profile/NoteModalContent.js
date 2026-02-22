@@ -14,7 +14,7 @@ const NoteModalContent = ({
   item,
   openBottomSheet,
   setEditBottomSheet,
-  deleteData,
+  onDeletePress,
   setSingleNoteData,
 }) => {
   const colorTheme = useTheme();
@@ -28,8 +28,10 @@ const NoteModalContent = ({
   }, [item, setSingleNoteData, setEditBottomSheet, openBottomSheet]);
 
   const handleDelete = useCallback(() => {
-    deleteData(item?._id);
-  }, [item?._id, deleteData]);
+    if (onDeletePress) {
+      onDeletePress(item);
+    }
+  }, [item, onDeletePress]);
 
   return (
     <View style={styles.wrapper}>

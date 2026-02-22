@@ -1,4 +1,4 @@
-import React, {useRef, useMemo, useCallback} from 'react';
+import React, {useRef, useMemo, useCallback, useState} from 'react';
 import {StyleSheet, Text, Pressable, Image, ActivityIndicator, View} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -19,6 +19,7 @@ import ProfileModalContent from '../component/profile/profile/ProfileModalConten
 import ToggleSwitch from 'toggle-switch-react-native';
 import {ScreenName} from '../component/Screen';
 import useThemeToggle from '../hooks/useThemeToggle';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const CustomeHeader = ({
   goBack,
@@ -69,6 +70,8 @@ const CustomeHeader = ({
   const threeDotIconRef = useRef(null);
   const colorTheme = useTheme();
   const {isDarkMode, toggleTheme} = useThemeToggle();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showDeleteAccountDialog, setShowDeleteAccountDialog] = useState(false);
 
   // Memoize menu options style
   const menuOptionsStyle = useMemo(() => ({
@@ -89,6 +92,26 @@ const CustomeHeader = ({
       navigation.goBack();
     }
   }, [saveNote, navigation]);
+
+  // Handle logout confirmation
+  const onLogoutPress = useCallback(() => {
+    setShowLogoutDialog(true);
+  }, []);
+
+  const confirmLogout = useCallback(() => {
+    handleLogout();
+    setShowLogoutDialog(false);
+  }, [handleLogout]);
+
+  // Handle delete account confirmation
+  const onDeleteAccountPress = useCallback(() => {
+    setShowDeleteAccountDialog(true);
+  }, []);
+
+  const confirmDeleteAccount = useCallback(() => {
+    handleDeleteAccount();
+    setShowDeleteAccountDialog(false);
+  }, [handleDeleteAccount]);
 
   return (
     <LinearGradient
@@ -167,8 +190,8 @@ const CustomeHeader = ({
           </MenuTrigger>
           <MenuOptions customStyles={menuOptionsStyle}>
             <ProfileModalContent
-              handleLogout={handleLogout}
-              handleDeleteAccount={handleDeleteAccount}
+              onLogoutPress={onLogoutPress}
+              onDeleteAccountPress={onDeleteAccountPress}
               colorTheme={colorTheme}
             />
           </MenuOptions>
@@ -281,6 +304,28 @@ const CustomeHeader = ({
           </Pressable>
         </View>
       )}
+
+      <ConfirmationDialog
+        isVisible={showLogoutDialog}
+        title={strings.logout || 'Logout'}
+        message={strings.logoutConfirmMessage || 'Are you sure you want to logout from your account?'}
+        confirmText={strings.logout || 'Logout'}
+        cancelText={strings.cancel}
+        isDanger={false}
+        onConfirm={confirmLogout}
+        onCancel={() => setShowLogoutDialog(false)}
+      />
+
+      <ConfirmationDialog
+        isVisible={showDeleteAccountDialog}
+        title={strings.deleteAccountConfirmTitle || 'Delete Account'}
+        message={strings.deleteAccountConfirmMessage}
+        confirmText={strings.delete}
+        cancelText={strings.cancel}
+        isDanger={true}
+        onConfirm={confirmDeleteAccount}
+        onCancel={() => setShowDeleteAccountDialog(false)}
+      />
     </LinearGradient>
   );
 };

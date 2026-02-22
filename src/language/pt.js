@@ -177,4 +177,19 @@ export default {
   deleteAccountConfirmMessage: 'Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita e todos os seus dados serão excluídos permanentemente.',
   cancel: 'Cancelar',
   deleteAccountSuccess: 'Conta excluída com sucesso',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Excluir Nota',
+  deleteNoteConfirmMessage: 'Tem certeza de que deseja excluir esta nota? Esta ação não pode ser desfeita.',
+  deleteCard: 'Excluir Cartão',
+  deleteCardConfirmMessage: 'Tem certeza de que deseja excluir este cartão? Esta ação não pode ser desfeita.',
+  deleteSetConfirmMessage: 'Tem certeza de que deseja excluir este conjunto? Todos os cartões deste conjunto também serão excluídos.',
+  deleteFolderConfirmMessage: 'Tem certeza de que deseja excluir esta pasta? Todos os conjuntos e cartões nesta pasta também serão excluídos.',
+  deletePdf: 'Excluir PDF',
+  deletePdfConfirmMessage: 'Tem certeza de que deseja excluir este PDF? Esta ação não pode ser desfeita.',
+  deletePdfFolderConfirmMessage: 'Tem certeza de que deseja excluir esta pasta? Todos os PDFs nesta pasta também serão excluídos.',
+  logoutConfirmMessage: 'Tem certeza de que deseja sair da sua conta?',
+  removeFolder: 'Remover Pasta',
+  removeFolderConfirmMessage: 'Tem certeza de que deseja remover este conjunto da pasta?',
+  remove: 'Remover',
 };

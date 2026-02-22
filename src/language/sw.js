@@ -177,4 +177,19 @@ export default {
   deleteAccountConfirmMessage: 'Je, una uhakika unataka kufuta akaunti yako? Hatua hii haiwezi kutenduliwa na data yako yote itafutwa kabisa.',
   cancel: 'Ghairi',
   deleteAccountSuccess: 'Akaunti imefutwa kwa mafanikio',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Futa Kumbukumbu',
+  deleteNoteConfirmMessage: 'Je, una uhakika unataka kufuta kumbukumbu hii? Hatua hii haiwezi kutenduliwa.',
+  deleteCard: 'Futa Kadi',
+  deleteCardConfirmMessage: 'Je, una uhakika unataka kufuta kadi hii? Hatua hii haiwezi kutenduliwa.',
+  deleteSetConfirmMessage: 'Je, una uhakika unataka kufuta seti hii? Kadi zote katika seti hii pia zitafutwa.',
+  deleteFolderConfirmMessage: 'Je, una uhakika unataka kufuta folda hii? Seti zote na kadi katika folda hii pia zitafutwa.',
+  deletePdf: 'Futa PDF',
+  deletePdfConfirmMessage: 'Je, una uhakika unataka kufuta PDF hii? Hatua hii haiwezi kutenduliwa.',
+  deletePdfFolderConfirmMessage: 'Je, una uhakika unataka kufuta folda hii? PDF zote katika folda hii pia zitafutwa.',
+  logoutConfirmMessage: 'Je, una uhakika unataka kutoka kwenye akaunti yako?',
+  removeFolder: 'Ondoa Folda',
+  removeFolderConfirmMessage: 'Je, una uhakika unataka kuondoa seti hii kutoka kwenye folda?',
+  remove: 'Ondoa',
 };

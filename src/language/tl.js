@@ -177,4 +177,19 @@ export default {
   deleteAccountConfirmMessage: 'Sigurado ka bang gusto mong burahin ang iyong account? Ang aksyong ito ay hindi na mababawi at ang lahat ng iyong datos ay permanenteng matatanggal.',
   cancel: 'Kanselahin',
   deleteAccountSuccess: 'Matagumpay na nabura ang account',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Burahin ang Tala',
+  deleteNoteConfirmMessage: 'Sigurado ka bang gusto mong burahin ang talang ito? Ang aksyong ito ay hindi na mababawi.',
+  deleteCard: 'Burahin ang Card',
+  deleteCardConfirmMessage: 'Sigurado ka bang gusto mong burahin ang card na ito? Ang aksyong ito ay hindi na mababawi.',
+  deleteSetConfirmMessage: 'Sigurado ka bang gusto mong burahin ang set na ito? Ang lahat ng mga card sa set na ito ay mabubura din.',
+  deleteFolderConfirmMessage: 'Sigurado ka bang gusto mong burahin ang folder na ito? Ang lahat ng mga set at card sa folder na ito ay mabubura din.',
+  deletePdf: 'Burahin ang PDF',
+  deletePdfConfirmMessage: 'Sigurado ka bang gusto mong burahin ang PDF na ito? Ang aksyong ito ay hindi na mababawi.',
+  deletePdfFolderConfirmMessage: 'Sigurado ka bang gusto mong burahin ang folder na ito? Ang lahat ng mga PDF sa folder na ito ay mabubura din.',
+  logoutConfirmMessage: 'Sigurado ka bang gusto mong mag-logout sa iyong account?',
+  removeFolder: 'Alisin ang Folder',
+  removeFolderConfirmMessage: 'Sigurado ka bang gusto mong alisin ang set na ito mula sa folder?',
+  remove: 'Alisin',
 };

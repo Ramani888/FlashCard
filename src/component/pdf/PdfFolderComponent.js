@@ -18,6 +18,7 @@ import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import {useAppSelector} from '../../redux/hooks';
+import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const PdfFolderComponent = ({onFolderClick}) => {
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -34,6 +35,9 @@ const PdfFolderComponent = ({onFolderClick}) => {
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
+
+  // Confirmation dialog state
+  const [showDeleteFolderDialog, setShowDeleteFolderDialog] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -122,6 +126,15 @@ const PdfFolderComponent = ({onFolderClick}) => {
       console.log('error in delete pdf folder api', error);
     }
   };
+
+  const handleDeleteFolderPress = useCallback(() => {
+    setShowDeleteFolderDialog(true);
+  }, []);
+
+  const confirmDeleteFolder = useCallback(() => {
+    deletePdfFolder();
+    setShowDeleteFolderDialog(false);
+  }, [deletePdfFolder]);
 
   // ================================== Api =================================== //
 
@@ -227,7 +240,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
                 type={'Folder'}
                 openBottomSheet={openBottomSheet}
                 setEditBottomSheet={setEditBottomSheet}
-                deleteItem={deletePdfFolder}
+                onDeletePress={handleDeleteFolderPress}
                 pdfId={item._id}
                 colorTheme={colorTheme}
               />
@@ -236,7 +249,7 @@ const PdfFolderComponent = ({onFolderClick}) => {
         </Pressable>
       );
     },
-    [colorTheme, colorView, onFolderClick, pdfFolderdata, openBottomSheet, deletePdfFolder],
+    [colorTheme, colorView, onFolderClick, pdfFolderdata, openBottomSheet, handleDeleteFolderPress],
   );
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
@@ -293,6 +306,17 @@ const PdfFolderComponent = ({onFolderClick}) => {
       <View style={styles.mainContainer}>
         <Loader visible={visible} />
         {renderBody()}
+        
+        <ConfirmationDialog
+          isVisible={showDeleteFolderDialog}
+          title={strings.deleteFolder || 'Delete Folder'}
+          message={strings.deletePdfFolderConfirmMessage || 'Are you sure you want to delete this folder? All PDFs in this folder will also be deleted.'}
+          confirmText={strings.delete}
+          cancelText={strings.cancel}
+          isDanger={true}
+          onConfirm={confirmDeleteFolder}
+          onCancel={() => setShowDeleteFolderDialog(false)}
+        />
       </View>
     </MenuProvider>
   );

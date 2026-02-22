@@ -18,6 +18,7 @@ import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import useFolderApi from '../../hooks/useFolderApi';
+import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const ITEM_HEIGHT = verticalScale(55); // Approximate height for getItemLayout
 
@@ -34,6 +35,9 @@ const FolderComponent = ({
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
+
+  // Confirmation dialog state
+  const [showDeleteFolderDialog, setShowDeleteFolderDialog] = useState(false);
 
   // Use custom hook for API operations
   const {
@@ -60,6 +64,16 @@ const FolderComponent = ({
   const menuOptionsStyle = useMemo(() => ({
     optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
   }), [colorTheme.modelNewBackground]);
+
+  // Dialog handlers
+  const handleDeleteFolderPress = useCallback(() => {
+    setShowDeleteFolderDialog(true);
+  }, []);
+
+  const confirmDeleteFolder = useCallback(() => {
+    deleteFolder();
+    setShowDeleteFolderDialog(false);
+  }, [deleteFolder]);
 
   const openBottomSheet = useCallback(() => {
     refRBSheet.current?.show();
@@ -124,7 +138,7 @@ const FolderComponent = ({
                 type={'Folder'}
                 openBottomSheet={openBottomSheet}
                 setEditBottomSheet={setEditBottomSheet}
-                deleteData={deleteFolder}
+                onDeletePress={handleDeleteFolderPress}
                 handleCreateSetClick={handleCreateSetClick}
                 singleItem={item}
               />
@@ -141,7 +155,7 @@ const FolderComponent = ({
       setSearchValue,
       menuOptionsStyle,
       openBottomSheet,
-      deleteFolder,
+      handleDeleteFolderPress,
       handleCreateSetClick,
       setSingleFolderItem,
     ],
@@ -235,6 +249,17 @@ const FolderComponent = ({
           position={'absolute'}
           bottom={verticalScale(10)}
           onPress={handleCreateFolderPress}
+        />
+        
+        <ConfirmationDialog
+          isVisible={showDeleteFolderDialog}
+          title={strings.deleteFolder || 'Delete Folder'}
+          message={strings.deleteFolderConfirmMessage || 'Are you sure you want to delete this folder? All sets and cards in this folder will also be deleted.'}
+          confirmText={strings.delete}
+          cancelText={strings.cancel}
+          isDanger={true}
+          onConfirm={confirmDeleteFolder}
+          onCancel={() => setShowDeleteFolderDialog(false)}
         />
       </View>
     );

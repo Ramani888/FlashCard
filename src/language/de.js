@@ -178,4 +178,19 @@ export default {
   deleteAccountConfirmMessage: 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und alle Ihre Daten werden dauerhaft gelöscht.',
   cancel: 'Abbrechen',
   deleteAccountSuccess: 'Konto erfolgreich gelöscht',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Notiz Löschen',
+  deleteNoteConfirmMessage: 'Sind Sie sicher, dass Sie diese Notiz löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
+  deleteCard: 'Karte Löschen',
+  deleteCardConfirmMessage: 'Sind Sie sicher, dass Sie diese Karte löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
+  deleteSetConfirmMessage: 'Sind Sie sicher, dass Sie dieses Set löschen möchten? Alle Karten in diesem Set werden ebenfalls gelöscht.',
+  deleteFolderConfirmMessage: 'Sind Sie sicher, dass Sie diesen Ordner löschen möchten? Alle Sets und Karten in diesem Ordner werden ebenfalls gelöscht.',
+  deletePdf: 'PDF Löschen',
+  deletePdfConfirmMessage: 'Sind Sie sicher, dass Sie dieses PDF löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
+  deletePdfFolderConfirmMessage: 'Sind Sie sicher, dass Sie diesen Ordner löschen möchten? Alle PDFs in diesem Ordner werden ebenfalls gelöscht.',
+  logoutConfirmMessage: 'Sind Sie sicher, dass Sie sich von Ihrem Konto abmelden möchten?',
+  removeFolder: 'Ordner Entfernen',
+  removeFolderConfirmMessage: 'Sind Sie sicher, dass Sie dieses Set aus dem Ordner entfernen möchten?',
+  remove: 'Entfernen',
 };

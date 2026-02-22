@@ -26,12 +26,12 @@ const ModalContent = ({
   type,
   openBottomSheet,
   setEditBottomSheet,
-  deleteData,
+  onDeletePress,
+  onRemoveFolderPress,
   handleCreateSetClick,
   singleItem,
   folderId,
   getSetData,
-  handleRemoveFolder
 }) => {
   const navigation = useNavigation();
   const [value, setValue] = useState(singleItem?.isPrivate);
@@ -62,6 +62,18 @@ const ModalContent = ({
   const iconSize = useMemo(() => scale(20), []);
   const userIcon = useMemo(() => require('../../Assets/Img/userIcon.png'), []);
   const lockIcon = useMemo(() => require('../../Assets/Img/lock.png'), []);
+
+  const handleDelete = useCallback(() => {
+    if (onDeletePress) {
+      onDeletePress();
+    }
+  }, [onDeletePress]);
+
+  const handleRemoveFolder = useCallback(() => {
+    if (onRemoveFolderPress) {
+      onRemoveFolderPress(singleItem?._id);
+    }
+  }, [onRemoveFolderPress, singleItem?._id]);
 
   const renderSetContent = useCallback(() => (
     <>
@@ -120,7 +132,7 @@ const ModalContent = ({
       </MenuOption>
       <Divider />
 
-      <MenuOption onSelect={() => deleteData()}>
+      <MenuOption onSelect={handleDelete}>
         <View style={styles.container}>
           <MaterialCommunityIcons
             name="delete"
@@ -135,11 +147,7 @@ const ModalContent = ({
       <Divider />
 
       <MenuOption
-        onSelect={() => {
-          if (typeof handleRemoveFolder === 'function') {
-            handleRemoveFolder(singleItem?._id);
-          }
-        }}>
+        onSelect={handleRemoveFolder}>
         <View style={styles.container}>
           <MaterialCommunityIcons
             name="folder-remove"
@@ -179,7 +187,7 @@ const ModalContent = ({
     colorTheme.textColor,
     setEditBottomSheet,
     openBottomSheet,
-    deleteData,
+    handleDelete,
     handleRemoveFolder,
     value,
     userIcon,
@@ -216,7 +224,7 @@ const ModalContent = ({
       </MenuOption>
       <Divider />
 
-      <MenuOption onSelect={() => deleteData()}>
+      <MenuOption onSelect={handleDelete}>
         <View style={[styles.container, styles.folderModal]}>
           <MaterialCommunityIcons
             name="delete"
@@ -236,7 +244,7 @@ const ModalContent = ({
     handleCreateSetClick,
     setEditBottomSheet,
     openBottomSheet,
-    deleteData,
+    handleDelete,
   ]);
 
   return (

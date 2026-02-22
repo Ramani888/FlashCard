@@ -177,4 +177,19 @@ export default {
   deleteAccountConfirmMessage: 'Êtes-vous sûr de vouloir supprimer votre compte? Cette action ne peut pas être annulée et toutes vos données seront définitivement supprimées.',
   cancel: 'Annuler',
   deleteAccountSuccess: 'Compte supprimé avec succès',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Supprimer la Note',
+  deleteNoteConfirmMessage: 'Êtes-vous sûr de vouloir supprimer cette note? Cette action ne peut pas être annulée.',
+  deleteCard: 'Supprimer la Carte',
+  deleteCardConfirmMessage: 'Êtes-vous sûr de vouloir supprimer cette carte? Cette action ne peut pas être annulée.',
+  deleteSetConfirmMessage: 'Êtes-vous sûr de vouloir supprimer cet ensemble? Toutes les cartes de cet ensemble seront également supprimées.',
+  deleteFolderConfirmMessage: 'Êtes-vous sûr de vouloir supprimer ce dossier? Tous les ensembles et cartes de ce dossier seront également supprimés.',
+  deletePdf: 'Supprimer le PDF',
+  deletePdfConfirmMessage: 'Êtes-vous sûr de vouloir supprimer ce PDF? Cette action ne peut pas être annulée.',
+  deletePdfFolderConfirmMessage: 'Êtes-vous sûr de vouloir supprimer ce dossier? Tous les PDFs de ce dossier seront également supprimés.',
+  logoutConfirmMessage: 'Êtes-vous sûr de vouloir vous déconnecter de votre compte?',
+  removeFolder: 'Retirer le Dossier',
+  removeFolderConfirmMessage: 'Êtes-vous sûr de vouloir retirer cet ensemble du dossier?',
+  remove: 'Retirer',
 };

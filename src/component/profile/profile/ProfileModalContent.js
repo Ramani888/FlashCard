@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {MenuOption} from 'react-native-popup-menu';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {scale, verticalScale} from '../../../custome/Responsive';
@@ -8,17 +8,10 @@ import Font from '../../Font';
 import strings from '../../../language/strings';
 
 const ProfileModalContent = ({
-  handleLogout,
-  handleDeleteAccount,
+  onLogoutPress,
+  onDeleteAccountPress,
   colorTheme,
 }) => {
-  const onLogoutPress = useCallback(() => {
-    handleLogout();
-  }, [handleLogout]);
-
-  const onDeleteAccountPress = useCallback(() => {
-    handleDeleteAccount();
-  }, [handleDeleteAccount]);
 
   return (
     <View style={styles.wrapper}>

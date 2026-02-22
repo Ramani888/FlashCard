@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {MenuOption} from 'react-native-popup-menu';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,9 +13,15 @@ import strings from '../../language/strings';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Divider} from '@rneui/themed/dist/Divider';
 
-const CardModalContent = ({deleteCard, item, folderId, setId}) => {
+const CardModalContent = ({onDeleteCardPress, item, folderId, setId}) => {
   const navigation = useNavigation();
   const colorTheme = useTheme();
+
+  const handleDeletePress = useCallback(() => {
+    if (onDeleteCardPress) {
+      onDeleteCardPress(item);
+    }
+  }, [onDeleteCardPress, item]);
 
   return (
     <View style={styles.wrapper}>
@@ -42,9 +48,7 @@ const CardModalContent = ({deleteCard, item, folderId, setId}) => {
       <Divider />
 
       <MenuOption
-        onSelect={() => {
-          deleteCard(item?._id);
-        }}>
+        onSelect={handleDeletePress}>
         <View style={styles.container}>
           <MaterialCommunityIcons
             name="delete"

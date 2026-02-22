@@ -178,4 +178,19 @@ export default {
   deleteAccountConfirmMessage: '¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer y todos sus datos se eliminarán permanentemente.',
   cancel: 'Cancelar',
   deleteAccountSuccess: 'Cuenta eliminada exitosamente',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Eliminar Nota',
+  deleteNoteConfirmMessage: '¿Está seguro de que desea eliminar esta nota? Esta acción no se puede deshacer.',
+  deleteCard: 'Eliminar Tarjeta',
+  deleteCardConfirmMessage: '¿Está seguro de que desea eliminar esta tarjeta? Esta acción no se puede deshacer.',
+  deleteSetConfirmMessage: '¿Está seguro de que desea eliminar este conjunto? Todas las tarjetas de este conjunto también serán eliminadas.',
+  deleteFolderConfirmMessage: '¿Está seguro de que desea eliminar esta carpeta? Todos los conjuntos y tarjetas de esta carpeta también serán eliminados.',
+  deletePdf: 'Eliminar PDF',
+  deletePdfConfirmMessage: '¿Está seguro de que desea eliminar este PDF? Esta acción no se puede deshacer.',
+  deletePdfFolderConfirmMessage: '¿Está seguro de que desea eliminar esta carpeta? Todos los PDFs de esta carpeta también serán eliminados.',
+  logoutConfirmMessage: '¿Está seguro de que desea cerrar sesión?',
+  removeFolder: 'Eliminar Carpeta',
+  removeFolderConfirmMessage: '¿Está seguro de que desea eliminar este conjunto de la carpeta?',
+  remove: 'Eliminar',
 };

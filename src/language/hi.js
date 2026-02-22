@@ -177,4 +177,19 @@ export default {
   deleteAccountConfirmMessage: 'क्या आप वास्तव में अपना खाता हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती है और आपका सभी डेटा स्थायी रूप से हटा दिया जाएगा।',
   cancel: 'रद्द करें',
   deleteAccountSuccess: 'खाता सफलतापूर्वक हटा दिया गया',
+  
+  // Confirmation dialog messages
+  deleteNote: 'नोट हटाएं',
+  deleteNoteConfirmMessage: 'क्या आप वास्तव में इस नोट को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती है।',
+  deleteCard: 'कार्ड हटाएं',
+  deleteCardConfirmMessage: 'क्या आप वास्तव में इस कार्ड को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती है।',
+  deleteSetConfirmMessage: 'क्या आप वास्तव में इस सेट को हटाना चाहते हैं? इस सेट के सभी कार्ड भी हटा दिए जाएंगे।',
+  deleteFolderConfirmMessage: 'क्या आप वास्तव में इस फ़ोल्डर को हटाना चाहते हैं? इस फ़ोल्डर के सभी सेट और कार्ड भी हटा दिए जाएंगे।',
+  deletePdf: 'PDF हटाएं',
+  deletePdfConfirmMessage: 'क्या आप वास्तव में इस PDF को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती है।',
+  deletePdfFolderConfirmMessage: 'क्या आप वास्तव में इस फ़ोल्डर को हटाना चाहते हैं? इस फ़ोल्डर के सभी PDF भी हटा दिए जाएंगे।',
+  logoutConfirmMessage: 'क्या आप वास्तव में अपने खाते से लॉगआउट करना चाहते हैं?',
+  removeFolder: 'फ़ोल्डर हटाएं',
+  removeFolderConfirmMessage: 'क्या आप वास्तव में इस सेट को फ़ोल्डर से हटाना चाहते हैं?',
+  remove: 'हटाएं',
 };

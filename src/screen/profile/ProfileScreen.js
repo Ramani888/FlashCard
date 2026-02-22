@@ -285,44 +285,27 @@ const ProfileScreen = () => {
     }
   };
 
-  const handleDeleteAccount = () => {
-    Alert.alert(
-      strings.deleteAccountConfirmTitle,
-      strings.deleteAccountConfirmMessage,
-      [
-        {
-          text: strings.cancel,
-          style: 'cancel',
-        },
-        {
-          text: strings.delete,
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              setVisible(true);
-              const response = await apiDelete(Api.deleteAccount);
-              if (response?.success) {
-                await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
-                dispatch(logout());
-                showMessageonTheScreen(strings.deleteAccountSuccess);
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: ScreenName.signIn}],
-                });
-              } else {
-                showMessageonTheScreen(response?.message || 'Failed to delete account. Please try again.');
-              }
-            } catch (error) {
-              console.log('error in delete account', error);
-              showMessageonTheScreen('Failed to delete account. Please try again.');
-            } finally {
-              setVisible(false);
-            }
-          },
-        },
-      ],
-      {cancelable: false},
-    );
+  const handleDeleteAccount = async () => {
+    try {
+      setVisible(true);
+      const response = await apiDelete(Api.deleteAccount);
+      if (response?.success) {
+        await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
+        dispatch(logout());
+        showMessageonTheScreen(strings.deleteAccountSuccess);
+        navigation.reset({
+          index: 0,
+          routes: [{name: ScreenName.signIn}],
+        });
+      } else {
+        showMessageonTheScreen(response?.message || 'Failed to delete account. Please try again.');
+      }
+    } catch (error) {
+      console.log('error in delete account', error);
+      showMessageonTheScreen('Failed to delete account. Please try again.');
+    } finally {
+      setVisible(false);
+    }
   };
 
   const renderHeader = useCallback(() => {

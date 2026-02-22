@@ -177,4 +177,19 @@ export default {
   deleteAccountConfirmMessage: 'Sei sicuro di voler eliminare il tuo account? Questa azione non può essere annullata e tutti i tuoi dati verranno eliminati definitivamente.',
   cancel: 'Annulla',
   deleteAccountSuccess: 'Account eliminato con successo',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Elimina Nota',
+  deleteNoteConfirmMessage: 'Sei sicuro di voler eliminare questa nota? Questa azione non può essere annullata.',
+  deleteCard: 'Elimina Carta',
+  deleteCardConfirmMessage: 'Sei sicuro di voler eliminare questa carta? Questa azione non può essere annullata.',
+  deleteSetConfirmMessage: 'Sei sicuro di voler eliminare questo set? Tutte le carte di questo set verranno eliminate.',
+  deleteFolderConfirmMessage: 'Sei sicuro di voler eliminare questa cartella? Tutti i set e le carte in questa cartella verranno eliminati.',
+  deletePdf: 'Elimina PDF',
+  deletePdfConfirmMessage: 'Sei sicuro di voler eliminare questo PDF? Questa azione non può essere annullata.',
+  deletePdfFolderConfirmMessage: 'Sei sicuro di voler eliminare questa cartella? Tutti i PDF in questa cartella verranno eliminati.',
+  logoutConfirmMessage: 'Sei sicuro di voler uscire dal tuo account?',
+  removeFolder: 'Rimuovi Cartella',
+  removeFolderConfirmMessage: 'Sei sicuro di voler rimuovere questo set dalla cartella?',
+  remove: 'Rimuovi',
 };

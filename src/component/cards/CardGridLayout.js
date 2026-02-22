@@ -18,7 +18,7 @@ const CardGridLayout = ({
   updateCard,
   folderId,
   setId,
-  deleteCard,
+  onDeleteCardPress,
 }) => {
   const navigation = useNavigation();
   const cardContainerRef = useRef();
@@ -125,7 +125,7 @@ const CardGridLayout = ({
             </MenuTrigger>
             <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
               <CardModalContent
-                deleteCard={deleteCard}
+                onDeleteCardPress={onDeleteCardPress}
                 item={item}
                 folderId={folderId}
                 setId={setId}

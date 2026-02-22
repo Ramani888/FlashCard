@@ -28,6 +28,7 @@ import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger} from 'react-native-popup-menu';
 import {useAppSelector} from '../../redux/hooks';
+import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const NotesScreen = () => {
   const navigation = useNavigation();
@@ -41,6 +42,8 @@ const NotesScreen = () => {
   const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
+  const [showDeleteNoteDialog, setShowDeleteNoteDialog] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState(null);
   
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
@@ -140,6 +143,19 @@ const NotesScreen = () => {
       setVisible(false);
     }
   }, []);
+
+  const handleDeleteNotePress = useCallback((noteId) => {
+    setNoteToDelete(noteId);
+    setShowDeleteNoteDialog(true);
+  }, []);
+
+  const confirmDeleteNote = useCallback(() => {
+    if (noteToDelete) {
+      deleteNote(noteToDelete);
+    }
+    setShowDeleteNoteDialog(false);
+    setNoteToDelete(null);
+  }, [noteToDelete, deleteNote]);
 
   // ====================================== End ===================================== //
 
@@ -264,7 +280,7 @@ const NotesScreen = () => {
                 item={item}
                 openBottomSheet={openBottomSheet}
                 setEditBottomSheet={setEditBottomSheet}
-                deleteData={deleteNote}
+                onDeletePress={handleDeleteNotePress}
                 setSingleNoteData={setSingleNoteData}
               />
             </MenuOptions>
@@ -280,7 +296,7 @@ const NotesScreen = () => {
       editNote,
       navigation,
       openBottomSheet,
-      deleteNote,
+      handleDeleteNotePress,
     ],
   );
 
@@ -336,6 +352,17 @@ const NotesScreen = () => {
             setSingleNoteData({});
             openBottomSheet();
           }}
+        />
+
+        <ConfirmationDialog
+          isVisible={showDeleteNoteDialog}
+          title={strings.deleteNote || 'Delete Note'}
+          message={strings.deleteNoteConfirmMessage || 'Are you sure you want to delete this note? This action cannot be undone.'}
+          confirmText={strings.delete}
+          cancelText={strings.cancel}
+          isDanger={true}
+          onConfirm={confirmDeleteNote}
+          onCancel={() => setShowDeleteNoteDialog(false)}
         />
       </View>
     </MenuProvider>

@@ -175,4 +175,19 @@ export default {
   deleteAccountConfirmMessage: '您确定要删除您的账户吗？此操作无法撤销，您的所有数据将被永久删除。',
   cancel: '取消',
   deleteAccountSuccess: '账户删除成功',
+  
+  // Confirmation dialog messages
+  deleteNote: '删除笔记',
+  deleteNoteConfirmMessage: '您确定要删除这条笔记吗？此操作无法撤销。',
+  deleteCard: '删除卡片',
+  deleteCardConfirmMessage: '您确定要删除这张卡片吗？此操作无法撤销。',
+  deleteSetConfirmMessage: '您确定要删除此套卡片吗？此套中的所有卡片也将被删除。',
+  deleteFolderConfirmMessage: '您确定要删除此文件夹吗？此文件夹中的所有套和卡片也将被删除。',
+  deletePdf: '删除PDF',
+  deletePdfConfirmMessage: '您确定要删除此PDF吗？此操作无法撤销。',
+  deletePdfFolderConfirmMessage: '您确定要删除此文件夹吗？此文件夹中的所有PDF也将被删除。',
+  logoutConfirmMessage: '您确定要退出您的账户吗？',
+  removeFolder: '移除文件夹',
+  removeFolderConfirmMessage: '您确定要从文件夹中移除此套吗？',
+  remove: '移除',
 };

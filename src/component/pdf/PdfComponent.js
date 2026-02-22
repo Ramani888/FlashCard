@@ -21,6 +21,7 @@ import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import {useAppSelector} from '../../redux/hooks';
+import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const PdfComponent = memo(({folderId}) => {
   const isFocused = useIsFocused();
@@ -39,6 +40,10 @@ const PdfComponent = memo(({folderId}) => {
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
+
+  // Confirmation dialog state
+  const [showDeletePdfDialog, setShowDeletePdfDialog] = useState(false);
+  const [pdfIdToDelete, setPdfIdToDelete] = useState(null);
 
   useEffect(() => {
     getPdf(false);
@@ -121,6 +126,19 @@ const PdfComponent = memo(({folderId}) => {
       console.log('error in delete pdf api', error);
     }
   };
+
+  const handleDeletePdfPress = useCallback((pdfId) => {
+    setPdfIdToDelete(pdfId);
+    setShowDeletePdfDialog(true);
+  }, []);
+
+  const confirmDeletePdf = useCallback(() => {
+    if (pdfIdToDelete) {
+      deletePdf(pdfIdToDelete);
+    }
+    setShowDeletePdfDialog(false);
+    setPdfIdToDelete(null);
+  }, [pdfIdToDelete, deletePdf]);
 
   // ================================= End =============================== //
 
@@ -278,7 +296,7 @@ const PdfComponent = memo(({folderId}) => {
                   type={'Pdf'}
                   openBottomSheet={openBottomSheet}
                   setEditBottomSheet={setEditBottomSheet}
-                  deleteItem={deletePdf}
+                  onDeletePress={handleDeletePdfPress}
                   pdfId={item?._id}
                   colorTheme={colorTheme}
                   downloadPdf={downloadPdf}
@@ -299,7 +317,7 @@ const PdfComponent = memo(({folderId}) => {
         </View>
       );
     },
-    [pdfData, PdfView, colorTheme, colorView, openBottomSheet, deletePdf, downloadPdf],
+    [pdfData, PdfView, colorTheme, colorView, openBottomSheet, handleDeletePdfPress, downloadPdf],
   );
 
   const renderBody = () => {
@@ -394,6 +412,17 @@ const PdfComponent = memo(({folderId}) => {
             setSinglePdfData({});
             openBottomSheet();
           }}
+        />
+        
+        <ConfirmationDialog
+          isVisible={showDeletePdfDialog}
+          title={strings.deletePdf || 'Delete PDF'}
+          message={strings.deletePdfConfirmMessage || 'Are you sure you want to delete this PDF? This action cannot be undone.'}
+          confirmText={strings.delete}
+          cancelText={strings.cancel}
+          isDanger={true}
+          onConfirm={confirmDeletePdf}
+          onCancel={() => setShowDeletePdfDialog(false)}
         />
       </View>
     </MenuProvider>

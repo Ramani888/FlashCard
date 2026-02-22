@@ -30,6 +30,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {MenuProvider, Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
 import {useAppSelector} from '../../redux/hooks';
+import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 if (
   Platform.OS === 'android' &&
@@ -54,6 +55,10 @@ const SetDetailScreen = () => {
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
+
+  // Confirmation dialog state
+  const [showDeleteCardDialog, setShowDeleteCardDialog] = useState(false);
+  const [cardToDelete, setCardToDelete] = useState(null);
 
   useEffect(() => {
     getCardData(false, false);
@@ -133,6 +138,19 @@ const SetDetailScreen = () => {
       console.log('error in delete card', error);
     }
   };
+
+  const handleDeleteCardPress = useCallback((card) => {
+    setCardToDelete(card);
+    setShowDeleteCardDialog(true);
+  }, []);
+
+  const confirmDeleteCard = useCallback(() => {
+    if (cardToDelete?._id) {
+      deleteCard(cardToDelete._id);
+    }
+    setShowDeleteCardDialog(false);
+    setCardToDelete(null);
+  }, [cardToDelete, deleteCard]);
 
   const updatePosition = useCallback(() => {
     try {
@@ -225,11 +243,11 @@ const SetDetailScreen = () => {
           setId={setId}
           onDragStart={drag}
           onDragEnd={() => {}}
-          deleteCard={deleteCard}
+          onDeleteCardPress={handleDeleteCardPress}
         />
       );
     },
-    [folderId, setId, updateCard, deleteCard],
+    [folderId, setId, updateCard, handleDeleteCardPress],
   );
 
   const handleReorder = useCallback((reorderedData) => {
@@ -267,7 +285,7 @@ const SetDetailScreen = () => {
                         updateCard={updateCard}
                         folderId={folderId}
                         setId={setId}
-                        deleteCard={deleteCard}
+                        onDeleteCardPress={handleDeleteCardPress}
                       />
                     );
                   }}
@@ -297,7 +315,7 @@ const SetDetailScreen = () => {
                       updateCard={updateCard}
                       folderId={folderId}
                       setId={setId}
-                      deleteCard={deleteCard}
+                      onDeleteCardPress={handleDeleteCardPress}
                     />
                   );
                 }}
@@ -321,7 +339,7 @@ const SetDetailScreen = () => {
       renderItem,
       setId,
       updateCard,
-      deleteCard,
+      handleDeleteCardPress,
     ],
   );
 
@@ -331,6 +349,17 @@ const SetDetailScreen = () => {
         <Loader visible={visible} />
         {renderHeader()}
         {renderBody}
+        
+        <ConfirmationDialog
+          isVisible={showDeleteCardDialog}
+          title={strings.deleteCard || 'Delete Card'}
+          message={strings.deleteCardConfirmMessage || 'Are you sure you want to delete this card? This action cannot be undone.'}
+          confirmText={strings.delete}
+          cancelText={strings.cancel}
+          isDanger={true}
+          onConfirm={confirmDeleteCard}
+          onCancel={() => setShowDeleteCardDialog(false)}
+        />
       </MenuProvider>
     </LinearGradient>
   );

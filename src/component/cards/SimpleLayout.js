@@ -21,7 +21,7 @@ const SimpleLayout = ({
   setId,
   onDragStart,
   onDragEnd,
-  deleteCard,
+  onDeleteCardPress,
 }) => {
   const navigation = useNavigation();
   const cardContainerRef = useRef();
@@ -110,7 +110,7 @@ const SimpleLayout = ({
             </MenuTrigger>
             <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: themeColor.modelNewBackground}}}>
               <CardModalContent
-                deleteCard={deleteCard}
+                onDeleteCardPress={onDeleteCardPress}
                 item={item}
                 folderId={folderId}
                 setId={setId}

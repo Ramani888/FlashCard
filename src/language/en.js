@@ -178,4 +178,19 @@ export default {
   deleteAccountConfirmMessage: 'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.',
   cancel: 'Cancel',
   deleteAccountSuccess: 'Account deleted successfully',
+  
+  // Confirmation dialog messages
+  deleteNote: 'Delete Note',
+  deleteNoteConfirmMessage: 'Are you sure you want to delete this note? This action cannot be undone.',
+  deleteCard: 'Delete Card',
+  deleteCardConfirmMessage: 'Are you sure you want to delete this card? This action cannot be undone.',
+  deleteSetConfirmMessage: 'Are you sure you want to delete this set? All cards in this set will also be deleted.',
+  deleteFolderConfirmMessage: 'Are you sure you want to delete this folder? All sets and cards in this folder will also be deleted.',
+  deletePdf: 'Delete PDF',
+  deletePdfConfirmMessage: 'Are you sure you want to delete this PDF? This action cannot be undone.',
+  deletePdfFolderConfirmMessage: 'Are you sure you want to delete this folder? All PDFs in this folder will also be deleted.',
+  logoutConfirmMessage: 'Are you sure you want to logout from your account?',
+  removeFolder: 'Remove Folder',
+  removeFolderConfirmMessage: 'Are you sure you want to remove this set from the folder?',
+  remove: 'Remove',
 };

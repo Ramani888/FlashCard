@@ -28,6 +28,7 @@ import useTheme from '../Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
 import useSetApi from '../../hooks/useSetApi';
+import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const {height} = Dimensions.get('window');
 const ITEM_HEIGHT = verticalScale(60); // Approximate height for getItemLayout
@@ -48,6 +49,11 @@ const SetComponent = ({
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
+
+  // Confirmation dialog state
+  const [showDeleteSetDialog, setShowDeleteSetDialog] = useState(false);
+  const [showRemoveFolderDialog, setShowRemoveFolderDialog] = useState(false);
+  const [setToDelete, setSetToDelete] = useState(null);
 
   // Use custom hook for API operations
   const {
@@ -76,6 +82,30 @@ const SetComponent = ({
   const menuOptionsStyle = useMemo(() => ({
     optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
   }), [colorTheme.modelNewBackground]);
+
+  // Dialog handlers
+  const handleDeleteSetPress = useCallback(() => {
+    setShowDeleteSetDialog(true);
+  }, []);
+
+  const confirmDeleteSet = useCallback(() => {
+    deleteSet();
+    setShowDeleteSetDialog(false);
+    setSetToDelete(null);
+  }, [deleteSet]);
+
+  const handleRemoveFolderPress = useCallback((setId) => {
+    setSetToDelete(setId);
+    setShowRemoveFolderDialog(true);
+  }, []);
+
+  const confirmRemoveFolder = useCallback(() => {
+    if (setToDelete) {
+      removeFolder(setToDelete);
+    }
+    setShowRemoveFolderDialog(false);
+    setSetToDelete(null);
+  }, [setToDelete, removeFolder]);
 
   // Handle openSetSheet prop changes
   useEffect(() => {
@@ -179,11 +209,11 @@ const SetComponent = ({
                     type={'Set'}
                     openBottomSheet={openBottomSheet}
                     setEditBottomSheet={setEditBottomSheet}
-                    deleteData={deleteSet}
+                    onDeletePress={handleDeleteSetPress}
+                    onRemoveFolderPress={handleRemoveFolderPress}
                     folderId={folderId}
                     singleItem={item}
                     getSetData={getSetData}
-                    handleRemoveFolder={removeFolder}
                   />
                 </MenuOptions>
               </Menu>
@@ -207,7 +237,7 @@ const SetComponent = ({
         </View>
       );
     },
-    [colorTheme, colorView, folderId, navigation, showFolder, menuOptionsStyle, openBottomSheet, deleteSet, getSetData, removeFolder, setSingleSetData],
+    [colorTheme, colorView, folderId, navigation, showFolder, menuOptionsStyle, openBottomSheet, getSetData, setSingleSetData, handleDeleteSetPress, handleRemoveFolderPress],
   );
 
   const BottomSheets = useCallback(() => {
@@ -284,6 +314,28 @@ const SetComponent = ({
         onPress={handleCreateSetPress}
       />
       {BottomSheets()}
+      
+      <ConfirmationDialog
+        isVisible={showDeleteSetDialog}
+        title={strings.deleteSet || 'Delete Set'}
+        message={strings.deleteSetConfirmMessage || 'Are you sure you want to delete this set? Allcards in this set will also be deleted.'}
+        confirmText={strings.delete}
+        cancelText={strings.cancel}
+        isDanger={true}
+        onConfirm={confirmDeleteSet}
+        onCancel={() => setShowDeleteSetDialog(false)}
+      />
+      
+      <ConfirmationDialog
+        isVisible={showRemoveFolderDialog}
+        title={strings.removeFolder || 'Remove Folder'}
+        message={strings.removeFolderConfirmMessage || 'Are you sure you want to remove this set from the folder?'}
+        confirmText={strings.remove || 'Remove'}
+        cancelText={strings.cancel}
+        isDanger={true}
+        onConfirm={confirmRemoveFolder}
+        onCancel={() => setShowRemoveFolderDialog(false)}
+      />
     </View>
   );
 
