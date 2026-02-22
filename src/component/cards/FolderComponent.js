@@ -90,7 +90,6 @@ FolderItem.displayName = 'FolderItem';
 const FolderComponent = ({
   onFolderClick,
   handleCreateSetClick,
-  setLoading,
   search,
   setSearchValue,
 }) => {
@@ -120,7 +119,7 @@ const FolderComponent = ({
     prepareForEdit,
     prepareForCreate,
     setSingleFolderItem,
-  } = useFolderApi({search, setExternalLoading: setLoading});
+  } = useFolderApi({search});
 
   // Memoize menu options style
   const menuOptionsStyle = useMemo(() => ({
@@ -240,36 +239,38 @@ const FolderComponent = ({
   const renderBody = () => {
     return (
       <View style={styles.bodyContainer}>
-        <Pressable
-          style={styles.folderContainer}
-          onPress={handleAllSetPress}>
-          <Text style={styles.folderText}>{strings.allSet}</Text>
-        </Pressable>
+        <View style={styles.contentArea}>
+          <Pressable
+            style={styles.folderContainer}
+            onPress={handleAllSetPress}>
+            <Text style={styles.folderText}>{strings.allSet}</Text>
+          </Pressable>
 
-        {folderData?.length > 0 ? (
-          <FlatList
-            data={folderData}
-            renderItem={renderFolder}
-            keyExtractor={keyExtractor}
-            getItemLayout={getItemLayout}
-            style={styles.flatlist}
-            contentContainerStyle={styles.flatlistContent}
-            showsVerticalScrollIndicator={false}
-            initialNumToRender={15}
-            maxToRenderPerBatch={15}
-            windowSize={10}
-            removeClippedSubviews={true}
-            updateCellsBatchingPeriod={50}
-            maxToRenderPerBatchDuringScrolling={5}
-          />
-        ) : (
-          !loading && (
-            <NoDataView
-              content={strings.folderNotFound}
-              noDataViewStyle={noDataStyle}
+          {folderData?.length > 0 ? (
+            <FlatList
+              data={folderData}
+              renderItem={renderFolder}
+              keyExtractor={keyExtractor}
+              getItemLayout={getItemLayout}
+              style={styles.flatlist}
+              contentContainerStyle={styles.flatlistContent}
+              showsVerticalScrollIndicator={false}
+              initialNumToRender={15}
+              maxToRenderPerBatch={15}
+              windowSize={10}
+              removeClippedSubviews={true}
+              updateCellsBatchingPeriod={50}
+              maxToRenderPerBatchDuringScrolling={5}
             />
-          )
-        )}
+          ) : (
+            !loading && (
+              <NoDataView
+                content={strings.folderNotFound}
+                noDataViewStyle={noDataStyle}
+              />
+            )
+          )}
+        </View>
 
         {BottomSheets()}
 
@@ -317,7 +318,13 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(15),
     flex: 1,
   },
-  bodyContainer: {flex: 1},
+  bodyContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  contentArea: {
+    flex: 1,
+  },
   flatlist: {
     marginTop: verticalScale(10),
     flex: 1,
@@ -399,5 +406,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingVertical: verticalScale(10),
     backgroundColor: 'transparent',
+    marginTop: verticalScale(10),
   },
 });

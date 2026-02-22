@@ -1,6 +1,5 @@
 import React, {useState, useCallback, useMemo, memo} from 'react';
 import {
-  ActivityIndicator,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
@@ -20,6 +19,7 @@ import SetComponent from '../../component/cards/SetComponent';
 import FolderComponent from '../../component/cards/FolderComponent';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import {useLoader} from '../../context';
 
 const {width, height} = Dimensions.get('window');
 
@@ -38,13 +38,13 @@ SearchIcon.displayName = 'SearchIcon';
 
 const SetAndFolderScreen = () => {
   const [search, setSearch] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [showFolder, setShowFolder] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [tab, setTab] = useState('SET');
   const [folderId, setFolderId] = useState('');
   const [openSetSheet, setOpenSetSheet] = useState(false);
   const colorTheme = useTheme();
+  const {showLoader, hideLoader} = useLoader();
 
   // Memoize whether to show image folder icon
   const isImageFolder = useMemo(() => tab === 'SET', [tab]);
@@ -165,33 +165,25 @@ const SetAndFolderScreen = () => {
             )}
             {renderButtons()}
           </LinearGradient>
-          {loading && (
-            <ActivityIndicator
-              animating={true}
-              size={'small'}
-              color={Color.theme1}
-              style={styles.loadingIndicator}
-            />
-          )}
-          {tab === 'SET' && (
-            <SetComponent
-              folderId={folderId}
-              openSetSheet={openSetSheet}
-              setOpenSetSheet={setOpenSetSheet}
-              setLoading={setLoading}
-              search={searchValue}
-              showFolder={showFolder}
-            />
-          )}
-          {tab === 'FOLDERS' && (
-            <FolderComponent
-              onFolderClick={handleFolderClick}
-              handleCreateSetClick={handleCreateSetClick}
-              setLoading={setLoading}
-              setSearchValue={setSearchValue}
-              search={searchValue}
-            />
-          )}
+          <View style={styles.contentContainer}>
+            {tab === 'SET' && (
+              <SetComponent
+                folderId={folderId}
+                openSetSheet={openSetSheet}
+                setOpenSetSheet={setOpenSetSheet}
+                search={searchValue}
+                showFolder={showFolder}
+              />
+            )}
+            {tab === 'FOLDERS' && (
+              <FolderComponent
+                onFolderClick={handleFolderClick}
+                handleCreateSetClick={handleCreateSetClick}
+                setSearchValue={setSearchValue}
+                search={searchValue}
+              />
+            )}
+          </View>
         </View>
       </KeyboardAvoidingView>
       </MenuProvider>
@@ -206,7 +198,6 @@ const SetAndFolderScreen = () => {
     colorTheme.background1,
     colorTheme.gradientTheme,
     folderId,
-    loading,
     openSetSheet,
     showFolder,
     tab,
@@ -231,6 +222,9 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {flex: 1},
   mainView: {flex: 1},
+  contentContainer: {
+    flex: 1,
+  },
   inputContainerStyle: {
     marginTop: verticalScale(15),
     borderRadius: scale(10),
@@ -261,10 +255,5 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     paddingHorizontal: scale(20),
-  },
-  loadingIndicator: {
-    alignSelf: 'center',
-    marginTop: verticalScale(10),
-    marginBottom: verticalScale(-10),
   },
 });

@@ -139,7 +139,6 @@ const SetComponent = ({
   folderId,
   openSetSheet,
   setOpenSetSheet,
-  setLoading,
   search,
   showFolder
 }) => {
@@ -174,7 +173,7 @@ const SetComponent = ({
     prepareForEdit,
     prepareForCreate,
     setSingleSetData,
-  } = useSetApi({folderId, search, setExternalLoading: setLoading});
+  } = useSetApi({folderId, search});
 
   // Memoize menu options style
   const menuOptionsStyle = useMemo(() => ({
