@@ -18,7 +18,7 @@ import Font from '../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {apiGet, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
-import Loader from '../component/Loader';
+import {useLoader} from '../context/LoaderContext';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
 import {
@@ -40,7 +40,7 @@ const isAndroid = Platform.OS === 'android';
 const SubscriptionScreen = () => {
   const route = useRoute();
   const isFocused = useIsFocused();
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [subscriptionData, setSubscriptionData] = useState([]);
   const [iapInitialized, setIapInitialized] = useState(false);
   const [subscriptions, setSubscriptions] = useState([]);
@@ -116,7 +116,7 @@ const SubscriptionScreen = () => {
 
   const getSubscriptionData = useCallback(async (message, messageValue) => {
     try {
-      setVisible(true);
+      showLoader();
       const url = `${Api.subscription}`;
 
       const response = await apiGet(url);
@@ -127,7 +127,7 @@ const SubscriptionScreen = () => {
     } catch (error) {
       console.log('error in getpdf api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, []);
 
@@ -141,7 +141,7 @@ const SubscriptionScreen = () => {
         startDate: startDate,
         endDate: endDate,
       };
-      setVisible(true);
+      showLoader();
       try {
         const response = await apiPut(
           Api.updateSubscription,
@@ -154,7 +154,7 @@ const SubscriptionScreen = () => {
       } catch (error) {
         console.log('error in edit Set api', error);
       } finally {
-        setVisible(false);
+        hideLoader();
       }
     },
     [cancelSubscription, selectedSubscription, userId],
@@ -171,7 +171,7 @@ const SubscriptionScreen = () => {
       purchaseToken: offerToken,
       userId: userId,
     };
-    setVisible(true);
+    showLoader();
     try {
       const response = await apiPut(
         Api.cancelSubscription,
@@ -181,7 +181,7 @@ const SubscriptionScreen = () => {
     } catch (error) {
       console.log('error in edit Set api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, [subscribedData]);
 
@@ -435,7 +435,6 @@ const SubscriptionScreen = () => {
 
   return (
     <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
-      <Loader visible={visible} />
       <LinearGradient colors={colorTheme.gradientTheme} style={styles.gradient}>
         {renderHeader()}
         <View style={styles.contentContainer}>

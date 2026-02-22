@@ -16,7 +16,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Api from '../../Api/EndPoint';
 import {apiPost} from '../../Api/ApiService';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context/LoaderContext';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CustomeInputField from '../../custome/CustomeInputField';
 import useTheme from '../../component/Theme';
@@ -31,7 +31,7 @@ const options = {
 
 const SupportScreen = () => {
   const [selectedIssue, setSelectedIssue] = useState('');
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [imageFile, setImageFile] = useState('');
   const [issueDesc, setIssueDesc] = useState('');
   const colorTheme = useTheme();
@@ -48,7 +48,7 @@ const SupportScreen = () => {
     formdata.append('userId', userId);
 
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPost(Api.support, '', formdata);
       if (response?.success) {
         showMessageonTheScreen(response.message);
@@ -58,7 +58,7 @@ const SupportScreen = () => {
     } catch (error) {
       console.log('error in upload image api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, [imageFile, selectedIssue, issueDesc, userId]);
 
@@ -195,7 +195,6 @@ const SupportScreen = () => {
 
   return (
     <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
-      <Loader visible={visible} />
       <StatusBar backgroundColor={colorTheme.background1} />
       {renderHeader()}
       {renderBody()}

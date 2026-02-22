@@ -21,7 +21,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import {apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
@@ -34,7 +34,7 @@ const SignUpScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const colorTheme = useTheme();
-  const [visible, setVisible] = useState(false);
+  const {showLoader, hideLoader} = useLoader();
   const [languageModal, setLanguageModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -76,7 +76,7 @@ const SignUpScreen = () => {
 
   const signUp = async value => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPost(Api.signUp, '', JSON.stringify(value));
       if (response?.success === true) {
         navigation?.navigate(ScreenName.otpVerify, {email: value.email});
@@ -86,7 +86,7 @@ const SignUpScreen = () => {
     } catch (error) {
       console.log('error in signUp api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -126,7 +126,6 @@ const SignUpScreen = () => {
         {backgroundColor: colorTheme.background1},
       ]}
       showsVerticalScrollIndicator={false}>
-      <Loader visible={visible} />
       <Text style={[styles.title, {color: colorTheme.textColor}]}>
         {strings.signUp}
       </Text>

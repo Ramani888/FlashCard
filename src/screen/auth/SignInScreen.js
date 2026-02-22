@@ -13,7 +13,7 @@ import {ScreenName} from '../../component/Screen';
 import {apiPost} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import {useAppDispatch} from '../../redux/hooks';
@@ -35,8 +35,8 @@ const SignInScreen = () => {
   const navigation = useNavigation();
   const themeColor = useTheme();
   const dispatch = useAppDispatch();
+  const {showLoader, hideLoader} = useLoader();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [visible, setVisible] = useState(false);
 
   // ===================================== Api =================================== //
 
@@ -46,7 +46,7 @@ const SignInScreen = () => {
       password: password,
     };
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPost(Api.signIn, '', JSON.stringify(rawData));
       if (response?.success === true) {
         const userData = response?.user;
@@ -66,7 +66,7 @@ const SignInScreen = () => {
     } catch (error) {
       console.log('error in login api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, [dispatch, navigation]);
 
@@ -87,7 +87,6 @@ const SignInScreen = () => {
 
   return (
     <View style={[styles.container, {backgroundColor: themeColor.background1}]}>
-      <Loader visible={visible} />
       <Text style={[styles.title, {color: themeColor.textColor}]}>
         {strings.signIn}
       </Text>

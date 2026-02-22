@@ -10,7 +10,7 @@ import Font from '../../component/Font';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import NoDataView from '../../component/NoDataView';
 import useTheme from '../../component/Theme';
@@ -23,7 +23,7 @@ const AssignSetScreen = () => {
   const route = useRoute();
   const refRBSheet = useRef();
   const colorTheme = useTheme();
-  const [visible, setVisible] = useState(false);
+  const {showLoader, hideLoader} = useLoader();
   const [setData, setSetData] = useState([]);
   const [setName, setSetName] = useState('');
   const [setStatus, setSetStatus] = useState(0);
@@ -46,7 +46,7 @@ const AssignSetScreen = () => {
 
   const getSetData = useCallback(
     async (message, messageValue) => {
-      message === false && setVisible(true);
+      message === false && showLoader();
       try {
         const url = folderId
           ? `${Api.FolderSet}?userId=${userId}&folderId=${folderId}`
@@ -57,10 +57,10 @@ const AssignSetScreen = () => {
       } catch (error) {
         console.log('error in get folder api', error);
       } finally {
-        setVisible(false);
+        hideLoader();
       }
     },
-    [folderId, userId],
+    [folderId, userId, showLoader, hideLoader],
   );
 
   const createSet = useCallback(async () => {
@@ -72,7 +72,7 @@ const AssignSetScreen = () => {
       ...(folderId ? {folderId: folderId} : {}),
       isHighlight: colorView,
     };
-    setVisible(true);
+    showLoader();
     try {
       const response = await apiPost(Api.Set, '', JSON.stringify(rawData));
       setSetName('');
@@ -82,11 +82,11 @@ const AssignSetScreen = () => {
     } catch (error) {
       console.log('error in create set api', error);
     }
-  }, [colorView, folderId, getSetData, setColor, setName, setStatus]);
+  }, [colorView, folderId, getSetData, setColor, setName, setStatus, userId, showLoader]);
 
   const assignSet = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         `${Api.moveCard}?setId=${selectedSetId}&cardId=${cardId}`,
       );
@@ -101,7 +101,7 @@ const AssignSetScreen = () => {
 
   const assignOtherUserCard = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         `${Api.mediatorCard}?setId=${selectedSetId}&cardId=${cardId}&userId=${userId}`,
       );
@@ -308,7 +308,6 @@ const AssignSetScreen = () => {
   return (
     <View
       style={[styles.maiContainer, {backgroundColor: colorTheme.background1}]}>
-      <Loader visible={visible} />
       {renderHeader()}
       {renderBody()}
     </View>

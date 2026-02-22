@@ -10,6 +10,9 @@ export {useDebounce, default as useDebounceDefault} from './useDebounce';
 // Re-export Redux hooks
 export {useAppDispatch, useAppSelector} from '../redux/hooks';
 
+// Re-export Context hooks for convenience
+export {useLoader} from '../context';
+
 // Re-export types
 export type {Folder} from './useFolderApi';
 export type {CardSet} from './useSetApi';

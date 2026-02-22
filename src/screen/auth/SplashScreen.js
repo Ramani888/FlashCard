@@ -8,16 +8,13 @@ import LottieSplashScreen from 'react-native-lottie-splash-screen';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     checkLogin();
   }, [checkLogin]);
 
   const checkLogin = useCallback(async () => {
-    setVisible(true);
     const user = await AsyncStorage.getItem('user');
-    setVisible(false);
 
     if (user) {
       setTimeout(() => {

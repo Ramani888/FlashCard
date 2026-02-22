@@ -6,7 +6,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
@@ -22,7 +22,7 @@ const AssignPdfFolder = () => {
   const route = useRoute();
   const refRBSheet = useRef(null);
   const {pdfId} = route.params;
-  const [visible, setVisible] = useState(false);
+  const {showLoader, hideLoader} = useLoader();
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
@@ -44,7 +44,7 @@ const AssignPdfFolder = () => {
   // ============================ API Calls ============================ //
 
   const getPdfFolderData = async (message, messageValue) => {
-    message === false && setVisible(true);
+    message === false && showLoader();
     try {
       const response = await apiGet(
         `${Api.pdfFolder}?userId=${userId}`,
@@ -54,7 +54,7 @@ const AssignPdfFolder = () => {
     } catch (error) {
       console.log('error in get pdf folder api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -66,7 +66,7 @@ const AssignPdfFolder = () => {
         userId: userId,
         isHighlight: colorView,
       };
-      setVisible(true);
+      showLoader();
       try {
         const response = await apiPost(
           Api.pdfFolder,
@@ -81,12 +81,12 @@ const AssignPdfFolder = () => {
         console.log('error in create pdf folder api', error);
       }
     },
-    [colorView, folderColor, folderName, userId],
+    [colorView, folderColor, folderName, userId, showLoader, getPdfFolderData],
   );
 
   const assignPdfFolder = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         `${Api.assignPdfFolder}?_id=${pdfId}&folderId=${selectedFolderId}`,
       );
@@ -198,7 +198,6 @@ const AssignPdfFolder = () => {
 
   return (
     <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
-      <Loader visible={visible} />
       {renderHeader}
       <View style={styles.bodyContainer}>
         {folderData?.length > 0 ? (

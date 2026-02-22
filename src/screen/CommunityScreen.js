@@ -15,7 +15,7 @@ import CustomeHeader from '../custome/CustomeHeader';
 import {scale, verticalScale} from '../custome/Responsive';
 import Font from '../component/Font';
 import {useNavigation} from '@react-navigation/native';
-import Loader from '../component/Loader';
+import {useLoader} from '../context/LoaderContext';
 import {apiGet} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -28,7 +28,7 @@ import NoDataView from '../component/NoDataView';
 const {height} = Dimensions.get('window');
 const GlobalLiveFeedScreen = () => {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [liveFeedData, setLiveFeedData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
@@ -44,13 +44,13 @@ const GlobalLiveFeedScreen = () => {
 
   const getLiveFeedData = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiGet(Api.getLiveFeedData);
       setLiveFeedData(response || []);
     } catch (error) {
       console.error('Error in getLiveFeedData API:', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -171,15 +171,13 @@ const GlobalLiveFeedScreen = () => {
           scrollEnabled={false}
         />
       ) : (
-        visible === false && (
-          <View style={styles.noDataView}>
-            <NoDataView
-              content={strings.noDataFound}
-              noDataTextStyle={styles.noDataText}
-              isCommunityScreen={true}
-            />
-          </View>
-        )
+        <View style={styles.noDataView}>
+          <NoDataView
+            content={strings.noDataFound}
+            noDataTextStyle={styles.noDataText}
+            isCommunityScreen={true}
+          />
+        </View>
       )}
     </ScrollView>
   );
@@ -192,7 +190,6 @@ const GlobalLiveFeedScreen = () => {
         styles.screenContainer,
         {backgroundColor: colorTheme.background},
       ]}>
-      <Loader visible={visible} />
       {renderBody()}
       <CustomeModal
         visible={modalVisible}

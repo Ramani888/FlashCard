@@ -23,7 +23,7 @@ import EmailBottomSheetsContent from '../../component/profile/profile/EmailBotto
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context/LoaderContext';
 import {apiGet, apiPut, apiDelete} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import * as Progress from 'react-native-progress';
@@ -107,7 +107,7 @@ const ProfileScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [userCreditData, setUserCreditData] = useState({});
@@ -185,7 +185,7 @@ const ProfileScreen = () => {
     formdata.append('picture', file);
     formdata.append('_id', userId);
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(Api.profilePic, '', formdata);
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
@@ -196,13 +196,13 @@ const ProfileScreen = () => {
     } catch (error) {
       console.log('error in updateProfilePicture api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
   const getProfileData = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiGet(
         `${Api.profile}?userId=${userId}`,
       );
@@ -217,14 +217,14 @@ const ProfileScreen = () => {
     } catch (error) {
       console.log('error in get profile api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
   const updateCredit = async (credit, type) => {
     const rawData = {userId: userId, credit: credit, type: type};
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
       if (response.success) {
         getProfileData(false);
@@ -232,7 +232,7 @@ const ProfileScreen = () => {
     } catch (error) {
       console.error('Error updating credit:', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -269,7 +269,7 @@ const ProfileScreen = () => {
 
   const handleLogout = async () => {
     try {
-      setVisible(true);
+      showLoader();
       await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
       // Clear Redux state instead of global
       dispatch(logout());
@@ -281,13 +281,13 @@ const ProfileScreen = () => {
     } catch (error) {
       console.log('error in logout', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
   const handleDeleteAccount = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiDelete(Api.deleteAccount);
       if (response?.success) {
         await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
@@ -304,7 +304,7 @@ const ProfileScreen = () => {
       console.log('error in delete account', error);
       showMessageonTheScreen('Failed to delete account. Please try again.');
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -383,7 +383,6 @@ const ProfileScreen = () => {
     <MenuProvider>
       <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
         <StatusBar translucent backgroundColor={Color.transparent} />
-        <Loader visible={visible || loading} color={Color.White} />
         <ScrollView
           style={styles.scrollContainer}
           showsVerticalScrollIndicator={false}>

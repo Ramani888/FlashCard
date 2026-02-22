@@ -16,7 +16,7 @@ import Font from '../../component/Font';
 import SetDetailModalContent from '../../component/cards/SetDetailModalContent';
 import {apiDelete, apiGet, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CardGridLayout from '../../component/cards/CardGridLayout';
 import SimpleLayout from '../../component/cards/SimpleLayout';
@@ -43,7 +43,7 @@ const SetDetailScreen = () => {
   const route = useRoute();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
+  const {showLoader, hideLoader} = useLoader();
   const [cardData, setCardData] = useState([]);
   const [layout, setLayout] = useState('single');
   const [changeOrder, setChangeOrder] = useState(false);
@@ -70,7 +70,7 @@ const SetDetailScreen = () => {
     async (update, isBlur, deleteCard, position) => {
       try {
         if (!update && !deleteCard) {
-          setVisible(true);
+          showLoader();
         }
         const response = await apiGet(
           `${Api.card}?setId=${setId}&folderId=${folderId}&userId=${userId}`,
@@ -79,15 +79,15 @@ const SetDetailScreen = () => {
       } catch (error) {
         console.log('error', error);
       } finally {
-        setVisible(false);
+        hideLoader();
       }
     },
-    [folderId, setId, userId],
+    [folderId, setId, userId, showLoader, hideLoader],
   );
 
   const updateCard = useCallback(
     async (cardId, top, bottom, note, isBlur, position) => {
-      !position && setVisible(true);
+      !position && showLoader();
       const rawData = {
         _id: cardId,
         userId: userId,
@@ -108,13 +108,13 @@ const SetDetailScreen = () => {
         console.log('error in update card', error);
       }
     },
-    [folderId, setId, getCardData],
+    [folderId, setId, userId, getCardData, showLoader],
   );
 
   const blurAllCard = async isBlur => {
     setIsAllBlur(isBlur);
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         `${Api.blurAllCard}?setId=${setId}&isBlur=${isBlur}`,
       );
@@ -128,7 +128,7 @@ const SetDetailScreen = () => {
 
   const deleteCard = async cardId => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiDelete(`${Api.card}?_id=${cardId}`);
       if (response?.success === true) {
         getCardData(false, '', true);
@@ -154,7 +154,7 @@ const SetDetailScreen = () => {
 
   const updatePosition = useCallback(() => {
     try {
-      setVisible(true);
+      showLoader();
       cardData?.map((item, index) =>
         updateCard(
           item?._id,
@@ -168,7 +168,7 @@ const SetDetailScreen = () => {
     } catch (error) {
       console.log('error in update position functionality');
     }
-  }, [cardData, updateCard]);
+  }, [cardData, updateCard, showLoader]);
 
   // ====================================== End ===================================== //
 
@@ -346,7 +346,6 @@ const SetDetailScreen = () => {
   return (
     <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
       <MenuProvider>
-        <Loader visible={visible} />
         {renderHeader()}
         {renderBody}
         

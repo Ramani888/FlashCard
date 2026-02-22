@@ -17,7 +17,7 @@ import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScreenName} from '../../component/Screen';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -28,7 +28,7 @@ const OtpVerifyScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const colorTheme = useTheme();
-  const [visible, setVisible] = useState(false);
+  const {showLoader, hideLoader} = useLoader();
   const [isValid, setIsValid] = useState(true);
   const [otp, setOtp] = useState('');
   const [countdown, setCountdown] = useState(60);
@@ -163,7 +163,7 @@ const OtpVerifyScreen = () => {
         language: languageCode, // Add selected language to the request
       };
       
-      setVisible(true);
+      showLoader();
       const response = await apiPost(
         Api.verifyOtp,
         '',
@@ -178,7 +178,7 @@ const OtpVerifyScreen = () => {
     } catch (error) {
       console.log('error in verify otp api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -196,7 +196,7 @@ const OtpVerifyScreen = () => {
         language: languageCode, // Add selected language to the request
       };
       
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         Api.forgotPasswordVerifyOtp,
         '',
@@ -210,7 +210,7 @@ const OtpVerifyScreen = () => {
     } catch (error) {
       console.log('error in verify otp api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -221,7 +221,7 @@ const OtpVerifyScreen = () => {
       const selectedLanguage = langData ? JSON.parse(langData) : null;
       const languageCode = selectedLanguage?.code || 'en'; // Default to English if not set
       
-      setVisible(true);
+      showLoader();
       const response = await apiPut(`${Api.resendOtp}?email=${email}&language=${languageCode}`);
       // console.log('response', response);
       if (response?.success === true) {
@@ -232,7 +232,7 @@ const OtpVerifyScreen = () => {
     } catch (error) {
       console.log('error in verify otp api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -336,7 +336,6 @@ const OtpVerifyScreen = () => {
   };
   return (
     <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
-      <Loader visible={visible} />
       {renderBody()}
     </View>
   );

@@ -6,7 +6,7 @@ import Font from '../../../component/Font';
 import CustomeHeader from '../../../custome/CustomeHeader';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import Loader from '../../../component/Loader';
+import {useLoader} from '../../../context/LoaderContext';
 import {apiGet} from '../../../Api/ApiService';
 import Api from '../../../Api/EndPoint';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -19,7 +19,7 @@ import useTheme from '../../../component/Theme';
 const OtherUserCardScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [cardData, setCardData] = useState([]);
   const {item} = route.params;
   const colorTheme = useTheme();
@@ -32,7 +32,7 @@ const OtherUserCardScreen = () => {
 
   const getCardData = useCallback(async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiGet(
         `${Api.card}?setId=${item?._id}&folderId=${item?.folderId}&userId=${item?.userId}`,
       );
@@ -40,7 +40,7 @@ const OtherUserCardScreen = () => {
     } catch (error) {
       console.log('error', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, [item?._id, item?.folderId, item?.userId]);
 
@@ -128,13 +128,11 @@ const OtherUserCardScreen = () => {
             renderItem={renderCard}
           />
         ) : (
-          visible === false && (
-            <NoDataView
-              content={strings.cardNotFound}
-              noDataViewStyle={{marginTop: verticalScale(-70)}}
-              noDataTextStyle={{color: Color.White}}
-            />
-          )
+          <NoDataView
+            content={strings.cardNotFound}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+            noDataTextStyle={{color: Color.White}}
+          />
         )}
       </View>
     );
@@ -143,7 +141,6 @@ const OtherUserCardScreen = () => {
   return (
     <MenuProvider>
       <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
-        <Loader visible={visible} />
         {header}
         {renderBody()}
       </LinearGradient>

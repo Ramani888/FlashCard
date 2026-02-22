@@ -20,7 +20,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
@@ -29,7 +29,7 @@ import {useAppSelector} from '../../redux/hooks';
 const CreateCardScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [visible, setVisible] = useState(false);
+  const {showLoader, hideLoader} = useLoader();
   const [top, setTop] = useState('');
   const [bottom, setBottom] = useState('');
   const [noteVisible, setNoteVisible] = useState(false);
@@ -82,7 +82,7 @@ const CreateCardScreen = () => {
     };
 
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPost(Api.card, '', JSON.stringify(rawData));
       if (response.success === true) {
         showMessageonTheScreen(response?.message);
@@ -91,7 +91,7 @@ const CreateCardScreen = () => {
     } catch (err) {
       console.log('Error creating card:', err);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -107,7 +107,7 @@ const CreateCardScreen = () => {
       isBlur: initialData?.isBlur === false ? 0 : 1,
     };
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(Api.card, '', JSON.stringify(rawData));
       if (response.success === true) {
         showMessageonTheScreen(response?.message);
@@ -116,7 +116,7 @@ const CreateCardScreen = () => {
     } catch (error) {
       console.log('error in update card', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -159,7 +159,6 @@ const CreateCardScreen = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={[styles.container, {backgroundColor: colorTheme.background}]}>
-      <Loader visible={visible} />
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
         keyboardShouldPersistTaps="handled">

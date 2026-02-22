@@ -17,7 +17,7 @@ import BottomSheetContent from '../../component/BottomSheetContent';
 import NoteModalContent from '../../component/profile/NoteModalContent';
 import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context/LoaderContext';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
@@ -32,7 +32,7 @@ import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const NotesScreen = () => {
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
   const [noteData, setNoteData] = useState([]);
@@ -59,7 +59,7 @@ const NotesScreen = () => {
 
   const getNoteData = async (initialLoader, message) => {
     try {
-      initialLoader && setVisible(true);
+      initialLoader && showLoader();
       const response = await apiGet(`${Api.notes}?userId=${userId}`);
       
       // Handle different response structures
@@ -80,7 +80,7 @@ const NotesScreen = () => {
     } catch (error) {
       console.log('error in get note data', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -93,7 +93,7 @@ const NotesScreen = () => {
       isHighlight: colorView,
     };
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPost(Api.notes, '', JSON.stringify(rawData));
       if (response?.success === true) {
         getNoteData(false, response?.message);
@@ -101,7 +101,7 @@ const NotesScreen = () => {
     } catch (error) {
       console.log('error in create note api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, [colorView, noteColor, noteName, userId]);
 
@@ -116,7 +116,7 @@ const NotesScreen = () => {
         isHighlight: isColorView ? isColorView : colorView,
       };
       try {
-        setVisible(true);
+        showLoader();
         const response = await apiPut(Api.notes, '', JSON.stringify(rawData));
         if (response?.success === true) {
           getNoteData(false, false);
@@ -124,7 +124,7 @@ const NotesScreen = () => {
       } catch (error) {
         console.log('error in update note api', error);
       } finally {
-        setVisible(false);
+        hideLoader();
       }
     },
     [colorView, noteColor, noteName, singleNoteData, userId],
@@ -132,7 +132,7 @@ const NotesScreen = () => {
 
   const deleteNote = useCallback(async noteId => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiDelete(`${Api.notes}?_id=${noteId}`);
       if (response?.success === true) {
         getNoteData(false, response?.message);
@@ -140,7 +140,7 @@ const NotesScreen = () => {
     } catch (error) {
       console.log('error in delete note api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, []);
 
@@ -314,24 +314,21 @@ const NotesScreen = () => {
             windowSize={5}
           />
         ) : (
-          visible === false && (
-            <NoDataView
-              content={strings.noNoteFound}
-              noDataViewStyle={{marginTop: verticalScale(-70)}}
-            />
-          )
+          <NoDataView
+            content={strings.noNoteFound}
+            noDataViewStyle={{marginTop: verticalScale(-70)}}
+          />
         )}
         {BottomSheets()}
       </View>
     ),
-    [renderNotes, BottomSheets, visible, noteData],
+    [renderNotes, BottomSheets, noteData],
   );
 
   return (
     <MenuProvider>
       <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
         <StatusBar translucent backgroundColor="transparent" />
-        <Loader visible={visible} />
         {renderHeader()}
         {renderBody()}
         <CustomeButton

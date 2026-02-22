@@ -11,7 +11,7 @@ import {apiGet} from '../../../Api/ApiService';
 import Api from '../../../Api/EndPoint';
 import {Menu, MenuTrigger, MenuOptions, MenuOption, MenuProvider} from 'react-native-popup-menu';
 import {ScreenName} from '../../../component/Screen';
-import Loader from '../../../component/Loader';
+import {useLoader} from '../../../context/LoaderContext';
 import NoDataView from '../../../component/NoDataView';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useTheme from '../../../component/Theme';
@@ -20,7 +20,7 @@ import strings from '../../../language/strings';
 const OtherUserScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [setData, setSetData] = useState([]);
   const {item} = route.params;
   const colorTheme = useTheme();
@@ -33,7 +33,7 @@ const OtherUserScreen = () => {
 
   const getSetData = useCallback(async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiGet(
         `${Api.mediatorUserSet}?userId=${item?.contactUserId}`,
       );
@@ -43,7 +43,7 @@ const OtherUserScreen = () => {
     } catch (error) {
       console.log('error in get set data api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   }, [item.contactUserId]);
 
@@ -146,13 +146,11 @@ const OtherUserScreen = () => {
             style={styles.flatlist}
           />
         ) : (
-          visible === false && (
-            <NoDataView
-              content={strings.setNotFound}
-              noDataViewStyle={{}}
-              noDataTextStyle={{color: Color.Black}}
-            />
-          )
+          <NoDataView
+            content={strings.setNotFound}
+            noDataViewStyle={{}}
+            noDataTextStyle={{color: Color.Black}}
+          />
         )}
       </View>
     );
@@ -160,7 +158,6 @@ const OtherUserScreen = () => {
   return (
     <MenuProvider>
       <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
-        <Loader visible={visible} />
         {renderBody()}
       </View>
     </MenuProvider>

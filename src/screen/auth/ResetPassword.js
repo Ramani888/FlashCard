@@ -19,7 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
 import {apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
@@ -27,10 +27,10 @@ import strings from '../../language/strings';
 const ResetPassword = () => {
   const navigation = useNavigation();
   const themeColor = useTheme();
+  const {showLoader, hideLoader} = useLoader();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
-  const [visible, setVisible] = useState(false);
 
   // ======================================= Api ====================================== //
 
@@ -41,7 +41,7 @@ const ResetPassword = () => {
     };
 
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         Api.forgotPassword,
         '',
@@ -57,7 +57,7 @@ const ResetPassword = () => {
     } catch (error) {
       console.log('error', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -121,7 +121,6 @@ const ResetPassword = () => {
         {backgroundColor: themeColor.background1},
       ]}
       showsVerticalScrollIndicator={false}>
-      <Loader visible={visible} />
       <Text style={[styles.title, {color: themeColor.textColor}]}>
         {strings.resetPassword}
       </Text>

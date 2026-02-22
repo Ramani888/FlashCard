@@ -18,7 +18,7 @@ import Font from './src/component/Font';
 import firestore from '@react-native-firebase/firestore';
 import DeviceInfo from 'react-native-device-info';
 import ErrorBoundary from './src/component/ErrorBoundary';
-import {AuthProvider} from './src/context';
+import {AuthProvider, LoaderProvider} from './src/context';
 import {useAppSelector} from './src/redux/hooks';
 
 /**
@@ -141,7 +141,9 @@ const App = gestureHandlerRootHOC(() => {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <AppContent />
+        <LoaderProvider>
+          <AppContent />
+        </LoaderProvider>
       </AuthProvider>
     </Provider>
   );

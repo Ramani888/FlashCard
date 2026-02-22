@@ -20,7 +20,7 @@ import CustomeHeader from '../custome/CustomeHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import {apiGet, apiPost, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
-import Loader from '../component/Loader';
+import {useLoader} from '../context/LoaderContext';
 import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
 import Clipboard from '@react-native-clipboard/clipboard';
 import useTheme from '../component/Theme';
@@ -44,7 +44,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const [answer, setAnswer] = useState('');
   const [inputHeight, setInputHeight] = useState(verticalScale(190));
   const [userCredit, setUserCredit] = useState('');
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const refAiRBSheet = useRef();
   const colorTheme = useTheme();
   const adRef = useRef();
@@ -69,7 +69,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
   const getAnswer = async () => {
     const rawData = {message: question};
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPost(
         Api.chatGptAi,
         '',
@@ -82,14 +82,14 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     } catch (error) {
       console.error('Error in chatGpt API:', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
-  const getProfileData = async showLoader => {
+  const getProfileData = async shouldShowLoader => {
     try {
-      if (showLoader) {
-        setVisible(true);
+      if (shouldShowLoader) {
+        showLoader();
       }
       const response = await apiGet(
         `${Api.profile}?userId=${userId}`,
@@ -98,14 +98,16 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     } catch (error) {
       console.error('Error fetching profile data:', error);
     } finally {
-      setVisible(false);
+      if (shouldShowLoader) {
+        hideLoader();
+      }
     }
   };
 
   const updateCredit = async (credit, type) => {
     const rawData = {userId: userId, credit: credit, type: type};
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(Api.credit, '', JSON.stringify(rawData));
       if (response.success) {
         getProfileData(false);
@@ -113,7 +115,7 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
     } catch (error) {
       console.error('Error updating credit:', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -171,7 +173,6 @@ const AiScreen = ({setOpenAIBottomsheet}) => {
       style={styles.Wrapper}
     >
       <View style={[styles.Container]}>
-        <Loader visible={visible} />
         <View style={styles.Header}>
           {renderHeader()}
           <VideoAds

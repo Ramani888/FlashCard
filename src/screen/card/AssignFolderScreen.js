@@ -6,7 +6,7 @@ import CustomeButton from '../../custome/CustomeButton';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
-import Loader from '../../component/Loader';
+import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {apiGet, apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
@@ -21,7 +21,7 @@ const AssignFolderScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const refRBSheet = useRef(null);
-  const [visible, setVisible] = useState(false);
+  const {showLoader, hideLoader} = useLoader();
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
@@ -52,7 +52,7 @@ const AssignFolderScreen = () => {
 
   const getFolderData = async (message = false, messageValue) => {
     if (!message) {
-      setVisible(true);
+      showLoader();
     }
     try {
       const response = await apiGet(
@@ -65,7 +65,7 @@ const AssignFolderScreen = () => {
     } catch (error) {
       console.error('Error in fetching folder data', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -77,7 +77,7 @@ const AssignFolderScreen = () => {
       userId: userId,
       isHighlight: colorView,
     };
-    setVisible(true);
+    showLoader();
     try {
       const response = await apiPost(Api.Folder, '', JSON.stringify(rawData));
       setFolderName('');
@@ -87,11 +87,11 @@ const AssignFolderScreen = () => {
     } catch (error) {
       console.error('Error in creating folder', error);
     }
-  }, [colorView, folderColor, folderName, folderStatus, userId]);
+  }, [colorView, folderColor, folderName, folderStatus, userId, showLoader, getFolderData]);
 
   const assignFolder = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         `${Api.assignedFolder}?folderId=${selectedFolderId}&setId=${setId}`,
       );
@@ -106,7 +106,7 @@ const AssignFolderScreen = () => {
 
   const assignOtherSet = async () => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPut(
         `${Api.mediatorUserSet}?folderId=${selectedFolderId}&setId=${setId}&userId=${userId}`,
       );
@@ -221,7 +221,6 @@ const AssignFolderScreen = () => {
 
   return (
     <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
-      <Loader visible={visible} />
       {renderHeader}
       <View style={styles.bodyContainer}>
         {folderData?.length > 0 ? (

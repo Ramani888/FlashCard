@@ -11,7 +11,7 @@ import ContactBottomSheetContent from '../../../component/profile/contact/Contac
 import {apiDelete, apiGet, apiPost} from '../../../Api/ApiService';
 import Api from '../../../Api/EndPoint';
 import showMessageonTheScreen from '../../../component/ShowMessageOnTheScreen';
-import Loader from '../../../component/Loader';
+import {useLoader} from '../../../context/LoaderContext';
 import useTheme from '../../../component/Theme';
 import strings from '../../../language/strings';
 import NoDataView from '../../../component/NoDataView';
@@ -19,7 +19,7 @@ import ActionSheet from 'react-native-actions-sheet';
 import {useAppSelector} from '../../../redux/hooks';
 
 const ContactScreen = () => {
-  const [visible, setVisible] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
   const [contactData, setContactData] = useState([]);
   const refContactRBSheet = useRef();
   const colorTheme = useTheme();
@@ -36,7 +36,7 @@ const ContactScreen = () => {
 
   const getContacts = async (message, messageValue) => {
     try {
-      message === false && setVisible(true);
+      message === false && showLoader();
       const response = await apiGet(
         `${Api.contacts}?userId=${userId}`,
       );
@@ -47,7 +47,7 @@ const ContactScreen = () => {
     } catch (error) {
       console.log('error in get contact api', error);
     } finally {
-      setVisible(false);
+      hideLoader();
     }
   };
 
@@ -57,7 +57,7 @@ const ContactScreen = () => {
       contactUserId: selectedUserId,
     };
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiPost(Api.contacts, '', JSON.stringify(rawData));
       if (response.success === true) {
         getContacts(true, response?.message);
@@ -69,7 +69,7 @@ const ContactScreen = () => {
 
   const deleteContacts = async contactId => {
     try {
-      setVisible(true);
+      showLoader();
       const response = await apiDelete(`${Api.contacts}?_id=${contactId}`);
       if (response.success === true) {
         getContacts(true, response?.message);
@@ -180,7 +180,6 @@ const ContactScreen = () => {
   return (
     <MenuProvider>
       <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
-        <Loader visible={visible} />
         {renderHeader}
         <View style={styles.bodyContainer}>
           {contactData?.length > 0 ? (
