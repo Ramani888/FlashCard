@@ -91,7 +91,7 @@ const ConfirmationDialog = memo(({
               fontSize={moderateScale(14)}
               fontFamily={Font.semiBold}
               fontColor={Color.White}
-              borderRadius={moderateScale(5)}
+              borderRadius={moderateScale(10)}
               marginTop={verticalScale(10)}
               marginBottom={verticalScale(10)}
               marginRight={scale(10)}
@@ -106,7 +106,7 @@ const ConfirmationDialog = memo(({
               fontSize={moderateScale(14)}
               fontFamily={Font.semiBold}
               fontColor={Color.White}
-              borderRadius={moderateScale(5)}
+              borderRadius={moderateScale(10)}
               marginTop={verticalScale(10)}
               marginBottom={verticalScale(10)}
               textTransform={'uppercase'}
@@ -125,7 +125,7 @@ export default ConfirmationDialog;
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: scale(10),
+    borderRadius: scale(20),
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: scale(15),
