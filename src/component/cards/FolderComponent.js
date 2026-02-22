@@ -61,12 +61,14 @@ const FolderItem = memo(({item, onPress, onMenuPress, colorView, colorTheme, men
       </View>
       <Menu>
         <MenuTrigger onPress={handleMenuTriggerPress}>
-          <Entypo
-            name="dots-three-vertical"
-            size={scale(13)}
-            color={Color.Black}
-            style={styles.dotsIcon}
-          />
+          <View style={styles.menuIconContainer}>
+            <Entypo
+              name="dots-three-vertical"
+              size={scale(15)}
+              color={item?.isHighlight ? Color.Black : colorTheme.textColor}
+              style={styles.dotsIcon}
+            />
+          </View>
         </MenuTrigger>
         <MenuOptions customStyles={menuOptionsStyle}>
           <ModalContent
@@ -251,6 +253,7 @@ const FolderComponent = ({
             keyExtractor={keyExtractor}
             getItemLayout={getItemLayout}
             style={styles.flatlist}
+            contentContainerStyle={styles.flatlistContent}
             showsVerticalScrollIndicator={false}
             initialNumToRender={15}
             maxToRenderPerBatch={15}
@@ -270,20 +273,19 @@ const FolderComponent = ({
 
         {BottomSheets()}
 
-        <CustomeButton
-          buttonColor={Color.theme1}
-          buttonWidth="100%"
-          buttonHeight={scale(45)}
-          title={strings.createFolder}
-          borderRadius={scale(10)}
-          fontSize={scale(15)}
-          fontColor={Color.White}
-          fontFamily={Font.semiBold}
-          marginTop={verticalScale(15)}
-          position={'absolute'}
-          bottom={verticalScale(10)}
-          onPress={handleCreateFolderPress}
-        />
+        <View style={styles.buttonContainer}>
+          <CustomeButton
+            buttonColor={Color.theme1}
+            buttonWidth="100%"
+            buttonHeight={scale(45)}
+            title={strings.createFolder}
+            borderRadius={scale(10)}
+            fontSize={scale(15)}
+            fontColor={Color.White}
+            fontFamily={Font.semiBold}
+            onPress={handleCreateFolderPress}
+          />
+        </View>
         
         <ConfirmationDialog
           isVisible={showDeleteFolderDialog}
@@ -316,7 +318,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bodyContainer: {flex: 1},
-  flatlist: {marginTop: verticalScale(10), marginBottom: verticalScale(55)},
+  flatlist: {
+    marginTop: verticalScale(10),
+    flex: 1,
+  },
+  flatlistContent: {
+    paddingBottom: verticalScale(10),
+  },
   folderContainer: {
     backgroundColor: Color.White,
     borderRadius: scale(10),
@@ -345,6 +353,8 @@ const styles = StyleSheet.create({
   folderInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
+    marginRight: scale(8),
   },
   iconColor: {
     width: scale(13),
@@ -358,10 +368,16 @@ const styles = StyleSheet.create({
     paddingLeft: scale(10),
     flex: 1,
   },
+  menuIconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: scale(40),
+    minHeight: scale(40),
+  },
   dotsIcon: {
     backgroundColor: Color.WhiteDefault,
     borderRadius: scale(5),
-    padding: scale(10),
+    padding: scale(8),
   },
   menuOptionsContainer: {
     borderRadius: scale(10),
@@ -379,5 +395,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: scale(50),
     marginVertical: verticalScale(15),
+  },
+  buttonContainer: {
+    paddingVertical: verticalScale(10),
+    backgroundColor: 'transparent',
   },
 });

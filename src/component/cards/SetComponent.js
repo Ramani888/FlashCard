@@ -115,16 +115,18 @@ const SetItem = memo(({item, onPress, onMenuPress, showFolder, colorTheme, color
           </Menu>
         </View>
       </Pressable>
-      {showFolder && item?.folderName && (
+      {showFolder && (
         <View style={[styles.folderContainer, styles.alignSelf]}>
           <Image
             source={folderIcon}
             style={styles.folderIcon}
             resizeMode="contain"
           />
-          <Text style={styles.folderText} numberOfLines={1}>
-            {item.folderName}
-          </Text>
+          {item?.folderName && (
+            <Text style={styles.folderText} numberOfLines={1}>
+              {item.folderName}
+            </Text>
+          )}
         </View>
       )}
     </View>
@@ -456,11 +458,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Color.White,
-    height: scale(35),
+    minHeight: scale(35),
     borderRadius: scale(10),
     marginTop: verticalScale(5),
     paddingHorizontal: scale(5),
-    alignSelf: 'flex-start',
+    paddingVertical: scale(3),
   },
   folderIcon: {
     width: scale(26),
@@ -472,7 +474,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     textTransform: 'capitalize',
     marginLeft: scale(5),
-    flex: 1,
+    maxWidth: scale(200),
   },
   indicatorStyle: {
     marginTop: verticalScale(10),

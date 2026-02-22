@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import {Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
 import CardModalContent from './CardModalContent';
+import AddNoteModalContent from './AddNoteModalContent';
 
 const CardGridLayout = ({
   item,

@@ -26,9 +26,9 @@ const NoteModalContent = ({
 
   const handleDelete = useCallback(() => {
     if (onDeletePress) {
-      onDeletePress(item);
+      onDeletePress(item._id);
     }
-  }, [item, onDeletePress]);
+  }, [item._id, onDeletePress]);
 
   const actions = useMemo(() => [
     {
