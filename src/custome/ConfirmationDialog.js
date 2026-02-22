@@ -1,6 +1,5 @@
 import React, {memo} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {moderateScale, scale, verticalScale} from './Responsive';
 import Color from '../component/Color';
 import CustomeButton from './CustomeButton';
@@ -63,11 +62,11 @@ const ConfirmationDialog = memo(({
       mainPadding={scale(5)}
       backgroundColor={colorTheme.modelBackground}
       content={
-        <LinearGradient
-          colors={colorTheme.gradientTheme}
-          style={styles.container}
-          start={{x: 0, y: 0}}
-          end={{x: 0, y: 1}}>
+        <View
+          style={[
+            styles.container,
+            {backgroundColor: colorTheme.modelBackgroundView},
+          ]}>
           <Text
             style={[
               styles.title,
@@ -113,7 +112,7 @@ const ConfirmationDialog = memo(({
               onPress={onConfirm}
             />
           </View>
-        </LinearGradient>
+        </View>
       }
     />
   );
