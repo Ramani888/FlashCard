@@ -1,3 +1,4 @@
+// @ts-nocheck - JavaScript component with PropTypes instead of TypeScript types
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
 import CustomeInputField from '../../src/custome/CustomeInputField';
