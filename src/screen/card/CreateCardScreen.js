@@ -22,8 +22,6 @@ import {apiPost, apiPut} from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import Loader from '../../component/Loader';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-// import AIScreen from '../../component/AIScreen';
-import {ScreenName} from '../../component/Screen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import {useAppSelector} from '../../redux/hooks';
@@ -232,18 +230,6 @@ const CreateCardScreen = () => {
             </Text>
           </Pressable>
 
-          <Pressable
-            onPress={() => navigation.navigate(ScreenName.aiScreen)}
-            style={[
-              styles.aiButton,
-              {marginBottom: noteVisible ? verticalScale(30) : 0},
-            ]}>
-            <Image
-              source={require('../../Assets/Img/ai.png')}
-              style={styles.aiImage}
-            />
-          </Pressable>
-
           <CustomeButton
             buttonColor={Color.theme1}
             buttonWidth="100%"
@@ -253,7 +239,7 @@ const CreateCardScreen = () => {
             fontSize={scale(15)}
             fontColor={Color.White}
             fontFamily={Font.semiBold}
-            marginTop={noteVisible ? verticalScale(0) : verticalScale(35)}
+            marginTop={verticalScale(35)}
             marginBottom={verticalScale(0)}
             bottom={verticalScale(10)}
             onPress={() => {
@@ -265,7 +251,6 @@ const CreateCardScreen = () => {
             }}
           />
         </View>
-        {/* <AiScreen setOpenAIBottomsheet={setOpenAIBottomsheet} /> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -339,6 +324,4 @@ const styles = StyleSheet.create({
     padding: scale(10),
     width: scale(30),
   },
-  aiButton: {marginVertical: verticalScale(27)},
-  aiImage: {width: scale(60), height: scale(60), alignSelf: 'center'},
 });
