@@ -172,4 +172,9 @@ export default {
   swahili: 'Kiswahili',
   tagalog: 'Kitagalog',
   hindi: 'Kihindi',
+  deleteAccount: 'Futa Akaunti',
+  deleteAccountConfirmTitle: 'Futa Akaunti',
+  deleteAccountConfirmMessage: 'Je, una uhakika unataka kufuta akaunti yako? Hatua hii haiwezi kutenduliwa na data yako yote itafutwa kabisa.',
+  cancel: 'Ghairi',
+  deleteAccountSuccess: 'Akaunti imefutwa kwa mafanikio',
 };

@@ -172,4 +172,9 @@ export default {
   swahili: 'Swahili',
   tagalog: 'Tagalog',
   hindi: 'Hindi',
+  deleteAccount: 'Burahin ang Account',
+  deleteAccountConfirmTitle: 'Burahin ang Account',
+  deleteAccountConfirmMessage: 'Sigurado ka bang gusto mong burahin ang iyong account? Ang aksyong ito ay hindi na mababawi at ang lahat ng iyong datos ay permanenteng matatanggal.',
+  cancel: 'Kanselahin',
+  deleteAccountSuccess: 'Matagumpay na nabura ang account',
 };

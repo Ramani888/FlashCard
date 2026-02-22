@@ -172,4 +172,9 @@ export default {
   swahili: 'Suahili',
   tagalog: 'Tagalog',
   hindi: 'Hindi',
+  deleteAccount: 'Usuń Konto',
+  deleteAccountConfirmTitle: 'Usuń Konto',
+  deleteAccountConfirmMessage: 'Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć i wszystkie Twoje dane zostaną trwale usunięte.',
+  cancel: 'Anuluj',
+  deleteAccountSuccess: 'Konto usunięte pomyślnie',
 };

@@ -39,6 +39,7 @@ const Api = {
   getLiveFeedData: `${Base_url}/card/all`,
   updateSubscription: `${Base_url}/subscription`,
   cancelSubscription: `${Base_url}/cancel/subscription`,
+  deleteAccount: `${Base_url}/account`,
 };
 
 export default Api;

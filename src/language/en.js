@@ -173,4 +173,9 @@ export default {
   swahili: 'Swahili',
   tagalog: 'Tagalog',
   hindi: 'Hindi',
+  deleteAccount: 'Delete Account',
+  deleteAccountConfirmTitle: 'Delete Account',
+  deleteAccountConfirmMessage: 'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.',
+  cancel: 'Cancel',
+  deleteAccountSuccess: 'Account deleted successfully',
 };

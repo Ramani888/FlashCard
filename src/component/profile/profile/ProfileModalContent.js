@@ -9,11 +9,16 @@ import strings from '../../../language/strings';
 
 const ProfileModalContent = ({
   handleLogout,
+  handleDeleteAccount,
   colorTheme,
 }) => {
   const onLogoutPress = useCallback(() => {
     handleLogout();
   }, [handleLogout]);
+
+  const onDeleteAccountPress = useCallback(() => {
+    handleDeleteAccount();
+  }, [handleDeleteAccount]);
 
   return (
     <View style={styles.wrapper}>
@@ -26,6 +31,19 @@ const ProfileModalContent = ({
           />
           <Text style={[styles.text, {color: Color.Red}]}>
             {strings.logout}
+          </Text>
+        </View>
+      </MenuOption>
+      <View style={styles.divider} />
+      <MenuOption onSelect={onDeleteAccountPress}>
+        <View style={styles.container}>
+          <MaterialCommunityIcons
+            name="account-remove"
+            size={scale(16)}
+            color={Color.Red}
+          />
+          <Text style={[styles.text, {color: Color.Red}]}>
+            {strings.deleteAccount}
           </Text>
         </View>
       </MenuOption>
@@ -51,6 +69,11 @@ const styles = StyleSheet.create({
     fontSize: scale(15),
     color: Color.Black,
     fontFamily: Font.regular,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: Color.LightGray,
+    marginVertical: verticalScale(4),
   },
 });
 

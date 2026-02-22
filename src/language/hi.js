@@ -172,4 +172,9 @@ export default {
   swahili: 'स्वाहिली',
   tagalog: 'टागालोग',
   hindi: 'हिंदी',
+  deleteAccount: 'खाता हटाएं',
+  deleteAccountConfirmTitle: 'खाता हटाएं',
+  deleteAccountConfirmMessage: 'क्या आप वास्तव में अपना खाता हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती है और आपका सभी डेटा स्थायी रूप से हटा दिया जाएगा।',
+  cancel: 'रद्द करें',
+  deleteAccountSuccess: 'खाता सफलतापूर्वक हटा दिया गया',
 };

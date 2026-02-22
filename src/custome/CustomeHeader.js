@@ -57,6 +57,7 @@ const CustomeHeader = ({
   setSelectedLanguage,
   updateProfilePic,
   handleLogout,
+  handleDeleteAccount,
   openUserNameBottomSheets,
   openEmailBottomSheets,
   handleLanguageSaved,
@@ -167,6 +168,7 @@ const CustomeHeader = ({
           <MenuOptions customStyles={menuOptionsStyle}>
             <ProfileModalContent
               handleLogout={handleLogout}
+              handleDeleteAccount={handleDeleteAccount}
               colorTheme={colorTheme}
             />
           </MenuOptions>

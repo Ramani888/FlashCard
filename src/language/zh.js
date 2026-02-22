@@ -170,4 +170,9 @@ export default {
   swahili: '斯瓦希里语',
   tagalog: '他加禄语',
   hindi: '印地语',
+  deleteAccount: '删除账户',
+  deleteAccountConfirmTitle: '删除账户',
+  deleteAccountConfirmMessage: '您确定要删除您的账户吗？此操作无法撤销，您的所有数据将被永久删除。',
+  cancel: '取消',
+  deleteAccountSuccess: '账户删除成功',
 };

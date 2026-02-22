@@ -172,4 +172,9 @@ export default {
   swahili: 'Swahili',
   tagalog: 'Tagalog',
   hindi: 'Hindi',
+  deleteAccount: 'Supprimer le Compte',
+  deleteAccountConfirmTitle: 'Supprimer le Compte',
+  deleteAccountConfirmMessage: 'Êtes-vous sûr de vouloir supprimer votre compte? Cette action ne peut pas être annulée et toutes vos données seront définitivement supprimées.',
+  cancel: 'Annuler',
+  deleteAccountSuccess: 'Compte supprimé avec succès',
 };
