@@ -3,10 +3,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Linking,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Color from '../../component/Color';
@@ -32,9 +31,22 @@ const ResetPassword = () => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
 
+  // Memoize validation schema
+  const validationSchema = useMemo(() => Yup.object().shape({
+    email: Yup.string()
+      .email(strings.invalidEmail)
+      .required(strings.emailRequired),
+    password: Yup.string()
+      .min(8, strings.passwordError)
+      .required(strings.passwordRequired),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], strings.passwordMatch)
+      .required(strings.confirmPasswordRequired),
+  }), []);
+
   // ======================================= Api ====================================== //
 
-  const forgetPassword = async values => {
+  const forgetPassword = useCallback(async (values) => {
     const rawData = {
       email: values?.email,
       password: values?.password,
@@ -59,60 +71,54 @@ const ResetPassword = () => {
     } finally {
       hideLoader();
     }
-  };
+  }, [navigation, showLoader, hideLoader]);
 
-  const togglePasswordVisibility = () =>
-    setIsPasswordVisible(!isPasswordVisible);
+  const togglePasswordVisibility = useCallback(() =>
+    setIsPasswordVisible(prev => !prev), []);
 
-  const toggleConfirmPasswordVisibility = () =>
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  const toggleConfirmPasswordVisibility = useCallback(() =>
+    setIsConfirmPasswordVisible(prev => !prev), []);
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email(strings.invalidEmail)
-      .required(strings.emailRequired),
-    password: Yup.string()
-      .min(8, strings.passwordError)
-      .required(strings.passwordRequired),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], strings.passwordMatch)
-      .required(strings.confirmPasswordRequired),
-  });
+  // Memoize icon components
+  const emailIcon = useMemo(() => (
+    <View style={styles.iconWrapper}>
+      <MaterialCommunityIcons
+        name="email-outline"
+        size={scale(17)}
+        color={Color.Gray}
+      />
+    </View>
+  ), []);
 
-  //   const renderInputFields = (
-  //     handleChange,
-  //     handleBlur,
-  //     values,
-  //     errors,
-  //     touched,
-  //   ) => {
-  //     return inputFields.map(field => (
-  //       <CustomeInputField
-  //         key={field.name}
-  //         placeholder={field.placeholder}
-  //         placeholderTextColor={Color.mediumGray}
-  //         onChangeText={handleChange(field.name)}
-  //         onBlur={handleBlur(field.name)}
-  //         value={values[field.name]}
-  //         errors={errors[field.name]}
-  //         touched={touched[field.name]}
-  //         iconLeft={true}
-  //         keyboardType={field.keyboardType || 'default'}
-  //         inputStyles={styles.inputStyles}
-  //         errorTextStyles={styles.errorText}
-  //         IconLeftComponent={
-  //           <View style={styles.iconWrapper}>
-  //             <MaterialCommunityIcons
-  //               name={field.iconName}
-  //               size={scale(17)}
-  //               color={Color.Gray}
-  //             />
-  //           </View>
-  //         }
-  //         inputContainerStyles={styles.inputContainer}
-  //       />
-  //     ));
-  //   };
+  const keyIcon = useMemo(() => (
+    <View style={styles.iconWrapper}>
+      <MaterialCommunityIcons
+        name="key-outline"
+        size={scale(17)}
+        color={Color.Gray}
+      />
+    </View>
+  ), []);
+
+  const passwordEyeIcon = useMemo(() => (
+    <Pressable style={styles.iconWrapper} onPress={togglePasswordVisibility}>
+      <MaterialCommunityIcons
+        name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
+        size={scale(17)}
+        color={Color.Gray}
+      />
+    </Pressable>
+  ), [isPasswordVisible, togglePasswordVisibility]);
+
+  const confirmPasswordEyeIcon = useMemo(() => (
+    <Pressable style={styles.iconWrapper} onPress={toggleConfirmPasswordVisibility}>
+      <MaterialCommunityIcons
+        name={isConfirmPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
+        size={scale(17)}
+        color={Color.Gray}
+      />
+    </Pressable>
+  ), [isConfirmPasswordVisible, toggleConfirmPasswordVisibility]);
 
   return (
     <ScrollView
@@ -144,32 +150,22 @@ const ResetPassword = () => {
         }) => (
           <View style={styles.formContainer}>
             <CustomeInputField
-              key={strings.email}
               placeholder={strings.enterEmail}
               placeholderTextColor={Color.mediumGray}
-              onChangeText={handleChange(strings.email)}
-              onBlur={handleBlur(strings.email)}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
               value={values.email}
               errors={errors.email}
               touched={touched.email}
               iconLeft={true}
-              keyboardType={'email-address'}
+              keyboardType="email-address"
               inputStyles={styles.inputStyles}
               errorTextStyles={styles.errorText}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'email-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
+              IconLeftComponent={emailIcon}
               inputContainerStyles={styles.inputContainer}
             />
 
             <CustomeInputField
-              key={'password'}
               placeholder={strings.newPassword}
               placeholderTextColor={Color.mediumGray}
               onChangeText={handleChange('password')}
@@ -181,32 +177,13 @@ const ResetPassword = () => {
               secureTextEntry={!isPasswordVisible}
               inputStyles={styles.inputStyles}
               errorTextStyles={styles.errorText}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'key-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
+              IconLeftComponent={keyIcon}
               iconRight={true}
-              IconRightComponent={
-                <Pressable
-                  style={styles.iconWrapper}
-                  onPress={togglePasswordVisibility}>
-                  <MaterialCommunityIcons
-                    name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </Pressable>
-              }
+              IconRightComponent={passwordEyeIcon}
               inputContainerStyles={styles.inputContainer}
             />
 
             <CustomeInputField
-              key={'confrim password'}
               placeholder={strings.confirmNewPassword}
               placeholderTextColor={Color.mediumGray}
               onChangeText={handleChange('confirmPassword')}
@@ -218,31 +195,9 @@ const ResetPassword = () => {
               secureTextEntry={!isConfirmPasswordVisible}
               inputStyles={styles.inputStyles}
               errorTextStyles={styles.errorText}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'key-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
+              IconLeftComponent={keyIcon}
               iconRight={true}
-              IconRightComponent={
-                <Pressable
-                  style={styles.iconWrapper}
-                  onPress={toggleConfirmPasswordVisibility}>
-                  <MaterialCommunityIcons
-                    name={
-                      isConfirmPasswordVisible
-                        ? 'eye-outline'
-                        : 'eye-off-outline'
-                    }
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </Pressable>
-              }
+              IconRightComponent={confirmPasswordEyeIcon}
               inputContainerStyles={styles.inputContainer}
             />
 

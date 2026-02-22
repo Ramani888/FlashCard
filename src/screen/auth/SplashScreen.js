@@ -1,38 +1,41 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScreenName} from '../../component/Screen';
 import LottieSplashScreen from 'react-native-lottie-splash-screen';
 
+const SPLASH_TIMEOUT = 500;
+
 const SplashScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        const user = await AsyncStorage.getItem('user');
+        const targetScreen = user ? ScreenName.setAndFolder : ScreenName.signIn;
+        
+        setTimeout(() => {
+          LottieSplashScreen.hide();
+          navigation.reset({
+            index: 0,
+            routes: [{name: targetScreen}],
+          });
+        }, SPLASH_TIMEOUT);
+      } catch (error) {
+        console.log('Error checking login:', error);
+        setTimeout(() => {
+          LottieSplashScreen.hide();
+          navigation.reset({
+            index: 0,
+            routes: [{name: ScreenName.signIn}],
+          });
+        }, SPLASH_TIMEOUT);
+      }
+    };
+
     checkLogin();
-  }, [checkLogin]);
-
-  const checkLogin = useCallback(async () => {
-    const user = await AsyncStorage.getItem('user');
-
-    if (user) {
-      setTimeout(() => {
-        LottieSplashScreen.hide();
-        navigation.reset({
-          index: 0,
-          routes: [{name: ScreenName.setAndFolder}],
-        });
-      }, 500);
-    } else {
-      setTimeout(() => {
-        LottieSplashScreen.hide();
-        navigation.reset({
-          index: 0,
-          routes: [{name: ScreenName.signIn}],
-        });
-      }, 500);
-    }
   }, [navigation]);
 
   return <View style={styles.container} />;
@@ -47,5 +50,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
   },
-  lottie: {width: '100%', height: '100%'},
 });

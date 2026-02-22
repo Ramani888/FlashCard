@@ -24,6 +24,18 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
+// Helper function to get language code from AsyncStorage
+const getLanguageCode = async () => {
+  try {
+    const langData = await AsyncStorage.getItem('Language');
+    const selectedLanguage = langData ? JSON.parse(langData) : null;
+    return selectedLanguage?.code || 'en';
+  } catch (error) {
+    console.log('Error getting language:', error);
+    return 'en';
+  }
+};
+
 const OtpVerifyScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -39,13 +51,11 @@ const OtpVerifyScreen = () => {
   const timerRef = useRef(null);
   const startTimestampRef = useRef(null);
 
-  const startTimer = () => {
-    if (timerRef.current) {
-      return;
-    } // Prevent multiple intervals
+  const startTimer = useCallback(() => {
+    if (timerRef.current) return; // Prevent multiple intervals
 
     setIsCounting(true);
-    startTimestampRef.current = Date.now(); // Save the start time
+    startTimestampRef.current = Date.now();
     timerRef.current = setInterval(() => {
       const now = Date.now();
       const elapsedSeconds = Math.floor(
@@ -61,15 +71,15 @@ const OtpVerifyScreen = () => {
         setIsCounting(false);
       }
     }, 1000);
-  };
+  }, []);
 
   // Stop Timer
-  const stopTimer = () => {
+  const stopTimer = useCallback(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (countdown === 0) {
@@ -93,7 +103,7 @@ const OtpVerifyScreen = () => {
       setCountdown(remainingTime);
 
       if (remainingTime > 0) {
-        startTimestampRef.current = Date.now() - elapsedSeconds * 1000; // Adjust the start time
+        startTimestampRef.current = Date.now() - elapsedSeconds * 1000;
         startTimer();
       } else {
         stopTimer();
@@ -102,7 +112,7 @@ const OtpVerifyScreen = () => {
     }
 
     appState.current = nextAppState;
-  }, []);
+  }, [startTimer, stopTimer]);
 
   // Clear Timer on Unmount
   useEffect(() => {
@@ -120,47 +130,20 @@ const OtpVerifyScreen = () => {
   // Start Timer on Mount
   useEffect(() => {
     startTimer();
-    return () => stopTimer(); // Cleanup on unmount
-  }, []);
-
-  // useEffect(() => {
-  //   let timer;
-  //   if (isCounting) {
-  //     timer = setInterval(() => {
-  //       setCountdown(prevCountdown => {
-  //         if (prevCountdown <= 1) {
-  //           clearInterval(timer);
-  //           setIsCounting(false);
-  //           return 60;
-  //         }
-  //         return prevCountdown - 1;
-  //       });
-  //     }, 1000);
-  //   }
-
-  //   return () => clearInterval(timer);
-  // }, [isCounting]);
-
-  // useEffect(() => {
-  //   setIsCounting(true);
-  // }, [isFocused]);
-
-  // console.log('Api.verifyOtp',Api.verifyOtp)
+    return () => stopTimer();
+  }, [startTimer, stopTimer]);
 
   // ===================================== Api ==================================== //
 
-  const verifyOtp = async () => {
+  const verifyOtp = useCallback(async () => {
     try {
-      // Get language from AsyncStorage
-      const langData = await AsyncStorage.getItem('Language');
-      const selectedLanguage = langData ? JSON.parse(langData) : null;
-      const languageCode = selectedLanguage?.code || 'en'; // Default to English if not set
+      const languageCode = await getLanguageCode();
       
       const rawData = {
-        email: email,
-        otp: otp,
+        email,
+        otp,
         isPrivacy: true,
-        language: languageCode, // Add selected language to the request
+        language: languageCode,
       };
       
       showLoader();
@@ -180,20 +163,17 @@ const OtpVerifyScreen = () => {
     } finally {
       hideLoader();
     }
-  };
+  }, [email, otp, showLoader, hideLoader, navigation]);
 
-  const forgotPasswordVerifyOtp = async () => {
+  const forgotPasswordVerifyOtp = useCallback(async () => {
     try {
-      // Get language from AsyncStorage
-      const langData = await AsyncStorage.getItem('Language');
-      const selectedLanguage = langData ? JSON.parse(langData) : null;
-      const languageCode = selectedLanguage?.code || 'en'; // Default to English if not set
+      const languageCode = await getLanguageCode();
       
       const rawData = {
-        email: email,
-        password: password,
-        otp: otp,
-        language: languageCode, // Add selected language to the request
+        email,
+        password,
+        otp,
+        language: languageCode,
       };
       
       showLoader();
@@ -202,7 +182,6 @@ const OtpVerifyScreen = () => {
         '',
         JSON.stringify(rawData),
       );
-      // console.log('response',response)
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
         navigation.navigate(ScreenName.signIn);
@@ -212,48 +191,40 @@ const OtpVerifyScreen = () => {
     } finally {
       hideLoader();
     }
-  };
+  }, [email, password, otp, showLoader, hideLoader, navigation]);
 
-  const ResendOtp = async () => {
+  const ResendOtp = useCallback(async () => {
     try {
-      // Get language from AsyncStorage
-      const langData = await AsyncStorage.getItem('Language');
-      const selectedLanguage = langData ? JSON.parse(langData) : null;
-      const languageCode = selectedLanguage?.code || 'en'; // Default to English if not set
+      const languageCode = await getLanguageCode();
       
       showLoader();
       const response = await apiPut(`${Api.resendOtp}?email=${email}&language=${languageCode}`);
-      // console.log('response', response);
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
+        setCountdown(60);
         startTimer();
-        setIsCounting(true);
       }
     } catch (error) {
-      console.log('error in verify otp api', error);
+      console.log('error in resend otp api', error);
     } finally {
       hideLoader();
     }
-  };
+  }, [email, showLoader, hideLoader, startTimer]);
 
   // ===================================== End ==================================== //
 
-  const handleOtpChange = text => {
+  const handleOtpChange = useCallback((text) => {
     setOtp(text);
-    if (text.length === 4 && /^\d+$/.test(text)) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
-  };
+    setIsValid(text.length === 4 && /^\d+$/.test(text));
+  }, []);
 
-  const handleVerify = () => {
+  const handleVerify = useCallback(() => {
     if (isValid && otp.length === 4) {
       password ? forgotPasswordVerifyOtp() : verifyOtp();
     } else {
       showMessageonTheScreen(strings.invalidOtpMessage);
     }
-  };
+  }, [isValid, otp, password, forgotPasswordVerifyOtp, verifyOtp]);
 
   const renderBody = () => {
     return (

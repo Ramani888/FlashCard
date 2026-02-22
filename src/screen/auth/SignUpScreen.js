@@ -1,10 +1,9 @@
-import React, {useState, memo, useRef, useEffect} from 'react';
+import React, {useState, memo, useRef, useEffect, useCallback, useMemo} from 'react';
 import {
   Pressable,
   StyleSheet,
   Text,
   View,
-  Linking,
   ScrollView,
   Image,
 } from 'react-native';
@@ -30,6 +29,21 @@ import LanguageModalContent from '../../component/auth/LanguageModalContent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Language mapping utility
+const LANGUAGE_CODE_MAP = {
+  'English': 'en',
+  'Español': 'es',
+  'Português': 'pt',
+  'Français': 'fr',
+  'Italiano': 'it',
+  'Deutsch': 'de',
+  'Polski': 'pl',
+  '普通话': 'zh',
+  'Kiswahili': 'sw',
+  'Tagalog': 'tl',
+  'हिंदी': 'hi',
+};
+
 const SignUpScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -48,20 +62,23 @@ const SignUpScreen = () => {
 
   const languageRef = useRef();
 
-  const handleLanguageSaved = async Language => {
+  // Memoize validation schema
+  const validationSchema = useMemo(() => Yup.object().shape({
+    email: Yup.string()
+      .email(strings.invalidEmail)
+      .required(strings.emailRequired),
+    password: Yup.string()
+      .min(8, strings.passwordError)
+      .required(strings.passwordRequired),
+  }), []);
+
+  const handleLanguageSaved = useCallback(async (Language) => {
     await AsyncStorage.setItem('Language', JSON.stringify(Language));
-    Language?.name === 'English' && strings.setLanguage('en');
-    Language?.name === 'Español' && strings.setLanguage('es');
-    Language?.name === 'Português' && strings.setLanguage('pt');
-    Language?.name === 'Français' && strings.setLanguage('fr');
-    Language?.name === 'Italiano' && strings.setLanguage('it');
-    Language?.name === 'Deutsch' && strings.setLanguage('de');
-    Language?.name === 'Polski' && strings.setLanguage('pl');
-    Language?.name === '普通话' && strings.setLanguage('zh');
-    Language?.name === 'Kiswahili' && strings.setLanguage('sw');
-    Language?.name === 'Tagalog' && strings.setLanguage('tl');
-    Language?.name === 'हिंदी' && strings.setLanguage('hi');
-  };
+    const languageCode = LANGUAGE_CODE_MAP[Language?.name];
+    if (languageCode) {
+      strings.setLanguage(languageCode);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -74,7 +91,7 @@ const SignUpScreen = () => {
 
   // ======================================== Api ===================================== //
 
-  const signUp = async value => {
+  const signUp = useCallback(async (value) => {
     try {
       showLoader();
       const response = await apiPost(Api.signUp, '', JSON.stringify(value));
@@ -88,36 +105,62 @@ const SignUpScreen = () => {
     } finally {
       hideLoader();
     }
-  };
+  }, [navigation, showLoader, hideLoader]);
 
   // ======================================== End ===================================== //
 
-  const togglePasswordVisibility = () =>
-    setIsPasswordVisible(!isPasswordVisible);
+  const togglePasswordVisibility = useCallback(() =>
+    setIsPasswordVisible(prev => !prev), []);
 
-  const handleSignIn = () => {
+  const handleSignIn = useCallback(() => {
     navigation.navigate(ScreenName.signIn);
-  };
+  }, [navigation]);
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email(strings.invalidEmail)
-      .required(strings.emailRequired),
-    password: Yup.string()
-      .min(8, strings.passwordError)
-      .required(strings.passwordRequired),
-  });
+  const handleCheckboxToggle = useCallback(() => {
+    setIsChecked(prev => !prev);
+  }, []);
 
-  const openModal = (item, isLastItem) => {
+  const openModal = useCallback(() => {
     languageRef.current.measureInWindow((x, y, width, height) => {
       setModalPosition({x: x, y: y + verticalScale(55)});
       setLanguageModal(true);
     });
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setLanguageModal(false);
-  };
+  }, []);
+
+  // Memoize icon components
+  const emailIcon = useMemo(() => (
+    <View style={styles.iconWrapper}>
+      <MaterialCommunityIcons
+        name="email-outline"
+        size={scale(17)}
+        color={Color.Gray}
+      />
+    </View>
+  ), []);
+
+  const keyIcon = useMemo(() => (
+    <View style={styles.iconWrapper}>
+      <MaterialCommunityIcons
+        name="key-outline"
+        size={scale(17)}
+        color={Color.Gray}
+      />
+    </View>
+  ), []);
+
+  const eyeIcon = useMemo(() => (
+    <Pressable style={styles.iconWrapper} onPress={togglePasswordVisibility}>
+      <MaterialCommunityIcons
+        name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
+        size={scale(17)}
+        color={Color.Gray}
+      />
+    </Pressable>
+  ), [isPasswordVisible, togglePasswordVisibility]);
 
   return (
     <ScrollView
@@ -173,7 +216,6 @@ const SignUpScreen = () => {
             </Pressable>
 
             <CustomeInputField
-              key={'email'}
               placeholder={strings.enterEmail}
               placeholderTextColor={Color.mediumGray}
               onChangeText={handleChange('email')}
@@ -182,23 +224,14 @@ const SignUpScreen = () => {
               errors={errors?.email}
               touched={touched?.email}
               iconLeft={true}
-              keyboardType={'email-address' || 'default'}
+              keyboardType="email-address"
               inputStyles={styles.inputStyles}
               errorTextStyles={styles.errorText}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'email-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
+              IconLeftComponent={emailIcon}
               inputContainerStyles={styles.inputContainer}
             />
 
             <CustomeInputField
-              key={'password'}
               placeholder={strings.enterPassword}
               placeholderTextColor={Color.mediumGray}
               onChangeText={handleChange('password')}
@@ -210,34 +243,16 @@ const SignUpScreen = () => {
               secureTextEntry={!isPasswordVisible}
               inputStyles={styles.inputStyles}
               errorTextStyles={styles.errorText}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'key-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
+              IconLeftComponent={keyIcon}
               iconRight={true}
-              IconRightComponent={
-                <Pressable
-                  style={styles.iconWrapper}
-                  onPress={togglePasswordVisibility}>
-                  <MaterialCommunityIcons
-                    name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
-                    size={scale(17)}
-                    color={Color.Gray}
-                  />
-                </Pressable>
-              }
+              IconRightComponent={eyeIcon}
               inputContainerStyles={styles.inputContainer}
             />
 
             <View style={styles.checkboxContainer}>
               <CheckBox
                 checked={isChecked}
-                onPress={() => setIsChecked(!isChecked)}
+                onPress={handleCheckboxToggle}
                 iconType="material-community"
                 checkedIcon="checkbox-marked"
                 uncheckedIcon="checkbox-blank-outline"
@@ -292,18 +307,6 @@ const SignUpScreen = () => {
               textTransform={'uppercase'}
               onPress={handleSignIn}
             />
-
-            {/* <View style={styles.signUpContainer}>
-              <Text style={styles.infoText}>
-                {strings.alreadyAccountmsg}{' '}
-                <Text
-                  style={styles.signUpText}
-                  onPress={() => }>
-                  {' '}
-                  {strings.signIn}
-                </Text>
-              </Text>
-            </View> */}
           </View>
         )}
       </Formik>

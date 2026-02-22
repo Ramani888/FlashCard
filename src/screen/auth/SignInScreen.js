@@ -1,4 +1,4 @@
-import React, {useState, memo, useCallback} from 'react';
+import React, {useState, memo, useCallback, useMemo} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -21,16 +21,6 @@ import {setUser} from '../../redux/slices/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from '../../config';
 
-// Validation schema memoized outside component
-const createValidationSchema = () => Yup.object().shape({
-  email: Yup.string()
-    .email(strings.invalidEmail)
-    .required(strings.emailRequired),
-  password: Yup.string()
-    .min(8, strings.passwordError)
-    .required(strings.passwordRequired),
-});
-
 const SignInScreen = () => {
   const navigation = useNavigation();
   const themeColor = useTheme();
@@ -38,24 +28,28 @@ const SignInScreen = () => {
   const {showLoader, hideLoader} = useLoader();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  // Memoize validation schema to prevent recreation on every render
+  const validationSchema = useMemo(() => Yup.object().shape({
+    email: Yup.string()
+      .email(strings.invalidEmail)
+      .required(strings.emailRequired),
+    password: Yup.string()
+      .min(8, strings.passwordError)
+      .required(strings.passwordRequired),
+  }), []);
+
   // ===================================== Api =================================== //
 
   const loginUser = useCallback(async (email, password) => {
-    const rawData = {
-      email: email,
-      password: password,
-    };
+    const rawData = {email, password};
     try {
       showLoader();
       const response = await apiPost(Api.signIn, '', JSON.stringify(rawData));
       if (response?.success === true) {
         const userData = response?.user;
-        // Save to AsyncStorage
         await AsyncStorage.setItem(Config.STORAGE_KEYS.USER, JSON.stringify(userData));
-        // Update Redux state (no more global variables!)
         dispatch(setUser({user: userData, token: userData?.token}));
         showMessageonTheScreen(response?.message);
-        // Navigate to home
         navigation.reset({
           index: 0,
           routes: [{name: ScreenName.setAndFolder}],
@@ -68,7 +62,7 @@ const SignInScreen = () => {
     } finally {
       hideLoader();
     }
-  }, [dispatch, navigation]);
+  }, [dispatch, navigation, showLoader, hideLoader]);
 
   // ===================================== Api =================================== //
 
@@ -83,7 +77,36 @@ const SignInScreen = () => {
     navigation.navigate(ScreenName.resetPassword);
   }, [navigation]);
 
-  const validationSchema = createValidationSchema();
+  // Memoize icon components to prevent recreation
+  const emailIcon = useMemo(() => (
+    <View style={styles.iconWrapper}>
+      <MaterialCommunityIcons
+        name="email-outline"
+        size={moderateScale(17)}
+        color={Color.Gray}
+      />
+    </View>
+  ), []);
+
+  const keyIcon = useMemo(() => (
+    <View style={styles.iconWrapper}>
+      <MaterialCommunityIcons
+        name="key-outline"
+        size={moderateScale(17)}
+        color={Color.Gray}
+      />
+    </View>
+  ), []);
+
+  const eyeIcon = useMemo(() => (
+    <Pressable style={styles.iconWrapper} onPress={togglePasswordVisibility}>
+      <MaterialCommunityIcons
+        name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
+        size={moderateScale(17)}
+        color={Color.Gray}
+      />
+    </Pressable>
+  ), [isPasswordVisible, togglePasswordVisibility]);
 
   return (
     <View style={[styles.container, {backgroundColor: themeColor.background1}]}>
@@ -109,7 +132,6 @@ const SignInScreen = () => {
         }) => (
           <View style={styles.formContainer}>
             <CustomeInputField
-              key={'email'}
               placeholder={strings.enterEmail}
               placeholderTextColor={Color.mediumGray}
               onChangeText={handleChange('email')}
@@ -118,22 +140,13 @@ const SignInScreen = () => {
               errors={errors?.email}
               touched={touched?.email}
               iconLeft={true}
-              keyboardType={'email-address'}
+              keyboardType="email-address"
               inputStyles={styles.inputStyles}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'email-outline'}
-                    size={moderateScale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
+              IconLeftComponent={emailIcon}
               inputContainerStyles={styles.inputContainer}
             />
 
             <CustomeInputField
-              key={'password'}
               placeholder={strings.enterPassword}
               placeholderTextColor={Color.mediumGray}
               onChangeText={handleChange('password')}
@@ -144,27 +157,9 @@ const SignInScreen = () => {
               iconLeft={true}
               secureTextEntry={!isPasswordVisible}
               inputStyles={styles.inputStyles}
-              IconLeftComponent={
-                <View style={styles.iconWrapper}>
-                  <MaterialCommunityIcons
-                    name={'key-outline'}
-                    size={moderateScale(17)}
-                    color={Color.Gray}
-                  />
-                </View>
-              }
+              IconLeftComponent={keyIcon}
               iconRight={true}
-              IconRightComponent={
-                <Pressable
-                  style={styles.iconWrapper}
-                  onPress={togglePasswordVisibility}>
-                  <MaterialCommunityIcons
-                    name={isPasswordVisible ? 'eye-outline' : 'eye-off-outline'}
-                    size={moderateScale(17)}
-                    color={Color.Gray}
-                  />
-                </Pressable>
-              }
+              IconRightComponent={eyeIcon}
               inputContainerStyles={styles.inputContainer}
             />
 
