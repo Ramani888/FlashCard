@@ -1,72 +1,34 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {MenuOption} from 'react-native-popup-menu';
+import React, {useMemo} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scale, verticalScale} from '../../../custome/Responsive';
 import Color from '../../Color';
-import Font from '../../Font';
 import strings from '../../../language/strings';
+import ActionMenu from '../../common/ActionMenu';
+import {MENU_ICON_SIZE} from '../../common/MenuOptionItem';
 
 const ProfileModalContent = ({
   onLogoutPress,
   onDeleteAccountPress,
   colorTheme,
 }) => {
+  const actions = useMemo(() => [
+    {
+      icon: <MaterialCommunityIcons name="logout" size={MENU_ICON_SIZE} color={Color.Red} />,
+      label: strings.logout,
+      onSelect: onLogoutPress,
+      textColor: colorTheme.textColor,
+      isDanger: true
+    },
+    {
+      icon: <MaterialCommunityIcons name="account-remove" size={MENU_ICON_SIZE} color={Color.Red} />,
+      label: strings.deleteAccount,
+      onSelect: onDeleteAccountPress,
+      textColor: colorTheme.textColor,
+      isDanger: true,
+      showDivider: false
+    }
+  ], [colorTheme.textColor, onLogoutPress, onDeleteAccountPress]);
 
-  return (
-    <View style={styles.wrapper}>
-      <MenuOption onSelect={onLogoutPress}>
-        <View style={styles.container}>
-          <MaterialCommunityIcons
-            name="logout"
-            size={scale(16)}
-            color={Color.Red}
-          />
-          <Text style={[styles.text, {color: Color.Red}]}>
-            {strings.logout}
-          </Text>
-        </View>
-      </MenuOption>
-      <View style={styles.divider} />
-      <MenuOption onSelect={onDeleteAccountPress}>
-        <View style={styles.container}>
-          <MaterialCommunityIcons
-            name="account-remove"
-            size={scale(16)}
-            color={Color.Red}
-          />
-          <Text style={[styles.text, {color: Color.Red}]}>
-            {strings.deleteAccount}
-          </Text>
-        </View>
-      </MenuOption>
-    </View>
-  );
+  return <ActionMenu actions={actions} />;
 };
 
 export default React.memo(ProfileModalContent);
-
-const styles = StyleSheet.create({
-  wrapper: {
-    padding: scale(12),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: verticalScale(4),
-  },
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(6),
-  },
-  text: {
-    fontSize: scale(15),
-    color: Color.Black,
-    fontFamily: Font.regular,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: Color.LightGray,
-    marginVertical: verticalScale(4),
-  },
-});
-

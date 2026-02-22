@@ -1,15 +1,12 @@
-import React, {memo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {memo, useCallback, useMemo} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scale, verticalScale} from '../../../custome/Responsive';
 import Color from '../../Color';
-import Font from '../../Font';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../Screen';
 import strings from '../../../language/strings';
-import {MenuOption} from 'react-native-popup-menu';
-import {Divider} from '@rneui/themed';
+import ActionMenu from '../../common/ActionMenu';
+import {MENU_ICON_SIZE} from '../../common/MenuOptionItem';
 
 const ContactModalContent = ({
   item,
@@ -18,58 +15,34 @@ const ContactModalContent = ({
 }) => {
   const navigation = useNavigation();
 
-  return (
-    <View style={styles.wrapper}>
-      <MenuOption
-        onSelect={() => deleteContacts(item?._id)}>
-        <View style={styles.container}>
-          <MaterialCommunityIcons
-            name="delete"
-            size={scale(17)}
-            color={Color.Red}
-          />
-          <Text style={[styles.text, {color: colorTheme.textColor}]}>
-            {strings.deleteContact}
-          </Text>
-        </View>
-      </MenuOption>
+  const handleDelete = useCallback(() => {
+    deleteContacts(item?._id);
+  }, [deleteContacts, item]);
 
-      <Divider />
+  const handleView = useCallback(() => {
+    navigation.navigate(ScreenName.otherUser, {
+      item: item,
+    });
+  }, [navigation, item]);
 
-      <MenuOption
-        onSelect={() => {
-          navigation.navigate(ScreenName.otherUser, {
-            item: item,
-          });
-        }}>
-        <View style={styles.container}>
-          <Entypo name="eye" size={scale(17)} color={colorTheme.textColor} />
-          <Text style={[styles.text, {color: colorTheme.textColor}]}>
-            {strings.viewCard}
-          </Text>
-        </View>
-      </MenuOption>
-    </View>
-  );
+  const actions = useMemo(() => [
+    {
+      icon: <MaterialCommunityIcons name="delete" size={MENU_ICON_SIZE} color={Color.Red} />,
+      label: strings.deleteContact,
+      onSelect: handleDelete,
+      textColor: colorTheme.textColor,
+      isDanger: true
+    },
+    {
+      icon: <Entypo name="eye" size={MENU_ICON_SIZE} color={colorTheme.textColor} />,
+      label: strings.viewCard,
+      onSelect: handleView,
+      textColor: colorTheme.textColor,
+      showDivider: false
+    }
+  ], [colorTheme.textColor, handleDelete, handleView]);
+
+  return <ActionMenu actions={actions} />;
 };
 
 export default memo(ContactModalContent);
-
-const styles = StyleSheet.create({
-  wrapper: {
-    padding: scale(12),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: verticalScale(4)
-  },
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(6)
-  },
-  text: {
-    fontSize: scale(14),
-    color: Color.Black,
-    fontFamily: Font.regular,
-  },
-});

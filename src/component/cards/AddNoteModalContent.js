@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {MenuOption} from 'react-native-popup-menu';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
@@ -10,39 +9,49 @@ import {useNavigation} from '@react-navigation/native';
 import strings from '../../language/strings';
 import useTheme from '../Theme';
 import {Divider} from '@rneui/themed/dist/Divider';
+import ActionMenu from '../common/ActionMenu';
+import {MENU_ICON_SIZE} from '../common/MenuOptionItem';
 
 const AddNoteModalContent = ({item, folderId, setId}) => {
   const navigation = useNavigation();
   const colorTheme = useTheme();
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     navigation.navigate(ScreenName.createCard, {
       initialData: item,
       folderId: folderId,
       setId: setId,
     });
-  };
+  }, [navigation, item, folderId, setId]);
 
-  return (
-    <View style={styles.wrapper}>
+  const actions = useMemo(() => [
+    {
+      icon: <Entypo name="plus" size={MENU_ICON_SIZE} color={Color.theme1} />,
+      label: strings.addNote,
+      onSelect: handlePress,
+      textColor: colorTheme.textColor,
+      showDivider: false
+    }
+  ], [handlePress, colorTheme.textColor]);
+
+  const customHeader = useMemo(() => (
+    <>
       <View style={styles.noneSection}>
         <Text style={[styles.noneText, {color: colorTheme.textColor}]}>
           {strings.none}
         </Text>
       </View>
       <Divider />
-      <MenuOption onSelect={handlePress}>
-        <View style={styles.addNoteContainer}>
-          <Entypo
-            name="plus"
-            size={scale(20)}
-            color={Color.theme1}
-          />
-          <Text style={[styles.addNoteText, {color: colorTheme.textColor}]}>
-            {strings.addNote}
-          </Text>
-        </View>
-      </MenuOption>
+    </>
+  ), [colorTheme.textColor]);
+
+  return (
+    <View style={styles.wrapper}>
+      <ActionMenu
+        customContent={customHeader}
+        customContentPosition="top"
+        actions={actions}
+      />
     </View>
   );
 };
@@ -65,16 +74,7 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     textAlign: 'center',
   },
-  addNoteContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(8),
+  menuSection: {
     paddingTop: verticalScale(8),
-  },
-  addNoteText: {
-    fontSize: scale(16),
-    color: Color.Black,
-    fontFamily: Font.regular,
-    textTransform: 'capitalize',
   },
 });

@@ -1,17 +1,16 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback} from 'react';
-import {MenuOption} from 'react-native-popup-menu';
+import {Image, StyleSheet} from 'react-native';
+import React, {useCallback, useMemo} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scale, verticalScale} from '../../custome/Responsive';
+import {scale} from '../../custome/Responsive';
 import Color from '../Color';
-import Font from '../Font';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
 import useTheme from '../Theme';
 import strings from '../../language/strings';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {Divider} from '@rneui/themed/dist/Divider';
+import ActionMenu from '../common/ActionMenu';
+import {MENU_ICON_SIZE} from '../common/MenuOptionItem';
 
 const CardModalContent = ({onDeleteCardPress, item, folderId, setId}) => {
   const navigation = useNavigation();
@@ -23,112 +22,69 @@ const CardModalContent = ({onDeleteCardPress, item, folderId, setId}) => {
     }
   }, [onDeleteCardPress, item]);
 
-  return (
-    <View style={styles.wrapper}>
-      <MenuOption
-        onSelect={() => {
-          navigation.navigate(ScreenName.createCard, {
-            editNote: true,
-            initialData: item,
-            folderId: folderId,
-            setId: setId,
-          });
-        }}>
-        <View style={styles.container}>
-          <MaterialIcons
-            name="edit"
-            size={scale(15)}
-            color={colorTheme.textColor}
-          />
-          <Text style={[styles.text, {color: colorTheme.textColor}]}>
-            {strings.edit}
-          </Text>
-        </View>
-      </MenuOption>
-      <Divider />
+  const handleEdit = useCallback(() => {
+    navigation.navigate(ScreenName.createCard, {
+      editNote: true,
+      initialData: item,
+      folderId: folderId,
+      setId: setId,
+    });
+  }, [navigation, item, folderId, setId]);
 
-      <MenuOption
-        onSelect={handleDeletePress}>
-        <View style={styles.container}>
-          <MaterialCommunityIcons
-            name="delete"
-            size={scale(15)}
-            color={Color.Red}
-          />
-          <Text style={[styles.text, {color: colorTheme.textColor}]}>
-            {strings.delete}
-          </Text>
-        </View>
-      </MenuOption>
-      <Divider />
+  const handleCopy = useCallback(() => {
+    const copyText = `${item?.top ?? ''}\n${item?.bottom ?? ''}`;
+    Clipboard.setString(copyText);
+  }, [item]);
 
-      <MenuOption
-        onSelect={() => {
-          const copyText = `${item?.top ?? ''}\n${item?.bottom ?? ''}`;
-          Clipboard.setString(copyText);
-        }}>
-        <View style={styles.container}>
-          <MaterialIcons
-            name="content-copy"
-            size={scale(15)}
-            color={colorTheme.textColor}
-          />
-          <Text style={[styles.text, {color: colorTheme.textColor}]}>
-            {strings.copy}
-          </Text>
-        </View>
-      </MenuOption>
-      <Divider />
+  const handleMove = useCallback(() => {
+    navigation.navigate(ScreenName.assignSet, {
+      folderId: folderId,
+      setId: setId,
+      cardId: item?._id,
+    });
+  }, [navigation, folderId, setId, item]);
 
-      <MenuOption
-        onSelect={() => {
-          navigation.navigate(ScreenName.assignSet, {
-            folderId: folderId,
-            setId: setId,
-            cardId: item?._id,
-          });
-        }}>
-        <View style={[styles.container, styles.lastItem]}>
-          <Image
-            source={require('../../Assets/Img/moveFolder.png')}
-            style={styles.iconImage}
-            tintColor={colorTheme.textColor}
-          />
-          <Text style={[styles.text, {color: colorTheme.textColor}]}>
-            {strings.move}
-          </Text>
-        </View>
-      </MenuOption>
-    </View>
-  );
+  const actions = useMemo(() => [
+    {
+      icon: <MaterialIcons name="edit" size={MENU_ICON_SIZE} color={colorTheme.textColor} />,
+      label: strings.edit,
+      onSelect: handleEdit,
+      textColor: colorTheme.textColor
+    },
+    {
+      icon: <MaterialCommunityIcons name="delete" size={MENU_ICON_SIZE} color={Color.Red} />,
+      label: strings.delete,
+      onSelect: handleDeletePress,
+      textColor: colorTheme.textColor,
+      isDanger: true
+    },
+    {
+      icon: <MaterialIcons name="content-copy" size={MENU_ICON_SIZE} color={colorTheme.textColor} />,
+      label: strings.copy,
+      onSelect: handleCopy,
+      textColor: colorTheme.textColor
+    },
+    {
+      icon: <Image
+        source={require('../../Assets/Img/moveFolder.png')}
+        style={styles.iconImage}
+        tintColor={colorTheme.textColor}
+      />,
+      label: strings.move,
+      onSelect: handleMove,
+      textColor: colorTheme.textColor,
+      showDivider: false
+    }
+  ], [colorTheme.textColor, handleEdit, handleDeletePress, handleCopy, handleMove]);
+
+  return <ActionMenu actions={actions} />;
 };
 
 export default React.memo(CardModalContent);
 
 const styles = StyleSheet.create({
-  wrapper: {
-    padding: scale(12),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: verticalScale(4),
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(6),
-  },
-  lastItem: {
-    borderBottomWidth: 0,
-  },
-  text: {
-    fontSize: scale(16),
-    color: Color.Black,
-    fontFamily: Font.regular,
-    textTransform: 'capitalize',
-  },
   iconImage: {
-    width: scale(16),
-    height: scale(16),
+    width: scale(17),
+    height: scale(17),
   },
 });

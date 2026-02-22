@@ -1,17 +1,14 @@
-import React, {useMemo, useCallback} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {MenuOption} from 'react-native-popup-menu';
-import {Divider} from '@rneui/themed/dist/Divider';
+import React, {useCallback, useMemo} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Color from '../Color';
-import Font from '../Font';
-import {scale, verticalScale} from '../../custome/Responsive';
+import {scale} from '../../custome/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../Screen';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import strings from '../../language/strings';
+import ActionMenu from '../common/ActionMenu';
+import {MENU_ICON_SIZE} from '../common/MenuOptionItem';
 
 const PdfModalContent = ({
   type,
@@ -24,7 +21,6 @@ const PdfModalContent = ({
   singlePdfData,
 }) => {
   const navigation = useNavigation();
-  const iconSize = useMemo(() => scale(20), []);
 
   const handleDelete = useCallback(() => {
     if (onDeletePress) {
@@ -32,176 +28,73 @@ const PdfModalContent = ({
     }
   }, [onDeletePress, pdfId]);
 
-  const renderBody = useMemo(
-    () => (
-      <View style={styles.wrapper}>
-        {type === 'Folder' ? (
-          <View>
-            <MenuOption
-              onSelect={() => {
-                setEditBottomSheet(true);
-                openBottomSheet();
-              }}>
-              <View style={styles.container}>
-                <MaterialIcons
-                  name="edit"
-                  size={iconSize}
-                  color={colorTheme.textColor}
-                />
-                <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                  {strings.edit}
-                </Text>
-              </View>
-            </MenuOption>
-            <Divider />
-            <MenuOption
-              onSelect={handleDelete}>
-              <View style={[styles.container, styles.lastItem]}>
-                <MaterialCommunityIcons
-                  name="delete"
-                  size={iconSize}
-                  color={Color.Red}
-                />
-                <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                  {strings.deleteFolder}
-                </Text>
-              </View>
-            </MenuOption>
-          </View>
-        ) : (
-          <View>
-            <MenuOption
-              onSelect={() => {
-                setEditBottomSheet(true);
-                openBottomSheet();
-              }}>
-              <View style={styles.container}>
-                <MaterialIcons
-                  name="edit"
-                  size={iconSize}
-                  color={colorTheme.textColor}
-                />
-                <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                  {strings.edit}
-                </Text>
-              </View>
-            </MenuOption>
-            <Divider />
-            <MenuOption
-              onSelect={handleDelete}>
-              <View style={styles.container}>
-                <MaterialCommunityIcons
-                  name="delete"
-                  size={iconSize}
-                  color={Color.Red}
-                />
-                <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                  {strings.delete}
-                </Text>
-              </View>
-            </MenuOption>
-            <Divider />
-            <MenuOption
-              onSelect={() => {
-                if (downloadPdf && singlePdfData?.url) {
-                  downloadPdf(
-                    singlePdfData.url,
-                    singlePdfData.name
-                      ? `${singlePdfData.name}.pdf`
-                      : 'downloaded.pdf',
-                  );
-                }
-              }}>
-              <View style={styles.container}>
-                <Feather
-                  name="download"
-                  size={scale(15)}
-                  color={colorTheme.textColor}
-                />
-                <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                  {strings.downloadPdf}
-                </Text>
-              </View>
-            </MenuOption>
-            <Divider />
-            <MenuOption
-              onSelect={() => {
-                navigation.navigate(ScreenName.assignPdfFolder, {pdfId: pdfId});
-              }}>
-              <View style={[styles.container, styles.lastItem]}>
-                <Feather
-                  name="folder-plus"
-                  size={scale(15)}
-                  color={colorTheme.textColor}
-                />
-                <Text style={[styles.text, {color: colorTheme.textColor}]}>
-                  {strings.assignFolder}
-                </Text>
-              </View>
-            </MenuOption>
-          </View>
-        )}
-      </View>
-    ),
-    [
-      iconSize,
-      colorTheme,
-      handleDelete,
-      downloadPdf,
-      navigation,
-      setEditBottomSheet,
-      pdfId,
-      openBottomSheet,
-      singlePdfData,
-      type,
-    ],
-  );
+  const handleEdit = useCallback(() => {
+    setEditBottomSheet(true);
+    openBottomSheet();
+  }, [setEditBottomSheet, openBottomSheet]);
 
-  return (
-    <View>
-      {renderBody}
-    </View>
-  );
+  const handleDownload = useCallback(() => {
+    if (downloadPdf && singlePdfData?.url) {
+      downloadPdf(
+        singlePdfData.url,
+        singlePdfData.name
+          ? `${singlePdfData.name}.pdf`
+          : 'downloaded.pdf',
+      );
+    }
+  }, [downloadPdf, singlePdfData]);
+
+  const handleAssignFolder = useCallback(() => {
+    navigation.navigate(ScreenName.assignPdfFolder, {pdfId: pdfId});
+  }, [navigation, pdfId]);
+
+  const folderActions = useMemo(() => [
+    {
+      icon: <MaterialIcons name="edit" size={MENU_ICON_SIZE} color={colorTheme.textColor} />,
+      label: strings.edit,
+      onSelect: handleEdit,
+      textColor: colorTheme.textColor
+    },
+    {
+      icon: <MaterialCommunityIcons name="delete" size={MENU_ICON_SIZE} color={Color.Red} />,
+      label: strings.deleteFolder,
+      onSelect: handleDelete,
+      textColor: colorTheme.textColor,
+      isDanger: true,
+      showDivider: false
+    }
+  ], [colorTheme.textColor, handleEdit, handleDelete]);
+
+  const pdfActions = useMemo(() => [
+    {
+      icon: <MaterialIcons name="edit" size={MENU_ICON_SIZE} color={colorTheme.textColor} />,
+      label: strings.edit,
+      onSelect: handleEdit,
+      textColor: colorTheme.textColor
+    },
+    {
+      icon: <MaterialCommunityIcons name="delete" size={MENU_ICON_SIZE} color={Color.Red} />,
+      label: strings.delete,
+      onSelect: handleDelete,
+      textColor: colorTheme.textColor,
+      isDanger: true
+    },
+    {
+      icon: <Feather name="download" size={scale(15)} color={colorTheme.textColor} />,
+      label: strings.downloadPdf,
+      onSelect: handleDownload,
+      textColor: colorTheme.textColor
+    },
+    {
+      icon: <Feather name="folder-plus" size={scale(15)} color={colorTheme.textColor} />,
+      label: strings.assignFolder,
+      onSelect: handleAssignFolder,
+      textColor: colorTheme.textColor,
+      showDivider: false
+    }
+  ], [colorTheme.textColor, handleEdit, handleDelete, handleDownload, handleAssignFolder]);
+
+  return <ActionMenu actions={type === 'Folder' ? folderActions : pdfActions} />;
 };
 
 export default React.memo(PdfModalContent);
-
-const styles = StyleSheet.create({
-  wrapper: {
-    padding: scale(12),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: verticalScale(4),
-  },
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scale(6),
-  },
-  text: {
-    fontSize: scale(16),
-    color: Color.Black,
-    fontFamily: Font.regular,
-    textTransform: 'capitalize',
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: verticalScale(5),
-  },
-  switchContent: {
-    alignItems: 'center',
-  },
-  switchLabel: {
-    fontSize: scale(13),
-    color: Color.Black,
-    fontFamily: Font.regular,
-  },
-  icon: {
-    width: scale(20),
-    height: scale(20),
-  },
-  lastItem: {
-  },
-});
