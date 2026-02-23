@@ -43,7 +43,7 @@ const OtpVerifyScreen = () => {
   const {showLoader, hideLoader} = useLoader();
   const [isValid, setIsValid] = useState(true);
   const [otp, setOtp] = useState('');
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(120);
   const [isCounting, setIsCounting] = useState(false);
   const {email, password} = route.params;
 
@@ -61,7 +61,7 @@ const OtpVerifyScreen = () => {
       const elapsedSeconds = Math.floor(
         (now - startTimestampRef.current) / 1000,
       );
-      const remainingTime = Math.max(60 - elapsedSeconds, 0);
+      const remainingTime = Math.max(120 - elapsedSeconds, 0);
 
       setCountdown(remainingTime);
 
@@ -98,7 +98,7 @@ const OtpVerifyScreen = () => {
       const elapsedSeconds = Math.floor(
         (now - startTimestampRef.current) / 1000,
       );
-      const remainingTime = Math.max(60 - elapsedSeconds, 0);
+      const remainingTime = Math.max(120 - elapsedSeconds, 0);
 
       setCountdown(remainingTime);
 
@@ -201,7 +201,7 @@ const OtpVerifyScreen = () => {
       const response = await apiPut(`${Api.resendOtp}?email=${email}&language=${languageCode}`);
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
-        setCountdown(60);
+        setCountdown(120);
         startTimer();
       }
     } catch (error) {
@@ -226,6 +226,12 @@ const OtpVerifyScreen = () => {
     }
   }, [isValid, otp, password, forgotPasswordVerifyOtp, verifyOtp]);
 
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   const renderBody = () => {
     return (
       <View style={styles.bodyContainer}>
@@ -239,6 +245,10 @@ const OtpVerifyScreen = () => {
             {email}
           </Text>{' '}
           {strings.emailInfo2}
+        </Text>
+        <Text style={styles.noteText}>
+          <Text style={styles.noteLabel}>Note: </Text>
+          Please check your spam folder if you haven't received the email.
         </Text>
         <OTPTextInput
           handleTextChange={handleOtpChange}
@@ -269,7 +279,7 @@ const OtpVerifyScreen = () => {
                   color: Color.Red,
                   fontFamily: Font.regular,
                 }}>
-                {countdown}{' '}
+                {formatTime(countdown)}{' '}
               </Text>{' '}
               {strings.resendMessage2}
             </Text>
@@ -331,6 +341,20 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(10),
     width: scale(300),
     lineHeight: verticalScale(18),
+  },
+  noteText: {
+    fontSize: scale(11.5),
+    color: Color.mediumGray,
+    fontFamily: Font.regular,
+    textAlign: 'center',
+    marginTop: verticalScale(8),
+    width: scale(300),
+    fontStyle: 'italic',
+  },
+  noteLabel: {
+    color: Color.Red,
+    fontFamily: Font.semiBold,
+    fontStyle: 'normal',
   },
   otpContainer: {
     marginVertical: verticalScale(20),
