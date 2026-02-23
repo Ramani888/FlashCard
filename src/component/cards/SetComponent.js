@@ -31,7 +31,8 @@ import useSetApi from '../../hooks/useSetApi';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const {height} = Dimensions.get('window');
-const ITEM_HEIGHT = verticalScale(75); // Updated for accurate item height with folder
+const SET_ITEM_HEIGHT = verticalScale(65); // Base height for set item
+const FOLDER_SECTION_HEIGHT = verticalScale(45); // Height for folder display section
 
 // Memoized icon requires
 const folderIcon = require('../../Assets/Img/folder.png');
@@ -232,12 +233,17 @@ const SetComponent = ({
   // Memoized keyExtractor for FlatList
   const keyExtractor = useCallback((item) => item?._id || String(item?.name), []);
 
-  // getItemLayout for FlatList optimization - fixed item heights for better performance
+  // Calculate item height dynamically based on showFolder
+  const itemHeight = useMemo(() => {
+    return showFolder ? SET_ITEM_HEIGHT + FOLDER_SECTION_HEIGHT : SET_ITEM_HEIGHT;
+  }, [showFolder]);
+
+  // getItemLayout for FlatList optimization - only when heights are consistent
   const getItemLayout = useCallback((data, index) => ({
-    length: ITEM_HEIGHT,
-    offset: ITEM_HEIGHT * index,
+    length: itemHeight,
+    offset: itemHeight * index,
     index,
-  }), []);
+  }), [itemHeight]);
 
   // Handle item press
   const handleItemPress = useCallback((item) => {
@@ -325,12 +331,12 @@ const SetComponent = ({
           getItemLayout={getItemLayout}
           showsVerticalScrollIndicator={false}
           style={styles.flatlist}
-          initialNumToRender={15}
-          maxToRenderPerBatch={15}
-          windowSize={10}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
           removeClippedSubviews={true}
-          updateCellsBatchingPeriod={50}
-          maxToRenderPerBatchDuringScrolling={5}
+          updateCellsBatchingPeriod={100}
+          legacyImplementation={false}
         />
       ) : (
         !loading && <NoDataView content={strings.setNotFound} />
@@ -395,6 +401,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     marginBottom: verticalScale(15),
+    // Ensure consistent item bounds for better scroll performance
   },
   setContainer: {
     flexDirection: 'row',
@@ -402,7 +409,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: Color.White,
     padding: scale(5),
-    borderRadius: scale(10),
+    borderRadius: scale(10)
   },
   rowContainer: {
     flexDirection: 'row',

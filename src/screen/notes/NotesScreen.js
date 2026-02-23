@@ -191,6 +191,16 @@ const NotesScreen = () => {
     openBottomSheet();
   }, [openBottomSheet]);
 
+  const keyExtractor = useCallback((item) => item._id || item.name, []);
+
+  const ITEM_HEIGHT = verticalScale(55); // Approximate height of each note item
+
+  const getItemLayout = useCallback((data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  }), []);
+
   const renderHeader = useCallback(
     () => (
       <CustomeHeader
@@ -331,11 +341,15 @@ const NotesScreen = () => {
           <FlatList
             data={noteData}
             renderItem={renderNotes}
-            keyExtractor={item => item._id || item.name}
+            keyExtractor={keyExtractor}
+            getItemLayout={getItemLayout}
             style={styles.flatlist}
             removeClippedSubviews={true}
+            initialNumToRender={10}
             maxToRenderPerBatch={10}
             windowSize={5}
+            updateCellsBatchingPeriod={100}
+            legacyImplementation={false}
           />
         ) : (
           <NoDataView
@@ -424,7 +438,7 @@ const styles = StyleSheet.create({
     borderWidth: scale(0.3),
     borderColor: Color.LightGray,
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   noteText: {
     fontSize: scale(15),

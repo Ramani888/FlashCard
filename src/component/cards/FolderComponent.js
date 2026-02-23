@@ -20,7 +20,7 @@ import ActionSheet from 'react-native-actions-sheet';
 import useFolderApi from '../../hooks/useFolderApi';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
-const ITEM_HEIGHT = verticalScale(65); // Updated for accurate item height
+const ITEM_HEIGHT = verticalScale(70); // Updated for accurate item height including margins
 
 // Memoized no data style
 const noDataStyle = {marginTop: verticalScale(-70)};
@@ -255,12 +255,12 @@ const FolderComponent = ({
               style={styles.flatlist}
               contentContainerStyle={styles.flatlistContent}
               showsVerticalScrollIndicator={false}
-              initialNumToRender={15}
-              maxToRenderPerBatch={15}
-              windowSize={10}
+              initialNumToRender={10}
+              maxToRenderPerBatch={10}
+              windowSize={5}
               removeClippedSubviews={true}
-              updateCellsBatchingPeriod={50}
-              maxToRenderPerBatchDuringScrolling={5}
+              updateCellsBatchingPeriod={100}
+              legacyImplementation={false}
             />
           ) : (
             !loading && (
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     padding: scale(7),
     backgroundColor: Color.White,
     borderRadius: scale(10),
-    marginBottom: verticalScale(10),
+    marginBottom: verticalScale(10)
   },
   folderInfo: {
     flexDirection: 'row',
