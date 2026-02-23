@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../component/Color';
 import CustomeHeader from '../custome/CustomeHeader';
@@ -35,6 +36,7 @@ const GlobalLiveFeedScreen = () => {
   const [singleCardItem, setSinglrCardItem] = useState({});
   const plusButtonRef = useRef(null);
   const colorTheme = useTheme();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     getLiveFeedData();
@@ -151,7 +153,9 @@ const GlobalLiveFeedScreen = () => {
   );
 
   const renderBody = () => (
-    <ScrollView style={styles.bodyContainer}>
+    <ScrollView 
+      style={styles.bodyContainer}
+      contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20))}}>
       <LinearGradient
         colors={colorTheme.gradientTheme}
         style={styles.headerContainer}>

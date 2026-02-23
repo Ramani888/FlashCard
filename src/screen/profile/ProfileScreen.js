@@ -11,6 +11,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../../component/Color';
 import CustomeHeader from '../../custome/CustomeHeader';
@@ -123,6 +124,7 @@ const ProfileScreen = () => {
   const refEmailRBSheet = useRef();
   const adRef = useRef();
   const colorTheme = useTheme();
+  const insets = useSafeAreaInsets();
   
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
@@ -395,6 +397,7 @@ const ProfileScreen = () => {
         <StatusBar translucent backgroundColor={Color.transparent} />
         <ScrollView
           style={styles.scrollContainer}
+          contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20))}}
           showsVerticalScrollIndicator={false}>
           {renderHeader()}
           <VideoAds

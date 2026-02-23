@@ -1,5 +1,6 @@
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useRef, useState, memo, useEffect} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {scale, verticalScale} from '../../custome/Responsive';
 import Color from '../Color';
@@ -26,6 +27,7 @@ import ConfirmationDialog from '../../custome/ConfirmationDialog';
 const PdfComponent = memo(({folderId}) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const [visible, setVisible] = useState(false);
   const [pdfData, setPdfData] = useState(false);
   const [editBottomSheet, setEditBottomSheet] = useState(false);
@@ -330,6 +332,7 @@ const PdfComponent = memo(({folderId}) => {
             keyExtractor={item => item.name}
             showsVerticalScrollIndicator={false}
             style={styles.flatlist}
+            contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(70), verticalScale(80))}}
           />
         ) : (
           visible === false && (
@@ -406,7 +409,7 @@ const PdfComponent = memo(({folderId}) => {
           marginTop={verticalScale(15)}
           position="absolute"
           alignSelf="center"
-          bottom={verticalScale(10)}
+          bottom={Math.max(insets.bottom + verticalScale(10), verticalScale(20))}
           onPress={() => {
             setEditBottomSheet(false);
             setSinglePdfData({});
@@ -515,5 +518,5 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   alignSelf: {alignSelf: 'flex-start'},
-  flatlist: {flex: 1, marginBottom: verticalScale(60)},
+  flatlist: {flex: 1, paddingBottom: 10},
 });

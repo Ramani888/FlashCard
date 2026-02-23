@@ -1,6 +1,7 @@
 import {Image, Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import store from './src/redux/newStore';
 import Color from './src/component/Color';
@@ -79,12 +80,13 @@ const AppContent = () => {
 
   return (
     <ErrorBoundary onError={handleError}>
-      <MenuProvider>
-        <View style={styles.container}>
-          <CheckNetwork />
-          <StatusBar translucent backgroundColor={Color.transparent} />
-          <NavigationContainer>
-            <AppNav />
+      <SafeAreaProvider>
+        <MenuProvider>
+          <View style={styles.container}>
+            <CheckNetwork />
+            <StatusBar translucent backgroundColor={Color.transparent} />
+            <NavigationContainer>
+              <AppNav />
 
             <CustomeModal
               visible={updatedModal}
@@ -127,9 +129,10 @@ const AppContent = () => {
                 </View>
               }
             />
-          </NavigationContainer>
-        </View>
-      </MenuProvider>
+            </NavigationContainer>
+          </View>
+        </MenuProvider>
+      </SafeAreaProvider>
     </ErrorBoundary>
   );
 };

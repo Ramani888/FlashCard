@@ -8,6 +8,7 @@ import {
   UIManager,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import {scale, verticalScale} from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
@@ -44,6 +45,7 @@ const SetDetailScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const {showLoader, hideLoader} = useLoader();
+  const insets = useSafeAreaInsets();
   const [cardData, setCardData] = useState([]);
   const [layout, setLayout] = useState('single');
   const [changeOrder, setChangeOrder] = useState(false);
@@ -326,7 +328,7 @@ const SetDetailScreen = () => {
                   data={cardData}
                   keyExtractor={keyExtractor}
                   showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{paddingBottom: scale(10)}}
+                  contentContainerStyle={{paddingBottom: Math.max(insets.bottom + scale(10), scale(30))}}
                   renderItem={renderSimpleItem}
                 />
               )
@@ -345,7 +347,7 @@ const SetDetailScreen = () => {
                 data={cardData}
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{paddingBottom: scale(50)}}
+                contentContainerStyle={{paddingBottom: Math.max(insets.bottom + scale(30), scale(70))}}
                 style={styles.masonryFlatlist}
                 renderItem={renderGridItem}
               />

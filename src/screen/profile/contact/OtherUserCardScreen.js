@@ -1,5 +1,6 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Color from '../../../component/Color';
 import {scale, verticalScale} from '../../../custome/Responsive';
 import Font from '../../../component/Font';
@@ -23,6 +24,7 @@ const OtherUserCardScreen = () => {
   const [cardData, setCardData] = useState([]);
   const {item} = route.params;
   const colorTheme = useTheme();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     getCardData();
@@ -124,7 +126,7 @@ const OtherUserCardScreen = () => {
             data={cardData}
             keyExtractor={keyExtractor}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingBottom: scale(50)}}
+            contentContainerStyle={{paddingBottom: Math.max(insets.bottom + scale(50), scale(60))}}
             renderItem={renderCard}
           />
         ) : (

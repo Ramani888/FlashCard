@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   Menu,
   MenuTrigger,
@@ -144,6 +145,7 @@ const SetComponent = ({
   showFolder
 }) => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
@@ -331,6 +333,7 @@ const SetComponent = ({
           getItemLayout={getItemLayout}
           showsVerticalScrollIndicator={false}
           style={styles.flatlist}
+          contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(65), verticalScale(75))}}
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           windowSize={5}
@@ -352,7 +355,7 @@ const SetComponent = ({
         fontFamily={Font.semiBold}
         marginTop={verticalScale(15)}
         position={'absolute'}
-        bottom={verticalScale(10)}
+        bottom={Math.max(insets.bottom + verticalScale(10), verticalScale(20))}
         onPress={handleCreateSetPress}
       />
       {BottomSheets()}

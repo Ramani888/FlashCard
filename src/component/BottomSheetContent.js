@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Color from './Color';
 import {scale, verticalScale} from '../custome/Responsive';
 import CustomeButton from '../custome/CustomeButton';
@@ -36,6 +37,7 @@ const BottomSheetContent = ({
   initialData,
 }) => {
   const colorTheme = useTheme();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (initialData) {
@@ -181,7 +183,10 @@ const BottomSheetContent = ({
   );
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView 
+      style={styles.container} 
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20))}}>
       {renderBody}
       <CustomeButton
         buttonColor={Color.theme1}

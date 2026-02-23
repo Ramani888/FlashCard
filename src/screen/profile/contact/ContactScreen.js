@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
 import React, {useCallback, useRef, useState, useMemo, useEffect} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomeHeader from '../../../custome/CustomeHeader';
 import Color from '../../../component/Color';
 import {scale, verticalScale} from '../../../custome/Responsive';
@@ -23,6 +24,7 @@ const ContactScreen = () => {
   const [contactData, setContactData] = useState([]);
   const refContactRBSheet = useRef();
   const colorTheme = useTheme();
+  const insets = useSafeAreaInsets();
   
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
@@ -188,6 +190,7 @@ const ContactScreen = () => {
               renderItem={renderContacts}
               keyExtractor={(item, index) => index.toString()}
               style={styles.flatListStyle}
+              contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20))}}
             />
           ) : (
             <NoDataView

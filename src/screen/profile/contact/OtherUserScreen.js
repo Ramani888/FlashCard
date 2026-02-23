@@ -1,5 +1,6 @@
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Color from '../../../component/Color';
@@ -24,6 +25,7 @@ const OtherUserScreen = () => {
   const [setData, setSetData] = useState([]);
   const {item} = route.params;
   const colorTheme = useTheme();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     getSetData();

@@ -10,6 +10,7 @@ import {
   ScrollView,
   BackHandler,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Color from '../component/Color';
 import {scale, verticalScale, moderateScale} from '../custome/Responsive';
 import Font from '../component/Font';
@@ -69,6 +70,7 @@ const HomeScreen = () => {
   const themeColor = useTheme();
   const navigation = useNavigation();
   const [theme, setTheme] = useState('Light');
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const getInitialTheme = async () => {
@@ -249,7 +251,7 @@ const HomeScreen = () => {
 
   const renderBody = useCallback(
     () => (
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={[styles.scrollContainer, {paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20))}]}>
         <LinearGradient
           colors={gradientColors}
           style={styles.headerContainer}>

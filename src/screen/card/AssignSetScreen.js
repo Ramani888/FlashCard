@@ -1,5 +1,6 @@
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {scale, verticalScale} from '../../custome/Responsive';
@@ -24,6 +25,7 @@ const AssignSetScreen = () => {
   const refRBSheet = useRef();
   const colorTheme = useTheme();
   const {showLoader, hideLoader} = useLoader();
+  const insets = useSafeAreaInsets();
   const [setData, setSetData] = useState([]);
   const [setName, setSetName] = useState('');
   const [setStatus, setSetStatus] = useState(0);
@@ -322,7 +324,7 @@ const AssignSetScreen = () => {
           fontFamily={Font.semiBold}
           marginTop={verticalScale(15)}
           position={'absolute'}
-          bottom={verticalScale(10)}
+          bottom={Math.max(insets.bottom + verticalScale(10), verticalScale(20))}
           onPress={handleAssignPress}
         />
       </View>

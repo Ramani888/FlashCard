@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Color from '../../component/Color';
 import {scale, verticalScale} from '../../custome/Responsive';
 import CustomeHeader from '../../custome/CustomeHeader';
@@ -33,6 +34,7 @@ import ConfirmationDialog from '../../custome/ConfirmationDialog';
 const NotesScreen = () => {
   const navigation = useNavigation();
   const { showLoader, hideLoader } = useLoader();
+  const insets = useSafeAreaInsets();
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
   const [noteData, setNoteData] = useState([]);
@@ -344,6 +346,7 @@ const NotesScreen = () => {
             keyExtractor={keyExtractor}
             getItemLayout={getItemLayout}
             style={styles.flatlist}
+            contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(70), verticalScale(80))}}
             removeClippedSubviews={true}
             initialNumToRender={10}
             maxToRenderPerBatch={10}
@@ -360,7 +363,7 @@ const NotesScreen = () => {
         {BottomSheets()}
       </View>
     ),
-    [renderNotes, BottomSheets, noteData],
+    [renderNotes, BottomSheets, noteData, insets.bottom],
   );
 
   return (
@@ -381,7 +384,7 @@ const NotesScreen = () => {
           marginTop={verticalScale(15)}
           position="absolute"
           alignSelf="center"
-          bottom={verticalScale(10)}
+          bottom={Math.max(insets.bottom + verticalScale(10), verticalScale(20))}
           onPress={handleCreateNotePress}
         />
 
@@ -469,5 +472,5 @@ const styles = StyleSheet.create({
     marginLeft: scale(3),
   },
   colorView: {flexDirection: 'row', alignItems: 'center'},
-  flatlist: {flex: 1, marginBottom: verticalScale(60)},
+  flatlist: {flex: 1},
 });

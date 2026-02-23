@@ -1,5 +1,6 @@
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useRef, useState, useCallback, useMemo, memo} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   Menu,
   MenuTrigger,
@@ -93,6 +94,7 @@ const FolderComponent = ({
   search,
   setSearchValue,
 }) => {
+  const insets = useSafeAreaInsets();
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const refRBSheet = useRef();
   const colorTheme = useTheme();
@@ -253,7 +255,7 @@ const FolderComponent = ({
               keyExtractor={keyExtractor}
               getItemLayout={getItemLayout}
               style={styles.flatlist}
-              contentContainerStyle={styles.flatlistContent}
+              contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(20), verticalScale(30))}}
               showsVerticalScrollIndicator={false}
               initialNumToRender={10}
               maxToRenderPerBatch={10}
@@ -274,7 +276,7 @@ const FolderComponent = ({
 
         {BottomSheets()}
 
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, {paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20))}]}>
           <CustomeButton
             buttonColor={Color.theme1}
             buttonWidth="100%"

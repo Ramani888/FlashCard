@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeButton from '../../custome/CustomeButton';
@@ -23,6 +24,7 @@ const AssignImageFolder = () => {
   const refRBSheet = useRef(null);
   const {imageId} = route.params;
   const {showLoader, hideLoader} = useLoader();
+  const insets = useSafeAreaInsets();
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
@@ -225,7 +227,7 @@ const AssignImageFolder = () => {
           fontFamily={Font.semiBold}
           marginTop={verticalScale(15)}
           position="absolute"
-          bottom={verticalScale(10)}
+          bottom={Math.max(insets.bottom + verticalScale(10), verticalScale(20))}
           onPress={() => {
             if (selectedFolderId) {
               assignImageFolder();

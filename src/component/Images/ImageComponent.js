@@ -1,5 +1,6 @@
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -28,6 +29,7 @@ const ImageComponent = ({folderId, showFolder}) => {
   const navigation = useNavigation();
   const refRBSheet = useRef(null);
   const isFocused = useIsFocused();
+  const insets = useSafeAreaInsets();
   const [visible, setVisible] = useState(false);
   const [imageData, setImageData] = useState([]);
   const [imageId, setImageId] = useState('');
@@ -204,7 +206,8 @@ const ImageComponent = ({folderId, showFolder}) => {
             renderItem={renderImage}
             numColumns={3}
             keyExtractor={(_, index) => index.toString()}
-            style={{marginBottom: hp('2%'), marginHorizontal: wp(0.5)}}
+            style={{marginHorizontal: wp(0.5)}}
+            contentContainerStyle={{paddingBottom: Math.max(insets.bottom + hp('8%'), hp('10%'))}}
             showsVerticalScrollIndicator={false}
           />
         ) : (
@@ -232,7 +235,7 @@ const ImageComponent = ({folderId, showFolder}) => {
           marginTop={hp('2%')}
           position="absolute"
           alignSelf="center"
-          bottom={hp('1.5%')}
+          bottom={Math.max(insets.bottom + hp('1.5%'), hp('2.5%'))}
           onPress={() => {
             openBottomSheet();
           }}

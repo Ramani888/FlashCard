@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -22,6 +23,7 @@ const {height} = Dimensions.get('window');
 const NoteDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const insets = useSafeAreaInsets();
   const [notes, setNotes] = useState('');
   const notesRef = useRef('');
   const colorTheme = useTheme();
@@ -93,7 +95,7 @@ const NoteDetailScreen = () => {
       enabled={Platform.OS === 'ios' ? true : false}>
       <LinearGradient
         colors={colorTheme.gradientTheme}
-        style={styles.headerContainer}>
+        style={[styles.headerContainer, {paddingBottom: Math.max(insets.bottom + verticalScale(20), verticalScale(30))}]}>
         {renderHeader()}
 
         <View style={styles.view}>

@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CustomeHeader from '../../custome/CustomeHeader';
 import CustomeButton from '../../custome/CustomeButton';
@@ -22,6 +23,7 @@ const AssignFolderScreen = () => {
   const route = useRoute();
   const refRBSheet = useRef(null);
   const {showLoader, hideLoader} = useLoader();
+  const insets = useSafeAreaInsets();
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [folderStatus, setFolderStatus] = useState(0);
@@ -293,7 +295,7 @@ const AssignFolderScreen = () => {
           fontColor={Color.White}
           fontFamily={Font.semiBold}
           marginTop={verticalScale(15)}
-          bottom={verticalScale(10)}
+          bottom={Math.max(insets.bottom + verticalScale(10), verticalScale(20))}
           onPress={handleAssignPress}
         />
       </View>

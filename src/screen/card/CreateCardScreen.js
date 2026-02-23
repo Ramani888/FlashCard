@@ -10,6 +10,7 @@ import {
   Pressable,
   Keyboard,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from '../../custome/Responsive';
 import CustomeHeader from '../../custome/CustomeHeader';
@@ -31,6 +32,7 @@ const CreateCardScreen = () => {
   const route = useRoute();
   const {showLoader, hideLoader} = useLoader();
   const colorTheme = useTheme();
+  const insets = useSafeAreaInsets();
   
   // Get params
   const {folderId, setId, initialData, editNote} = route.params || {};
@@ -198,7 +200,7 @@ const CreateCardScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={[styles.container, {backgroundColor: colorTheme.background}]}>
       <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
+        contentContainerStyle={[styles.scrollViewContent, {paddingBottom: Math.max(insets.bottom, 20)}]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
         <LinearGradient colors={gradientColors} style={styles.headerContainer}>
@@ -274,8 +276,7 @@ const CreateCardScreen = () => {
             fontColor={Color.White}
             fontFamily={Font.semiBold}
             marginTop={verticalScale(35)}
-            marginBottom={verticalScale(0)}
-            bottom={verticalScale(10)}
+            marginBottom={verticalScale(20)}
             onPress={handleSubmit}
           />
         </View>
