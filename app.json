@@ -2,6 +2,7 @@
   "name": "FlashCard",
   "displayName": "Bible Flashcards & Notes",
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-9823475062473479~5043844703"
+    "android_app_id": "ca-app-pub-9823475062473479~5043844703",
+    "ios_app_id": "ca-app-pub-9823475062473479~8697658069"
   }
 }
