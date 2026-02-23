@@ -13,7 +13,6 @@ export interface Folder {
   name: string;
   color: string;
   isHighlight: boolean;
-  isPrivate?: boolean;
   userId?: string;
 }
 
@@ -31,8 +30,6 @@ interface UseFolderApiReturn {
   // Form state
   folderName: string;
   setFolderName: (name: string) => void;
-  folderStatus: number;
-  setFolderStatus: (status: number) => void;
   folderColor: string;
   setFolderColor: (color: string) => void;
   colorView: boolean;
@@ -59,7 +56,6 @@ const useFolderApi = ({
 
   // Form state
   const [folderName, setFolderName] = useState('');
-  const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
 
@@ -71,7 +67,6 @@ const useFolderApi = ({
   useEffect(() => {
     if (singleFolderItem && Object.keys(singleFolderItem).length > 0) {
       setFolderName(singleFolderItem?.name || '');
-      setFolderStatus(singleFolderItem?.isPrivate === true ? 1 : 0);
       setFolderColor(singleFolderItem?.color || '');
       setColorView(singleFolderItem?.isHighlight || false);
     }
@@ -198,7 +193,6 @@ const useFolderApi = ({
    */
   const resetForm = useCallback(() => {
     setFolderName('');
-    setFolderStatus(0);
     setFolderColor('');
     setColorView(false);
   }, []);
@@ -227,8 +221,6 @@ const useFolderApi = ({
     // Form state
     folderName,
     setFolderName,
-    folderStatus,
-    setFolderStatus,
     folderColor,
     setFolderColor,
     colorView,

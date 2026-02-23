@@ -40,8 +40,7 @@ export default {
   blur: 'Malabo',
   layout: 'Layout',
   createName: 'Gumawa ng Pangalan',
-  public: 'Pampubliko',
-  private: 'Pribado',
+
   color: 'Kulay',
   or: 'O',
   inputOtp: 'Ilagay ang OTP',

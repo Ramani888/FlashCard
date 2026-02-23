@@ -109,8 +109,6 @@ const FolderComponent = ({
     loading,
     folderName,
     setFolderName,
-    folderStatus,
-    setFolderStatus,
     folderColor,
     setFolderColor,
     colorView,
@@ -214,8 +212,6 @@ const FolderComponent = ({
             title={editBottomSheet ? strings.editFolder : strings.createFolder}
             name={folderName}
             setName={setFolderName}
-            status={folderStatus}
-            setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
             setColorView={setColorView}
@@ -228,7 +224,6 @@ const FolderComponent = ({
     );
   }, [
     folderName,
-    folderStatus,
     folderColor,
     editBottomSheet,
     colorView,

@@ -40,8 +40,6 @@ export default {
   blur: 'धुंधला',
   layout: 'लेआउट',
   createName: 'नाम बनाएं',
-  public: 'सार्वजनिक',
-  private: 'निजी',
   color: 'रंग',
   or: 'या',
   inputOtp: 'ओटीपी दर्ज करें',

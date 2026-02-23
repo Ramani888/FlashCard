@@ -40,8 +40,6 @@ export default {
   blur: 'Sfocatura',
   layout: 'Layout',
   createName: 'Crea Nome',
-  public: 'Pubblico',
-  private: 'Privato',
   color: 'Colore',
   or: 'Oppure',
   inputOtp: 'Inserisci OTP',

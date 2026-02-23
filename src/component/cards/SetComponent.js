@@ -162,8 +162,6 @@ const SetComponent = ({
     loading,
     setName,
     setSetName,
-    setStatus,
-    setSetStatus,
     setColor,
     setSetColor,
     colorView,
@@ -298,8 +296,6 @@ const SetComponent = ({
             title={editBottomSheet ? strings.editSet : strings.createSet}
             name={setName}
             setName={setSetName}
-            status={setStatus}
-            setStatus={setSetStatus}
             color={setColor}
             setColor={setSetColor}
             setColorView={setColorView}
@@ -312,7 +308,6 @@ const SetComponent = ({
     );
   }, [
     setName,
-    setStatus,
     setColor,
     editBottomSheet,
     colorView,

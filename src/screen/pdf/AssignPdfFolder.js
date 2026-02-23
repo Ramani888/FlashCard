@@ -27,7 +27,6 @@ const AssignPdfFolder = () => {
   const insets = useSafeAreaInsets();
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
-  const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState('');
@@ -76,7 +75,6 @@ const AssignPdfFolder = () => {
           JSON.stringify(rawData),
         );
         setFolderName('');
-        setFolderStatus(0);
         setFolderColor('');
         getPdfFolderData(true, response?.message);
       } catch (error) {
@@ -175,8 +173,6 @@ const AssignPdfFolder = () => {
             title={strings.createFolder}
             name={folderName}
             setName={setFolderName}
-            status={folderStatus}
-            setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
             setColorView={setColorView}
@@ -188,7 +184,6 @@ const AssignPdfFolder = () => {
     ),
     [
       folderName,
-      folderStatus,
       folderColor,
       colorView,
       colorTheme.background,

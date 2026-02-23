@@ -39,7 +39,6 @@ const NotesScreen = () => {
   const [singleNoteData, setSingleNoteData] = useState({});
   const [noteData, setNoteData] = useState([]);
   const [noteName, setNoteName] = useState();
-  const [noteStatus, setNoteStatus] = useState(0);
   const [noteColor, setNoteColor] = useState('');
   const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef();
@@ -233,8 +232,6 @@ const NotesScreen = () => {
             title={editBottomSheet ? strings.editNote : strings.createNotes}
             name={noteName}
             setName={setNoteName}
-            status={noteStatus}
-            setStatus={setNoteStatus}
             color={noteColor}
             setColor={setNoteColor}
             setColorView={setColorView}
@@ -247,7 +244,6 @@ const NotesScreen = () => {
     ),
     [
       noteName,
-      noteStatus,
       noteColor,
       editBottomSheet,
       colorView,

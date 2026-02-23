@@ -28,7 +28,6 @@ const AssignSetScreen = () => {
   const insets = useSafeAreaInsets();
   const [setData, setSetData] = useState([]);
   const [setName, setSetName] = useState('');
-  const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
   const [colorView, setColorView] = useState(false);
   const [selectedSetId, setSelectedSetId] = useState('');
@@ -73,7 +72,6 @@ const AssignSetScreen = () => {
 
     const rawData = {
       name: setName,
-      isPrivate: setStatus,
       color: setColor,
       userId: userId,
       ...(folderId ? {folderId: folderId} : {}),
@@ -83,7 +81,6 @@ const AssignSetScreen = () => {
     try {
       const response = await apiPost(Api.Set, '', JSON.stringify(rawData));
       setSetName('');
-      setSetStatus(0);
       setSetColor('');
       setColorView(false);
       refRBSheet.current?.hide();
@@ -94,7 +91,7 @@ const AssignSetScreen = () => {
     } finally {
       hideLoader();
     }
-  }, [colorView, folderId, getSetData, setColor, setName, setStatus, userId, showLoader, hideLoader]);
+  }, [colorView, folderId, getSetData, setColor, setName, userId, showLoader, hideLoader]);
 
   const assignSet = useCallback(async () => {
     try {
@@ -271,8 +268,6 @@ const AssignSetScreen = () => {
             title={strings.createSet}
             name={setName}
             setName={setSetName}
-            status={setStatus}
-            setStatus={setSetStatus}
             color={setColor}
             setColor={setSetColor}
             setColorView={setColorView}
@@ -284,7 +279,6 @@ const AssignSetScreen = () => {
     );
   }, [
     setName,
-    setStatus,
     setColor,
     colorView,
     colorTheme.background,

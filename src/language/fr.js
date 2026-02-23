@@ -40,8 +40,6 @@ export default {
   blur: 'Flou',
   layout: 'Disposition',
   createName: 'Créer un nom',
-  public: 'Public',
-  private: 'Privé',
   color: 'Couleur',
   or: 'Ou',
   inputOtp: 'Entrer OTP',

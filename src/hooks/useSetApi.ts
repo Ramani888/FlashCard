@@ -14,7 +14,6 @@ export interface CardSet {
   name: string;
   color: string;
   isHighlight: boolean;
-  isPrivate?: boolean | number;
   userId?: string;
   folderId?: string;
 }
@@ -34,8 +33,6 @@ interface UseSetApiReturn {
   // Form state
   setName: string;
   setSetName: (name: string) => void;
-  setStatus: number;
-  setSetStatus: (status: number) => void;
   setColor: string;
   setSetColor: (color: string) => void;
   colorView: boolean;
@@ -65,7 +62,6 @@ const useSetApi = ({
 
   // Form state
   const [setName, setSetName] = useState('');
-  const [setStatus, setSetStatus] = useState(0);
   const [setColor, setSetColor] = useState('');
   const [colorView, setColorView] = useState(false);
 
@@ -77,7 +73,6 @@ const useSetApi = ({
   useEffect(() => {
     if (singleSetData && Object.keys(singleSetData).length > 0) {
       setSetName(singleSetData?.name || '');
-      setSetStatus(singleSetData?.isPrivate === true ? 1 : 0);
       setSetColor(singleSetData?.color || '');
       setColorView(singleSetData?.isHighlight || false);
     }
@@ -145,7 +140,6 @@ const useSetApi = ({
 
     const rawData = {
       name: setName,
-      isPrivate: setStatus,
       color: setColor,
       userId: userId,
       ...(folderId ? {folderId} : {}),
@@ -160,7 +154,7 @@ const useSetApi = ({
     } catch (error) {
       console.log('Error creating set:', error);
     }
-  }, [colorView, folderId, getSetData, setColor, setName, setStatus, userId]);
+  }, [colorView, folderId, getSetData, setColor, setName, userId]);
 
   /**
    * Edit an existing set
@@ -171,7 +165,6 @@ const useSetApi = ({
     const rawData = {
       _id: singleSetData?._id,
       name: setName,
-      isPrivate: setStatus,
       color: setColor,
       userId: userId,
       isHighlight: colorView,
@@ -185,7 +178,7 @@ const useSetApi = ({
     } catch (error) {
       console.log('Error editing set:', error);
     }
-  }, [colorView, getSetData, setColor, setName, setStatus, singleSetData, userId]);
+  }, [colorView, getSetData, setColor, setName, singleSetData, userId]);
 
   /**
    * Remove folder association from a set
@@ -229,7 +222,6 @@ const useSetApi = ({
    */
   const resetForm = useCallback(() => {
     setSetName('');
-    setSetStatus(0);
     setSetColor('');
     setColorView(false);
   }, []);
@@ -258,8 +250,6 @@ const useSetApi = ({
     // Form state
     setName,
     setSetName,
-    setStatus,
-    setSetStatus,
     setColor,
     setSetColor,
     colorView,

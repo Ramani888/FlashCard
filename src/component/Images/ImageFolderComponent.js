@@ -33,7 +33,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
   const [pdfFolderdata, setPdfFolderData] = useState([]);
   const [singleFolderItem, setSingleFolderItem] = useState({});
   const [folderName, setFolderName] = useState('');
-  const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
   const refRBSheet = useRef();
@@ -81,7 +80,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
         JSON.stringify(rawData),
       );
       setFolderName('');
-      setFolderStatus(0);
       setFolderColor('');
       getImageFolderData(true, response?.message);
     } catch (error) {
@@ -105,7 +103,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
         JSON.stringify(rawData),
       );
       setFolderName('');
-      setFolderStatus(0);
       setFolderColor('');
       getImageFolderData(true, response?.message);
     } catch (error) {
@@ -152,8 +149,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
             title={editBottomSheet ? strings.editFolder : strings.createFolder}
             name={folderName}
             setName={setFolderName}
-            status={folderStatus}
-            setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
             setColorView={setColorView}
@@ -166,7 +161,6 @@ const ImageFolderComponent = ({onFolderClick}) => {
     );
   }, [
     folderName,
-    folderStatus,
     folderColor,
     editBottomSheet,
     colorView,

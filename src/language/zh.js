@@ -40,8 +40,6 @@ export default {
   blur: '模糊',
   layout: '布局',
   createName: '创建名称',
-  public: '公开',
-  private: '私人',
   color: '颜色',
   or: '或者',
   inputOtp: '输入 OTP',

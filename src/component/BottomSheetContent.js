@@ -1,7 +1,6 @@
 import React, {useMemo, useCallback, useEffect} from 'react';
 import {
   Dimensions,
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -14,7 +13,6 @@ import {scale, verticalScale} from '../custome/Responsive';
 import CustomeButton from '../custome/CustomeButton';
 import Font from './Font';
 import CustomeInputField from '../custome/CustomeInputField';
-import {Switch} from '@rneui/themed';
 import ColorCodePicker from './cards/ColorCodePicker';
 import showMessageonTheScreen from './ShowMessageOnTheScreen';
 import useTheme from './Theme';
@@ -27,8 +25,6 @@ const BottomSheetContent = ({
   title,
   name,
   setName,
-  status,
-  setStatus,
   color,
   setColor,
   setColorView,
@@ -48,20 +44,12 @@ const BottomSheetContent = ({
   }, [initialData, setColor, setColorView, setName]);
 
   const iconSize = useMemo(() => scale(20), []);
-  const userIcon = useMemo(() => require('../Assets/Img/userIcon.png'), []);
-  const lockIcon = useMemo(() => require('../Assets/Img/lock.png'), []);
-
-  const toggleSwitch = useCallback(
-    () => setStatus(status => (status === 0 ? 1 : 0)),
-    [setStatus],
-  );
 
   const handleSubmit = () => {
-    if (name && status !== null && color) {
+    if (name && color) {
       create();
       closeBottomSheet();
       setName('');
-      setStatus('');
       setColor('');
       setColorView(false);
     } else {
@@ -88,37 +76,6 @@ const BottomSheetContent = ({
           inputStyles={[styles.inputStyles, {color: colorTheme.textColor}]}
           backgroundColor={colorTheme.listAndBoxColor}
         />
-
-        {title !== 'CREATE NOTES' &&
-          title !== 'EDIT NOTES' &&
-          title !== 'CREATE FOLDER' &&
-          title !== 'EDIT FOLDER' && (
-            <View style={styles.switchContainer}>
-              <View style={styles.switchContent}>
-                <Image source={userIcon} style={styles.icon} />
-                <Text
-                  style={[styles.switchLabel, {color: colorTheme.textColor}]}>
-                  {strings.public}
-                </Text>
-              </View>
-
-              <Switch
-                value={status === 1}
-                onValueChange={toggleSwitch}
-                color={status === 1 ? '#FF0000' : '#4CAF50'}
-                trackColor={{false: '#d3d3d3', true: '#d3d3d3'}}
-                thumbColor={status === 1 ? '#FF0000' : '#4CAF50'}
-              />
-
-              <View style={styles.switchContent}>
-                <Image source={lockIcon} style={styles.icon} />
-                <Text
-                  style={[styles.switchLabel, {color: colorTheme.textColor}]}>
-                  {strings.private}
-                </Text>
-              </View>
-            </View>
-          )}
 
         <View style={styles.colorSection}>
           <Text style={[styles.colorTitle, {color: colorTheme.textColor}]}>
@@ -170,15 +127,11 @@ const BottomSheetContent = ({
       name,
       color,
       title,
-      userIcon,
-      lockIcon,
-      toggleSwitch,
       setColorView,
       colorView,
       colorTheme,
       setColor,
       setName,
-      status,
     ],
   );
 
@@ -245,25 +198,6 @@ const styles = StyleSheet.create({
     color: Color.Black,
     fontFamily: Font.regular,
     paddingLeft: scale(5),
-  },
-  switchContainer: {
-    width: width * 0.6,
-    alignSelf: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  switchContent: {
-    alignItems: 'center',
-  },
-  switchLabel: {
-    fontSize: scale(13),
-    color: Color.Black,
-    fontFamily: Font.regular,
-  },
-  icon: {
-    width: width * 0.07,
-    height: height * 0.04,
   },
   colorSection: {
     marginTop: verticalScale(10),

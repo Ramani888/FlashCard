@@ -1,5 +1,5 @@
-const Base_url = 'https://biblestudycards.app/api';
-// const Base_url = 'http://192.168.1.2:3010/api';
+// const Base_url = 'https://biblestudycards.app/api';
+const Base_url = 'http://192.168.1.2:3010/api';
 // const Base_url = 'https://flash-card-backend-bice.vercel.app/api';
 
 const Api = {

@@ -112,7 +112,7 @@ describe('Folder Slice', () => {
   });
 
   it('should handle setSelectedFolder', () => {
-    const folder = {_id: '1', name: 'Test Folder', color: '#FF0000', userId: '1', isPrivate: false, isHighlight: false};
+    const folder = {_id: '1', name: 'Test Folder', color: '#FF0000', userId: '1', isHighlight: false};
     const actual = folderReducer(initialState, setSelectedFolder(folder));
     expect(actual.selectedFolder).toEqual(folder);
   });
@@ -126,8 +126,8 @@ describe('Folder Slice', () => {
   it('should handle clearFolders', () => {
     const stateWithFolders = {
       ...initialState,
-      folders: [{_id: '1', name: 'Test', color: '#000', userId: '1', isPrivate: false, isHighlight: false}],
-      selectedFolder: {_id: '1', name: 'Test', color: '#000', userId: '1', isPrivate: false, isHighlight: false},
+      folders: [{_id: '1', name: 'Test', color: '#000', userId: '1', isHighlight: false}],
+      selectedFolder: {_id: '1', name: 'Test', color: '#000', userId: '1', isHighlight: false},
     };
     const actual = folderReducer(stateWithFolders, clearFolders());
     expect(actual.folders).toEqual([]);

@@ -27,7 +27,6 @@ const AssignImageFolder = () => {
   const insets = useSafeAreaInsets();
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
-  const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [selectedFolderId, setSelectedFolderId] = useState('');
   const [colorView, setColorView] = useState(false);
@@ -76,7 +75,6 @@ const AssignImageFolder = () => {
           JSON.stringify(rawData),
         );
         setFolderName('');
-        setFolderStatus(0);
         setFolderColor('');
         getImageFolderData(true, response?.message);
       } catch (error) {
@@ -175,8 +173,6 @@ const AssignImageFolder = () => {
             title={strings.createFolder}
             name={folderName}
             setName={setFolderName}
-            status={folderStatus}
-            setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
             setColorView={setColorView}
@@ -188,7 +184,6 @@ const AssignImageFolder = () => {
     ),
     [
       folderName,
-      folderStatus,
       folderColor,
       colorView,
       colorTheme.background,

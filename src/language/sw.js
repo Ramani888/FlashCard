@@ -40,8 +40,7 @@ export default {
   blur: 'Fifisha',
   layout: 'Mpangilio',
   createName: 'Unda Jina',
-  public: 'Ya Umma',
-  private: 'Ya Kibinafsi',
+
   color: 'Rangi',
   or: 'Au',
   inputOtp: 'Ingiza OTP',

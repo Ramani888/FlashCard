@@ -40,8 +40,6 @@ export default {
   blur: 'Weichzeichnen',
   layout: 'Layout',
   createName: 'Name erstellen',
-  public: 'Öffentlich',
-  private: 'Privat',
   color: 'Farbe',
   or: 'Oder',
   inputOtp: 'OTP eingeben',

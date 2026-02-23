@@ -26,7 +26,6 @@ const AssignFolderScreen = () => {
   const insets = useSafeAreaInsets();
   const [folderData, setFolderData] = useState([]);
   const [folderName, setFolderName] = useState('');
-  const [folderStatus, setFolderStatus] = useState(0);
   const [folderColor, setFolderColor] = useState('');
   const [colorView, setColorView] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState('');
@@ -80,7 +79,6 @@ const AssignFolderScreen = () => {
 
     const rawData = {
       name: folderName,
-      isPrivate: folderStatus,
       color: folderColor,
       userId: userId,
       isHighlight: colorView,
@@ -89,7 +87,6 @@ const AssignFolderScreen = () => {
     try {
       const response = await apiPost(Api.Folder, '', JSON.stringify(rawData));
       setFolderName('');
-      setFolderStatus(0);
       setFolderColor('');
       setColorView(false);
       refRBSheet.current?.hide();
@@ -100,7 +97,7 @@ const AssignFolderScreen = () => {
     } finally {
       hideLoader();
     }
-  }, [colorView, folderColor, folderName, folderStatus, userId, showLoader, hideLoader, getFolderData]);
+  }, [colorView, folderColor, folderName, userId, showLoader, hideLoader, getFolderData]);
 
   const assignFolder = useCallback(async () => {
     try {
@@ -231,8 +228,6 @@ const AssignFolderScreen = () => {
             title={strings.createFolder}
             name={folderName}
             setName={setFolderName}
-            status={folderStatus}
-            setStatus={setFolderStatus}
             color={folderColor}
             setColor={setFolderColor}
             setColorView={setColorView}
@@ -244,7 +239,6 @@ const AssignFolderScreen = () => {
     ),
     [
       folderName,
-      folderStatus,
       folderColor,
       colorView,
       colorTheme.background,

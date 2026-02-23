@@ -22,7 +22,6 @@ export interface Folder {
   name: string;
   color: string;
   userId: string;
-  isPrivate: boolean;
   isHighlight: boolean;
   setsCount?: number;
   createdAt?: string;
@@ -36,7 +35,6 @@ export interface CardSet {
   color: string;
   folderId?: string;
   userId: string;
-  isPrivate: boolean;
   isHighlight: boolean;
   cardsCount?: number;
   createdAt?: string;

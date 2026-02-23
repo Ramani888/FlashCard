@@ -40,8 +40,6 @@ export default {
   blur: 'Rozmycie',
   layout: 'Układ',
   createName: 'Utwórz nazwę',
-  public: 'Publiczne',
-  private: 'Prywatne',
   color: 'Kolor',
   or: 'Lub',
   inputOtp: 'Wprowadź OTP',
