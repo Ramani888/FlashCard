@@ -131,6 +131,14 @@ const SignUpScreen = () => {
     setLanguageModal(false);
   }, []);
 
+  const handleTermsPress = useCallback(() => {
+    navigation.navigate(ScreenName.privacy, {tab: 'terms'});
+  }, [navigation]);
+
+  const handlePrivacyPress = useCallback(() => {
+    navigation.navigate(ScreenName.privacy, {tab: 'privacy'});
+  }, [navigation]);
+
   // Memoize icon components
   const emailIcon = useMemo(() => (
     <View style={styles.iconWrapper}>
@@ -263,13 +271,13 @@ const SignUpScreen = () => {
                 {strings.termConditionMessage1}{' '}
                 <Text
                   style={[styles.linkText, {color: colorTheme.textColor}]}
-                  onPress={() => {}}>
+                  onPress={handleTermsPress}>
                   {strings.termConditionMessage2}
                 </Text>{' '}
                 {strings.and}{' '}
                 <Text
                   style={[styles.linkText, {color: colorTheme.textColor}]}
-                  onPress={() => {}}>
+                  onPress={handlePrivacyPress}>
                   {strings.privacyPolicy}
                 </Text>
               </Text>

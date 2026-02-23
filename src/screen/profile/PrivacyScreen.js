@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -20,9 +20,16 @@ const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 const HEADER_HEIGHT = verticalScale(60);
 const TAB_HEIGHT = verticalScale(65);
 
-const TermsScreen = () => {
+const TermsScreen = ({route}) => {
   const colorTheme = useTheme();
-  const [activeTab, setActiveTab] = useState('terms'); // 'privacy' or 'terms'
+  const initialTab = route?.params?.tab || 'terms';
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    if (route?.params?.tab) {
+      setActiveTab(route.params.tab);
+    }
+  }, [route?.params?.tab]);
 
   const renderHeader = useCallback(() => {
     return (
