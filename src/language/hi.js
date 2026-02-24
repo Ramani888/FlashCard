@@ -139,6 +139,8 @@ export default {
   selectUsername: 'उपयोगकर्ता नाम चुनें',
   noDataFound: 'कोई डेटा नहीं मिला',
   noFolder: 'कोई फ़ोल्डर नहीं',
+  noteLabel: 'नोट: ',
+  spamFolderNote: 'यदि आपको ईमेल नहीं मिला है तो कृपया अपना स्पैम फ़ोल्डर देखें।',
 
   contactNotfound: 'संपर्क नहीं मिला',
   watchAd: 'विज्ञापन देखें',
@@ -175,7 +177,7 @@ export default {
   deleteAccountConfirmMessage: 'क्या आप वास्तव में अपना खाता हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती है और आपका सभी डेटा स्थायी रूप से हटा दिया जाएगा।',
   cancel: 'रद्द करें',
   deleteAccountSuccess: 'खाता सफलतापूर्वक हटा दिया गया',
-  
+
   // Confirmation dialog messages
   deleteNote: 'नोट हटाएं',
   deleteNoteConfirmMessage: 'क्या आप वास्तव में इस नोट को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती है।',

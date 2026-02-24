@@ -140,6 +140,8 @@ export default {
   selectUsername: 'CHAGUA JINA LA MTUMIAJI',
   noDataFound: 'Hakuna Data Iliyopatikana',
   noFolder: 'Hakuna Folda Iliyopatikana',
+  noteLabel: 'Kumbuka: ',
+  spamFolderNote: 'Tafadhali angalia folda yako ya taka (spam) kama haujapokea barua pepe.',
 
   contactNotfound: 'Mawasiliano hayapatikani',
   watchAd: 'Tazama tangazo',
@@ -176,7 +178,7 @@ export default {
   deleteAccountConfirmMessage: 'Je, una uhakika unataka kufuta akaunti yako? Hatua hii haiwezi kutenduliwa na data yako yote itafutwa kabisa.',
   cancel: 'Ghairi',
   deleteAccountSuccess: 'Akaunti imefutwa kwa mafanikio',
-  
+
   // Confirmation dialog messages
   deleteNote: 'Futa Kumbukumbu',
   deleteNoteConfirmMessage: 'Je, una uhakika unataka kufuta kumbukumbu hii? Hatua hii haiwezi kutenduliwa.',

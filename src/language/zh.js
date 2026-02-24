@@ -137,6 +137,8 @@ export default {
   selectUsername: '选择用户名',
   noDataFound: '未找到数据',
   noFolder: '未找到文件夹',
+  noteLabel: '注意：',
+  spamFolderNote: '如果您没有收到电子邮件，请检查您的垃圾邮件文件夹。',
 
   contactNotfound: '找不到联系人',
   watchAd: '看广告',
@@ -173,7 +175,7 @@ export default {
   deleteAccountConfirmMessage: '您确定要删除您的账户吗？此操作无法撤销，您的所有数据将被永久删除。',
   cancel: '取消',
   deleteAccountSuccess: '账户删除成功',
-  
+
   // Confirmation dialog messages
   deleteNote: '删除笔记',
   deleteNoteConfirmMessage: '您确定要删除这条笔记吗？此操作无法撤销。',

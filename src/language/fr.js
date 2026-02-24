@@ -139,6 +139,8 @@ export default {
   selectUsername: 'SÉLECTIONNER UN NOM D’UTILISATEUR',
   noDataFound: 'Aucune donnée trouvée',
   noFolder: 'Aucun dossier',
+  noteLabel: 'Note : ',
+  spamFolderNote: "Veuillez vérifier votre dossier spam si vous n'avez pas reçu l'e-mail.",
 
   contactNotfound: 'Contact introuvable',
   watchAd: "Regarder l'annonce",
@@ -175,7 +177,7 @@ export default {
   deleteAccountConfirmMessage: 'Êtes-vous sûr de vouloir supprimer votre compte? Cette action ne peut pas être annulée et toutes vos données seront définitivement supprimées.',
   cancel: 'Annuler',
   deleteAccountSuccess: 'Compte supprimé avec succès',
-  
+
   // Confirmation dialog messages
   deleteNote: 'Supprimer la Note',
   deleteNoteConfirmMessage: 'Êtes-vous sûr de vouloir supprimer cette note? Cette action ne peut pas être annulée.',

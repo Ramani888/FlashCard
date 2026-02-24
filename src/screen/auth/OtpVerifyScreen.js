@@ -6,23 +6,23 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {scale, verticalScale} from '../../custome/Responsive';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { scale, verticalScale } from '../../custome/Responsive';
 import Font from '../../component/Font';
 import Color from '../../component/Color';
 import OTPTextInput from 'react-native-otp-textinput';
 import CustomeButton from '../../custome/CustomeButton';
-import {apiPost, apiPut} from '../../Api/ApiService';
+import { apiPost, apiPut } from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ScreenName} from '../../component/Screen';
-import {useLoader} from '../../context';
+import { ScreenName } from '../../component/Screen';
+import { useLoader } from '../../context';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 // Helper function to get language code from AsyncStorage
 const getLanguageCode = async () => {
@@ -40,12 +40,12 @@ const OtpVerifyScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const colorTheme = useTheme();
-  const {showLoader, hideLoader} = useLoader();
+  const { showLoader, hideLoader } = useLoader();
   const [isValid, setIsValid] = useState(true);
   const [otp, setOtp] = useState('');
   const [countdown, setCountdown] = useState(120);
   const [isCounting, setIsCounting] = useState(false);
-  const {email, password} = route.params;
+  const { email, password } = route.params;
 
   const appState = useRef(AppState.currentState);
   const timerRef = useRef(null);
@@ -138,14 +138,14 @@ const OtpVerifyScreen = () => {
   const verifyOtp = useCallback(async () => {
     try {
       const languageCode = await getLanguageCode();
-      
+
       const rawData = {
         email,
         otp,
         isPrivacy: true,
         language: languageCode,
       };
-      
+
       showLoader();
       const response = await apiPost(
         Api.verifyOtp,
@@ -168,14 +168,14 @@ const OtpVerifyScreen = () => {
   const forgotPasswordVerifyOtp = useCallback(async () => {
     try {
       const languageCode = await getLanguageCode();
-      
+
       const rawData = {
         email,
         password,
         otp,
         language: languageCode,
       };
-      
+
       showLoader();
       const response = await apiPut(
         Api.forgotPasswordVerifyOtp,
@@ -196,7 +196,7 @@ const OtpVerifyScreen = () => {
   const ResendOtp = useCallback(async () => {
     try {
       const languageCode = await getLanguageCode();
-      
+
       showLoader();
       const response = await apiPut(`${Api.resendOtp}?email=${email}&language=${languageCode}`);
       if (response?.success === true) {
@@ -235,20 +235,20 @@ const OtpVerifyScreen = () => {
   const renderBody = () => {
     return (
       <View style={styles.bodyContainer}>
-        <Text style={[styles.title, {color: colorTheme.textColor}]}>
+        <Text style={[styles.title, { color: colorTheme.textColor }]}>
           {strings.inputOtp}
         </Text>
         <Text style={styles.subtitle}>
           {strings.emailInfo1}
-          <Text style={[styles.email, {color: colorTheme.textColor}]}>
+          <Text style={[styles.email, { color: colorTheme.textColor }]}>
             {' '}
             {email}
           </Text>{' '}
           {strings.emailInfo2}
         </Text>
         <Text style={styles.noteText}>
-          <Text style={styles.noteLabel}>Note: </Text>
-          Please check your spam folder if you haven't received the email.
+          <Text style={styles.noteLabel}>{strings.noteLabel}</Text>
+          {strings.spamFolderNote}
         </Text>
         <OTPTextInput
           handleTextChange={handleOtpChange}
@@ -271,7 +271,7 @@ const OtpVerifyScreen = () => {
               {strings.dontReciveEmail}
             </Text>
 
-            <Text style={[styles.recendOtpText, {color: colorTheme.textColor}]}>
+            <Text style={[styles.recendOtpText, { color: colorTheme.textColor }]}>
               {strings.resendMessage1}{' '}
               <Text
                 style={{
@@ -316,7 +316,7 @@ const OtpVerifyScreen = () => {
     );
   };
   return (
-    <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
+    <View style={[styles.container, { backgroundColor: colorTheme.background1 }]}>
       {renderBody()}
     </View>
   );
@@ -325,8 +325,8 @@ const OtpVerifyScreen = () => {
 export default React.memo(OtpVerifyScreen);
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
-  bodyContainer: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  container: { flex: 1 },
+  bodyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   title: {
     fontSize: scale(20),
     color: Color.Black,
@@ -369,12 +369,12 @@ const styles = StyleSheet.create({
     fontFamily: Font.regular,
     backgroundColor: Color.White,
   },
-  resendView: {alignItems: 'center'},
-  resendBtn: {alignSelf: 'flex-end', marginRight: scale(20)},
+  resendView: { alignItems: 'center' },
+  resendBtn: { alignSelf: 'flex-end', marginRight: scale(20) },
   recendOtpText: {
     fontSize: scale(15),
     fontFamily: Font.regular,
     color: Color.Black,
   },
-  email: {color: Color.Black},
+  email: { color: Color.Black },
 });

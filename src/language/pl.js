@@ -139,6 +139,8 @@ export default {
   selectUsername: 'WYBIERZ NAZWĘ UŻYTKOWNIKA',
   noDataFound: 'Nie znaleziono danych',
   noFolder: 'Nie znaleziono folderu',
+  noteLabel: 'Uwaga: ',
+  spamFolderNote: 'Sprawdź folder spam, jeśli nie otrzymałeś e-maila.',
 
   contactNotfound: 'Kontakt nie znaleziono',
   watchAd: 'Oglądaj reklamę',
@@ -175,7 +177,7 @@ export default {
   deleteAccountConfirmMessage: 'Czy na pewno chcesz usunąć swoje konto? Tej akcji nie można cofnąć i wszystkie Twoje dane zostaną trwale usunięte.',
   cancel: 'Anuluj',
   deleteAccountSuccess: 'Konto usunięte pomyślnie',
-  
+
   // Confirmation dialog messages
   deleteNote: 'Usuń Notatkę',
   deleteNoteConfirmMessage: 'Czy na pewno chcesz usunąć tę notatkę? Tej akcji nie można cofnąć.',

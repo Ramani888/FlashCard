@@ -140,6 +140,8 @@ export default {
   selectUsername: 'BENUTZERNAMEN AUSWÄHLEN',
   noDataFound: 'Keine Daten gefunden',
   noFolder: 'Kein Ordner gefunden',
+  noteLabel: 'Hinweis: ',
+  spamFolderNote: 'Bitte überprüfen Sie Ihren Spam-Ordner, falls Sie die E-Mail nicht erhalten haben.',
 
   contactNotfound: 'Kontakt nicht gefunden',
   watchAd: 'Anzeige ansehen',
@@ -176,7 +178,7 @@ export default {
   deleteAccountConfirmMessage: 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und alle Ihre Daten werden dauerhaft gelöscht.',
   cancel: 'Abbrechen',
   deleteAccountSuccess: 'Konto erfolgreich gelöscht',
-  
+
   // Confirmation dialog messages
   deleteNote: 'Notiz Löschen',
   deleteNoteConfirmMessage: 'Sind Sie sicher, dass Sie diese Notiz löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',

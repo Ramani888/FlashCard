@@ -138,6 +138,8 @@ export default {
   selectUsername: 'SELECT USERNAME',
   noDataFound: 'No Data Found',
   noFolder: 'No Folder',
+  noteLabel: 'Note: ',
+  spamFolderNote: "Please check your spam folder if you haven't received the email.",
 
   // new added
 
@@ -176,7 +178,7 @@ export default {
   deleteAccountConfirmMessage: 'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.',
   cancel: 'Cancel',
   deleteAccountSuccess: 'Account deleted successfully',
-  
+
   // Confirmation dialog messages
   deleteNote: 'Delete Note',
   deleteNoteConfirmMessage: 'Are you sure you want to delete this note? This action cannot be undone.',

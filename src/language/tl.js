@@ -140,6 +140,8 @@ export default {
   selectUsername: 'PUMILI NG USERNAME',
   noDataFound: 'Walang Natagpuang Data',
   noFolder: 'Walang Natagpuang Folder',
+  noteLabel: 'Tandaan: ',
+  spamFolderNote: 'Pakisuri ang iyong spam folder kung hindi mo pa natatanggap ang email.',
 
   contactNotfound: 'Walang nakitang contact',
   watchAd: 'Panoorin ang ad',
@@ -176,7 +178,7 @@ export default {
   deleteAccountConfirmMessage: 'Sigurado ka bang gusto mong burahin ang iyong account? Ang aksyong ito ay hindi na mababawi at ang lahat ng iyong datos ay permanenteng matatanggal.',
   cancel: 'Kanselahin',
   deleteAccountSuccess: 'Matagumpay na nabura ang account',
-  
+
   // Confirmation dialog messages
   deleteNote: 'Burahin ang Tala',
   deleteNoteConfirmMessage: 'Sigurado ka bang gusto mong burahin ang talang ito? Ang aksyong ito ay hindi na mababawi.',

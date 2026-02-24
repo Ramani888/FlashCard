@@ -140,6 +140,8 @@ export default {
   selectUsername: 'SELECCIONAR NOMBRE DE USUARIO',
   noDataFound: 'No se encontraron datos',
   noFolder: 'No se encontró carpeta',
+  noteLabel: 'Nota: ',
+  spamFolderNote: 'Por favor, revise su carpeta de spam si no ha recibido el correo electrónico.',
 
   contactNotfound: 'Contacto no encontrado',
   watchAd: 'Ver anuncio',
@@ -176,7 +178,7 @@ export default {
   deleteAccountConfirmMessage: '¿Está seguro de que desea eliminar su cuenta? Esta acción no se puede deshacer y todos sus datos se eliminarán permanentemente.',
   cancel: 'Cancelar',
   deleteAccountSuccess: 'Cuenta eliminada exitosamente',
-  
+
   // Confirmation dialog messages
   deleteNote: 'Eliminar Nota',
   deleteNoteConfirmMessage: '¿Está seguro de que desea eliminar esta nota? Esta acción no se puede deshacer.',
