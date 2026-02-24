@@ -198,7 +198,22 @@ const OtpVerifyScreen = () => {
       const languageCode = await getLanguageCode();
 
       showLoader();
-      const response = await apiPut(`${Api.resendOtp}?email=${email}&language=${languageCode}`);
+      let response;
+      if (password) {
+        const rawData = {
+          email,
+          password,
+          language: languageCode,
+        };
+        response = await apiPut(
+          Api.forgotPassword,
+          '',
+          JSON.stringify(rawData),
+        );
+      } else {
+        response = await apiPut(`${Api.resendOtp}?email=${email}&language=${languageCode}`);
+      }
+
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
         setCountdown(120);
@@ -209,7 +224,7 @@ const OtpVerifyScreen = () => {
     } finally {
       hideLoader();
     }
-  }, [email, showLoader, hideLoader, startTimer]);
+  }, [email, password, showLoader, hideLoader, startTimer]);
 
   // ===================================== End ==================================== //
 
