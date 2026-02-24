@@ -386,11 +386,6 @@ const ProfileScreen = () => {
     );
   }, [closeEmailBottomSheet]);
 
-  const currentStorage = userStorageData?.coveredStorage;
-  const totalStorage = userStorageData?.storage;
-
-  const progress = totalStorage ? currentStorage / totalStorage : 0;
-
   return (
     <MenuProvider>
       <LinearGradient colors={colorTheme.gradientTheme} style={styles.container}>
@@ -425,61 +420,6 @@ const ProfileScreen = () => {
               inputContainerStyles={styles.inputContainer}
               inputStyles={[styles.inputStyles, {color: colorTheme.textColor}]}
             />
-          </View>
-
-          <View style={styles.separator} />
-
-          <View style={styles.subscriptionContainer}>
-            {/* <Pressable
-              style={styles.subscriptionBoxContainer}
-              onPress={() => handleShowAd()}>
-              <Text style={styles.subscriptionText}>{strings.watchAd}</Text>
-              <Image
-                source={require('../../Assets/Img/adsIcon.jpg')}
-                style={styles.adImageIcon}
-              />
-              <Text style={styles.subscriptionText}>{strings.earnCredits}</Text>
-              <Text style={styles.subscriptionText}>
-                {strings.subscription}
-              </Text>
-              <Pressable
-                style={styles.subscriptionBox}
-                onPress={() =>
-                  navigation.navigate(ScreenName.subscription, {
-                    selectedSubscription: userSubscriptionData,
-                  })
-                }>
-                <Image
-                  source={{uri: subscribedPlan?.icon}}
-                  style={styles.subscriptionImage}
-                  resizeMode="contain"
-                />
-                <Text style={styles.subscriptionTier}>
-                  {subscribedPlan?.name}
-                </Text>
-              </Pressable>
-            </Pressable> */}
-            <View style={styles.subscriptionRightView}>
-              {/* <View style={styles.aiCreditsContainer}>
-                <Text style={styles.aiCreditsText}>{strings.aiCredit}</Text>
-                <Text style={styles.aiCreditsText}>
-                  {userCreditData?.credit}
-                </Text>
-              </View> */}
-              <View style={styles.aiCreditsContainer}>
-                <Text style={styles.aiCreditsText}>
-                  {strings.Storage} ({currentStorage}/{totalStorage}{' '}
-                  {userStorageData?.unit})
-                </Text>
-                <Progress.Bar
-                  progress={progress}
-                  width={scale(150)}
-                  style={{marginTop: verticalScale(10)}}
-                  color={Color.theme1}
-                  height={verticalScale(12)}
-                />
-              </View>
-            </View>
           </View>
 
           <View style={styles.separator} />
