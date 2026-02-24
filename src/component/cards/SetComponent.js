@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState, useMemo, memo} from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo, memo } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Menu,
   MenuTrigger,
@@ -16,13 +16,13 @@ import {
 } from 'react-native-popup-menu';
 import Color from '../Color';
 import Font from '../Font';
-import {scale, verticalScale} from '../../custome/Responsive';
+import { scale, verticalScale } from '../../custome/Responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 import ModalContent from './ModalContent';
 import BottomSheetContent from '../BottomSheetContent';
-import {useNavigation} from '@react-navigation/native';
-import {ScreenName} from '../Screen';
+import { useNavigation } from '@react-navigation/native';
+import { ScreenName } from '../Screen';
 import Loader from '../Loader';
 import NoDataView from '../NoDataView';
 import useTheme from '../Theme';
@@ -31,16 +31,15 @@ import ActionSheet from 'react-native-actions-sheet';
 import useSetApi from '../../hooks/useSetApi';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
-const {height} = Dimensions.get('window');
-const SET_ITEM_HEIGHT = verticalScale(65); // Base height for set item
-const FOLDER_SECTION_HEIGHT = verticalScale(45); // Height for folder display section
+const { height } = Dimensions.get('window');
+
 
 // Memoized icon requires
 const folderIcon = require('../../Assets/Img/folder.png');
 const cardIcon = require('../../Assets/Img/cardIcon.png');
 
 // Memoized SetItem component for better performance
-const SetItem = memo(({item, onPress, onMenuPress, showFolder, colorTheme, colorView, menuOptionsStyle, openBottomSheet, handleDeleteSetPress, handleRemoveFolderPress, folderId, getSetData}) => {
+const SetItem = memo(({ item, onPress, onMenuPress, showFolder, colorTheme, colorView, menuOptionsStyle, openBottomSheet, handleDeleteSetPress, handleRemoveFolderPress, folderId, getSetData }) => {
   const handlePress = useCallback(() => {
     onPress(item);
   }, [item, onPress]);
@@ -64,7 +63,7 @@ const SetItem = memo(({item, onPress, onMenuPress, showFolder, colorTheme, color
         <View style={styles.rowContainer}>
           {!colorView && (
             <View
-              style={[styles.colorBox, {backgroundColor: item?.color}]}
+              style={[styles.colorBox, { backgroundColor: item?.color }]}
             />
           )}
           <Text
@@ -83,7 +82,7 @@ const SetItem = memo(({item, onPress, onMenuPress, showFolder, colorTheme, color
         <View style={styles.rowWithGap}>
           <View style={styles.subSetContainer}>
             <Text
-              style={[styles.subSetText, {color: colorTheme.textColor1}]}>
+              style={[styles.subSetText, { color: colorTheme.textColor1 }]}>
               {item?.cardCount}
             </Text>
             <Image
@@ -106,7 +105,7 @@ const SetItem = memo(({item, onPress, onMenuPress, showFolder, colorTheme, color
               <ModalContent
                 type={'Set'}
                 openBottomSheet={openBottomSheet}
-                setEditBottomSheet={() => {}}
+                setEditBottomSheet={() => { }}
                 onDeletePress={handleDeleteSetPress}
                 onRemoveFolderPress={handleRemoveFolderPress}
                 folderId={folderId}
@@ -174,11 +173,11 @@ const SetComponent = ({
     prepareForEdit,
     prepareForCreate,
     setSingleSetData,
-  } = useSetApi({folderId, search});
+  } = useSetApi({ folderId, search });
 
   // Memoize menu options style
   const menuOptionsStyle = useMemo(() => ({
-    optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
+    optionsContainer: [styles.menuOptionsContainer, { backgroundColor: colorTheme.modelNewBackground }]
   }), [colorTheme.modelNewBackground]);
 
   // Dialog handlers
@@ -233,17 +232,7 @@ const SetComponent = ({
   // Memoized keyExtractor for FlatList
   const keyExtractor = useCallback((item) => item?._id || String(item?.name), []);
 
-  // Calculate item height dynamically based on showFolder
-  const itemHeight = useMemo(() => {
-    return showFolder ? SET_ITEM_HEIGHT + FOLDER_SECTION_HEIGHT : SET_ITEM_HEIGHT;
-  }, [showFolder]);
 
-  // getItemLayout for FlatList optimization - only when heights are consistent
-  const getItemLayout = useCallback((data, index) => ({
-    length: itemHeight,
-    offset: itemHeight * index,
-    index,
-  }), [itemHeight]);
 
   // Handle item press
   const handleItemPress = useCallback((item) => {
@@ -260,7 +249,7 @@ const SetComponent = ({
   }, [setSingleSetData]);
 
   const renderSet = useCallback(
-    ({item}) => (
+    ({ item }) => (
       <SetItem
         item={item}
         onPress={handleItemPress}
@@ -325,16 +314,13 @@ const SetComponent = ({
           data={setData}
           renderItem={renderSet}
           keyExtractor={keyExtractor}
-          getItemLayout={getItemLayout}
           showsVerticalScrollIndicator={false}
           style={styles.flatlist}
-          contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(65), verticalScale(75))}}
+          contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + verticalScale(65), verticalScale(75)) }}
           initialNumToRender={10}
           maxToRenderPerBatch={10}
-          windowSize={5}
+          windowSize={10}
           removeClippedSubviews={true}
-          updateCellsBatchingPeriod={100}
-          legacyImplementation={false}
         />
       ) : (
         !loading && <NoDataView content={strings.setNotFound} />
@@ -354,7 +340,7 @@ const SetComponent = ({
         onPress={handleCreateSetPress}
       />
       {BottomSheets()}
-      
+
       <ConfirmationDialog
         isVisible={showDeleteSetDialog}
         title={strings.deleteSet || 'Delete Set'}
@@ -365,7 +351,7 @@ const SetComponent = ({
         onConfirm={confirmDeleteSet}
         onCancel={() => setShowDeleteSetDialog(false)}
       />
-      
+
       <ConfirmationDialog
         isVisible={showRemoveFolderDialog}
         title={strings.removeFolder || 'Remove Folder'}
@@ -390,7 +376,7 @@ const SetComponent = ({
 export default React.memo(SetComponent);
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: { flex: 1 },
   bodyContainer: {
     flex: 1,
     marginHorizontal: scale(15),
@@ -454,7 +440,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
@@ -489,6 +475,6 @@ const styles = StyleSheet.create({
     gap: scale(50),
     marginVertical: height * 0.01,
   },
-  flatlist: {flex: 1, paddingTop: verticalScale(15)},
-  alignSelf: {alignSelf: 'flex-start'},
+  flatlist: { flex: 1, paddingTop: verticalScale(15) },
+  alignSelf: { alignSelf: 'flex-start' },
 });

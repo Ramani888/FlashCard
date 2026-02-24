@@ -1,6 +1,6 @@
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useRef, useState, useCallback, useMemo, memo} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useRef, useState, useCallback, useMemo, memo } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Menu,
   MenuTrigger,
@@ -8,7 +8,7 @@ import {
 } from 'react-native-popup-menu';
 import Color from '../Color';
 import Font from '../Font';
-import {scale, verticalScale} from '../../custome/Responsive';
+import { scale, verticalScale } from '../../custome/Responsive';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ModalContent from './ModalContent';
 import CustomeButton from '../../custome/CustomeButton';
@@ -21,13 +21,13 @@ import ActionSheet from 'react-native-actions-sheet';
 import useFolderApi from '../../hooks/useFolderApi';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
-const ITEM_HEIGHT = verticalScale(70); // Updated for accurate item height including margins
+
 
 // Memoized no data style
-const noDataStyle = {marginTop: verticalScale(-70)};
+const noDataStyle = { marginTop: verticalScale(-70) };
 
 // Memoized FolderItem component for better performance
-const FolderItem = memo(({item, onPress, onMenuPress, colorView, colorTheme, menuOptionsStyle, openBottomSheet, handleDeleteFolderPress, handleCreateSetClick}) => {
+const FolderItem = memo(({ item, onPress, onMenuPress, colorView, colorTheme, menuOptionsStyle, openBottomSheet, handleDeleteFolderPress, handleCreateSetClick }) => {
   const handlePress = useCallback(() => {
     onPress(item._id);
   }, [item._id, onPress]);
@@ -49,12 +49,12 @@ const FolderItem = memo(({item, onPress, onMenuPress, colorView, colorTheme, men
       onPress={handlePress}>
       <View style={styles.folderInfo}>
         {!colorView && (
-          <View style={[styles.iconColor, {backgroundColor: item.color}]} />
+          <View style={[styles.iconColor, { backgroundColor: item.color }]} />
         )}
         <Text
           style={[
             styles.folderName,
-            {color: item?.isHighlight ? Color.Black : colorTheme.textColor},
+            { color: item?.isHighlight ? Color.Black : colorTheme.textColor },
           ]}
           numberOfLines={1}>
           {item.name}
@@ -75,7 +75,7 @@ const FolderItem = memo(({item, onPress, onMenuPress, colorView, colorTheme, men
           <ModalContent
             type={'Folder'}
             openBottomSheet={openBottomSheet}
-            setEditBottomSheet={() => {}}
+            setEditBottomSheet={() => { }}
             onDeletePress={handleDeleteFolderPress}
             handleCreateSetClick={handleCreateSetClick}
             singleItem={item}
@@ -119,11 +119,11 @@ const FolderComponent = ({
     prepareForEdit,
     prepareForCreate,
     setSingleFolderItem,
-  } = useFolderApi({search});
+  } = useFolderApi({ search });
 
   // Memoize menu options style
   const menuOptionsStyle = useMemo(() => ({
-    optionsContainer: [styles.menuOptionsContainer, {backgroundColor: colorTheme.modelNewBackground}]
+    optionsContainer: [styles.menuOptionsContainer, { backgroundColor: colorTheme.modelNewBackground }]
   }), [colorTheme.modelNewBackground]);
 
   // Dialog handlers
@@ -154,12 +154,7 @@ const FolderComponent = ({
   // Memoized keyExtractor for FlatList
   const keyExtractor = useCallback((item) => item?._id || String(item?.name), []);
 
-  // getItemLayout for FlatList optimization - fixed item heights for better performance
-  const getItemLayout = useCallback((data, index) => ({
-    length: ITEM_HEIGHT,
-    offset: ITEM_HEIGHT * index,
-    index,
-  }), []);
+
 
   // Handle folder press
   const handleFolderPress = useCallback((folderId) => {
@@ -173,7 +168,7 @@ const FolderComponent = ({
   }, [setSingleFolderItem]);
 
   const renderFolder = useCallback(
-    ({item}) => (
+    ({ item }) => (
       <FolderItem
         item={item}
         onPress={handleFolderPress}
@@ -248,16 +243,13 @@ const FolderComponent = ({
               data={folderData}
               renderItem={renderFolder}
               keyExtractor={keyExtractor}
-              getItemLayout={getItemLayout}
               style={styles.flatlist}
-              contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(20), verticalScale(30))}}
+              contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + verticalScale(20), verticalScale(30)) }}
               showsVerticalScrollIndicator={false}
               initialNumToRender={10}
               maxToRenderPerBatch={10}
-              windowSize={5}
+              windowSize={10}
               removeClippedSubviews={true}
-              updateCellsBatchingPeriod={100}
-              legacyImplementation={false}
             />
           ) : (
             !loading && (
@@ -271,7 +263,7 @@ const FolderComponent = ({
 
         {BottomSheets()}
 
-        <View style={[styles.buttonContainer, {paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20))}]}>
+        <View style={[styles.buttonContainer, { paddingBottom: Math.max(insets.bottom + verticalScale(10), verticalScale(20)) }]}>
           <CustomeButton
             buttonColor={Color.theme1}
             buttonWidth="100%"
@@ -284,7 +276,7 @@ const FolderComponent = ({
             onPress={handleCreateFolderPress}
           />
         </View>
-        
+
         <ConfirmationDialog
           isVisible={showDeleteFolderDialog}
           title={strings.deleteFolder || 'Delete Folder'}
@@ -387,7 +379,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
