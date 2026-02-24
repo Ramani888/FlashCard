@@ -1,4 +1,4 @@
-import React, {useCallback, useState, memo} from 'react';
+import React, { useCallback, useState, memo } from 'react';
 import {
   Image,
   Pressable,
@@ -8,20 +8,21 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Color from '../../component/Color';
-import {scale, verticalScale} from '../../custome/Responsive';
+import { scale, verticalScale } from '../../custome/Responsive';
 import Font from '../../component/Font';
 import CustomeButton from '../../custome/CustomeButton';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import Api from '../../Api/EndPoint';
-import {apiPost} from '../../Api/ApiService';
-import {useLoader} from '../../context/LoaderContext';
+import { apiPost } from '../../Api/ApiService';
+import { useLoader } from '../../context/LoaderContext';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CustomeInputField from '../../custome/CustomeInputField';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
-import {useAppSelector} from '../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 
 const options = {
   mediaType: 'photo',
@@ -35,7 +36,8 @@ const SupportScreen = () => {
   const [imageFile, setImageFile] = useState('');
   const [issueDesc, setIssueDesc] = useState('');
   const colorTheme = useTheme();
-  
+  const insets = useSafeAreaInsets();
+
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
@@ -105,7 +107,7 @@ const SupportScreen = () => {
         title={strings.profileTab2}
         iconColor={colorTheme.textColor}
         containerStyle={styles.headerStyle}
-        titleStyle={[styles.headerTitleStyle, {color: colorTheme.textColor}]}
+        titleStyle={[styles.headerTitleStyle, { color: colorTheme.textColor }]}
       />
     ),
     [colorTheme.textColor],
@@ -141,7 +143,7 @@ const SupportScreen = () => {
             <Text
               style={[
                 styles.issue,
-                {color: isSelected ? Color.White : colorTheme.textColor},
+                { color: isSelected ? Color.White : colorTheme.textColor },
               ]}>
               {issueName}
             </Text>
@@ -159,7 +161,7 @@ const SupportScreen = () => {
               numberOfLines={8}
               textAlignVertical="top"
               backgroundColor={colorTheme.listAndBoxColor}
-              inputStyles={{color: colorTheme.textColor}}
+              inputStyles={{ color: colorTheme.textColor }}
               inputContainerStyles={styles.inputContainerStyle}
             />
           )}
@@ -184,7 +186,7 @@ const SupportScreen = () => {
         {renderIssue(strings.feedback)}
         {renderIssue(strings.issues)}
         {renderIssue(strings.suggestions)}
-        <Text style={[styles.inform, {color: colorTheme.textColor}]}>
+        <Text style={[styles.inform, { color: colorTheme.textColor }]}>
           {strings.imformMessage}
         </Text>
         <View style={styles.screenshotContainer}>
@@ -192,7 +194,7 @@ const SupportScreen = () => {
             <Image
               source={
                 imageFile.uri
-                  ? {uri: imageFile.uri}
+                  ? { uri: imageFile.uri }
                   : require('../../Assets/Img/imageFram.png')
               }
               style={imageFile.uri ? styles.selectedImage : styles.image}
@@ -208,7 +210,7 @@ const SupportScreen = () => {
   );
 
   return (
-    <View style={[styles.container, {backgroundColor: colorTheme.background1}]}>
+    <View style={[styles.container, { backgroundColor: colorTheme.background1, paddingBottom: Math.max(insets.bottom, verticalScale(10)) }]}>
       <StatusBar backgroundColor={colorTheme.background1} />
       {renderHeader()}
       {renderBody()}
@@ -232,7 +234,7 @@ const SupportScreen = () => {
 export default memo(SupportScreen);
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: { flex: 1 },
   headerStyle: {
     backgroundColor: Color.transparent,
     height: verticalScale(90),
@@ -248,7 +250,7 @@ const styles = StyleSheet.create({
     height: scale(7),
     borderRadius: scale(3.5),
   },
-  bodyContainer: {flex: 1, margin: scale(15)},
+  bodyContainer: { flex: 1, margin: scale(15) },
   issueView: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -303,5 +305,5 @@ const styles = StyleSheet.create({
     borderRadius: scale(5),
     marginTop: verticalScale(30),
   },
-  inform: {marginTop: verticalScale(10)},
+  inform: { marginTop: verticalScale(10) },
 });
