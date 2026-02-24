@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Platform,
@@ -8,16 +8,16 @@ import {
   UIManager,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import {scale, verticalScale} from '../../custome/Responsive';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
+import { scale, verticalScale } from '../../custome/Responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import Color from '../../component/Color';
 import Font from '../../component/Font';
 import SetDetailModalContent from '../../component/cards/SetDetailModalContent';
-import {apiDelete, apiGet, apiPut} from '../../Api/ApiService';
+import { apiDelete, apiGet, apiPut } from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import {useLoader} from '../../context';
+import { useLoader } from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import CardGridLayout from '../../component/cards/CardGridLayout';
 import SimpleLayout from '../../component/cards/SimpleLayout';
@@ -29,8 +29,8 @@ import strings from '../../language/strings';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import {MenuProvider, Menu, MenuTrigger, MenuOptions} from 'react-native-popup-menu';
-import {useAppSelector} from '../../redux/hooks';
+import { MenuProvider, Menu, MenuTrigger, MenuOptions } from 'react-native-popup-menu';
+import { useAppSelector } from '../../redux/hooks';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 if (
@@ -44,16 +44,16 @@ const SetDetailScreen = () => {
   const route = useRoute();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const {showLoader, hideLoader} = useLoader();
+  const { showLoader, hideLoader, isLoading } = useLoader();
   const insets = useSafeAreaInsets();
   const [cardData, setCardData] = useState([]);
   const [layout, setLayout] = useState('single');
   const [changeOrder, setChangeOrder] = useState(false);
   const [isAllBlur, setIsAllBlur] = useState(false);
-  const {setName} = route.params;
-  const {setId, folderId} = route.params;
+  const { setName } = route.params;
+  const { setId, folderId } = route.params;
   const colorTheme = useTheme();
-  
+
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
@@ -213,7 +213,7 @@ const SetDetailScreen = () => {
         {changeOrder && (
           <Pressable
             onPress={() => setChangeOrder(false)}
-            style={{padding: scale(5)}}>
+            style={{ padding: scale(5) }}>
             <AntDesign name="close" size={scale(25)} color={Color.White} />
           </Pressable>
         )}
@@ -230,7 +230,7 @@ const SetDetailScreen = () => {
                 style={styles.dotsIcon}
               />
             </MenuTrigger>
-            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground}}}>
+            <MenuOptions customStyles={{ optionsContainer: { borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground } }}>
               <SetDetailModalContent
                 folderId={folderId}
                 setId={setId}
@@ -258,7 +258,7 @@ const SetDetailScreen = () => {
   }, [setName, changeOrder, folderId, setId, layout, isAllBlur, colorTheme.modelNewBackground, navigation, updatePosition, blurAllCard, handleLayoutChange]);
 
   const renderItem = useCallback(
-    ({item, drag, isActive}) => {
+    ({ item, drag, isActive }) => {
       return (
         <SimpleLayout
           item={item}
@@ -293,7 +293,7 @@ const SetDetailScreen = () => {
   );
 
   const renderGridItem = useCallback(
-    ({item}) => (
+    ({ item }) => (
       <CardGridLayout
         item={item}
         updateCard={updateCard}
@@ -317,28 +317,28 @@ const SetDetailScreen = () => {
                   data={cardData}
                   keyExtractor={keyExtractor}
                   renderItem={renderItem}
-                  onDragEnd={({data}) => handleReorder(data)}
+                  onDragEnd={({ data }) => handleReorder(data)}
                   activationDistance={20}
                   autoscrollSpeed={200}
                   autoscrollThreshold={80}
-                  containerStyle={{flex: 1}}
+                  containerStyle={{ flex: 1 }}
                 />
               ) : (
                 <FlatList
                   data={cardData}
                   keyExtractor={keyExtractor}
                   showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{paddingBottom: Math.max(insets.bottom + scale(10), scale(30))}}
+                  contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + scale(10), scale(30)) }}
                   renderItem={renderSimpleItem}
                 />
               )
-            ) : (
+            ) : !isLoading ? (
               <NoDataView
                 content={strings.cardNotFound}
-                noDataViewStyle={{marginTop: verticalScale(-70)}}
-                noDataTextStyle={{color: Color.White}}
+                noDataViewStyle={{ marginTop: verticalScale(-70) }}
+                noDataTextStyle={{ color: Color.White }}
               />
-            )}
+            ) : null}
           </>
         ) : (
           <>
@@ -347,17 +347,17 @@ const SetDetailScreen = () => {
                 data={cardData}
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{paddingBottom: Math.max(insets.bottom + scale(30), scale(70))}}
+                contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + scale(30), scale(70)) }}
                 style={styles.masonryFlatlist}
                 renderItem={renderGridItem}
               />
-            ) : (
+            ) : !isLoading ? (
               <NoDataView
                 content={strings.cardNotFound}
-                noDataViewStyle={{marginTop: verticalScale(-70)}}
-                noDataTextStyle={{color: Color.White}}
+                noDataViewStyle={{ marginTop: verticalScale(-70) }}
+                noDataTextStyle={{ color: Color.White }}
               />
-            )}
+            ) : null}
           </>
         )}
       </View>
@@ -371,6 +371,7 @@ const SetDetailScreen = () => {
       handleReorder,
       renderSimpleItem,
       renderGridItem,
+      isLoading,
     ],
   );
 
@@ -379,7 +380,7 @@ const SetDetailScreen = () => {
       <MenuProvider>
         {renderHeader()}
         {renderBody}
-        
+
         <ConfirmationDialog
           isVisible={showDeleteCardDialog}
           title={strings.deleteCard || 'Delete Card'}
@@ -496,7 +497,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.White,
     elevation: scale(10),
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: scale(0.3),
     shadowRadius: scale(4),
     borderRadius: scale(10),
@@ -518,12 +519,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: scale(10),
     alignItems: 'flex-start',
   },
-  gridCardAction: {flexDirection: 'column', paddingVertical: verticalScale(5)},
+  gridCardAction: { flexDirection: 'column', paddingVertical: verticalScale(5) },
   //   dotsIcon: {
   //     backgroundColor: Color.iconBackground,
   //     borderRadius: scale(5),
   //     padding: scale(10),
   //     marginBottom: verticalScale(5),
   //   },
-  check: {marginTop: verticalScale(5), marginRight: scale(12)},
+  check: { marginTop: verticalScale(5), marginRight: scale(12) },
 });

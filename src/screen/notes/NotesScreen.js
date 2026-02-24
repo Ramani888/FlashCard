@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Pressable,
@@ -7,33 +7,33 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Color from '../../component/Color';
-import {scale, verticalScale} from '../../custome/Responsive';
+import { scale, verticalScale } from '../../custome/Responsive';
 import CustomeHeader from '../../custome/CustomeHeader';
 import Font from '../../component/Font';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomeButton from '../../custome/CustomeButton';
 import BottomSheetContent from '../../component/BottomSheetContent';
 import NoteModalContent from '../../component/profile/NoteModalContent';
-import {apiDelete, apiGet, apiPost, apiPut} from '../../Api/ApiService';
+import { apiDelete, apiGet, apiPost, apiPut } from '../../Api/ApiService';
 import Api from '../../Api/EndPoint';
-import {useLoader} from '../../context/LoaderContext';
+import { useLoader } from '../../context/LoaderContext';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
-import {useNavigation} from '@react-navigation/native';
-import {ScreenName} from '../../component/Screen';
+import { useNavigation } from '@react-navigation/native';
+import { ScreenName } from '../../component/Screen';
 import NoDataView from '../../component/NoDataView';
-import {widthPercentageToDP} from 'react-native-responsive-screen';
+import { widthPercentageToDP } from 'react-native-responsive-screen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import ActionSheet from 'react-native-actions-sheet';
-import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger} from 'react-native-popup-menu';
-import {useAppSelector} from '../../redux/hooks';
+import { Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger } from 'react-native-popup-menu';
+import { useAppSelector } from '../../redux/hooks';
 import ConfirmationDialog from '../../custome/ConfirmationDialog';
 
 const NotesScreen = () => {
   const navigation = useNavigation();
-  const { showLoader, hideLoader } = useLoader();
+  const { showLoader, hideLoader, isLoading } = useLoader();
   const insets = useSafeAreaInsets();
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const [singleNoteData, setSingleNoteData] = useState({});
@@ -45,7 +45,7 @@ const NotesScreen = () => {
   const colorTheme = useTheme();
   const [showDeleteNoteDialog, setShowDeleteNoteDialog] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
-  
+
   // Get user from Redux state instead of global
   const user = useAppSelector(state => state.auth.user);
   const userId = user?._id;
@@ -56,7 +56,7 @@ const NotesScreen = () => {
     try {
       initialLoader && showLoader();
       const response = await apiGet(`${Api.notes}?userId=${userId}`);
-      
+
       // Handle different response structures
       let notes = [];
       if (Array.isArray(response)) {
@@ -66,9 +66,9 @@ const NotesScreen = () => {
       } else if (response?.notes && Array.isArray(response.notes)) {
         notes = response.notes;
       }
-      
+
       setNoteData(notes);
-      
+
       if (!initialLoader && message) {
         showMessageonTheScreen(message);
       }
@@ -90,7 +90,7 @@ const NotesScreen = () => {
       showMessageonTheScreen('Please enter note name');
       return;
     }
-    
+
     const rawData = {
       userId: userId,
       name: noteName,
@@ -256,7 +256,7 @@ const NotesScreen = () => {
   );
 
   const renderNotes = useCallback(
-    ({item, index}) => {
+    ({ item, index }) => {
       return (
         <Pressable
           style={[
@@ -281,12 +281,12 @@ const NotesScreen = () => {
           }}>
           <View style={styles.colorView}>
             {!item?.isHighlight && (
-              <Text style={[styles.color, {backgroundColor: item?.color}]} />
+              <Text style={[styles.color, { backgroundColor: item?.color }]} />
             )}
             <Text
               style={[
                 styles.noteText,
-                {color: item?.isHighlight ? Color.Black : colorTheme.textColor},
+                { color: item?.isHighlight ? Color.Black : colorTheme.textColor },
               ]}>
               {item?.name}
             </Text>
@@ -307,7 +307,7 @@ const NotesScreen = () => {
                 ]}
               />
             </MenuTrigger>
-            <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground}}}>
+            <MenuOptions customStyles={{ optionsContainer: { borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground } }}>
               <NoteModalContent
                 item={item}
                 openBottomSheet={openBottomSheet}
@@ -342,7 +342,7 @@ const NotesScreen = () => {
             keyExtractor={keyExtractor}
             getItemLayout={getItemLayout}
             style={styles.flatlist}
-            contentContainerStyle={{paddingBottom: Math.max(insets.bottom + verticalScale(70), verticalScale(80))}}
+            contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + verticalScale(70), verticalScale(80)) }}
             removeClippedSubviews={true}
             initialNumToRender={10}
             maxToRenderPerBatch={10}
@@ -350,21 +350,21 @@ const NotesScreen = () => {
             updateCellsBatchingPeriod={100}
             legacyImplementation={false}
           />
-        ) : (
+        ) : !isLoading ? (
           <NoDataView
             content={strings.noNoteFound}
-            noDataViewStyle={{marginTop: verticalScale(-70)}}
+            noDataViewStyle={{ marginTop: verticalScale(-70) }}
           />
-        )}
+        ) : null}
         {BottomSheets()}
       </View>
     ),
-    [renderNotes, BottomSheets, noteData, insets.bottom],
+    [renderNotes, BottomSheets, noteData, insets.bottom, isLoading],
   );
 
   return (
     <MenuProvider>
-      <View style={[styles.container, {backgroundColor: colorTheme.background}]}>
+      <View style={[styles.container, { backgroundColor: colorTheme.background }]}>
         <StatusBar translucent backgroundColor="transparent" />
         {renderHeader()}
         {renderBody()}
@@ -457,7 +457,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.White,
     elevation: scale(10),
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: scale(0.3),
     shadowRadius: scale(4),
   },
@@ -467,6 +467,6 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     marginLeft: scale(3),
   },
-  colorView: {flexDirection: 'row', alignItems: 'center'},
-  flatlist: {flex: 1},
+  colorView: { flexDirection: 'row', alignItems: 'center' },
+  flatlist: { flex: 1 },
 });
