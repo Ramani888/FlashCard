@@ -219,3 +219,5 @@ export * from './errorHandling';
 export * from './validation';
 export * from './formatters';
 export * from './performance';
+export * from './sanitization';
+export {default as logger, logApiCall, logError, logPerformance} from './logger';

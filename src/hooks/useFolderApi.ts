@@ -7,6 +7,7 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
 import {useAppSelector} from '../redux/hooks';
+import logger from '../utils/logger';
 
 export interface Folder {
   _id: string;
@@ -112,7 +113,7 @@ const useFolderApi = ({
           showMessageonTheScreen(messageValue);
         }
       } catch (error) {
-        console.log('Error fetching folders:', error);
+        logger.error('Error fetching folders:', error);
         setFolderData([]);
       } finally {
         setLoading(false);
@@ -143,7 +144,7 @@ const useFolderApi = ({
       resetForm();
       await getFolderData(true, response?.message);
     } catch (error) {
-      console.log('Error creating folder:', error);
+      logger.error('Error creating folder:', error);
     }
   }, [colorView, folderColor, folderName, getFolderData, userId]);
 
@@ -167,7 +168,7 @@ const useFolderApi = ({
       resetForm();
       await getFolderData(true, response?.message);
     } catch (error) {
-      console.log('Error editing folder:', error);
+      logger.error('Error editing folder:', error);
     }
   }, [colorView, folderColor, folderName, getFolderData, singleFolderItem, userId]);
 
@@ -184,7 +185,7 @@ const useFolderApi = ({
       );
       await getFolderData(true, response?.message);
     } catch (error) {
-      console.log('Error deleting folder:', error);
+      logger.error('Error deleting folder:', error);
     }
   }, [singleFolderItem, getFolderData]);
 

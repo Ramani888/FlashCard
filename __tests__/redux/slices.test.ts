@@ -27,7 +27,7 @@ describe('Auth Slice', () => {
     user: null,
     token: null,
     isAuthenticated: false,
-    isLoading: false,
+    isLoading: true, // Initial state is true to wait for auth check
     error: null,
   };
 

@@ -35,7 +35,8 @@ import VideoAds from '../ads/VideoAds';
 import LanguageModalContent from '../../component/auth/LanguageModalContent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAppSelector, useAppDispatch} from '../../redux/hooks';
-import {setUser, logout} from '../../redux/slices/authSlice';
+import {setUser, signOut} from '../../redux/slices/authSlice';
+import secureStorage from '../../services/secureStorageService';
 import Config from '../../config';
 
 const {height} = Dimensions.get('window');
@@ -191,9 +192,13 @@ const ProfileScreen = () => {
       const response = await apiPut(Api.profilePic, '', formdata);
       if (response?.success === true) {
         showMessageonTheScreen(response?.message || 'Profile picture updated');
-        // Update Redux state instead of global
+        // Update Redux state
         dispatch(setUser({user: response.user, token: response.user?.token}));
-        await AsyncStorage.setItem(Config.STORAGE_KEYS.USER, JSON.stringify(response.user));
+        // Store in secure storage instead of AsyncStorage
+        await secureStorage.setUserData(response.user);
+        if (response.user?.token) {
+          await secureStorage.setAuthToken(response.user.token);
+        }
       } else {
         showMessageonTheScreen('Failed to update profile picture');
       }
@@ -281,9 +286,8 @@ const ProfileScreen = () => {
   const handleLogout = useCallback(async () => {
     try {
       showLoader();
-      await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
-      // Clear Redux state instead of global
-      dispatch(logout());
+      // Use signOut thunk which properly clears secure storage
+      await dispatch(signOut()).unwrap();
       showMessageonTheScreen(strings.userLogoutSuccess);
       navigation.reset({
         index: 0,
@@ -302,8 +306,8 @@ const ProfileScreen = () => {
       showLoader();
       const response = await apiDelete(Api.deleteAccount);
       if (response?.success) {
-        await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
-        dispatch(logout());
+        // Use signOut thunk which properly clears secure storage
+        await dispatch(signOut()).unwrap();
         showMessageonTheScreen(strings.deleteAccountSuccess);
         navigation.reset({
           index: 0,

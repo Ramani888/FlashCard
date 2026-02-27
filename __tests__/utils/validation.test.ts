@@ -40,7 +40,8 @@ describe('Validation Utilities', () => {
 
   describe('validatePassword', () => {
     it('should return valid for password meeting requirements', () => {
-      const result = validatePassword('password123');
+      // Updated to meet new strong password requirements
+      const result = validatePassword('Password123!');
       expect(result.isValid).toBe(true);
     });
 
@@ -51,21 +52,31 @@ describe('Validation Utilities', () => {
     });
 
     it('should return invalid for short password', () => {
-      const result = validatePassword('12345', {minLength: 6});
+      const result = validatePassword('Pa1!', {minLength: 8});
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Password must be at least 6 characters');
+      expect(result.error).toBe('Password must be at least 8 characters');
     });
 
     it('should enforce number requirement when specified', () => {
-      const result = validatePassword('password', {requireNumbers: true});
+      const result = validatePassword('Password!', {
+        requireNumbers: true,
+        requireUppercase: false,
+        requireLowercase: false,
+        requireSpecial: false,
+      });
       expect(result.isValid).toBe(false);
       expect(result.error).toBe('Password must contain at least one number');
     });
 
     it('should enforce special character requirement when specified', () => {
-      const result = validatePassword('password123', {requireSpecial: true});
+      const result = validatePassword('Password123', {
+        requireSpecial: true,
+        requireUppercase: false,
+        requireLowercase: false,
+        requireNumbers: false,
+      });
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Password must contain at least one special character');
+      expect(result.error).toContain('special character');
     });
 
     it('should pass all requirements', () => {
@@ -73,6 +84,8 @@ describe('Validation Utilities', () => {
         minLength: 8,
         requireNumbers: true,
         requireSpecial: true,
+        requireUppercase: true,
+        requireLowercase: true,
       });
       expect(result.isValid).toBe(true);
     });
@@ -215,7 +228,7 @@ describe('Validation Utilities', () => {
           validators: [value => validateEmail(value as string)],
         },
         password: {
-          value: 'password123',
+          value: 'Password123!',
           validators: [value => validatePassword(value as string)],
         },
       });

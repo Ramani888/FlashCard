@@ -1,44 +1,42 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScreenName} from '../../component/Screen';
 import LottieSplashScreen from 'react-native-lottie-splash-screen';
+import {useAppSelector} from '../../redux/hooks';
+import Color from '../../component/Color';
 
 const SPLASH_TIMEOUT = 500;
 
 const SplashScreen = () => {
   const navigation = useNavigation();
+  // Get auth state from Redux instead of AsyncStorage
+  const {isAuthenticated, isLoading} = useAppSelector(state => state.auth);
+  const hasNavigated = useRef(false);
 
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const user = await AsyncStorage.getItem('user');
-        const targetScreen = user ? ScreenName.setAndFolder : ScreenName.signIn;
-        
-        setTimeout(() => {
-          LottieSplashScreen.hide();
-          navigation.reset({
-            index: 0,
-            routes: [{name: targetScreen}],
-          });
-        }, SPLASH_TIMEOUT);
-      } catch (error) {
-        console.log('Error checking login:', error);
-        setTimeout(() => {
-          LottieSplashScreen.hide();
-          navigation.reset({
-            index: 0,
-            routes: [{name: ScreenName.signIn}],
-          });
-        }, SPLASH_TIMEOUT);
-      }
-    };
+    // Only navigate once, when auth loading is complete
+    if (!isLoading && !hasNavigated.current) {
+      hasNavigated.current = true;
+      const targetScreen = isAuthenticated 
+        ? ScreenName.setAndFolder 
+        : ScreenName.signIn;
+      
+      setTimeout(() => {
+        LottieSplashScreen.hide();
+        navigation.reset({
+          index: 0,
+          routes: [{name: targetScreen}],
+        });
+      }, SPLASH_TIMEOUT);
+    }
+  }, [isLoading, isAuthenticated, navigation]);
 
-    checkLogin();
-  }, [navigation]);
-
-  return <View style={styles.container} />;
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color={Color.theme1} />
+    </View>
+  );
 };
 
 export default SplashScreen;

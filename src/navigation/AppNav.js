@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import AppStack from './AppStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import strings from '../language/strings';
@@ -12,14 +12,23 @@ const AppNav = () => {
   const isFocused = useIsFocused();
   
   // Use Redux auth state instead of global variables
-  const {user, isAuthenticated, isLoading} = useAppSelector(state => state.auth);
+  const {isAuthenticated, isLoading} = useAppSelector(state => state.auth);
+  
+  // Track previous auth state to detect logout
+  const prevIsAuthenticatedRef = useRef(isAuthenticated);
 
-  // Navigate based on auth state
+  // Handle logout detection (token expiry or manual logout)
+  // Only navigate to login if user was authenticated and is now logged out
   useEffect(() => {
-    if (!isLoading && isAuthenticated && user) {
-      navigation.navigate(ScreenName.setAndFolder);
+    // If user was authenticated before but not anymore (logout/token expiry)
+    if (!isLoading && prevIsAuthenticatedRef.current && !isAuthenticated) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: ScreenName.signIn}],
+      });
     }
-  }, [isAuthenticated, isLoading, user, navigation]);
+    prevIsAuthenticatedRef.current = isAuthenticated;
+  }, [isAuthenticated, isLoading, navigation]);
 
   useEffect(() => {
     (async () => {

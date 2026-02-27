@@ -17,6 +17,7 @@ import ColorCodePicker from './cards/ColorCodePicker';
 import showMessageonTheScreen from './ShowMessageOnTheScreen';
 import useTheme from './Theme';
 import strings from '../language/strings';
+import {sanitizeString} from '../utils/sanitization';
 
 const {width, height} = Dimensions.get('window');
 
@@ -45,6 +46,12 @@ const BottomSheetContent = ({
 
   const iconSize = useMemo(() => scale(20), []);
 
+  // Sanitize name input
+  const handleNameChange = useCallback((text) => {
+    const sanitized = sanitizeString(text);
+    setName(sanitized);
+  }, [setName]);
+
   const handleSubmit = () => {
     if (name && color) {
       create();
@@ -68,7 +75,7 @@ const BottomSheetContent = ({
         <CustomeInputField
           placeholder={strings.createName}
           placeholderTextColor={Color.mediumGray}
-          onChangeText={setName}
+          onChangeText={handleNameChange}
           value={name}
           borderWidth={1}
           borderColor={Color.LightGray}
@@ -131,7 +138,7 @@ const BottomSheetContent = ({
       colorView,
       colorTheme,
       setColor,
-      setName,
+      handleNameChange,
     ],
   );
 

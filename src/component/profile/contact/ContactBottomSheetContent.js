@@ -20,6 +20,8 @@ import Api from '../../../Api/EndPoint';
 import debounce from 'lodash.debounce';
 import strings from '../../../language/strings';
 import {useAppSelector} from '../../../redux/hooks';
+import {sanitizeString, sanitizeSearchQuery} from '../../../utils/sanitization';
+import logger from '../../../utils/logger';
 
 const ContactBottomSheetContent = ({
   closeContactBottomSheet,
@@ -39,8 +41,10 @@ const ContactBottomSheetContent = ({
       debounce(async searchValue => {
         try {
           setVisible(true);
+          // Sanitize search input before sending to API
+          const sanitizedSearch = sanitizeSearchQuery(searchValue);
           const res = await apiGet(
-            `${Api.searchUser}?search=${searchValue}&userId=${userId}`,
+            `${Api.searchUser}?search=${sanitizedSearch}&userId=${userId}`,
           );
           if (res) {
             setUserData(res);
@@ -48,7 +52,7 @@ const ContactBottomSheetContent = ({
             setUserData([]);
           }
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          logger.error('Error fetching user data:', error);
         } finally {
           setVisible(false);
         }

@@ -28,6 +28,8 @@ import CustomeModal from '../../custome/CustomeModal';
 import LanguageModalContent from '../../component/auth/LanguageModalContent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {sanitizeEmail, sanitizeString} from '../../utils/sanitization';
+import logger from '../../utils/logger';
 
 // Language mapping utility
 const LANGUAGE_CODE_MAP = {
@@ -94,14 +96,20 @@ const SignUpScreen = () => {
   const signUp = useCallback(async (value) => {
     try {
       showLoader();
-      const response = await apiPost(Api.signUp, '', JSON.stringify(value));
+      // Sanitize inputs before sending to API
+      const sanitizedValue = {
+        ...value,
+        email: sanitizeEmail(value.email),
+        password: sanitizeString(value.password),
+      };
+      const response = await apiPost(Api.signUp, '', JSON.stringify(sanitizedValue));
       if (response?.success === true) {
-        navigation?.navigate(ScreenName.otpVerify, {email: value.email});
+        navigation?.navigate(ScreenName.otpVerify, {email: sanitizedValue.email});
       } else {
         showMessageonTheScreen(response?.message);
       }
     } catch (error) {
-      console.log('error in signUp api', error);
+      logger.error('error in signUp api', error);
     } finally {
       hideLoader();
     }

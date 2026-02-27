@@ -123,9 +123,13 @@ const SetItem = memo(({ item, onPress, onMenuPress, showFolder, colorTheme, colo
             style={styles.folderIcon}
             resizeMode="contain"
           />
-          {item?.folderName && (
+          {item?.folderName ? (
             <Text style={styles.folderText} numberOfLines={1}>
               {item.folderName}
+            </Text>
+          ) : (
+            <Text style={[styles.folderText, {color: Color.LightGray}]} numberOfLines={1}>
+              {strings.noFolder || 'No Folder'}
             </Text>
           )}
         </View>
@@ -147,6 +151,7 @@ const SetComponent = ({
   const insets = useSafeAreaInsets();
   const [editBottomSheet, setEditBottomSheet] = useState(false);
   const refRBSheet = useRef();
+  const flatListRef = useRef(null);
   const colorTheme = useTheme();
 
   // Confirmation dialog state
@@ -232,8 +237,6 @@ const SetComponent = ({
   // Memoized keyExtractor for FlatList
   const keyExtractor = useCallback((item) => item?._id || String(item?.name), []);
 
-
-
   // Handle item press
   const handleItemPress = useCallback((item) => {
     navigation.navigate(ScreenName.setDetail, {
@@ -311,6 +314,7 @@ const SetComponent = ({
     <View style={styles.bodyContainer}>
       {setData?.length > 0 ? (
         <FlatList
+          ref={flatListRef}
           data={setData}
           renderItem={renderSet}
           keyExtractor={keyExtractor}
@@ -320,7 +324,10 @@ const SetComponent = ({
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           windowSize={10}
-          removeClippedSubviews={true}
+          removeClippedSubviews={false}
+          maintainVisibleContentPosition={{
+            minIndexForVisible: 0,
+          }}
         />
       ) : (
         !loading && <NoDataView content={strings.setNotFound} />

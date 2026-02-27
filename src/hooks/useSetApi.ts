@@ -8,6 +8,7 @@ import {apiDelete, apiGet, apiPost, apiPut} from '../Api/ApiService';
 import Api from '../Api/EndPoint';
 import showMessageonTheScreen from '../component/ShowMessageOnTheScreen';
 import {useAppSelector} from '../redux/hooks';
+import logger from '../utils/logger';
 
 export interface CardSet {
   _id: string;
@@ -120,7 +121,7 @@ const useSetApi = ({
           showMessageonTheScreen(messageValue);
         }
       } catch (error) {
-        console.log('Error fetching sets:', error);
+        logger.error('Error fetching sets:', error);
         setSetData([]);
       } finally {
         setLoading(false);
@@ -152,7 +153,7 @@ const useSetApi = ({
       resetForm();
       await getSetData(true, response?.message);
     } catch (error) {
-      console.log('Error creating set:', error);
+      logger.error('Error creating set:', error);
     }
   }, [colorView, folderId, getSetData, setColor, setName, userId]);
 
@@ -176,7 +177,7 @@ const useSetApi = ({
       resetForm();
       await getSetData(true, response?.message);
     } catch (error) {
-      console.log('Error editing set:', error);
+      logger.error('Error editing set:', error);
     }
   }, [colorView, getSetData, setColor, setName, singleSetData, userId]);
 
@@ -196,7 +197,7 @@ const useSetApi = ({
       const response = await apiPut(Api.Set, '', JSON.stringify(rawData));
       await getSetData(true, response?.message);
     } catch (error) {
-      console.log('Error removing folder:', error);
+      logger.error('Error removing folder:', error);
     } finally {
       setLoading(false);
     }
@@ -213,7 +214,7 @@ const useSetApi = ({
       const response = await apiDelete(`${Api.Set}?_id=${singleSetData._id}`);
       await getSetData(true, response?.message);
     } catch (error) {
-      console.log('Error deleting set:', error);
+      logger.error('Error deleting set:', error);
     }
   }, [singleSetData, getSetData]);
 

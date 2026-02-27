@@ -10,6 +10,7 @@ import {
 import Color from '../component/Color';
 import Font from '../component/Font';
 import {scale, verticalScale, moderateScale} from '../custome/Responsive';
+import logger from '../utils/logger';
 
 interface Props {
   children: ReactNode;
@@ -41,7 +42,7 @@ class ErrorBoundary extends Component<Props, State> {
     this.setState({errorInfo});
 
     // Log error to your error reporting service
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    logger.error('ErrorBoundary caught an error:', error, errorInfo);
 
     // Call custom error handler if provided
     if (this.props.onError) {

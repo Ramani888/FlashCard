@@ -22,6 +22,8 @@ import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import {sanitizeEmail, sanitizeString} from '../../utils/sanitization';
+import logger from '../../utils/logger';
 
 const ResetPassword = () => {
   const navigation = useNavigation();
@@ -47,9 +49,13 @@ const ResetPassword = () => {
   // ======================================= Api ====================================== //
 
   const forgetPassword = useCallback(async (values) => {
+    // Sanitize inputs before sending to API
+    const sanitizedEmail = sanitizeEmail(values?.email);
+    const sanitizedPassword = sanitizeString(values?.password);
+    
     const rawData = {
-      email: values?.email,
-      password: values?.password,
+      email: sanitizedEmail,
+      password: sanitizedPassword,
     };
 
     try {
@@ -62,12 +68,12 @@ const ResetPassword = () => {
       if (response?.success === true) {
         showMessageonTheScreen(response?.message);
         navigation?.navigate(ScreenName.otpVerify, {
-          email: values.email,
-          password: values?.password,
+          email: sanitizedEmail,
+          password: sanitizedPassword,
         });
       }
     } catch (error) {
-      console.log('error', error);
+      logger.error('error', error);
     } finally {
       hideLoader();
     }

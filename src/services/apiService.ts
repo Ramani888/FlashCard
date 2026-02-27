@@ -2,9 +2,9 @@
  * Enhanced API Service with Axios-like features
  * Provides request/response interceptors, error handling, and retry logic
  */
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from '../config';
 import showMessageOnTheScreen from '../component/ShowMessageOnTheScreen';
+import secureStorage from './secureStorageService';
 
 interface RequestConfig {
   headers?: Record<string, string>;
@@ -30,20 +30,8 @@ class ApiService {
     this.baseUrl = Config.API_BASE_URL;
     this.defaultTimeout = Config.API_TIMEOUT;
     this.defaultRetries = Config.MAX_RETRIES;
-    this.loadAuthToken();
-  }
-
-  // Load auth token from storage
-  private async loadAuthToken(): Promise<void> {
-    try {
-      const userData = await AsyncStorage.getItem(Config.STORAGE_KEYS.USER);
-      if (userData) {
-        const user = JSON.parse(userData);
-        this.authToken = user?.token || null;
-      }
-    } catch (error) {
-      console.error('Failed to load auth token:', error);
-    }
+    // Note: Token is set explicitly via setAuthToken() after loading from storage
+    // in Redux authSlice loadStoredUser thunk
   }
 
   // Set auth token
@@ -51,21 +39,39 @@ class ApiService {
     this.authToken = token;
   }
 
-  // Build headers
+  // Get current auth token
+  public getAuthToken(): string | null {
+    return this.authToken;
+  }
+
+  // Build headers with security additions
   private buildHeaders(
     customHeaders?: Record<string, string>,
     isFormData: boolean = false,
   ): Headers {
     const headers = new Headers();
 
+    // Authorization header (without Bearer prefix to match backend)
     if (this.authToken) {
       headers.append('Authorization', this.authToken);
     }
 
+    // Content type
     if (!isFormData) {
       headers.append('Content-Type', 'application/json');
     }
 
+    // Security headers
+    headers.append('Accept', 'application/json');
+    headers.append('X-Requested-With', 'XMLHttpRequest'); // CSRF protection
+    headers.append('X-Client-Version', Config.APP_VERSION);
+    headers.append('X-Platform', 'mobile');
+    
+    // Request tracking
+    headers.append('X-Request-ID', this.generateRequestId());
+    headers.append('X-Timestamp', Date.now().toString());
+
+    // Custom headers
     if (customHeaders) {
       Object.entries(customHeaders).forEach(([key, value]) => {
         headers.append(key, value);
@@ -111,9 +117,12 @@ class ApiService {
       showError = true,
     } = config;
 
+    // Use full URL if provided, otherwise construct with baseUrl
     const fullUrl = url.startsWith('http') ? url : `${this.baseUrl}${url}`;
     const isFormData = body instanceof FormData;
     const headers = this.buildHeaders(customHeaders, isFormData);
+
+    console.log('[API] Request:', {method, url: fullUrl, hasBody: !!body});
 
     const requestOptions: RequestInit = {
       method,
@@ -134,6 +143,12 @@ class ApiService {
           requestOptions,
           timeout,
         );
+
+        console.log('[API] Response:', {
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok,
+        });
 
         // Handle different response statuses
         if (response.status === 401) {
@@ -156,11 +171,26 @@ class ApiService {
           throw new Error('Server error');
         }
 
+        // Parse response regardless of status code
         const result = await response.json();
+        console.log('[API] Result:', {
+          success: result.success,
+          hasData: !!result.data,
+          message: result.message,
+        });
+        
+        // Return result even if HTTP status is not OK (e.g., 400, 403)
+        // Backend should set success: false in these cases
         return result as ApiResponse<T>;
       } catch (error) {
         lastError = error as Error;
         attempts++;
+
+        console.log('[API] Error:', {
+          attempt: attempts,
+          error: lastError.message,
+          name: lastError.name,
+        });
 
         if (lastError.name === 'AbortError') {
           if (showError) {
@@ -180,6 +210,8 @@ class ApiService {
 
     // All retries failed
     const errorMessage = lastError?.message || 'Request failed';
+    console.log('[API] All retries failed:', errorMessage);
+    
     if (showError) {
       showMessageOnTheScreen(errorMessage);
     }
@@ -194,8 +226,7 @@ class ApiService {
   // Handle 401 unauthorized
   private async handleUnauthorized(): Promise<void> {
     this.authToken = null;
-    await AsyncStorage.removeItem(Config.STORAGE_KEYS.USER);
-    await AsyncStorage.removeItem(Config.STORAGE_KEYS.TOKEN);
+    await secureStorage.logout();
     // Optionally dispatch a logout action here
   }
 
@@ -240,6 +271,42 @@ class ApiService {
     config?: RequestConfig,
   ): Promise<ApiResponse<T>> {
     return this.requestWithRetry<T>('POST', url, formData, config);
+  }
+
+  // ========== SECURITY UTILITIES ==========
+
+  /**
+   * Generate unique request ID for tracking
+   */
+  private generateRequestId(): string {
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  /**
+   * Validate response integrity
+   * Can be extended to verify signatures if backend implements it
+   */
+  private validateResponse(response: Response): boolean {
+    // Check for suspicious headers or response patterns
+    const contentType = response.headers.get('content-type');
+    if (contentType && !contentType.includes('application/json') && !contentType.includes('text/')) {
+      return false;
+    }
+
+    // Add more validation as needed
+    return true;
+  }
+
+  /**
+   * Sanitize request data before sending
+   */
+  private sanitizeRequestData(data: unknown): unknown {
+    if (typeof data === 'string') {
+      // Basic sanitization
+      return data.trim();
+    }
+    // For objects, could add more comprehensive sanitization
+    return data;
   }
 }
 

@@ -6,6 +6,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {setTheme as setReduxTheme} from '../redux/slices/themeSlice';
+import logger from '../utils/logger';
 
 type ThemeType = 'Light' | 'Dark';
 
@@ -33,7 +34,7 @@ const useThemeToggle = (): UseThemeToggleReturn => {
         setTheme(initialTheme);
         setIsInitialized(true);
       } catch (error) {
-        console.log('Error loading theme:', error);
+        logger.error('Error loading theme:', error);
         setTheme('Light');
         setIsInitialized(true);
       }
@@ -51,7 +52,7 @@ const useThemeToggle = (): UseThemeToggleReturn => {
         await AsyncStorage.setItem('theme', theme);
         dispatch(setReduxTheme(theme));
       } catch (error) {
-        console.log('Error saving theme:', error);
+        logger.error('Error saving theme:', error);
       }
     };
 

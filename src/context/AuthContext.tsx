@@ -3,9 +3,12 @@
  * Initializes auth state from storage on app start and provides auth context
  */
 import React, {createContext, useContext, useEffect, ReactNode} from 'react';
+import {AppState, AppStateStatus} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {loadStoredUser} from '../redux/slices/authSlice';
+import {loadStoredUser, signOut} from '../redux/slices/authSlice';
 import {User} from '../types';
+import {isTokenExpired} from '../utils/jwtUtils';
+import logger from '../utils/logger';
 
 interface AuthContextType {
   user: User | null;
@@ -31,6 +34,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   useEffect(() => {
     dispatch(loadStoredUser());
   }, [dispatch]);
+
+  // Check token expiry when app comes to foreground or periodically
+  useEffect(() => {
+    // Function to validate token and logout if expired
+    const validateToken = async () => {
+      if (isAuthenticated && token) {
+        if (isTokenExpired(token)) {
+          logger.info('Token expired while app running. Logging out.');
+          dispatch(signOut());
+        }
+      }
+    };
+
+    // Check immediately
+    validateToken();
+
+    // Check when app state changes (e.g., coming back from background)
+    const subscription = AppState.addEventListener(
+      'change',
+      (nextAppState: AppStateStatus) => {
+        if (nextAppState === 'active') {
+          validateToken();
+        }
+      },
+    );
+
+    // Also check periodically every hour
+    const intervalId = setInterval(
+      validateToken,
+      60 * 60 * 1000, // 1 hour
+    );
+
+    return () => {
+      subscription.remove();
+      clearInterval(intervalId);
+    };
+  }, [isAuthenticated, token, dispatch]);
 
   const value: AuthContextType = {
     user,

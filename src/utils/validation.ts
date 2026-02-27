@@ -26,9 +26,15 @@ export const validateEmail = (email: string): ValidationResult => {
 // Password validation
 export const validatePassword = (
   password: string,
-  options?: {minLength?: number; requireNumbers?: boolean; requireSpecial?: boolean},
+  options?: {minLength?: number; requireNumbers?: boolean; requireSpecial?: boolean; requireUppercase?: boolean; requireLowercase?: boolean},
 ): ValidationResult => {
-  const {minLength = 6, requireNumbers = false, requireSpecial = false} = options || {};
+  const {
+    minLength = 8,
+    requireNumbers = true,
+    requireSpecial = true,
+    requireUppercase = true,
+    requireLowercase = true,
+  } = options || {};
 
   if (!password) {
     return {isValid: false, error: 'Password is required'};
@@ -38,15 +44,106 @@ export const validatePassword = (
     return {isValid: false, error: `Password must be at least ${minLength} characters`};
   }
 
+  if (password.length > 128) {
+    return {isValid: false, error: 'Password must be less than 128 characters'};
+  }
+
+  if (requireUppercase && !/[A-Z]/.test(password)) {
+    return {isValid: false, error: 'Password must contain at least one uppercase letter'};
+  }
+
+  if (requireLowercase && !/[a-z]/.test(password)) {
+    return {isValid: false, error: 'Password must contain at least one lowercase letter'};
+  }
+
   if (requireNumbers && !/\d/.test(password)) {
     return {isValid: false, error: 'Password must contain at least one number'};
   }
 
   if (requireSpecial && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-    return {isValid: false, error: 'Password must contain at least one special character'};
+    return {isValid: false, error: 'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)'};
+  }
+
+  // Check for common weak passwords
+  const weakPasswords = ['password', '12345678', 'qwerty', 'abc123', 'password123'];
+  if (weakPasswords.includes(password.toLowerCase())) {
+    return {isValid: false, error: 'This password is too common. Please choose a stronger password'};
   }
 
   return {isValid: true};
+};
+
+/**
+ * Strong password validator for sensitive operations
+ * Requires uppercase, lowercase, number, special character, and minimum 10 characters
+ */
+export const validateStrongPassword = (password: string): ValidationResult => {
+  return validatePassword(password, {
+    minLength: 10,
+    requireNumbers: true,
+    requireSpecial: true,
+    requireUppercase: true,
+    requireLowercase: true,
+  });
+};
+
+/**
+ * Calculate password strength (0-5 scale)
+ * 0 = Very Weak, 5 = Very Strong
+ */
+export const calculatePasswordStrength = (password: string): {
+  score: number;
+  label: string;
+  feedback: string[];
+} => {
+  if (!password) {
+    return {score: 0, label: 'Very Weak', feedback: ['Password is required']};
+  }
+
+  let score = 0;
+  const feedback: string[] = [];
+
+  // Length check
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (password.length < 8) {
+    feedback.push('Use at least 8 characters');
+  }
+
+  // Character diversity
+  if (/[a-z]/.test(password)) score++;
+  else feedback.push('Add lowercase letters');
+
+  if (/[A-Z]/.test(password)) score++;
+  else feedback.push('Add uppercase letters');
+
+  if (/\d/.test(password)) score++;
+  else feedback.push('Add numbers');
+
+  if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+  else feedback.push('Add special characters');
+
+  // Penalize common patterns
+  if (/^(.)\1+$/.test(password)) {
+    score = Math.max(0, score - 2);
+    feedback.push('Avoid repeating characters');
+  }
+
+  if (/12345|qwerty|password/i.test(password)) {
+    score = Math.max(0, score - 2);
+    feedback.push('Avoid common patterns');
+  }
+
+  // Normalize score to 0-5
+  score = Math.min(5, Math.max(0, Math.floor((score / 7) * 5)));
+
+  const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+
+  return {
+    score,
+    label: labels[score],
+    feedback: feedback.length > 0 ? feedback : ['Great password!'],
+  };
 };
 
 // Name validation

@@ -10,16 +10,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CustomeButton from '../../custome/CustomeButton';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '../../component/Screen';
-import {apiPost} from '../../Api/ApiService';
-import Api from '../../Api/EndPoint';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import {useLoader} from '../../context';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
 import {useAppDispatch} from '../../redux/hooks';
-import {setUser} from '../../redux/slices/authSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Config from '../../config';
+import {signIn} from '../../redux/slices/authSlice';
+import {sanitizeEmail, sanitizeString} from '../../utils/sanitization';
+import logger from '../../utils/logger';
 
 const SignInScreen = () => {
   const navigation = useNavigation();
@@ -41,26 +39,36 @@ const SignInScreen = () => {
   // ===================================== Api =================================== //
 
   const loginUser = useCallback(async (email, password) => {
-    const rawData = {email, password};
+    // Sanitize inputs before sending to API
+    const sanitizedEmail = sanitizeEmail(email);
+    const sanitizedPassword = sanitizeString(password);
+    
     try {
       showLoader();
-      const response = await apiPost(Api.signIn, '', JSON.stringify(rawData));
-      if (response?.success === true) {
-        const userData = response?.user;
-        await AsyncStorage.setItem(Config.STORAGE_KEYS.USER, JSON.stringify(userData));
-        dispatch(setUser({user: userData, token: userData?.token}));
-        showMessageonTheScreen(response?.message);
+      // Use the proper signIn thunk that stores data in secure storage
+      const result = await dispatch(signIn({
+        email: sanitizedEmail, 
+        password: sanitizedPassword
+      })).unwrap();
+      
+      logger.info('Login successful, result:', result);
+      
+      // Hide loader first, then navigate
+      hideLoader();
+      
+      // Small delay to ensure loader is hidden and state is updated
+      setTimeout(() => {
+        logger.info('Navigating to main app...');
         navigation.reset({
           index: 0,
           routes: [{name: ScreenName.setAndFolder}],
         });
-      } else {
-        showMessageonTheScreen(response?.message);
-      }
+      }, 100);
     } catch (error) {
-      console.log('error in login api', error);
-    } finally {
       hideLoader();
+      logger.error('error in login api', error);
+      const errorMessage = typeof error === 'string' ? error : 'Login failed. Please try again.';
+      showMessageonTheScreen(errorMessage);
     }
   }, [dispatch, navigation, showLoader, hideLoader]);
 
