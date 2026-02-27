@@ -281,7 +281,7 @@ const NotesScreen = () => {
           }}>
           <View style={styles.colorView}>
             {!item?.isHighlight && (
-              <Text style={[styles.color, { backgroundColor: item?.color }]} />
+              <View style={[styles.color, { backgroundColor: item?.color }]} />
             )}
             <Text
               style={[

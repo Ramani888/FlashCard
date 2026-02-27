@@ -198,5 +198,6 @@ const styles = StyleSheet.create({
     paddingBottom: verticalScale(10),
     textAlignVertical: 'top',
     fontFamily: Font.regular,
+    alignSelf: 'flex-start'
   },
 });
