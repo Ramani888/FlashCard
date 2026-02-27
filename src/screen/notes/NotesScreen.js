@@ -293,19 +293,23 @@ const NotesScreen = () => {
           </View>
           <Menu>
             <MenuTrigger>
-              <Entypo
-                name="dots-three-vertical"
-                size={scale(13)}
-                color={Color.Black}
+              <View
                 style={[
                   styles.dotsIcon,
                   {
                     backgroundColor: item?.isHighlight
                       ? Color.White
                       : colorTheme.threeDotIcon,
+                    borderRadius: scale(10),
                   },
                 ]}
-              />
+              >
+                <Entypo
+                  name="dots-three-vertical"
+                  size={scale(13)}
+                  color={Color.Black}
+                />
+              </View>
             </MenuTrigger>
             <MenuOptions customStyles={{ optionsContainer: { borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground } }}>
               <NoteModalContent

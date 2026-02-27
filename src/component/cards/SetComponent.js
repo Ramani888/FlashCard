@@ -94,12 +94,13 @@ const SetItem = memo(({ item, onPress, onMenuPress, showFolder, colorTheme, colo
           </View>
           <Menu>
             <MenuTrigger onPress={handleMenuTriggerPress}>
-              <Entypo
-                name="dots-three-vertical"
-                size={scale(13)}
-                color={Color.Black}
-                style={styles.dotsIcon}
-              />
+              <View style={styles.dotsIcon}>
+                <Entypo
+                  name="dots-three-vertical"
+                  size={scale(13)}
+                  color={Color.Black}
+                />
+              </View>
             </MenuTrigger>
             <MenuOptions customStyles={menuOptionsStyle}>
               <ModalContent

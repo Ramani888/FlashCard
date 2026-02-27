@@ -61,16 +61,28 @@ const FolderItem = memo(({ item, onPress, onMenuPress, colorView, colorTheme, me
         </Text>
       </View>
       <Menu>
-        <MenuTrigger onPress={handleMenuTriggerPress}>
-          <View style={styles.menuIconContainer}>
-            <Entypo
-              name="dots-three-vertical"
-              size={scale(15)}
-              color={item?.isHighlight ? Color.Black : colorTheme.textColor}
-              style={styles.dotsIcon}
-            />
-          </View>
-        </MenuTrigger>
+          <MenuTrigger onPress={handleMenuTriggerPress}>
+            <View style={styles.menuIconContainer}>
+              <View
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: Color.WhiteDefault,
+                    borderRadius: scale(5),
+                    padding: scale(8),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  },
+                ]}
+              >
+                <Entypo
+                  name="dots-three-vertical"
+                  size={scale(15)}
+                  color={item?.isHighlight ? Color.Black : colorTheme.textColor}
+                />
+              </View>
+            </View>
+          </MenuTrigger>
         <MenuOptions customStyles={menuOptionsStyle}>
           <ModalContent
             type={'Folder'}

@@ -223,12 +223,24 @@ const SetDetailScreen = () => {
         {changeOrder === false && (
           <Menu>
             <MenuTrigger>
-              <Entypo
-                name="dots-three-vertical"
-                size={scale(13)}
-                color={Color.White}
-                style={styles.dotsIcon}
-              />
+              <View
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: '#e0e0e0',
+                    borderRadius: scale(5),
+                    padding: scale(4),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  },
+                ]}
+              >
+                <Entypo
+                  name="dots-three-vertical"
+                  size={scale(13)}
+                  color={Color.White}
+                />
+              </View>
             </MenuTrigger>
             <MenuOptions customStyles={{ optionsContainer: { borderRadius: scale(8), backgroundColor: colorTheme.modelNewBackground } }}>
               <SetDetailModalContent

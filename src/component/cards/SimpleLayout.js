@@ -91,12 +91,24 @@ const SimpleLayout = ({
           ) : (
             <Menu>
               <MenuTrigger>
-                <AntDesign
-                  name={'infocirlce'}
-                  size={scale(11)}
-                  color={Color.Grey}
-                  style={styles.dotsIcon}
-                />
+                <View
+                  style={[
+                    styles.dotsIcon,
+                    {
+                      backgroundColor: '#e0e0e0',
+                      borderRadius: scale(5),
+                      padding: scale(4),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                  ]}
+                >
+                  <AntDesign
+                    name={'infocirlce'}
+                    size={scale(11)}
+                    color={Color.Grey}
+                  />
+                </View>
               </MenuTrigger>
               <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: themeColor.modelNewBackground}}}>
                 <AddNoteModalContent
@@ -108,21 +120,45 @@ const SimpleLayout = ({
             </Menu>
           )}
           <Pressable onPress={toggleBlur}>
-            <Entypo
-              name={item?.isBlur ? 'eye-with-line' : 'eye'}
-              size={scale(11)}
-              color={Color.Grey}
-              style={styles.dotsIcon}
-            />
+            <View
+              style={[
+                styles.dotsIcon,
+                {
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: scale(5),
+                  padding: scale(4),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
+              ]}
+            >
+              <Entypo
+                name={item?.isBlur ? 'eye-with-line' : 'eye'}
+                size={scale(11)}
+                color={Color.Grey}
+              />
+            </View>
           </Pressable>
           <Menu>
             <MenuTrigger>
-              <Entypo
-                name="dots-three-vertical"
-                size={scale(11)}
-                color={Color.Grey}
-                style={styles.dotsIcon}
-              />
+              <View
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: '#e0e0e0',
+                    borderRadius: scale(5),
+                    padding: scale(4),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  },
+                ]}
+              >
+                <Entypo
+                  name="dots-three-vertical"
+                  size={scale(11)}
+                  color={Color.Grey}
+                />
+              </View>
             </MenuTrigger>
             <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8), backgroundColor: themeColor.modelNewBackground}}}>
               <CardModalContent

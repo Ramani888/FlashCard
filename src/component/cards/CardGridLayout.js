@@ -60,22 +60,46 @@ const CardGridLayout = ({
         <View style={[styles.cardActions, styles.gridCardAction]}>
           {item?.note ? (
             <Pressable onPress={toggleNote}>
-              <AntDesign
-                name={'infocirlce'}
-                size={scale(11)}
-                color={Color.Grey}
-                style={styles.dotsIcon}
-              />
-            </Pressable>
-          ) : (
-            <Menu>
-              <MenuTrigger>
+              <View
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: '#e0e0e0',
+                    borderRadius: scale(5),
+                    padding: scale(4),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  },
+                ]}
+              >
                 <AntDesign
                   name={'infocirlce'}
                   size={scale(11)}
                   color={Color.Grey}
-                  style={styles.dotsIcon}
                 />
+              </View>
+            </Pressable>
+          ) : (
+            <Menu>
+              <MenuTrigger>
+                <View
+                  style={[
+                    styles.dotsIcon,
+                    {
+                      backgroundColor: '#e0e0e0',
+                      borderRadius: scale(5),
+                      padding: scale(4),
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                  ]}
+                >
+                  <AntDesign
+                    name={'infocirlce'}
+                    size={scale(11)}
+                    color={Color.Grey}
+                  />
+                </View>
               </MenuTrigger>
               <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
                 <AddNoteModalContent
@@ -99,30 +123,45 @@ const CardGridLayout = ({
                 isBlurred,
               );
             }}>
-            {item?.isBlur ? (
+            <View
+              style={[
+                styles.dotsIcon,
+                {
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: scale(5),
+                  padding: scale(4),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
+              ]}
+            >
               <Entypo
-                name="eye-with-line"
+                name={item?.isBlur ? 'eye-with-line' : 'eye'}
                 size={scale(11)}
                 color={Color.Grey}
-                style={styles.dotsIcon}
               />
-            ) : (
-              <Entypo
-                name="eye"
-                size={scale(11)}
-                color={Color.Grey}
-                style={styles.dotsIcon}
-              />
-            )}
+            </View>
           </Pressable>
           <Menu>
             <MenuTrigger>
-              <Entypo
-                name="dots-three-vertical"
-                size={scale(11)}
-                color={Color.Grey}
-                style={styles.dotsIcon}
-              />
+              <View
+                style={[
+                  styles.dotsIcon,
+                  {
+                    backgroundColor: '#e0e0e0',
+                    borderRadius: scale(5),
+                    padding: scale(4),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  },
+                ]}
+              >
+                <Entypo
+                  name="dots-three-vertical"
+                  size={scale(11)}
+                  color={Color.Grey}
+                />
+              </View>
             </MenuTrigger>
             <MenuOptions customStyles={{optionsContainer: {borderRadius: scale(8)}}}>
               <CardModalContent
