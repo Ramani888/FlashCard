@@ -1,20 +1,17 @@
 /**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
- * directory of this source tree.
+ * Flipper has been removed in React Native 0.74+.
+ * This file is kept as a no-op stub for compatibility.
  */
 package com.flashcard.app;
 
 import android.content.Context;
-import com.facebook.react.ReactInstanceManager;
 
 /**
- * Class responsible of loading Flipper inside your React Native application. This is the release
- * flavor of it so it's empty as we don't want to load Flipper.
+ * No-op stub — Flipper has been removed.
  */
 public class ReactNativeFlipper {
-  public static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManager) {
-    // Do nothing as we don't want to initialize Flipper on Release.
+  public static void initializeFlipper(Context context) {
+    // No-op: Flipper removed in React Native 0.74+
   }
 }
+
