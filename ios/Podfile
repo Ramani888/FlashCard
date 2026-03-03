@@ -50,9 +50,43 @@ target 'FlashCard' do
           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.4'
         end
 
-        # Enable modular headers for Firebase Swift pods only
+        # Fix non-modular-include-in-framework-module errors (Xcode 26 / Clang 17 hard error)
+        # Strategy: disable CLANG_ENABLE_MODULES for third-party wrapper pods that use #import
+        # style React Native headers (these trigger the non-modular include check).
+        # Keep modules ENABLED for: React/RCT core pods, Firebase, and pods that use @import.
+        needs_modules = target.name.start_with?('Firebase') ||
+                        target.name.start_with?('React') ||
+                        target.name.start_with?('RCT') ||
+                        target.name.start_with?('hermes') ||
+                        target.name.start_with?('Hermes') ||
+                        target.name.start_with?('FBLazy') ||
+                        target.name.start_with?('ReactCodegen') ||
+                        target.name == 'GoogleUtilities' ||
+                        target.name == 'Yoga' ||
+                        target.name == 'DoubleConversion' ||
+                        target.name == 'fmt' ||
+                        target.name == 'glog' ||
+                        # These pods use @import syntax and require modules
+                        target.name == 'react-native-netinfo' ||
+                        target.name == 'RNDeviceInfo'
         if target.name.start_with?('Firebase') || target.name == 'GoogleUtilities'
           config.build_settings['DEFINES_MODULE'] = 'YES'
+          config.build_settings['CLANG_ENABLE_MODULES'] = 'YES'
+        elsif needs_modules
+          config.build_settings['CLANG_ENABLE_MODULES'] = 'YES'
+        else
+          # Disable modules for third-party pods to avoid non-modular include errors
+          # in Clang 17 where this check cannot be suppressed with -Wno- flags
+          config.build_settings['DEFINES_MODULE'] = 'NO'
+          config.build_settings['CLANG_ENABLE_MODULES'] = 'NO'
+        end
+        config.build_settings['ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+        config.build_settings['CLANG_WARN_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'NO'
+        # Belt-and-suspenders: add -Wno flag to OTHER_CFLAGS
+        other_cflags = config.build_settings['OTHER_CFLAGS'] || '$(inherited)'
+        other_cflags_str = other_cflags.is_a?(Array) ? other_cflags.join(' ') : other_cflags.to_s
+        unless other_cflags_str.include?('-Wno-non-modular-include-in-framework-module')
+          config.build_settings['OTHER_CFLAGS'] = "#{other_cflags_str} -Wno-non-modular-include-in-framework-module"
         end
 
         # Fix FBReactNativeSpec header search paths for Xcode 17
@@ -62,6 +96,35 @@ target 'FlashCard' do
           config.build_settings['HEADER_SEARCH_PATHS'] << "\"${PODS_CONFIGURATION_BUILD_DIR}/FBReactNativeSpec/FBReactNativeSpec.framework/Headers\""
         end
       end
+    end
+
+    # Directly patch all pod xcconfig files to suppress non-modular include errors
+    Dir.glob("#{installer.sandbox.root}/Target Support Files/**/*.xcconfig").each do |xcconfig_path|
+      xcconfig = File.read(xcconfig_path)
+      modified = false
+
+      # Replace any existing YES with NO
+      if xcconfig.include?('CLANG_WARN_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES')
+        xcconfig = xcconfig.gsub('CLANG_WARN_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES',
+                                 'CLANG_WARN_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO')
+        modified = true
+      elsif !xcconfig.include?('CLANG_WARN_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES')
+        xcconfig += "\nALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES\n"
+        xcconfig += "CLANG_WARN_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO\n"
+        modified = true
+      end
+
+      # Inject -Wno- into OTHER_CFLAGS so it overrides the iOS SDK default -Werror= flag
+      unless xcconfig.include?('-Wno-non-modular-include-in-framework-module')
+        if xcconfig.match?(/^OTHER_CFLAGS\s*=/)
+          xcconfig = xcconfig.gsub(/^(OTHER_CFLAGS\s*=.*)$/, '\1 -Wno-non-modular-include-in-framework-module')
+        else
+          xcconfig += "\nOTHER_CFLAGS = $(inherited) -Wno-non-modular-include-in-framework-module\n"
+        end
+        modified = true
+      end
+
+      File.write(xcconfig_path, xcconfig) if modified
     end
 
     # Fix Firebase linking issues - remove weak framework references
@@ -75,6 +138,20 @@ target 'FlashCard' do
           xcconfig = xcconfig.gsub(/-weak_framework "FirebaseCore"/, '')
           xcconfig = xcconfig.gsub(/-weak_framework "FirebaseCoreExtension"/, '')
           File.write(xcconfig_path, xcconfig)
+        end
+      end
+
+      # Fix gRPC-Core zutil.h fdopen conflict with iOS 26+ SDK:
+      # zutil.h defines fdopen(fd,mode) as NULL, which conflicts with _stdio.h in newer SDKs.
+      # Defining Z_SOLO=1 skips the fdopen redefinition block in zutil.h.
+      if target.name == 'gRPC-Core'
+        target.build_configurations.each do |config|
+          gcc_defs = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] || ['$(inherited)']
+          gcc_defs_arr = gcc_defs.is_a?(Array) ? gcc_defs : gcc_defs.split(' ')
+          unless gcc_defs_arr.include?('Z_SOLO=1')
+            gcc_defs_arr << 'Z_SOLO=1'
+            config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = gcc_defs_arr
+          end
         end
       end
     end
