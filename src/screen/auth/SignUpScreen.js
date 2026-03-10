@@ -6,6 +6,8 @@ import {
   View,
   ScrollView,
   Image,
+  FlatList,
+  Dimensions,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -24,37 +26,22 @@ import {useLoader} from '../../context';
 import showMessageonTheScreen from '../../component/ShowMessageOnTheScreen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
-import CustomeModal from '../../custome/CustomeModal';
-import LanguageModalContent from '../../component/auth/LanguageModalContent';
+import {LANGUAGES} from '../../component/auth/LanguageModalContent';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import {Divider} from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {sanitizeEmail, sanitizeString} from '../../utils/sanitization';
 import logger from '../../utils/logger';
-
-// Language mapping utility
-const LANGUAGE_CODE_MAP = {
-  'English': 'en',
-  'Español': 'es',
-  'Português': 'pt',
-  'Français': 'fr',
-  'Italiano': 'it',
-  'Deutsch': 'de',
-  'Polski': 'pl',
-  '普通话': 'zh',
-  'Kiswahili': 'sw',
-  'Tagalog': 'tl',
-  'हिंदी': 'hi',
-};
 
 const SignUpScreen = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const colorTheme = useTheme();
   const {showLoader, hideLoader} = useLoader();
-  const [languageModal, setLanguageModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({x: 0, y: 0});
+  const [languageKey, setLanguageKey] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState({
     id: 0,
     name: 'English',
@@ -62,9 +49,10 @@ const SignUpScreen = () => {
     code: 'en',
   });
 
-  const languageRef = useRef();
+  const refLangSheet = useRef();
+  const {height} = Dimensions.get('window');
 
-  // Memoize validation schema
+  // Memoize validation schema — re-created when language changes so error messages update
   const validationSchema = useMemo(() => Yup.object().shape({
     email: Yup.string()
       .email(strings.invalidEmail)
@@ -72,24 +60,36 @@ const SignUpScreen = () => {
     password: Yup.string()
       .min(8, strings.passwordError)
       .required(strings.passwordRequired),
-  }), []);
+  }), [languageKey]);
 
   const handleLanguageSaved = useCallback(async (Language) => {
     await AsyncStorage.setItem('Language', JSON.stringify(Language));
-    const languageCode = LANGUAGE_CODE_MAP[Language?.name];
-    if (languageCode) {
-      strings.setLanguage(languageCode);
+    if (Language?.code) {
+      strings.setLanguage(Language.code);
+      setLanguageKey(k => k + 1); // force re-render so all strings update
     }
   }, []);
+
+  const handleLangSelect = useCallback((item) => {
+    setSelectedLanguage(item);
+    handleLanguageSaved(item);
+    refLangSheet.current.close();
+  }, [handleLanguageSaved]);
 
   useEffect(() => {
     (async () => {
       const lang = await AsyncStorage.getItem('Language');
       if (lang) {
-        setSelectedLanguage(JSON.parse(lang));
+        const saved = JSON.parse(lang);
+        const match = LANGUAGES.find(item => item.id === saved?.id);
+        if (match) {
+          setSelectedLanguage(match);
+          strings.setLanguage(match.code);
+          setLanguageKey(k => k + 1);
+        }
       }
     })();
-  }, [isFocused]);
+  }, []); // run once on mount only — isFocused causes a race with async handleLanguageSaved
 
   // ======================================== Api ===================================== //
 
@@ -128,15 +128,8 @@ const SignUpScreen = () => {
     setIsChecked(prev => !prev);
   }, []);
 
-  const openModal = useCallback(() => {
-    languageRef.current.measureInWindow((x, y, width, height) => {
-      setModalPosition({x: x, y: y + verticalScale(55)});
-      setLanguageModal(true);
-    });
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setLanguageModal(false);
+  const openLangSheet = useCallback(() => {
+    refLangSheet.current.open();
   }, []);
 
   const handleTermsPress = useCallback(() => {
@@ -211,24 +204,15 @@ const SignUpScreen = () => {
         }) => (
           <View style={styles.formContainer}>
             <Pressable
-              ref={languageRef}
               style={styles.languageButton}
-              onPress={openModal}>
+              onPress={openLangSheet}>
               <Image source={selectedLanguage?.flag} style={styles.flagImage} />
               <Text style={styles.language}>{selectedLanguage?.name}</Text>
-              {languageModal ? (
-                <AntDesign
-                  name="caretup"
-                  size={scale(17)}
-                  color={Color.Black}
-                />
-              ) : (
-                <AntDesign
-                  name="caretdown"
-                  size={scale(17)}
-                  color={Color.Black}
-                />
-              )}
+              <AntDesign
+                name="caretdown"
+                size={scale(17)}
+                color={Color.Black}
+              />
             </Pressable>
 
             <CustomeInputField
@@ -327,30 +311,52 @@ const SignUpScreen = () => {
         )}
       </Formik>
 
-      <CustomeModal
-        visible={languageModal}
-        onClose={closeModal}
-        closeModal={false}
-        mainPadding={scale(5)}
-        backgroundColor={colorTheme.modelBackground}
-        content={
-          <LanguageModalContent
-            setSelectedLanguage={setSelectedLanguage}
-            selectedLanguage={selectedLanguage}
-            closeModal={closeModal}
-            handleLanguageSaved={handleLanguageSaved}
-          />
-        }
-        width={'90%'}
-        height={'63.5%'}
-        justifyContent="flex-end"
-        borderRadius={20}
-        modalContainerStyle={[
-          styles.modal,
-          {backgroundColor: colorTheme.modelBackgroundView},
-          {top: modalPosition.y, left: modalPosition.x},
-        ]}
-      />
+      <RBSheet
+        ref={refLangSheet}
+        height={height * 0.75}
+        openDuration={250}
+        draggable={true}
+        customStyles={{
+          container: styles.langSheetContainer,
+          draggableIcon: styles.langSheetDragIcon,
+        }}>
+        <Text style={styles.langSheetTitle}>{strings.selectLanguage}</Text>
+        <FlatList
+          data={LANGUAGES}
+          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          extraData={selectedLanguage}
+          contentContainerStyle={styles.langSheetList}
+          renderItem={({item}) => {
+            const isSelected = selectedLanguage?.id === item.id;
+            return (
+              <>
+                <Pressable
+                  onPress={() => handleLangSelect(item)}
+                  style={styles.langRow}>
+                  <View style={styles.langFlagWrapper}>
+                    <Image source={item.flag} style={styles.langFlag} />
+                  </View>
+                  <View style={styles.langTextWrapper}>
+                    <Text style={styles.langNameBold}>
+                      {item.name}
+                      <Text style={styles.langNameLight}>
+                        {' – '}{item.englishName}
+                      </Text>
+                    </Text>
+                  </View>
+                  {isSelected ? (
+                    <AntDesign name="checkcircle" size={scale(22)} color={Color.Green} />
+                  ) : (
+                    <View style={styles.langRadio} />
+                  )}
+                </Pressable>
+                <Divider />
+              </>
+            );
+          }}
+        />
+      </RBSheet>
     </ScrollView>
   );
 };
@@ -456,6 +462,64 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: scale(0.3),
     shadowRadius: scale(4),
+  },
+  langSheetContainer: {
+    borderTopLeftRadius: scale(20),
+    borderTopRightRadius: scale(20),
+    paddingHorizontal: scale(16),
+  },
+  langSheetDragIcon: {
+    marginTop: verticalScale(10),
+  },
+  langSheetTitle: {
+    fontSize: scale(16),
+    fontFamily: Font.semiBold,
+    textAlign: 'center',
+    marginVertical: verticalScale(12),
+    color: Color.Black,
+  },
+  langSheetList: {
+    paddingBottom: verticalScale(20),
+  },
+  langRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: scale(4),
+  },
+  langFlagWrapper: {
+    width: scale(44),
+    height: scale(44),
+    borderRadius: scale(22),
+    overflow: 'hidden',
+    marginRight: scale(12),
+    backgroundColor: '#f0f0f0',
+  },
+  langFlag: {
+    width: scale(44),
+    height: scale(44),
+  },
+  langTextWrapper: {
+    flex: 1,
+  },
+  langNameBold: {
+    fontSize: scale(14),
+    fontFamily: Font.semiBold,
+    color: Color.Black,
+    textAlign: 'left',
+    writingDirection: 'ltr',
+  },
+  langNameLight: {
+    fontSize: scale(13),
+    fontFamily: Font.regular,
+    color: Color.mediumGray,
+  },
+  langRadio: {
+    width: scale(22),
+    height: scale(22),
+    borderWidth: scale(1.5),
+    borderColor: '#ccc',
+    borderRadius: scale(11),
   },
   languageButton: {
     backgroundColor: Color.White,

@@ -1,4 +1,7 @@
-import {Image, Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {Image, I18nManager, Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
+
+// Force LTR layout for all languages — no RTL support
+I18nManager.forceRTL(false);
 import React, {useEffect, useState, useCallback} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';

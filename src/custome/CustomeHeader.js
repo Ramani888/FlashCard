@@ -1,5 +1,5 @@
 import React, {useRef, useMemo, useCallback, useState} from 'react';
-import {StyleSheet, Text, Pressable, Image, ActivityIndicator, View} from 'react-native';
+import {StyleSheet, Text, Pressable, Image, ActivityIndicator, View, FlatList, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -16,7 +16,9 @@ import Color from '../component/Color';
 import Font from '../component/Font';
 import useTheme from '../component/Theme';
 import strings from '../language/strings';
-import LanguageModalContent from '../component/auth/LanguageModalContent';
+import {LANGUAGES} from '../component/auth/LanguageModalContent';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import {Divider} from '@rneui/themed';
 import ProfileModalContent from '../component/profile/profile/ProfileModalContent';
 import {ScreenName} from '../component/Screen';
 import useThemeToggle from '../hooks/useThemeToggle';
@@ -76,6 +78,8 @@ const CustomeHeader = ({
   const {isDarkMode, toggleTheme} = useThemeToggle();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showDeleteAccountDialog, setShowDeleteAccountDialog] = useState(false);
+  const refLanguageSheet = useRef();
+  const {height} = Dimensions.get('window');
 
   // Memoize gradient colors
   const gradientColors = useMemo(() => {
@@ -175,6 +179,16 @@ const CustomeHeader = ({
     navigation.navigate(ScreenName.notes);
   }, [navigation]);
 
+  // Language sheet handler
+  const handleLangSelect = useCallback((item) => {
+    setSelectedLanguage(item);
+    strings.setLanguage(item.code);
+    if (handleLanguageSaved) {
+      handleLanguageSaved(item);
+    }
+    refLanguageSheet.current.close();
+  }, [setSelectedLanguage, handleLanguageSaved]);
+
   // Ad handler
   const handleAdPress = useCallback(() => {
     if (adReady) {
@@ -259,18 +273,9 @@ const CustomeHeader = ({
 
       {/* Language Selector */}
       {language && (
-        <Menu style={styles.languageFlag}>
-          <MenuTrigger>
-            <Image source={selectedLanguage?.flag} style={styles.flagImage} />
-          </MenuTrigger>
-          <MenuOptions customStyles={menuOptionsStyle}>
-            <LanguageModalContent
-              setSelectedLanguage={setSelectedLanguage}
-              selectedLanguage={selectedLanguage}
-              handleLanguageSaved={handleLanguageSaved}
-            />
-          </MenuOptions>
-        </Menu>
+        <Pressable style={styles.languageFlag} onPress={() => refLanguageSheet.current.open()}>
+          <Image source={selectedLanguage?.flag} style={styles.flagImage} />
+        </Pressable>
       )}
 
       {/* Plus Button */}
@@ -377,6 +382,56 @@ const CustomeHeader = ({
         onConfirm={confirmDeleteAccount}
         onCancel={closeDeleteAccountDialog}
       />
+
+      {/* Language Action Sheet */}
+      {language && (
+        <RBSheet
+          ref={refLanguageSheet}
+          height={height * 0.75}
+          openDuration={250}
+          draggable={true}
+          customStyles={{
+            container: styles.langSheetContainer,
+            draggableIcon: styles.langSheetDragIcon,
+          }}>
+          <Text style={styles.langSheetTitle}>{strings.selectLanguage}</Text>
+          <FlatList
+            data={LANGUAGES}
+            keyExtractor={item => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            extraData={selectedLanguage}
+            contentContainerStyle={styles.langSheetList}
+            renderItem={({item}) => {
+              const isSelected = selectedLanguage?.id === item.id;
+              return (
+                <>
+                  <Pressable
+                    onPress={() => handleLangSelect(item)}
+                    style={styles.langRow}>
+                    <View style={styles.langFlagWrapper}>
+                      <Image source={item.flag} style={styles.langFlag} />
+                    </View>
+                    <View style={styles.langTextWrapper}>
+                      <Text style={[styles.langNameBold, {color: colorTheme.textColor}]}>
+                        {item.name}
+                        <Text style={[styles.langNameLight, {color: colorTheme.textColor}]}>
+                          {' – '}{item.englishName}
+                        </Text>
+                      </Text>
+                    </View>
+                    {isSelected ? (
+                      <AntDesign name="checkcircle" size={scale(22)} color={Color.Green} />
+                    ) : (
+                      <View style={styles.langRadio} />
+                    )}
+                  </Pressable>
+                  <Divider />
+                </>
+              );
+            }}
+          />
+        </RBSheet>
+      )}
     </LinearGradient>
   );
 };
@@ -602,5 +657,64 @@ const styles = StyleSheet.create({
   flagImage: {
     width: scale(36), 
     height: scale(24)
+  },
+  // Language Action Sheet
+  langSheetContainer: {
+    borderTopLeftRadius: scale(20),
+    borderTopRightRadius: scale(20),
+    paddingHorizontal: scale(16),
+  },
+  langSheetDragIcon: {
+    marginTop: verticalScale(10),
+  },
+  langSheetTitle: {
+    fontSize: scale(16),
+    fontFamily: Font.semiBold,
+    textAlign: 'center',
+    marginVertical: verticalScale(12),
+    color: Color.Black,
+  },
+  langSheetList: {
+    paddingBottom: verticalScale(20),
+  },
+  langRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: scale(4),
+  },
+  langFlagWrapper: {
+    width: scale(44),
+    height: scale(44),
+    borderRadius: scale(22),
+    overflow: 'hidden',
+    marginRight: scale(12),
+    backgroundColor: '#f0f0f0',
+  },
+  langFlag: {
+    width: scale(44),
+    height: scale(44),
+  },
+  langTextWrapper: {
+    flex: 1,
+  },
+  langNameBold: {
+    fontSize: scale(14),
+    fontFamily: Font.semiBold,
+    color: Color.Black,
+    textAlign: 'left',
+    writingDirection: 'ltr',
+  },
+  langNameLight: {
+    fontSize: scale(13),
+    fontFamily: Font.regular,
+    color: Color.mediumGray,
+  },
+  langRadio: {
+    width: scale(22),
+    height: scale(22),
+    borderWidth: scale(1.5),
+    borderColor: '#ccc',
+    borderRadius: scale(11),
   },
 });

@@ -3,8 +3,8 @@
  * Manages app localization and language switching
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import strings from '../language/strings';
 import Config from '../config';
+import strings from '../language/strings';
 
 export interface LanguageOption {
   code: string;
@@ -26,6 +26,20 @@ export const SUPPORTED_LANGUAGES: LanguageOption[] = [
   {code: 'sw', name: 'Swahili', nativeName: 'Kiswahili', flag: '🇰🇪'},
   {code: 'tl', name: 'Tagalog', nativeName: 'Tagalog', flag: '🇵🇭'},
   {code: 'hi', name: 'Hindi', nativeName: 'हिंदी', flag: '🇮🇳'},
+  {code: 'id', name: 'Indonesian', nativeName: 'Indonesia', flag: '🇮🇩'},
+  {code: 'ko', name: 'Korean', nativeName: '한국어', flag: '🇰🇷'},
+  {code: 'am', name: 'Amharic', nativeName: 'አማርኛ', flag: '🇪🇹'},
+  {code: 'uk', name: 'Ukrainian', nativeName: 'Українська', flag: '🇺🇦'},
+  {code: 'ig', name: 'Igbo', nativeName: 'Igbo', flag: '🇳🇬'},
+  {code: 'ro', name: 'Romanian', nativeName: 'Română', flag: '🇷🇴'},
+  {code: 'yo', name: 'Yoruba', nativeName: 'Yorùbá', flag: '🇳🇬'},
+  {code: 'ceb', name: 'Cebuano', nativeName: 'Cebuano', flag: '🇵🇭'},
+  {code: 'el', name: 'Greek', nativeName: 'Ελληνικά', flag: '🇬🇷'},
+  {code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦'},
+  {code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱'},
+  {code: 'sv', name: 'Swedish', nativeName: 'Svenska', flag: '🇸🇪'},
+  {code: 'hu', name: 'Hungarian', nativeName: 'Magyar', flag: '🇭🇺'},
+  {code: 'vi', name: 'Vietnamese', nativeName: 'Tiếng Việt', flag: '🇻🇳'},
 ];
 
 // Language name to code mapping
@@ -41,6 +55,20 @@ const LANGUAGE_NAME_TO_CODE: Record<string, string> = {
   Kiswahili: 'sw',
   Tagalog: 'tl',
   हिंदी: 'hi',
+  'Bahasa Indonesia': 'id',
+  '한국어': 'ko',
+  'አማርኛ': 'am',
+  'Українська': 'uk',
+  'Igbo': 'ig',
+  'Română': 'ro',
+  'Yorùbá': 'yo',
+  'Cebuano': 'ceb',
+  'Ελληνικά': 'el',
+  'العربية': 'ar',
+  'Nederlands': 'nl',
+  'Svenska': 'sv',
+  'Magyar': 'hu',
+  'Tiếng Việt': 'vi',
 };
 
 class LanguageService {
@@ -62,8 +90,9 @@ class LanguageService {
       );
 
       if (savedLanguage) {
-        const parsed = JSON.parse(savedLanguage);
-        const code = this.getLanguageCode(parsed?.name || parsed);
+        const parsed = JSON.parse(savedLanguage) as {name?: string} | string;
+        const name = typeof parsed === 'string' ? parsed : parsed?.name ?? '';
+        const code = this.getLanguageCode(name);
         this.setLanguage(code);
       } else {
         this.setLanguage('en');

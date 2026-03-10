@@ -31,8 +31,8 @@ import * as Progress from 'react-native-progress';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useTheme from '../../component/Theme';
 import strings from '../../language/strings';
+import {LANGUAGES} from '../../component/auth/LanguageModalContent';
 import VideoAds from '../ads/VideoAds';
-import LanguageModalContent from '../../component/auth/LanguageModalContent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAppSelector, useAppDispatch} from '../../redux/hooks';
 import {setUser, signOut} from '../../redux/slices/authSlice';
@@ -40,70 +40,6 @@ import secureStorage from '../../services/secureStorageService';
 import Config from '../../config';
 
 const {height} = Dimensions.get('window');
-
-const languages = [
-  {
-    id: 0,
-    name: 'English',
-    flag: require('../../Assets/FlagImage/UsaFlag.png'),
-    code: 'en',
-  },
-  {id: 1, name: 'Espanol', flag: require('../../Assets/FlagImage/spain.png'), code: 'es'},
-  {
-    id: 2,
-    name: 'Postogues',
-    flag: require('../../Assets/FlagImage/portugal.png'),
-    code: 'pt',
-  },
-  {
-    id: 3,
-    name: 'Francais',
-    flag: require('../../Assets/FlagImage/france.png'),
-    code: 'fr',
-  },
-  {
-    id: 4,
-    name: 'Italiano',
-    flag: require('../../Assets/FlagImage/italy.png'),
-    code: 'it',
-  },
-  {
-    id: 5,
-    name: 'German',
-    flag: require('../../Assets/FlagImage/germany.png'),
-    code: 'de',
-  },
-  {id: 6, name: 'Polish', flag: require('../../Assets/FlagImage/poland.png'), code: 'pl'},
-  {
-    id: 7,
-    name: 'Mandarin',
-    flag: require('../../Assets/FlagImage/china.png'),
-    code: 'zh',
-  },
-  {id: 8, name: 'Swahili', flag: require('../../Assets/FlagImage/kenya.png'), code: 'sw'},
-  {
-    id: 9,
-    name: 'Tagalog',
-    flag: require('../../Assets/FlagImage/philippines.png'),
-    code: 'tl',
-  },
-  {id: 10, name: 'Hindi', flag: require('../../Assets/FlagImage/india.png'), code: 'hi'},
-];
-
-// Language code mapping for cleaner language setting
-const LANGUAGE_CODE_MAP = {
-  'English': 'en',
-  'Español': 'es',
-  'Português': 'pt',
-  'Français': 'fr',
-  'Italiano': 'it',
-  'Deutsch': 'de',
-  'Polski': 'pl',
-  '普通话': 'zh',
-  'Kiswahili': 'sw',
-  'Tagalog': 'tl',
-  'हिंदी': 'hi',
-};
 
 const ProfileScreen = () => {
   const isFocused = useIsFocused();
@@ -120,6 +56,7 @@ const ProfileScreen = () => {
     id: 0,
     name: 'English',
     flag: require('../../Assets/FlagImage/UsaFlag.png'),
+    code: 'en',
   });
 
   const refEmailRBSheet = useRef();
@@ -135,20 +72,20 @@ const ProfileScreen = () => {
     (async () => {
       const lang = await AsyncStorage.getItem('Language');
       if (lang) {
-        languages?.map(item => {
-          if (JSON.parse(lang)?.id === item?.id) {
-            setSelectedLanguage(item);
-          }
-        });
+        const saved = JSON.parse(lang);
+        const match = LANGUAGES.find(item => item.id === saved?.id);
+        if (match) {
+          setSelectedLanguage(match);
+          strings.setLanguage(match.code);
+        }
       }
     })();
   }, [isFocused]);
 
   const handleLanguageSaved = useCallback(async Language => {
     await AsyncStorage.setItem('Language', JSON.stringify(Language));
-    const langCode = LANGUAGE_CODE_MAP[Language?.name];
-    if (langCode) {
-      strings.setLanguage(langCode);
+    if (Language?.code) {
+      strings.setLanguage(Language.code);
     }
   }, []);
 
